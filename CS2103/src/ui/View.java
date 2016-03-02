@@ -48,7 +48,7 @@ public class View {
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setLocationRelativeTo(null);
-		frame.setUndecorated(true);
+		//frame.setUndecorated(true);
 		frame.setVisible(false);
 	}
 
