@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Welcome to J.Listee</title>
+ <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+ <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+ <style>
+   #wrapper{
+     margin:0 auto;
+   }
+   .center {
+     width: 600px;
+     min-height: 400px;
+     margin:0px auto;
+     text-align: center;
+   }
+   .list{ 
+    height:530px;
+    padding: 15px;
+    padding-right: 5px;
+    background-color:rgba(238,238,238,0.8);
+    overflow-y:scroll;
+  }
+
+  .commandline{
+    background-color: #726e6e;
+    height: 60px;
+  }
+
+  .grouptitle{
+    font-size: 25px;
+    color: #888;
+    font-weight: 100;
+    margin: 5px;
+  }
+  section{
+    display: inline-block;
+  }
+  .task{
+    width: 100%;
+    height:75px;
+    border-radius: 8px;
+    background-color: rgba(255,255,255,0.6);
+    margin: 8px 0;
+  }
+  .task_number{
+    width:8%;
+    height: 100%;
+    border-radius: 8px 0 0 8px;
+    background-color: rgba(131,207,203,0.8);
+    font-size: 40px;
+    line-height: 75px;
+    color: #444;
+    float: left;
+  }
+  .overdue .task_number{
+    background-color: rgba(235,131,99,0.8);
+  }
+  .task_middle{
+    float: left;
+    width:68%;
+    height: 100%;
+    text-align: left;
+    padding:10px 0px 10px 10px;
+  }
+  .task_right{
+    float: left;
+    width: 24%;
+    height: 100%;
+    padding: 10px 15px 10px 5px;
+    text-align: left;
+  }
+
+  .task_description{
+    line-height: 22px;
+    font-size: 18px;
+  }
+  .time{
+    font-size: 14px;
+    line-height: 27px;
+  }
+  .task_components{
+    margin: 4px 5px 4px 5px;
+  }
+  .task_middle section,.task_middle span{
+    line-height: 14px;
+    height:20px;
+    border-radius: 3px;
+    padding: 2px;
+    text-align: center;
+  }
+  .task_location{    
+    background-color: rgba(63,190,122,0.4);    
+  }
+  .task_tags span{
+    background-color: #d8d8d8;
+    margin-right: 5px;
+  }
+  .task_right div{
+    line-height: 22px;
+    height:22px;
+    width:95%;
+    border-radius: 3px;
+    padding-left: 5px;
+  }
+  .task_lowertime{
+    background-color: rgba(240,108,125,0.4);
+  }
+  .task_uppertime{
+    background-color: rgba(0,181,242,0.4);
+  }
+  form{
+    width: 100%;
+    height: 60px;
+  }
+  input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: #fff;
+    border: 0;
+    outline:none;
+    line-height: 30px;
+    font-size: 20px;
+    padding: 15px;
+  }
+</style>
+</head>
+<body>
+  <script>
+    function chooseFolder() {
+   // Call Java callback function and pass text fields values.
+   onChooseFolder();
+ }
+</script>
+<div id="wrapper">
+ <div class="center">
+  <div class="main">
+    <div class="list">
+     <!-- 
+     <div class="group overdue">
+       <div class="grouptitle">OVERDUE</div>
+       <div class="tasklist" id="tasklist_overdue">
+
+       </div>
+     </div>
+     <div class="group today">
+      <div class="grouptitle">TODAY</div>
+      <div class="tasklist" id="tasklist_today">
+
+   </div>
+ </div>
+ <div class="group tomorrow">
+  <div class="grouptitle">TOMORROW</div>
+   <div class="tasklist" id="tasklist_tomorrow">
+
+   </div>
+</div>
+-->
+<div class="group timed">
+  <div class="grouptitle">TIMED</div>
+   <div class="tasklist" id="tasklist_timed">
+       
+   </div>
+</div>
+ <!-- 
+<div class="group untimed">
+  <div class="grouptitle">UNTIMED</div>
+   <div class="tasklist" id="tasklist_untimed">
+      
+   </div>
+</div>
+<div class="group reserved">    
+ <div class="grouptitle">RESERVED</div> 
+  <div class="tasklist" id="tasklist_reserved">
+       
+   </div>
+</div>
+-->
+</div>
+<div class="commandline">
+  <form>
+    <input type="text" id="command" placeholder="Type your command here"/>
+  </form>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
