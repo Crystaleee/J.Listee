@@ -84,7 +84,7 @@ class Display{
         return taskList;
     }
 }
-
+/*
 class Command{
 
     private String type;
@@ -124,7 +124,7 @@ class Command{
     public Calendar getAddEndDate(){
         return addEndDate;
     }
-}
+}*/
 /*class TimedTask extends Task{
     private Calendar startDate;
     private Calendar endDate;
