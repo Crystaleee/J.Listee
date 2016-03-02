@@ -10,7 +10,6 @@ class Task{
     private String description;
     private Calendar startDate;
     private Calendar endDate;
-    private String thatString;
 
     public Task(){
         description = "Default";
