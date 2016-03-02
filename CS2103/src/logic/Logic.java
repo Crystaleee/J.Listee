@@ -1,88 +1,14 @@
+package logic;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import javax.swing.text.html.parser.Parser;
+import parser.Parser;
+import bean.Command;
+import bean.Display;
+import bean.Task;
 
-
-class Task{
-
-    private String description;
-    private Calendar startDate;
-    private Calendar endDate;
-
-    public Task(){
-        description = "Default";
-        endDate = null;
-        startDate = null;
-    }
-    
-    public Task(String description){
-        this.description = description;
-        this.endDate = null;
-        this.startDate = null;
-    }
-    
-    public Task(String description, Calendar startDate, Calendar endDate){
-        this.description = description;
-    }
-    
-    public void setDescription(String description){
-        this.description = description;
-    }
-    
-    public String getDescription(){
-        return description;
-    }
-    
-    public void setStartDate(Calendar startDate){
-        this.startDate= startDate;
-    }
-    
-    public Calendar getStartDate(){
-        return startDate;
-    }
-    
-    public void setEndDate(Calendar endDate){
-        this.endDate= endDate;
-    }
-    
-    public Calendar getEndDate(){
-        return endDate;
-    }
-}
-
-class Display{
-
-    private String message;
-    private ArrayList<Task> taskList;
-
-    public Display(){
-        message = "";
-        taskList = null;
-    }
-    
-    public Display(String message, ArrayList<Task> taskList){
-        this.message = message;
-        this.taskList = taskList;
-    }
-    
-    public void setMessage(String message){
-        this.message = message;
-    }
-    
-    public String getMessage(){
-        return message;
-    }
-    
-    public void setList(ArrayList<Task> taskList){
-        this.taskList = taskList;
-    }
-    
-    public ArrayList<Task> getList(){
-        return taskList;
-    }
-}
 /*
 class Command{
 
@@ -189,12 +115,10 @@ public class Logic {
     private static Command userCommand;
     private static Display display;
     
-    public static void main(String args[]) {
-        
-
-        System.out.println(myTask.getDescription());
-        
-    }
+//    public static void main(String args[]) {
+//        System.out.println(myTask.getDescription());     
+//    }
+    
     public static String createFile(String filePath) throws IOException {
         try{
             Storage.createFile(filePath);
@@ -204,8 +128,8 @@ public class Logic {
         }
     }
     
-    public static Display initialiseProgram() throws IOException {
-        tasks = Storage.getList();
+    public static Display initializeProgram(String filePath) throws IOException {
+        tasks = Storage.getList(filePath);
         oldTasks.add(tasks);
         oldTasksIndex = 0;
         display.setList(tasks);
@@ -219,7 +143,7 @@ public class Logic {
     }
     
     public static void executeUserCommand() {
-        switch(userCommand.getType()){
+        switch(userCommand.getCommandType()){
         case COMMAND_ADD:
             addTask();
             
@@ -338,31 +262,31 @@ public class Logic {
     }
     
     public static void editDescription() {
-        if(userCommand.getDescription() != null){
-            tasks.get(userCommand.getTaskNum().get(0) - 1).setDescription(userCommand.getDescription());
+        if(userCommand.getTaskDescription() != null){
+            tasks.get(userCommand.getTaskNumber().get(0) - 1).setDescription(userCommand.getTaskDescription());
         }
     }
     
     public static void editEndDate() {
         if(userCommand.getAddEndDate() != null){
-            tasks.get(userCommand.getTaskNum().get(0) - 1).setEndDate(userCommand.getAddEndDate());
+            tasks.get(userCommand.getTaskNumber().get(0) - 1).setEndDate(userCommand.getAddEndDate());
         }
         if(userCommand.getDeleteEndDate() != null){
-            tasks.get(userCommand.getTaskNum().get(0) - 1).setEndDate(null);
+            tasks.get(userCommand.getTaskNumber().get(0) - 1).setEndDate(null);
         }
     }
     
     public static void editStartDate() {
         if(userCommand.getAddStartDate() != null){
-            tasks.get(userCommand.getTaskNum().get(0) - 1).setStartDate(userCommand.getAddStartDate());
+            tasks.get(userCommand.getTaskNumber().get(0) - 1).setStartDate(userCommand.getAddStartDate());
         }
         if(userCommand.getDeleteStartDate() != null){
-            tasks.get(userCommand.getTaskNum().get(0) - 1).setStartDate(null);
+            tasks.get(userCommand.getTaskNumber().get(0) - 1).setStartDate(null);
         }
     }
     
     public static ArrayList<Task> getTasksContainingKeyword() {
-        String keyword = userCommand.getDescription();
+        String keyword = userCommand.getTaskDescription();
         ArrayList<Task> tasksContainingKeyword = new ArrayList<Task>();
         for(int i = 0; i < tasks.size(); i++){
             if(tasks.get(i).getDescription().contains(keyword)){
@@ -394,8 +318,8 @@ public class Logic {
     public static ArrayList<String> deleteTaskFromList() {
         ArrayList<String> deletedTasks = new ArrayList<String>();
         Task deletedTask;
-        for(int i = userCommand.getTaskNum().size(); i>=0; i--){
-            deletedTask = tasks.remove(userCommand.getTaskNum().get(i-1) - 1);
+        for(int i = userCommand.getTaskNumber().size(); i>=0; i--){
+            deletedTask = tasks.remove(userCommand.getTaskNumber().get(i-1) - 1);
             deletedTasks.add(deletedTask.getDescription());
         }
         return deletedTasks;
@@ -413,8 +337,8 @@ public class Logic {
     public static boolean hasInvalidTaskNumbers() {
         ArrayList<Integer> invalidTaskNumbers = new ArrayList<Integer>();
         int tasknum;
-        for(int i = 0; i < userCommand.getTaskNum().size(); i++){
-            tasknum = userCommand.getTaskNum().get(i);
+        for(int i = 0; i < userCommand.getTaskNumber().size(); i++){
+            tasknum = userCommand.getTaskNumber().get(i);
             if((tasknum > tasks.size()) || (tasknum < 1)){
                 invalidTaskNumbers.add(tasknum);
             }
@@ -428,7 +352,7 @@ public class Logic {
             addTimedTask(startDate, endDate);
         }
         else{
-            addTask = new Task(userCommand.getDescription());
+            addTask = new Task(userCommand.getTaskDescription());
             tasks.add(addTask);
         }
     }
@@ -440,7 +364,7 @@ public class Logic {
                 break;
             }
         }
-        addTask = new Task(userCommand.getDescription(), startDate, endDate);
+        addTask = new Task(userCommand.getTaskDescription(), startDate, endDate);
         tasks.add(i, addTask);
     }
 

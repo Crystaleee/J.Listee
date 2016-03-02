@@ -45,25 +45,25 @@ public class ShowList  extends Browser {
                     		+"</section>"
                     		+ "<section class='task_middle'>"
                     		+ "<div class='task_components task_description'>"
-                    		+ task.getTaskDescription()
+                    		+ task.getDescription()
                     		+"</div>"
                     		+ "<section class='task_components task_location'>"
-                    		+ task.getTaskLocation()
+                    		+ task.getLocation()
                     		+"</section>"
                     		+ "<section class='task_components task_tags' id='task_tags'>"
                     		+ "</section>"
                     		+ "</section>"
                     		+ "<section class='task_right'>"
                     		+ "<div class='task_components time task_uppertime'>"
-                    		+ task.getStartTime()
+                    		+ task.getStartDate()
                     		+"</div>"
                     		+ " <div class='task_components time task_lowertime'>"
-                    		+ task.getEndTime()
+                    		+ task.getEndDate()
                     		+"</div>"
                     		+ "</section>");                   
                     
                     DOMNode task_tags=taskdiv.findElement(By.id("task_tags"));
-                    for(String tag: task.getTaskTags()){
+                    for(String tag: task.getTags()){
                     	DOMElement tagspan = document.createElement("span");
                     	tagspan.setInnerText(tag);
                     	task_tags.appendChild(tagspan);

@@ -1,9 +1,11 @@
 package ui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import logic.Logic;
 import storage.LogStorage;
 import bean.Task;
 
@@ -21,7 +23,7 @@ public class App {
 	//UI
 	static View view=new View();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		filePath=LogStorage.readLog();
 		//check if it's the first time that user use the application
 		if (filePath==null){
@@ -40,24 +42,17 @@ public class App {
 		View.frame.setVisible(true);
 	}
 
-	private static void executeUntilExit() {
+	private static void executeUntilExit() throws IOException {
 		//call to logic to get all the tasks
 		//TODO
-		//List<Task> taskList=Logic.getAllTasks(filePath);
-		//just simulate what the logic returns
-		String[] tags= {"#tag1","#tag2"};
-		Task t1=new Task("description", "@location", new Date(2016, 3, 1, 14, 30), new Date(2016, 3, 2, 14, 30),tags);
-		Task t2=new Task("description2", "@location2", new Date(2016, 3, 3, 14, 30), new Date(2016, 3, 5, 14, 30),tags);
-		List<Task> taskList=new ArrayList<Task>();
-		taskList.add(t1);
-		taskList.add(t2);
+		List<Task> taskList=Logic.initializeProgram(filePath).getList();
 				
 		while (true) {
 			displayList(taskList);				
 			//do nothing when command is null
 			while(command==null){}
 			//TODO logic handle user command
-			//taskList=Logic.handle(command);
+			taskList=Logic.handleCommand(command).getList();
 		}
 	}
 
