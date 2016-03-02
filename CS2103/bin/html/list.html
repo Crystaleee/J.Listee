@@ -130,10 +130,11 @@
 </head>
 <body>
   <script>
-    function chooseFolder() {
-   // Call Java callback function and pass text fields values.
-   onChooseFolder();
- }
+   function sendFormData() {
+    var command = cmd.elements['command'].value;
+    // Invoke the 'save' Java callback
+    sendCommand(command);
+  }
 </script>
 <div id="wrapper">
  <div class="center">
@@ -161,9 +162,9 @@
 -->
 <div class="group timed">
   <div class="grouptitle">TIMED</div>
-   <div class="tasklist" id="tasklist_timed">
-       
-   </div>
+  <div class="tasklist" id="tasklist_timed">
+
+  </div>
 </div>
  <!-- 
 <div class="group untimed">
@@ -181,8 +182,8 @@
 -->
 </div>
 <div class="commandline">
-  <form>
-    <input type="text" id="command" placeholder="Type your command here"/>
+  <form name="cmd">
+    <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendFormData();}" placeholder="Type your command here"/>
   </form>
 </div>
 </div>

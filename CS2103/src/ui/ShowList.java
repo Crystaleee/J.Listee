@@ -31,6 +31,7 @@ public class ShowList  extends Browser {
 		
 		this.loadURL(View.programPath + "\\src\\html\\list.html");
 
+		//add all the tasks in the list to the panel while loading
 		this.addLoadListener(new LoadAdapter() {
             @Override
             public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -69,7 +70,18 @@ public class ShowList  extends Browser {
                     }
                     tasklist_timed.appendChild(taskdiv);
                     index++;
-                }                 
+                }   
+                //reset starting index to 1
+                index=1;
+            }
+        });
+		
+		this.registerFunction("sendCommand", new BrowserFunction() {
+            public JSValue invoke(JSValue... args) {
+                JSValue userCmd = args[0];
+                App.command=userCmd.getString();
+
+                return JSValue.createNull();
             }
         });
 	}

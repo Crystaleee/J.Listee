@@ -18,39 +18,40 @@ import ui.App;
  * @version 1.0 
  */
 public class LogStorage {
-	//this is the log file path, storing the location of the task file
+	  //this is the log file path, storing the location of the task file
 		public static String logFile="D:\\J.Listee.log";
-		//this is the task file
-		public static String filePath;
+		
 		
 	/**
 	 * Read the log file, and find the file of task list. 
 	 * check if log file exists, if not exists, it's the very first time that user use J.Listee
 	 * 
+	 * @return null if there's no file path in the log file or log file doesn't exist, else return file path
 	 * @throws IOException
 	 *             If an I/O error occurs during readLine()
 	 */
-	public static void readLog() {
+	public static String readLog() {
 		File file = new File(logFile);
 		try {	
 			if (!file.exists()) {
 				file.createNewFile();
-				App.isFirstTime=true;
+				return null;
 			}else{
-				readLogFile();
+				return readLogFile();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**
-	 * Write all the items in List<String> texts into the file
+	 * Write in the log file the filepath
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during operations of bw and fos
 	 */
-	public static void writeLogFile() {
+	public static void writeLogFile(String filePath) {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream(logFile);
@@ -68,14 +69,21 @@ public class LogStorage {
 	}
 	
 	/**
+	 * read from the log file to find the filePath
+	 * 
+	 * @return the file path in the log file, null if it doesn't exist
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private static void readLogFile() throws FileNotFoundException, IOException {
+	private static String readLogFile() throws FileNotFoundException, IOException {
+		String filePath=null;
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(
 				logFile)));
 		String lineStr = br.readLine();
-		filePath=lineStr;
+		if(lineStr!=null){
+			filePath=lineStr;
+		}
 		br.close();
+		return filePath;
 	}
 }
