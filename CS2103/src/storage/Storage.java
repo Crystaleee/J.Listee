@@ -41,7 +41,7 @@ public class Storage {
 
 				String endDateString = br.readLine();
 				Calendar endDate = Calendar.getInstance();
-				startDate.setTime(sdf.parse(endDateString));
+				endDate.setTime(sdf.parse(endDateString));
 
 				Task task = new Task(description, startDate, endDate);
 				tasks.add(task);
