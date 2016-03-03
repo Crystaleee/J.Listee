@@ -12,6 +12,7 @@ class Command{
     private Display display;
     
     public Command(){
+        display = new Display();
     }
     
     public Display getDisplay() {
