@@ -137,13 +137,13 @@ public class Parser{
 	else if (command.getCommandType().equals("delete")){
 			args = inputLine.substring(7, inputLine.length()).split(",");
 			for (int i=0; i<args.length; i++){
-				//command.setDeleteTaskNumber(Integer.valueOf(args[i]));
+				command.setDeleteTaskNumber(Integer.valueOf(args[i]));
 			}
 		}
 		
 		else if (command.getCommandType().equals("postpone")){
 			command.setTaskNumber(Integer.valueOf(args[1]));
-			//command.setNumberOfDaysToPostpone(Integer.valueOf(args[2]));
+			command.setNumberOfDaysToPostpone(Integer.valueOf(args[2]));
 		}
 		
 /*		else if (command.getCommandType().equals("show")){
@@ -153,7 +153,7 @@ public class Parser{
 		else if (command.getCommandType().equals("done")){
 			args = inputLine.substring(5, inputLine.length()).split(",");
 			for (int i=0; i<args.length; i++){
-				//command.setDoneTaskNumber(Integer.valueOf(args[i]));
+				command.setDoneTaskNumber(Integer.valueOf(args[i]));
 			}
 		}
 		
