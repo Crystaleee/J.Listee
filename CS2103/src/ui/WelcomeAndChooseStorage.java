@@ -16,7 +16,7 @@ import com.teamdev.jxbrowser.chromium.swing.BrowserView;
  */
 public class WelcomeAndChooseStorage extends Browser {
 	BrowserView browserView;
-	static String userChosenFilePath;
+	private static String userChosenFilePath;
 
 	public WelcomeAndChooseStorage() {
 		browserView = new BrowserView(this);
@@ -31,11 +31,19 @@ public class WelcomeAndChooseStorage extends Browser {
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int returnVal = fileChooser.showOpenDialog(fileChooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					userChosenFilePath = fileChooser.getSelectedFile().getAbsolutePath();				
+					setUserChosenFilePath(fileChooser.getSelectedFile().getAbsolutePath());				
 				}
 				// Return undefined (void) to JavaScript.
 				return JSValue.createUndefined();
 			}
 		});
+	}
+
+	public static String getUserChosenFilePath() {
+		return userChosenFilePath;
+	}
+
+	public static void setUserChosenFilePath(String userChosenFilePath) {
+		WelcomeAndChooseStorage.userChosenFilePath = userChosenFilePath;
 	}
 }

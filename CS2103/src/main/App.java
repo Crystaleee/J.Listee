@@ -7,6 +7,7 @@ import logic.Logic;
 import storage.LogStorage;
 import ui.ShowList;
 import ui.View;
+import ui.WelcomeAndChooseStorage;
 import bean.Task;
 
 /**
@@ -29,7 +30,7 @@ public class App {
 		if (filePath==null){
 			displayWelcome();
 			//TODO logic tell storage to create a new task file
-			//Logic.createFile(WelcomeAndChooseStorage.userChosenFilePath);
+			Logic.createFile(WelcomeAndChooseStorage.getUserChosenFilePath());
 		}
 		executeUntilExit();
 	}
