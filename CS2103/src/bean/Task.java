@@ -1,4 +1,9 @@
-package bean;
+/*
+ * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * Last updated: 3/4/2016, 4:30AM
+ * CS2103
+ */
+ package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,6 +13,7 @@ class Task{
     private String description;
     private Calendar startDate;
     private Calendar endDate;
+    private String Location;
     private ArrayList<String> tags;
 
     public Task(){
