@@ -134,20 +134,29 @@ public class Parser{
 			}
 		}
 
-		/*	String endtDate = calendarDescription.get(0).substring(1, calendarDescription.get(0).length());
-					String[] startDateYYMMDD = startDate.split("/");
-
-					String startTime = calendarDescription.get(1);
-					String[] startTimeHourMinute = startTime.split(":");
-
-					int startDateYear = Integer.valueOf(startDateYYMMDD[2]);
-					int startDateMonth = Integer.valueOf(startDateYYMMDD[1]);
-					int startDateDay = Integer.valueOf(startDateYYMMDD[0]);
-					int startHour = Integer.valueOf(startTimeHourMinute[0]);
-					int startMin = Integer.valueOf(startTimeHourMinute[1]);
-					startDateTime.set(startDateYear,startDateMonth,startDateDay,startHour,startMin);
-		 */
-
+	else if (command.getCommandType().equals("delete")){
+			args = inputLine.substring(7, inputLine.length()).split(",");
+			for (int i=0; i<args.length; i++){
+				command.setDeleteTaskNumber(Integer.valueOf(args[i]));
+			}
+		}
+		
+		else if (command.getCommandType().equals("postpone")){
+			command.setTaskNumber(Integer.valueOf(args[1]));
+			command.setNumberOfDaysToPostpone(Integer.valueOf(args[2]));
+		}
+		
+/*		else if (command.getCommandType().equals("show")){
+				(need to double cfm)
+		} */
+		
+		else if (command.getCommandType().equals("done")){
+			args = inputLine.substring(5, inputLine.length()).split(",");
+			for (int i=0; i<args.length; i++){
+				command.setDoneTaskNumber(Integer.valueOf(args[i]));
+			}
+		}
+		
 
 	return command;
 	}
