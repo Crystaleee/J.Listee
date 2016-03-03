@@ -16,11 +16,11 @@ public class View {
 	private static final int WINDOW_WIDTH=600;
 	private static final int WINDOW_HEIGHT=590;
 	
-	protected static CardLayout card = new CardLayout(0, 0);
-	protected static JPanel panels = new JPanel(card);
-	protected static JFrame frame = new JFrame("J.Listee");
+	public static CardLayout card = new CardLayout(0, 0);
+	public static JPanel panels = new JPanel(card);
+	public static JFrame frame = new JFrame("J.Listee");
 	protected static WelcomeAndChooseStorage welcome;
-	protected static ShowList showList;
+	public static ShowList showList;
 	
 	public View() {
 		initialize();

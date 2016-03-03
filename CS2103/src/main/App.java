@@ -1,12 +1,12 @@
-package ui;
+package main;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import logic.Logic;
 import storage.LogStorage;
+import ui.ShowList;
+import ui.View;
 import bean.Task;
 
 /**

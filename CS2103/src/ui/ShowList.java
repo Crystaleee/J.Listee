@@ -23,7 +23,7 @@ import com.teamdev.jxbrowser.chromium.swing.BrowserView;
  * @version 1.0 
  */
 public class ShowList  extends Browser {
-	BrowserView browserView;
+	public BrowserView browserView;
 	int index=1;
 
 	public ShowList(final List<Task> taskList) {
