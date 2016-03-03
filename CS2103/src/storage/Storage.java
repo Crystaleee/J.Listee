@@ -19,11 +19,35 @@ public class Storage {
 
 	private static String filePath;
 
+	/*
+	 * public static void main(String[] args) throws IOException {
+	 * createFile("C:\\Users\\Chloe\\Documents\\Spring2016\\test.txt");
+	 * System.out.println(filePath);
+	 * 
+	 * Task testTask = new Task("Test Description", Calendar.getInstance(),
+	 * Calendar.getInstance()); addTask(testTask); Task testTask2 = new Task(
+	 * "Test Description", Calendar.getInstance(), Calendar.getInstance());
+	 * addTask(testTask2); Task testTask3 = new Task("Test Description",
+	 * Calendar.getInstance(), Calendar.getInstance()); addTask(testTask3);
+	 * 
+	 * ArrayList<Task> list = getList(filePath);
+	 * 
+	 * for (Task p : list) { System.out.println(p.getDescription());
+	 * System.out.println(p.getStartDate()); System.out.println(p.getEndDate());
+	 * }
+	 * 
+	 * PrintWriter writer = new PrintWriter(filePath); writer.print("");
+	 * writer.close();
+	 * 
+	 * editFile(list); }
+	 */
+
 	public static void createFile(String filepath) throws IOException {
 		File file = new File(filepath);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
+		filePath = filepath;
 	}
 
 	public static ArrayList<Task> getList(String filepath) throws IOException {
@@ -32,8 +56,9 @@ public class Storage {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 
 		try {
-			while (br.readLine() != null) {
-				String description = br.readLine();
+			String description;
+
+			while ((description = br.readLine()) != null) {
 
 				String startDateString = br.readLine();
 				Calendar startDate = Calendar.getInstance();
@@ -50,6 +75,7 @@ public class Storage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		filePath = filepath;
 		br.close();
 		return tasks;
 	}
@@ -59,8 +85,13 @@ public class Storage {
 
 		for (Task task : tasks) {
 			String description = task.getDescription();
-			String startDate = task.getStartDate().toString();
-			String endDate = task.getEndDate().toString();
+
+			Calendar startDateCalendar = task.getStartDate();
+			String startDate = startDateCalendar.getTime().toString();
+
+			Calendar endDateCalendar = task.getEndDate();
+			String endDate = endDateCalendar.getTime().toString();
+
 			writeTaskToFile(bw, description, startDate, endDate);
 		}
 		bw.flush();
@@ -71,8 +102,12 @@ public class Storage {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true)));
 
 		String description = taskToAdd.getDescription();
-		String startDate = taskToAdd.getStartDate().toString();
-		String endDate = taskToAdd.getEndDate().toString();
+
+		Calendar startDateCalendar = taskToAdd.getStartDate();
+		String startDate = startDateCalendar.getTime().toString();
+
+		Calendar endDateCalendar = taskToAdd.getEndDate();
+		String endDate = endDateCalendar.getTime().toString();
 
 		writeTaskToFile(bw, description, startDate, endDate);
 
@@ -82,12 +117,12 @@ public class Storage {
 
 	private static void writeTaskToFile(BufferedWriter bw, String description, String startDate, String endDate)
 			throws IOException {
-		bw.newLine();
 		bw.write(description);
 		bw.newLine();
 		bw.write(startDate);
 		bw.newLine();
 		bw.write(endDate);
+		bw.newLine();
 	}
 
 }
