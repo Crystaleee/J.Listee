@@ -3,6 +3,7 @@
  * Last updated: 3/4/2016, 4:30AM
  * CS2103
  */
+package logic
 
 import java.io.IOException;
 import java.util.ArrayList;
