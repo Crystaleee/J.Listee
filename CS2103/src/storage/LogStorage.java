@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import ui.App;
-
 /**
  * @author  Zhu Bingjing
  * @date 2016年3月2日 下午1:16:22 

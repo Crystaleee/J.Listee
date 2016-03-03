@@ -30,7 +30,11 @@ public class App {
 		if (filePath==null){
 			displayWelcome();
 			//TODO logic tell storage to create a new task file
-			Logic.createFile(WelcomeAndChooseStorage.getUserChosenFilePath());
+			//waiting when user hasn't decide
+			while(WelcomeAndChooseStorage.getUserChosenFilePath()==null){}
+			filePath=WelcomeAndChooseStorage.getUserChosenFilePath();
+			LogStorage.writeLogFile(filePath);
+			Logic.createFile(filePath);
 		}
 		executeUntilExit();
 	}
