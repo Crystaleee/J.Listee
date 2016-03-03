@@ -26,8 +26,6 @@ public class Task{
     
     public Task(String description, Calendar startDate, Calendar endDate){
         this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
     }
     
     public void setDescription(String description){
