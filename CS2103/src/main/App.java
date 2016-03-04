@@ -28,8 +28,7 @@ public class App {
 		filePath=LogStorage.readLog();
 		//check if it's the first time that user use the application
 		if (filePath==null){
-			displayWelcome();
-			//TODO logic tell storage to create a new task file
+			View.displayWelcome();
 			//waiting when user hasn't decide
 			while(WelcomeAndChooseStorage.getUserChosenFilePath()==null){}
 			filePath=WelcomeAndChooseStorage.getUserChosenFilePath();
@@ -39,21 +38,14 @@ public class App {
 		executeUntilExit();
 	}
 
-	/**
-	 * 
-	 */
-	private static void displayWelcome() {
-		View.card.show(View.panels, "welcome");
-		View.frame.setVisible(true);
-	}
+
 
 	private static void executeUntilExit() throws IOException {
 		//call to logic to get all the tasks
-		//TODO
 		List<Task> taskList=Logic.initializeProgram(filePath).getList();
 				
 		while (true) {
-			displayList(taskList);				
+			View.displayList(taskList);				
 			//do nothing when command is null
 			while(command==null){}
 			//TODO logic handle user command
@@ -61,13 +53,5 @@ public class App {
 		}
 	}
 
-	/**
-	 * @param taskList
-	 */
-	private static void displayList(List<Task> taskList) {
-		View.showList=new ShowList(taskList);
-		View.panels.add(View.showList.browserView,"showList");
-		View.card.show(View.panels, "showList");
-		View.frame.setVisible(true);
-	}	
+
 }

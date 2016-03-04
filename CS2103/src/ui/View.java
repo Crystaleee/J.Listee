@@ -1,10 +1,13 @@
 package ui;
 
 import java.awt.CardLayout;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
+
+import bean.Task;
 
 /**
  * @author Zhu Bingjing
@@ -16,9 +19,9 @@ public class View {
 	private static final int WINDOW_WIDTH=600;
 	private static final int WINDOW_HEIGHT=590;
 	
-	public static CardLayout card = new CardLayout(0, 0);
-	public static JPanel panels = new JPanel(card);
-	public static JFrame frame = new JFrame("J.Listee");
+	private static CardLayout card = new CardLayout(0, 0);
+	private static JPanel panels = new JPanel(card);
+	private static JFrame frame = new JFrame("J.Listee");
 	protected static WelcomeAndChooseStorage welcome;
 	public static ShowList showList;
 	
@@ -52,4 +55,23 @@ public class View {
 		frame.setVisible(false);
 	}
 
+	/**
+	 * display list in the frame
+	 * 
+	 * @param taskList
+	 */
+	public static void displayList(List<Task> taskList) {
+		View.showList=new ShowList(taskList);
+		View.panels.add(View.showList.browserView,"showList");
+		View.card.show(View.panels, "showList");
+		View.frame.setVisible(true);
+	}	
+	
+	/**
+	 * display welcome page in the frame
+	 */
+	public static void displayWelcome() {
+		View.card.show(View.panels, "welcome");
+		View.frame.setVisible(true);
+	}
 }
