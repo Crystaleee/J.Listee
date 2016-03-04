@@ -1,3 +1,4 @@
+package bean;
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
  * Last updated: 3/4/2016, 4:30AM

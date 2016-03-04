@@ -33,7 +33,7 @@ public class App {
 			while(WelcomeAndChooseStorage.getUserChosenFilePath()==null){}
 			filePath=WelcomeAndChooseStorage.getUserChosenFilePath();
 			LogStorage.writeLogFile(filePath);
-			Logic.createFile(filePath);
+			Logic.createFile(filePath+"\\J.Listee.txt");
 		}
 		executeUntilExit();
 	}
@@ -42,7 +42,7 @@ public class App {
 
 	private static void executeUntilExit() throws IOException {
 		//call to logic to get all the tasks
-		List<Task> taskList=Logic.initializeProgram(filePath).getList();
+		List<Task> taskList=Logic.initializeProgram(filePath+"\\J.Listee.txt").getList();
 				
 		while (true) {
 			View.displayList(taskList);				
