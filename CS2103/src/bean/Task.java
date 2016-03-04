@@ -1,33 +1,47 @@
-package bean;
+/*
+ * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * Last updated: 3/4/2016, 4:30AM
+ * CS2103
+ */
+ package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-public class Task{
+class Task{
 
     private String description;
     private Calendar startDate;
     private Calendar endDate;
-    private String location;
-    private List<String> tags=new ArrayList<String>();
+    private String Location;
+    private ArrayList<String> tags;
 
     public Task(){
         description = "Default";
         endDate = null;
         startDate = null;
+        tags = null;
     }
     
-    public Task(String description){
+    public Task(String description, ArrayList<String> tags){
         this.description = description;
         this.endDate = null;
         this.startDate = null;
+        this.tags = tags;
     }
     
     public Task(String description, Calendar startDate, Calendar endDate){
         this.description = description;
-        this.startDate = startDate;
         this.endDate = endDate;
+        this.startDate = startDate;
+        this.tags = null;
+    }
+    
+    public Task(String description, Calendar startDate, Calendar endDate, ArrayList<String> tags){
+        this.description = description;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.tags = tags;
     }
     
     public void setDescription(String description){
@@ -53,20 +67,12 @@ public class Task{
     public Calendar getEndDate(){
         return endDate;
     }
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public List<String> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<String> tags) {
-		this.tags = tags;
-	}
+    
+    public void setTags(ArrayList<String> tags){
+        this.tags= tags;
+    }
+    
+    public ArrayList<String> getTags(){
+        return tags;
+    }
 }
