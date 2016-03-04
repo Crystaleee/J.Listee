@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-class Command{
+public class Command{
     private Display display;
     
     public Command(){

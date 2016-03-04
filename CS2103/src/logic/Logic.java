@@ -3,10 +3,18 @@
  * Last updated: 3/4/2016, 4:30AM
  * CS2103
  */
-package logic
+package logic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import parser.Parser;
+import storage.Storage;
+import bean.Display;
+import bean.History;
+import bean.Task;
+import bean.Command;
+
 public class Logic {
     
     private static final String MESSAGE_FILE_CREATED = "File created and ready for use";
@@ -26,9 +34,9 @@ public class Logic {
         }
     }
     
-    public static Display initialiseProgram(){
+    public static Display initializeProgram(String filePath){
         try{
-            ArrayList<Task> taskList = Storage.getList();
+            ArrayList<Task> taskList = Storage.getList(filePath);
             History.saveList(taskList);
             setDisplay(null, taskList);
             return display;

@@ -8,7 +8,7 @@
 import java.util.ArrayList;
 import java.util.Calendar;
 
-class Task{
+public class Task{
 
     private String description;
     private Calendar startDate;
@@ -75,4 +75,12 @@ class Task{
     public ArrayList<String> getTags(){
         return tags;
     }
+
+	public String getLocation() {
+		return Location;
+	}
+
+	public void setLocation(String location) {
+		Location = location;
+	}
 }
