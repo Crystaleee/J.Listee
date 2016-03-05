@@ -1,89 +1,124 @@
 package ui;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.swing.JFileChooser;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
+import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
-import main.App;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import netscape.javascript.JSObject;
+import bean.DeadlineTask;
+import bean.Display;
+import bean.EventTask;
 import bean.Task;
-
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.BrowserFunction;
-import com.teamdev.jxbrowser.chromium.JSValue;
-import com.teamdev.jxbrowser.chromium.dom.By;
-import com.teamdev.jxbrowser.chromium.dom.DOMDocument;
-import com.teamdev.jxbrowser.chromium.dom.DOMElement;
-import com.teamdev.jxbrowser.chromium.dom.DOMNode;
-import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
-import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
-import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+import javafx.concurrent.Worker;
 
 /**
- * @author  Zhu Bingjing
- * @date 2016年3月2日 上午12:06:39 
- * @version 1.0 
+ * @author Zhu Bingjing
+ * @date 2016年3月2日 上午12:06:39
+ * @version 1.0
  */
-public class ShowList  extends Browser {
-	public BrowserView browserView;
-	int index=1;
+public class ShowList extends Pane {
+	private static WebView browser = new WebView();
+	private static WebEngine webEngine = browser.getEngine();
+	private Display display;
 
-	public ShowList(final List<Task> taskList) {
-		browserView = new BrowserView(this);
-		
-		this.loadURL(View.programPath + "\\src\\html\\list.html");
+	public ShowList(Display display) {
+		this.display=display;
+		// load the web page
+		webEngine.load(WelcomeAndChooseStorage.class.getResource(
+				"/html/list.html").toExternalForm());
+		// add the web view to the scene
+		this.getChildren().add(browser);
 
-		//add all the tasks in the list to the panel while loading
-		this.addLoadListener(new LoadAdapter() {
-            @Override
-            public void onFinishLoadingFrame(FinishLoadingEvent event) {
-                DOMDocument document = event.getBrowser().getDocument();
-                DOMNode tasklist_timed = document.findElement(By.id("tasklist_timed"));
-                for(Task task:taskList){
-                	DOMElement taskdiv = document.createElement("div");
-                    taskdiv.setAttribute("class", "task");
-                    taskdiv.setInnerHTML("<section class='task_number'>"
-                    		+ index
-                    		+"</section>"
-                    		+ "<section class='task_middle'>"
-                    		+ "<div class='task_components task_description'>"
-                    		+ task.getDescription()
-                    		+"</div>"
-                    		+ "<section class='task_components task_location'>"
-                    		+ task.getLocation()
-                    		+"</section>"
-                    		+ "<section class='task_components task_tags' id='task_tags'>"
-                    		+ "</section>"
-                    		+ "</section>"
-                    		+ "<section class='task_right'>"
-                    		+ "<div class='task_components time task_uppertime'>"
-                    		+ task.getStartDate()
-                    		+"</div>"
-                    		+ " <div class='task_components time task_lowertime'>"
-                    		+ task.getEndDate()
-                    		+"</div>"
-                    		+ "</section>");                   
-                    
-                    DOMNode task_tags=taskdiv.findElement(By.id("task_tags"));
-                    for(String tag: task.getTags()){
-                    	DOMElement tagspan = document.createElement("span");
-                    	tagspan.setInnerText(tag);
-                    	task_tags.appendChild(tagspan);
-                    }
-                    tasklist_timed.appendChild(taskdiv);
-                    index++;
-                }   
-                //reset starting index to 1
-                index=1;
-            }
-        });
-		
-		this.registerFunction("sendCommand", new BrowserFunction() {
-            public JSValue invoke(JSValue... args) {
-                JSValue userCmd = args[0];
-                App.command=userCmd.getString();
+		if (display != null) {
+			webEngine
+					.getLoadWorker()
+					.stateProperty()
+					.addListener(
+							(ObservableValue<? extends State> ov,
+									State oldState, State newState) -> {
+								if (newState == Worker.State.SUCCEEDED) {
+									JSObject win = (JSObject) webEngine
+											.executeScript("window");
 
-                return JSValue.createNull();
-            }
-        });
+									// construct JSON to pass to JS
+									//deadline tasks
+									if(display.getDeadlineTasks()!=null){
+										List<Task> deadlines=display.getDeadlineTasks();
+										JSONArray jsonDeadline = new JSONArray();
+										for (Task deadline: deadlines) {
+											JSONObject task = new JSONObject(deadline);
+											task.remove("startDateTime");
+											task.remove("endDateTime");
+											task.put("endDateTime",
+													new SimpleDateFormat(
+															"yy-MM-dd HH:mm")
+															.format(((DeadlineTask)deadline).getEndDateTime()
+																	.getTime()));
+											jsonDeadline.put(task);
+										}
+										win.call("addTasks", jsonDeadline,"deadline");
+									}
+									
+									
+									//event tasks
+									if(display.getEventTasks()!=null){
+										List<Task> events=display.getEventTasks();
+										JSONArray jsonEvent = new JSONArray();
+										for (Task event: events) {
+											JSONObject task = new JSONObject(event);
+											task.remove("startDateTime");
+											task.remove("endDateTime");
+											task.put("startDateTime",
+													new SimpleDateFormat(
+															"yy-MM-dd HH:mm")
+															.format(((EventTask) event)
+																	.getStartDateTime()
+																	.getTime()));
+											task.put("endDateTime",
+													new SimpleDateFormat(
+															"yy-MM-dd HH:mm")
+															.format(((EventTask) event).getEndDateTime()
+																	.getTime()));
+											jsonEvent.put(task);
+										}
+										win.call("addTasks", jsonEvent,"event");
+									}
+									
+									
+									//floating tasks
+									if(display.getFloatTasks()!=null){
+										List<Task> floatings=display.getFloatTasks();
+										JSONArray jsonFloating = new JSONArray();
+										for (Task floating: floatings) {
+											JSONObject task = new JSONObject(floating);
+											task.remove("startDateTime");
+											task.remove("endDateTime");
+											jsonFloating.put(task);
+										}
+										win.call("addTasks", jsonFloating,"floating");
+									}
+									
+									
+									win.setMember("app", new ListBridge());
+								}
+							});
+		}
+	}
+
+	// JavaScript interface object
+	public class ListBridge {
+		public void receiveCommand(String command) throws IOException {
+			System.out.println(command);
+			ui.feedback(command);
+		}
 	}
 }

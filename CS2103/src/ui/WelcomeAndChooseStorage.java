@@ -1,49 +1,62 @@
 package ui;
 
+import java.io.IOException;
+
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
+import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+
 import javax.swing.JFileChooser;
 
-import storage.LogStorage;
-
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.BrowserFunction;
-import com.teamdev.jxbrowser.chromium.JSValue;
-import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+import main.App;
+import netscape.javascript.JSObject;
 
 /**
  * @author Zhu Bingjing
  * @date 2016年3月1日 下午10:08:56
  * @version 1.0
  */
-public class WelcomeAndChooseStorage extends Browser {
-	BrowserView browserView;
-	private static String userChosenFilePath;
+public class WelcomeAndChooseStorage extends Pane {
+	private static WebView browser = new WebView();
+	private static WebEngine webEngine = browser.getEngine();
 
 	public WelcomeAndChooseStorage() {
-		browserView = new BrowserView(this);
-		this.loadURL(View.programPath + "\\src\\html\\launch.html");
+		// load the web page
+		webEngine.load(WelcomeAndChooseStorage.class.getResource(
+				"/html/launch.html").toExternalForm());
+		// process page loading
+		webEngine
+				.getLoadWorker()
+				.stateProperty()
+				.addListener(
+						(ObservableValue<? extends State> ov, State oldState,
+								State newState) -> {
+							if (newState == State.SUCCEEDED) {
+								JSObject win = (JSObject) webEngine
+										.executeScript("window");
+								win.setMember("app", new WelcomeBridge());
+							}
+						});
+		// add the web view to the scene
+		this.getChildren().add(browser);
+	}
 
-		// Register Java callback function that will be invoked from JavaScript
-		// when user clicks choose filefolder button.
-		this.registerFunction("onChooseFolder", new BrowserFunction() {
-			@Override
-			public JSValue invoke(JSValue... args) {
-				JFileChooser fileChooser = new JFileChooser("D:\\");
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int returnVal = fileChooser.showOpenDialog(fileChooser);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					setUserChosenFilePath(fileChooser.getSelectedFile().getAbsolutePath());				
-				}
-				// Return undefined (void) to JavaScript.
-				return JSValue.createUndefined();
+	// JavaScript interface object
+	public class WelcomeBridge {
+
+		public void chooseFolder() throws IOException {
+			JFileChooser fileChooser = new JFileChooser("D:\\");
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = fileChooser.showOpenDialog(fileChooser);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				// create file under the file folder chosen by user
+				ui.createFile(fileChooser.getSelectedFile().getAbsolutePath());
+				//display starting page
+				ui.initializeList(App.stage, App.filePath);
 			}
-		});
+		}
 	}
 
-	public static String getUserChosenFilePath() {
-		return userChosenFilePath;
-	}
-
-	public static void setUserChosenFilePath(String userChosenFilePath) {
-		WelcomeAndChooseStorage.userChosenFilePath = userChosenFilePath;
-	}
 }

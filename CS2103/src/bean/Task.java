@@ -7,7 +7,7 @@
 
 import java.util.ArrayList;
 
-public abstract class Task{
+public class Task{
     private String description;
     private String location;
     private ArrayList<String> tags;
