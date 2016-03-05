@@ -6,14 +6,14 @@
 package bean;
 import java.util.ArrayList;
 
-class Display{
+public class Display{
 
     private String message;
-    private ArrayList<TaskEvent> events;
-    private ArrayList<TaskDeadline> deadlineTasks;
-    private ArrayList<TaskFloat> floatTasks;
-    //private ArrayList<TaskFloat> reservedTasks;
-    //private ArrayList<TaskFloat> completedTasks;
+    private ArrayList<EventTask> events;
+    private ArrayList<DeadlineTask> deadlineTasks;
+    private ArrayList<FloatingTask> floatTasks;
+    //private ArrayList<FloatingTask> reservedTasks;
+    //private ArrayList<FloatingTask> completedTasks;
 
     public Display(){
         message = "";
@@ -33,8 +33,8 @@ class Display{
         //completedTasks = null;
     }
     
-    public Display(String message, ArrayList<TaskEvent> events, ArrayList<TaskDeadline> deadlineTasks, 
-            ArrayList<TaskFloat> floatTasks, ArrayList<TaskFloat> reservedTasks, ArrayList<TaskFloat> completedTasks){
+    public Display(String message, ArrayList<EventTask> events, ArrayList<DeadlineTask> deadlineTasks, 
+            ArrayList<FloatingTask> floatTasks, ArrayList<FloatingTask> reservedTasks, ArrayList<FloatingTask> completedTasks){
         this.message = "";
         this.events = events;
         this.deadlineTasks = deadlineTasks;
@@ -51,43 +51,43 @@ class Display{
         return message;
     }
     
-    public void setEvents(ArrayList<TaskEvent> events){
+    public void setEvents(ArrayList<EventTask> events){
         this.events = events;
     }
     
-    public ArrayList<TaskEvent> getEvents(){
+    public ArrayList<EventTask> getEvents(){
         return events;
     }
     
-    public void setDeadlineTasks(ArrayList<TaskDeadline> deadlineTasks){
+    public void setDeadlineTasks(ArrayList<DeadlineTask> deadlineTasks){
         this.deadlineTasks = deadlineTasks;
     }
     
-    public ArrayList<TaskDeadline> getDeadlineTasks(){
+    public ArrayList<DeadlineTask> getDeadlineTasks(){
         return deadlineTasks;
     }
     
-    public void setFloatTasks(ArrayList<TaskFloat> floatTasks){
+    public void setFloatTasks(ArrayList<FloatingTask> floatTasks){
         this.floatTasks = floatTasks;
     }
     
-    public ArrayList<TaskFloat> getFloatTasks(){
+    public ArrayList<FloatingTask> getFloatTasks(){
         return floatTasks;
     }
     
-    /*public void setReservedTasks(ArrayList<TaskFloat> reservedTasks){
+    /*public void setReservedTasks(ArrayList<FloatingTask> reservedTasks){
         this.reservedTasks = reservedTasks;
     }
     
-    public ArrayList<TaskFloat> getReservedTasks(){
+    public ArrayList<FloatingTask> getReservedTasks(){
         return reservedTasks;
     }
     
-    public ArrayList<TaskFloat> getCompletedTasks(){
+    public ArrayList<FloatingTask> getCompletedTasks(){
         return events;
     }
     
-    public void setCompletedTasks(ArrayList<TaskFloat> completedTasks){
+    public void setCompletedTasks(ArrayList<FloatingTask> completedTasks){
         this.completedTasks = completedTasks;
     }*/
 }
