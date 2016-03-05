@@ -3,6 +3,8 @@
  * Last updated: 3/5/2016, 8:00pm
  * CS2103
  */
+
+package bean;
 public class CommandInvalid extends Command{
     private final String MESSAGE_INVALID_COMMAND = "Pls enter a valid command";
     
