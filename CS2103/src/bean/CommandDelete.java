@@ -3,8 +3,12 @@
  * Last updated: 3/6/2016, 1:25am
  * CS2103
  */
+package bean;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import History.History;
+import storage.Storage;
 
 public class CommandDelete extends Command{
     private ArrayList<Integer> taskNumbers;
