@@ -7,13 +7,9 @@
  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
  <style>
-   #wrapper{
-     margin:0 auto;
-   }
    .center {
      width: 600px;
      min-height: 400px;
-     margin:0px auto;
      text-align: center;
    }
    .list{ 
@@ -130,60 +126,134 @@
 </head>
 <body>
   <script>
-   function sendFormData() {
+   function addDeadlineTasks(jsonTasks){
+    var taskList = JSON.parse(jsonTasks);
+    var tasklist_deadline=document.getElementById("tasklist_deadline");
+    //remove all existing children
+    while (tasklist_deadline.firstChild) {
+      tasklist_deadline.removeChild(tasklist_deadline.firstChild);
+    }
+
+    for  (index = 0; index < taskList.length; index++){
+
+      var taskdiv = document.createElement("div");
+      taskdiv.setAttribute("class", "task");
+      taskdiv.innerHTML="here";
+      taskdiv.innerHTML= "<section class='task_number'>"
+      + (index+1)
+      +"</section>"
+      + "<section class='task_middle'>"
+      + "<div class='task_components task_description'>"
+      + taskList[index].description
+      +"</div>"
+      + "<section class='task_components task_location'>"
+      + taskList[index].location
+      +"</section>"
+      + "<section class='task_components task_tags' id='task_tags"
+      +index
+      +"'>"
+      + "</section>"
+      + "</section>"
+      + "<section class='task_right'>"
+      + " <div class='task_components time task_lowertime'>"
+      + taskList[index].endDate
+      +"</div>"
+      + "</section>"
+
+      tasklist_deadline.appendChild(taskdiv);
+
+      var task_tags=document.getElementById("task_tags"+index);
+      for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+        var tagspan = document.createElement("span");
+        tagspan.innerHTML=taskList[index].tags[index2];
+        task_tags.appendChild(tagspan);
+      }
+    }    
+  }
+
+   function addEventTasks(jsonTasks){
+    var taskList = JSON.parse(jsonTasks);
+    var tasklist_event=document.getElementById("tasklist_event");
+    //remove all existing children
+    while (tasklist_event.firstChild) {
+      tasklist_event.removeChild(tasklist_event.firstChild);
+    }
+
+    for  (index = 0; index < taskList.length; index++){
+
+      var taskdiv = document.createElement("div");
+      taskdiv.setAttribute("class", "task");
+      taskdiv.innerHTML="here";
+      taskdiv.innerHTML= "<section class='task_number'>"
+      + (index+1)
+      +"</section>"
+      + "<section class='task_middle'>"
+      + "<div class='task_components task_description'>"
+      + taskList[index].description
+      +"</div>"
+      + "<section class='task_components task_location'>"
+      + taskList[index].location
+      +"</section>"
+      + "<section class='task_components task_tags' id='task_tags"
+      +index
+      +"'>"
+      + "</section>"
+      + "</section>"
+      + "<section class='task_right'>"
+      + "<div class='task_components time task_uppertime'>"
+      + taskList[index].startDate
+      +"</div>"
+      + " <div class='task_components time task_lowertime'>"
+      + taskList[index].endDate
+      +"</div>"
+      + "</section>"
+
+      tasklist_event.appendChild(taskdiv);
+
+      var task_tags=document.getElementById("task_tags"+index);
+      for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+        var tagspan = document.createElement("span");
+        tagspan.innerHTML=taskList[index].tags[index2];
+        task_tags.appendChild(tagspan);
+      }
+    }    
+  }
+
+  function sendCommand() {
     var command = cmd.elements['command'].value;
-    // Invoke the 'save' Java callback
-    sendCommand(command);
+    // Invoke the 'receive' Java callback
+    app.receiveCommand(command);
   }
 </script>
 <div id="wrapper">
  <div class="center">
   <div class="main">
     <div class="list">
-     <!-- 
-     <div class="group overdue">
-       <div class="grouptitle">OVERDUE</div>
-       <div class="tasklist" id="tasklist_overdue">
-
-       </div>
-     </div>
-     <div class="group today">
-      <div class="grouptitle">TODAY</div>
-      <div class="tasklist" id="tasklist_today">
-
-   </div>
- </div>
- <div class="group tomorrow">
-  <div class="grouptitle">TOMORROW</div>
-   <div class="tasklist" id="tasklist_tomorrow">
-
-   </div>
-</div>
--->
-<div class="group timed">
-  <div class="grouptitle">TIMED</div>
-  <div class="tasklist" id="tasklist_timed">
+     
+<div class="group deadline">
+  <div class="grouptitle">DEADLINES</div>
+  <div class="tasklist" id="tasklist_deadline">
 
   </div>
 </div>
- <!-- 
-<div class="group untimed">
-  <div class="grouptitle">UNTIMED</div>
-   <div class="tasklist" id="tasklist_untimed">
+ 
+<div class="group event">
+  <div class="grouptitle">EVENTS</div>
+   <div class="tasklist" id="tasklist_event">
       
    </div>
 </div>
-<div class="group reserved">    
- <div class="grouptitle">RESERVED</div> 
-  <div class="tasklist" id="tasklist_reserved">
+<div class="group floating">    
+ <div class="grouptitle">FLOATING</div> 
+  <div class="tasklist" id="tasklist_floating">
        
    </div>
 </div>
--->
+
 </div>
 <div class="commandline">
   <form name="cmd">
-    <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendFormData();}" placeholder="Type your command here"/>
+    <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here"/>
   </form>
 </div>
 </div>

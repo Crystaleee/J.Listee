@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="C:/Users/zhu/Downloads/jxbrowser-6.0-cross-desktop-win_mac_linux/lib/jxbrowser-6.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/zhu/Downloads/jxbrowser-6.0-cross-desktop-win_mac_linux/lib/jxbrowser-linux32-6.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/zhu/Downloads/jxbrowser-6.0-cross-desktop-win_mac_linux/lib/jxbrowser-linux64-6.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/zhu/Downloads/jxbrowser-6.0-cross-desktop-win_mac_linux/lib/jxbrowser-mac-6.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/zhu/Downloads/jxbrowser-6.0-cross-desktop-win_mac_linux/lib/jxbrowser-win-6.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/zhu/Downloads/license.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

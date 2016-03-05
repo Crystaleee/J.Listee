@@ -7,50 +7,40 @@
  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
  <style>
-   #wrapper{
-     margin:0 auto;
-   }
    .center {
      width: 600px;
-     height: 590px;
-     margin:0px auto;
+     height: 590px;  
      text-align: center;
    }
    .btn-lg{
     width: 400px;
     font-size: 25px;
-   }
-   h1{
+  }
+  h1{
     font-size: 60px;
-   }
-   .jumbotron{
+  }
+  .jumbotron{
     width: 100%;
     height:100%;
     padding: 50px;
     margin-bottom: 0px;
-   }
- </style>
+  }
+</style>
 </head>
 <body scroll="no">
-  <script>
-    function chooseFolder() {
-   // Call Java callback function and pass text fields values.
-   onChooseFolder();
- }
-</script>
-<div id="wrapper">
- <div class="center">
-  <div class="jumbotron">
-  <br>
-    <h1>Welcome to J.Listee!</h1>
-    <p><br><br>Now please specify a folder as the data storage location. You can use a cloud syncing service to control your to-do list.</p>
-    <br>
-    <br>
-    <br>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button" onclick="chooseFolder();">Choose a folder</a></p>
-    <br>
+  <div id="wrapper">
+   <div class="center">
+    <div class="jumbotron">
+      <br>
+      <h1>Welcome to J.Listee!</h1>
+      <p><br><br>Now please specify a folder as the data storage location. You can use a cloud syncing service to control your to-do list.</p>
+      <br>
+      <br>
+      <br>
+      <p><a class="btn btn-primary btn-lg" href="#" role="button" onclick="app.chooseFolder();">Choose a folder</a></p>
+      <br>
+    </div>
   </div>
-</div>
 </div>
 </body>
 </html>
