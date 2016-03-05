@@ -1,16 +1,21 @@
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 3/4/2016, 4:30AM
+ * Last updated: 3/5/2016, 8:55pm
  * CS2103
  */
- package bean;
-
+package bean;
 import java.util.ArrayList;
 
 public class Task{
     private String description;
     private String location;
     private ArrayList<String> tags;
+    
+    public Task(){
+        description = null;
+        location = null;
+        tags = null;
+    }
     
     public Task(String description, String location, ArrayList<String> tags){
         this.description = description;
