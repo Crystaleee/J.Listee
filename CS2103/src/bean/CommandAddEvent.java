@@ -1,68 +1,93 @@
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 3/5/2016, 9:46pm
+ * Last updated: 3/5/2016, 8:06pm
  * CS2103
  */
- package bean;
+package bean;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import History.History;
+import storage.Storage;
 
-public class CommandAddEvent extends CommandAddDeadlineTask{
-    private Calendar startDate;
+public class CommandAddFloatTask extends Command{
+    private String description;
+    private String location;
+    private ArrayList<String> tags;
+    private final String MESSAGE_NO_DESCRIPTION = "Pls enter a description";
+    private final String MESSAGE_SUCCESS = "added: \"%2$s\"";
+    private final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
     
-    public CommandAddEvent(){
-        this.setDescription(null);
-        this.setLocation(null);
-        this.startDate = null;
-        this.setEndDate(null);
-        this.setTags(null);
+    public CommandAddFloatTask(){
+        this.description = null;
+        this.location = null;
+        this.tags = null;
     }
     
-    public CommandAddEvent(String description, String location, Calendar startDate, Calendar endDate, ArrayList<String> tags){
-        this.setDescription(description);
-        this.setLocation(location);
-        this.startDate = startDate;
-        this.setEndDate(endDate);
-        this.setTags(tags);
+    public CommandAddFloatTask(String description, String location, ArrayList<String> tags){
+        this.description = description;
+        this.location = location;
+        this.tags = tags;
+    }
+    
+    public String getDescription(){
+        return description;
+    }
+    
+    public void setDescription(String description){
+        this.description = description;
+    } 
+    
+    public String getLocation(){
+        return location;
+    }
+    
+    public void setLocation(String location){
+        this.location = location;
+    } 
+    
+    public String getMessageNoDescription(){
+        return MESSAGE_NO_DESCRIPTION;
+    }
+    
+    public String getSuccessMessage(){
+        return MESSAGE_SUCCESS;
+    }
+    
+    public String getMessageErrorUpdateFile(){
+        return MESSAGE_ERROR_UPDATE_FILE;
+    }
+    
+    public void setTags(ArrayList<String> tags){
+        this.tags = tags;
+    }
+    
+    public ArrayList<String> getTags(){
+        return tags;
     }
     
     public Display execute(Display display){
-        if(getDescription() == null){
-            display.setMessage(getMessageNoDescription());
+        if(description == null){
+            display.setMessage(MESSAGE_NO_DESCRIPTION);
             return display;
         }
-        ArrayList<TaskEvent> events = addEvent(display.getEvents());
-        display.setEvents(events);
+        display.getFloatTasks().add(new Task(description, location, tags));
         if(hasUpdateFile(display)){
-            display.setMessage(getSuccessMessage());
+            display.setMessage(MESSAGE_SUCCESS);
             History.saveDisplay(display);
         }
         else{
-            display = new Display(getMessageErrorUpdateFile());
+            display = new Display(MESSAGE_ERROR_UPDATE_FILE);
         }
         return display;
     }
     
-    
-    public ArrayList<TaskEvent> addEvent(ArrayList<TaskEvent> taskList) {
-        int index = getAddIndex(taskList);
-        taskList.add(index, new TaskEvent(getDescription(), getLocation(), startDate, getEndDate(), getTags()));
-        return taskList;
-    }
-    
-    /*
-     * This method searches for the index to slot the deadline task in since we
-     * are sorting the list in order of earliest start time first
-     */
-    public int getAddIndex(ArrayList<TaskEvent> taskList) {
-        int i = 0;
-        for(i = 0; taskList.get(i).getStartDate()!= null; i++){
-            if(startDate.compareTo(taskList.get(i).getStartDate()) < 0){
-                break;
-            }
+    public boolean hasUpdateFile(Display display) {
+        try{
+            Storage.saveFile(display);
+            return true;
+        }catch(IOException error){
+            return false;
         }
-        return i;
     }
 }
