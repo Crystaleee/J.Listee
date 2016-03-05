@@ -3,8 +3,12 @@
  * Last updated: 3/5/2016, 8:06pm
  * CS2103
  */
+package bean;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import History.History;
+import storage.Storage;
 
 public class CommandAddFloatTask extends Command{
     private String description;
