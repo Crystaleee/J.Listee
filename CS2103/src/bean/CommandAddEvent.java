@@ -1,93 +1,68 @@
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 3/5/2016, 8:06pm
+ * Last updated: 3/5/2016, 9:46pm
  * CS2103
  */
-package bean;
-import java.io.IOException;
+ package bean;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import History.History;
-import storage.Storage;
 
-public class CommandAddFloatTask extends Command{
-    private String description;
-    private String location;
-    private ArrayList<String> tags;
-    private final String MESSAGE_NO_DESCRIPTION = "Pls enter a description";
-    private final String MESSAGE_SUCCESS = "added: \"%2$s\"";
-    private final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
+public class CommandAddEvent extends CommandAddDeadlineTask{
+    private Calendar startDate;
     
-    public CommandAddFloatTask(){
-        this.description = null;
-        this.location = null;
-        this.tags = null;
+    public CommandAddEvent(){
+        this.setDescription(null);
+        this.setLocation(null);
+        this.startDate = null;
+        this.setEndDate(null);
+        this.setTags(null);
     }
     
-    public CommandAddFloatTask(String description, String location, ArrayList<String> tags){
-        this.description = description;
-        this.location = location;
-        this.tags = tags;
-    }
-    
-    public String getDescription(){
-        return description;
-    }
-    
-    public void setDescription(String description){
-        this.description = description;
-    } 
-    
-    public String getLocation(){
-        return location;
-    }
-    
-    public void setLocation(String location){
-        this.location = location;
-    } 
-    
-    public String getMessageNoDescription(){
-        return MESSAGE_NO_DESCRIPTION;
-    }
-    
-    public String getSuccessMessage(){
-        return MESSAGE_SUCCESS;
-    }
-    
-    public String getMessageErrorUpdateFile(){
-        return MESSAGE_ERROR_UPDATE_FILE;
-    }
-    
-    public void setTags(ArrayList<String> tags){
-        this.tags = tags;
-    }
-    
-    public ArrayList<String> getTags(){
-        return tags;
+    public CommandAddEvent(String description, String location, Calendar startDate, Calendar endDate, ArrayList<String> tags){
+        this.setDescription(description);
+        this.setLocation(location);
+        this.startDate = startDate;
+        this.setEndDate(endDate);
+        this.setTags(tags);
     }
     
     public Display execute(Display display){
-        if(description == null){
-            display.setMessage(MESSAGE_NO_DESCRIPTION);
+        if(getDescription() == null){
+            display.setMessage(getMessageNoDescription());
             return display;
         }
-        display.getFloatTasks().add(new Task(description, location, tags));
+        ArrayList<TaskEvent> events = addEvent(display.getEvents());
+        display.setEvents(events);
         if(hasUpdateFile(display)){
-            display.setMessage(MESSAGE_SUCCESS);
+            display.setMessage(getSuccessMessage());
             History.saveDisplay(display);
         }
         else{
-            display = new Display(MESSAGE_ERROR_UPDATE_FILE);
+            display = new Display(getMessageErrorUpdateFile());
         }
         return display;
     }
     
-    public boolean hasUpdateFile(Display display) {
-        try{
-            Storage.saveFile(display);
-            return true;
-        }catch(IOException error){
-            return false;
+    
+    public ArrayList<TaskEvent> addEvent(ArrayList<TaskEvent> taskList) {
+        int index = getAddIndex(taskList);
+        taskList.add(index, new TaskEvent(getDescription(), getLocation(), startDate, getEndDate(), getTags()));
+        return taskList;
+    }
+    
+    /*
+     * This method searches for the index to slot the deadline task in since we
+     * are sorting the list in order of earliest start time first
+     */
+    public int getAddIndex(ArrayList<TaskEvent> taskList) {
+        int i = 0;
+        for(i = 0; taskList.get(i).getStartDate()!= null; i++){
+            if(startDate.compareTo(taskList.get(i).getStartDate()) < 0){
+                break;
+            }
         }
+        return i;
     }
 }
