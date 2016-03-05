@@ -1,20 +1,46 @@
+/*
+ * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * Last updated: 3/5/2016, 8:00pm
+ * CS2103
+ */
 package bean;
-
 import java.util.ArrayList;
 
-public class Display{
+class Display{
 
     private String message;
-    private ArrayList<Task> taskList;
+    private ArrayList<TaskEvent> events;
+    private ArrayList<TaskDeadline> deadlineTasks;
+    private ArrayList<TaskFloat> floatTasks;
+    //private ArrayList<TaskFloat> reservedTasks;
+    //private ArrayList<TaskFloat> completedTasks;
 
     public Display(){
         message = "";
-        taskList = null;
+        events = null;
+        deadlineTasks = null;
+        floatTasks = null;
+        //reservedTasks = null;
+        //completedTasks = null;
     }
     
-    public Display(String message, ArrayList<Task> taskList){
+    public Display(String message){
         this.message = message;
-        this.taskList = taskList;
+        events = null;
+        deadlineTasks = null;
+        floatTasks = null;
+        //reservedTasks = null;
+        //completedTasks = null;
+    }
+    
+    public Display(String message, ArrayList<TaskEvent> events, ArrayList<TaskDeadline> deadlineTasks, 
+            ArrayList<TaskFloat> floatTasks, ArrayList<TaskFloat> reservedTasks, ArrayList<TaskFloat> completedTasks){
+        this.message = "";
+        this.events = events;
+        this.deadlineTasks = deadlineTasks;
+        this.floatTasks = floatTasks;
+        //this.reservedTasks = reservedTasks;
+        //this.completedTasks = completedTasks;
     }
     
     public void setMessage(String message){
@@ -25,11 +51,43 @@ public class Display{
         return message;
     }
     
-    public void setList(ArrayList<Task> taskList){
-        this.taskList = taskList;
+    public void setEvents(ArrayList<TaskEvent> events){
+        this.events = events;
     }
     
-    public ArrayList<Task> getList(){
-        return taskList;
+    public ArrayList<TaskEvent> getEvents(){
+        return events;
     }
+    
+    public void setDeadlineTasks(ArrayList<TaskDeadline> deadlineTasks){
+        this.deadlineTasks = deadlineTasks;
+    }
+    
+    public ArrayList<TaskDeadline> getDeadlineTasks(){
+        return deadlineTasks;
+    }
+    
+    public void setFloatTasks(ArrayList<TaskFloat> floatTasks){
+        this.floatTasks = floatTasks;
+    }
+    
+    public ArrayList<TaskFloat> getFloatTasks(){
+        return floatTasks;
+    }
+    
+    /*public void setReservedTasks(ArrayList<TaskFloat> reservedTasks){
+        this.reservedTasks = reservedTasks;
+    }
+    
+    public ArrayList<TaskFloat> getReservedTasks(){
+        return reservedTasks;
+    }
+    
+    public ArrayList<TaskFloat> getCompletedTasks(){
+        return events;
+    }
+    
+    public void setCompletedTasks(ArrayList<TaskFloat> completedTasks){
+        this.completedTasks = completedTasks;
+    }*/
 }
