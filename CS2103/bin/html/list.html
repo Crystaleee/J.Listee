@@ -126,101 +126,90 @@
 </head>
 <body>
   <script>
-   function addDeadlineTasks(jsonTasks){
-    var taskList = JSON.parse(jsonTasks);
-    var tasklist_deadline=document.getElementById("tasklist_deadline");
+    var i=0;
+    function addTasks(jsonTasks, type){
+      if(type=="deadline"){
+        var tasklist_=document.getElementById("tasklist_deadline");
+      }else if(type=="event"){
+        var tasklist_=document.getElementById("tasklist_event");
+      }else if(type=="floating"){
+        var tasklist_=document.getElementById("tasklist_floating");
+      }
+
+      var taskList = JSON.parse(jsonTasks);
+
     //remove all existing children
-    while (tasklist_deadline.firstChild) {
-      tasklist_deadline.removeChild(tasklist_deadline.firstChild);
+    while (tasklist_.firstChild) {
+      tasklist_.removeChild(tasklist_.firstChild);
     }
 
     for  (index = 0; index < taskList.length; index++){
 
       var taskdiv = document.createElement("div");
       taskdiv.setAttribute("class", "task");
-      taskdiv.innerHTML="here";
+
       taskdiv.innerHTML= "<section class='task_number'>"
-      + (index+1)
+      + (i+1)
       +"</section>"
-      + "<section class='task_middle'>"
+      + "<section class='task_middle' id='task_middle'>"
       + "<div class='task_components task_description'>"
       + taskList[index].description
       +"</div>"
-      + "<section class='task_components task_location'>"
-      + taskList[index].location
+      + "<section class='task_components task_location'id='task_location"
+      + i
+      +"'>"
+
       +"</section>"
       + "<section class='task_components task_tags' id='task_tags"
-      +index
+      + i
       +"'>"
       + "</section>"
       + "</section>"
       + "<section class='task_right'>"
-      + " <div class='task_components time task_lowertime'>"
-      + taskList[index].endDate
+      + "<div class='task_components time task_uppertime' id='task_start"
+      + i
+      +"'>"
+
+      +"</div>"
+      + " <div class='task_components time task_lowertime' id='task_end"
+      + i
+      +"'>"
+
       +"</div>"
       + "</section>"
 
-      tasklist_deadline.appendChild(taskdiv);
+      tasklist_.appendChild(taskdiv);
 
-      var task_tags=document.getElementById("task_tags"+index);
-      for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+      //add location if necessary
+      if(taskList[index].location!=undefined){
+        var task_location=document.getElementById("task_location"+i);
+        task_location.innerHTML=taskList[index].location;
+      }
+      //add startDateTime if necessary
+      if(taskList[index].startDateTime!=undefined){
+        var task_start=document.getElementById("task_start"+i);
+        task_start.innerHTML=taskList[index].startDateTime;
+      }
+      //add startDateTime if necessary
+      if(taskList[index].startDateTime!=undefined){
+        var task_end=document.getElementById("task_end"+i);
+        task_end.innerHTML= taskList[index].endDateTime;
+      }
+      //add tags if necessary
+      if(taskList[index].tags!=undefined){
+       var task_tags=document.getElementById("task_tags"+i);
+       for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
         var tagspan = document.createElement("span");
         tagspan.innerHTML=taskList[index].tags[index2];
         task_tags.appendChild(tagspan);
       }
-    }    
-  }
-
-   function addEventTasks(jsonTasks){
-    var taskList = JSON.parse(jsonTasks);
-    var tasklist_event=document.getElementById("tasklist_event");
-    //remove all existing children
-    while (tasklist_event.firstChild) {
-      tasklist_event.removeChild(tasklist_event.firstChild);
     }
+    i=i+1;
+  }    
+}
 
-    for  (index = 0; index < taskList.length; index++){
-
-      var taskdiv = document.createElement("div");
-      taskdiv.setAttribute("class", "task");
-      taskdiv.innerHTML="here";
-      taskdiv.innerHTML= "<section class='task_number'>"
-      + (index+1)
-      +"</section>"
-      + "<section class='task_middle'>"
-      + "<div class='task_components task_description'>"
-      + taskList[index].description
-      +"</div>"
-      + "<section class='task_components task_location'>"
-      + taskList[index].location
-      +"</section>"
-      + "<section class='task_components task_tags' id='task_tags"
-      +index
-      +"'>"
-      + "</section>"
-      + "</section>"
-      + "<section class='task_right'>"
-      + "<div class='task_components time task_uppertime'>"
-      + taskList[index].startDate
-      +"</div>"
-      + " <div class='task_components time task_lowertime'>"
-      + taskList[index].endDate
-      +"</div>"
-      + "</section>"
-
-      tasklist_event.appendChild(taskdiv);
-
-      var task_tags=document.getElementById("task_tags"+index);
-      for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
-        var tagspan = document.createElement("span");
-        tagspan.innerHTML=taskList[index].tags[index2];
-        task_tags.appendChild(tagspan);
-      }
-    }    
-  }
-
-  function sendCommand() {
-    var command = cmd.elements['command'].value;
+function sendCommand() {
+  var command = cmd.elements['command'].value;
     // Invoke the 'receive' Java callback
     app.receiveCommand(command);
   }
@@ -229,33 +218,33 @@
  <div class="center">
   <div class="main">
     <div class="list">
-     
-<div class="group deadline">
-  <div class="grouptitle">DEADLINES</div>
-  <div class="tasklist" id="tasklist_deadline">
 
+      <div class="group deadline">
+        <div class="grouptitle">DEADLINES</div>
+        <div class="tasklist" id="tasklist_deadline">
+
+        </div>
+      </div>
+
+      <div class="group event">
+        <div class="grouptitle">EVENTS</div>
+        <div class="tasklist" id="tasklist_event">
+
+        </div>
+      </div>
+      <div class="group floating">    
+       <div class="grouptitle">FLOATING</div> 
+       <div class="tasklist" id="tasklist_floating">
+
+       </div>
+     </div>
+
+   </div>
+   <div class="commandline">
+    <form name="cmd">
+      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here"/>
+    </form>
   </div>
-</div>
- 
-<div class="group event">
-  <div class="grouptitle">EVENTS</div>
-   <div class="tasklist" id="tasklist_event">
-      
-   </div>
-</div>
-<div class="group floating">    
- <div class="grouptitle">FLOATING</div> 
-  <div class="tasklist" id="tasklist_floating">
-       
-   </div>
-</div>
-
-</div>
-<div class="commandline">
-  <form name="cmd">
-    <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here"/>
-  </form>
-</div>
 </div>
 </div>
 </div>
