@@ -3,8 +3,12 @@
  * Last updated: 3/5/2016, 11:16pm
  * CS2103
  */
+package bean;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import History.History;
 
 public class CommandAddReserved extends CommandAddFloatTask{
     private ArrayList<Calendar> startDates;
