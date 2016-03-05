@@ -3,9 +3,11 @@
  * Last updated: 3/5/2016, 9:46pm
  * CS2103
  */
- 
+ package bean;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import History.History;
 
 public class CommandAddEvent extends CommandAddDeadlineTask{
     private Calendar startDate;
