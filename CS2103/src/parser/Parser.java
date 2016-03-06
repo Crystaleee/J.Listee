@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import bean.Command;
+import bean.CommandAddDeadlineTask;
 import bean.CommandAddEvent;
+import bean.CommandAddFloatTask;
 import bean.CommandInvalid;
 
 public class Parser{
@@ -164,8 +166,8 @@ public class Parser{
 			}
 			
 			if (isDeadline){
-				Command deadlineTask = new CommandAddDeadline(taskDescription, location, endDateTime, tagLists);
-				return deadLineTask;
+				Command deadlineTask = new CommandAddDeadlineTask(taskDescription, location, endDateTime, tagLists);
+				return deadlineTask;
 			}
 			
 			else if (isEvent){
@@ -174,7 +176,7 @@ public class Parser{
 			}
 			
 			else {
-				Command floatingTask = new CommandAddFloat(taskDescription, location, tagLists);
+				Command floatingTask = new CommandAddFloatTask(taskDescription, location, tagLists);
 				return floatingTask;
 			} 
 
