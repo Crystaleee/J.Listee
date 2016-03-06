@@ -12,7 +12,7 @@ public class History {
     
     private static ArrayList<String> userInputs = new ArrayList<String>();
     private static ArrayList<Display> oldDisplays = new ArrayList<Display>();
-    private static int oldDisplaysIndex;
+    private static int oldDisplaysIndex = -1;
     
     public static void saveDisplay(Display display) {
         if(oldDisplaysIndex < (oldDisplays.size() -1)){
