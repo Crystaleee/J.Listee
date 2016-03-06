@@ -6,14 +6,11 @@
 package logic;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
+import History.History;
+import bean.Display;
 import parser.Parser;
 import storage.Storage;
-import bean.Display;
-import bean.History;
-import bean.Task;
-import bean.Command;
 
 public class Logic {
     
@@ -23,38 +20,31 @@ public class Logic {
 
     private static Display display;
     
-    public static Display createFile(String filePath){
+    public static boolean createFile(String filePath){
         try{
             Storage.createFile(filePath);
-            setDisplay(MESSAGE_FILE_CREATED, null);
-            return display;
+            return true;
         }catch(IOException error){
-            setDisplay(MESSAGE_ERROR_FILE_EXISTS, null);
-            return display;
+            return false;
         }
     }
     
     public static Display initializeProgram(String filePath){
         try{
-            ArrayList<Task> taskList = Storage.getList(filePath);
-            History.saveList(taskList);
-            setDisplay(null, taskList);
+            display = Storage.getDisplay(filePath);
+            display.setMessage(null);
+            History.saveDisplay(display);
             return display;
         }catch(IOException error){
-            setDisplay(MESSAGE_ERROR_READING_FILE, null);
+            display = new Display(MESSAGE_ERROR_FILE_EXISTS);
             return display;
         }
     }
     
     public static Display handleCommand(String userInput) {
         History.saveUserInput(userInput);
-        display = Parser.parseCommand(userInput).execute(History.getTaskList(0));
+        display = Parser.ParseCommand(userInput).execute(History.getDisplay(0));
         
         return display;
-    }
-    
-    public static void setDisplay(String message, ArrayList<Task> list) {
-        display.setMessage(message);
-        display.setList(list);
     }
 }
