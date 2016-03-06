@@ -35,6 +35,7 @@ public class Parser{
 		
 	}*/
 	
+	//pls rename to parseCommand and make it non static
 	public Command ParseCommand(String inputLine){
 
 		String[] args = inputLine.split(" ");	
