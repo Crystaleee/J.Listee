@@ -14,9 +14,9 @@ import storage.Storage;
 
 public class Logic {
     
-    private static final String MESSAGE_FILE_CREATED = "File created and ready for use";
+    //private static final String MESSAGE_FILE_CREATED = "File created and ready for use";
     private static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
-    private static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
+    //private static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
 
     private static Display display;
     
