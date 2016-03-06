@@ -41,7 +41,7 @@ public class Logic {
         }
     }
     
-    public static Display handleCommand(String userInput) {
+    public static Display executeUserCommand(String userInput) {
         History.saveUserInput(userInput);
         Parser myParser = new Parser();
         display = myParser.ParseCommand(userInput).execute(History.getDisplay(0));

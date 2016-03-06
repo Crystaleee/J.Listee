@@ -85,11 +85,11 @@ public class CommandDelete extends Command{
         }
         else{
             taskNum -= display.getDeadlineTasks().size();
-            if(taskNum < display.getEvents().size()){
-                deletedTask = display.getEvents().remove(taskNum - 1);
+            if(taskNum < display.getEventTasks().size()){
+                deletedTask = display.getEventTasks().remove(taskNum - 1);
             }
             else{
-                taskNum -= display.getEvents().size();
+                taskNum -= display.getEventTasks().size();
                 deletedTask = display.getFloatTasks().remove(taskNum- 1);
             }
         }

@@ -33,7 +33,7 @@ public class CommandAddEvent extends CommandAddDeadlineTask{
             display.setMessage(getMessageNoDescription());
             return display;
         }
-        ArrayList<TaskEvent> events = addEvent(display.getEvents());
+        ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
         display.setEvents(events);
         if(hasUpdateFile(display)){
             display.setMessage(getSuccessMessage());

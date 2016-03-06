@@ -111,7 +111,7 @@ public class Storage {
 
 		ArrayList<Task> floatTasks = thisDisplay.getFloatTasks();
 		ArrayList<TaskDeadline> deadlineTasks = thisDisplay.getDeadlineTasks();
-		ArrayList<TaskEvent> events = thisDisplay.getEvents();
+		ArrayList<TaskEvent> events = thisDisplay.getEventTasks();
 		ArrayList<TaskReserved> reservedTasks = thisDisplay.getReservedTasks();
 		ArrayList<Task> completedTasks = thisDisplay.getCompletedTasks();
 

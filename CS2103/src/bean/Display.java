@@ -59,7 +59,7 @@ public class Display{
         this.events = events;
     }
     
-    public ArrayList<TaskEvent> getEvents(){
+    public ArrayList<TaskEvent> getEventTasks(){
         return events;
     }
     
