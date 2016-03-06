@@ -1,3 +1,4 @@
+//@@author Chloe Odquier Fortuna A0149063E
 package storage;
 
 import java.io.BufferedReader;
@@ -8,40 +9,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
+import com.google.gson.Gson;
+
+import bean.Display;
 import bean.Task;
+import bean.TaskDeadline;
+import bean.TaskEvent;
+import bean.TaskReserved;
 
 public class Storage {
 
 	private static String filePath;
 
-	/*
-	 * public static void main(String[] args) throws IOException {
-	 * createFile("C:\\Users\\Chloe\\Documents\\Spring2016\\test.txt");
-	 * System.out.println(filePath);
-	 * 
-	 * Task testTask = new Task("Test Description", Calendar.getInstance(),
-	 * Calendar.getInstance()); addTask(testTask); Task testTask2 = new Task(
-	 * "Test Description", Calendar.getInstance(), Calendar.getInstance());
-	 * addTask(testTask2); Task testTask3 = new Task("Test Description",
-	 * Calendar.getInstance(), Calendar.getInstance()); addTask(testTask3);
-	 * 
-	 * ArrayList<Task> list = getList(filePath);
-	 * 
-	 * for (Task p : list) { System.out.println(p.getDescription());
-	 * System.out.println(p.getStartDate()); System.out.println(p.getEndDate());
-	 * }
-	 * 
-	 * PrintWriter writer = new PrintWriter(filePath); writer.print("");
-	 * writer.close();
-	 * 
-	 * editFile(list); }
-	 */
+	private static final String HEADER_FLOATING = "=== FLOATING ===";
+	private static final String HEADER_DEADLINE = "=== DEADLINE ===";
+	private static final String HEADER_EVENT = "=== EVENT ===";
+	private static final String HEADER_RESERVED = "=== RESERVED ===";
+	private static final String HEADER_COMPLETED = "=== COMPLETED ===";
 
+	private static final String MESSAGE_EMPTY = "";
+
+	// @@author Chloe Odquier Fortuna A0149063E
 	public static void createFile(String filepath) throws IOException {
 		File file = new File(filepath);
 		if (!file.exists()) {
@@ -50,78 +40,121 @@ public class Storage {
 		filePath = filepath;
 	}
 
-	public static ArrayList<Task> getList(String filepath) throws IOException {
+	// @@author Chloe Odquier Fortuna A0149063E
+	public static Display getDisplay(String filepath) throws IOException {
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-		ArrayList<Task> tasks = new ArrayList<Task>();
+		Gson gson = new Gson();
 
-		try {
-			String description;
+		ArrayList<Task> floatTasks = new ArrayList<Task>();
+		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
+		ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
+		ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
+		ArrayList<Task> completedTasks = new ArrayList<Task>();
 
-			while ((description = br.readLine()) != null) {
+		String line = null;
 
-				String startDateString = br.readLine();
-				Calendar startDate = Calendar.getInstance();
-				startDate.setTime(sdf.parse(startDateString));
-
-				String endDateString = br.readLine();
-				Calendar endDate = Calendar.getInstance();
-				endDate.setTime(sdf.parse(endDateString));
-
-				Task task = new Task(description, startDate, endDate);
-				tasks.add(task);
-			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		findHeaderInFile(br, line, HEADER_FLOATING);
+		while ((line = br.readLine()) != null && hasContent(line)) {
+			Task floatTask = gson.fromJson(line, Task.class);
+			floatTasks.add(floatTask);
 		}
-		filePath = filepath;
+
+		findHeaderInFile(br, line, HEADER_DEADLINE);
+		while ((line = br.readLine()) != null && hasContent(line)) {
+			TaskDeadline deadlineTask = gson.fromJson(line, TaskDeadline.class);
+			deadlineTasks.add(deadlineTask);
+		}
+
+		findHeaderInFile(br, line, HEADER_EVENT);
+		while ((line = br.readLine()) != null && hasContent(line)) {
+			TaskEvent event = gson.fromJson(line, TaskEvent.class);
+			events.add(event);
+		}
+
+		findHeaderInFile(br, line, HEADER_RESERVED);
+		while ((line = br.readLine()) != null && hasContent(line)) {
+			TaskReserved reservedTask = gson.fromJson(line, TaskReserved.class);
+			reservedTasks.add(reservedTask);
+		}
+
+		findHeaderInFile(br, line, HEADER_COMPLETED);
+		while ((line = br.readLine()) != null && hasContent(line)) {
+			Task completedTask = gson.fromJson(line, Task.class);
+			completedTasks.add(completedTask);
+		}
+
 		br.close();
-		return tasks;
+
+		Display display = new Display(MESSAGE_EMPTY, events, deadlineTasks, floatTasks, reservedTasks, completedTasks);
+		return display;
+
 	}
 
-	public static void editFile(ArrayList<Task> tasks) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
-
-		for (Task task : tasks) {
-			String description = task.getDescription();
-
-			Calendar startDateCalendar = task.getStartDate();
-			String startDate = startDateCalendar.getTime().toString();
-
-			Calendar endDateCalendar = task.getEndDate();
-			String endDate = endDateCalendar.getTime().toString();
-
-			writeTaskToFile(bw, description, startDate, endDate);
+	// @@author Chloe Odquier Fortuna A0149063E
+	private static void findHeaderInFile(BufferedReader br, String line, String header) throws IOException {
+		line = br.readLine();
+		while (line != null && !line.equals(header)) {
+			line = br.readLine();
 		}
+	}
+
+	// @@author Chloe Odquier Fortuna A0149063E
+	private static boolean hasContent(String line) {
+		return !line.trim().isEmpty();
+	}
+
+	// @@author Chloe Odquier Fortuna A0149063E
+	public static void saveFile(Display thisDisplay) throws IOException {
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
+		Gson gson = new Gson();
+
+		ArrayList<Task> floatTasks = thisDisplay.getFloatTasks();
+		ArrayList<TaskDeadline> deadlineTasks = thisDisplay.getDeadlineTasks();
+		ArrayList<TaskEvent> events = thisDisplay.getEvents();
+		ArrayList<TaskReserved> reservedTasks = thisDisplay.getReservedTasks();
+		ArrayList<Task> completedTasks = thisDisplay.getCompletedTasks();
+
+		writeHeaderToFile(bw, HEADER_FLOATING);
+		for (Task task : floatTasks) {
+			writeTaskToFile(bw, gson, task);
+		}
+
+		writeHeaderToFile(bw, HEADER_DEADLINE);
+		for (TaskDeadline task : deadlineTasks) {
+			writeTaskToFile(bw, gson, task);
+		}
+
+		writeHeaderToFile(bw, HEADER_EVENT);
+		for (TaskEvent event : events) {
+			writeTaskToFile(bw, gson, event);
+		}
+
+		writeHeaderToFile(bw, HEADER_RESERVED);
+		for (TaskReserved task : reservedTasks) {
+			writeTaskToFile(bw, gson, task);
+		}
+
+		writeHeaderToFile(bw, HEADER_COMPLETED);
+		for (Task task : completedTasks) {
+			writeTaskToFile(bw, gson, task);
+		}
+
 		bw.flush();
 		bw.close();
 	}
 
-	public static void addTask(Task taskToAdd) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true)));
-
-		String description = taskToAdd.getDescription();
-
-		Calendar startDateCalendar = taskToAdd.getStartDate();
-		String startDate = startDateCalendar.getTime().toString();
-
-		Calendar endDateCalendar = taskToAdd.getEndDate();
-		String endDate = endDateCalendar.getTime().toString();
-
-		writeTaskToFile(bw, description, startDate, endDate);
-
-		bw.flush();
-		bw.close();
+	// @@author Chloe Odquier Fortuna A0149063E
+	private static void writeHeaderToFile(BufferedWriter bw, String header) throws IOException {
+		bw.newLine();
+		bw.write(header);
+		bw.newLine();
 	}
 
-	private static void writeTaskToFile(BufferedWriter bw, String description, String startDate, String endDate)
-			throws IOException {
-		bw.write(description);
-		bw.newLine();
-		bw.write(startDate);
-		bw.newLine();
-		bw.write(endDate);
+	// @@author Chloe Odquier Fortuna A0149063E
+	private static void writeTaskToFile(BufferedWriter bw, Gson gson, Task task) throws IOException {
+		String taskAsString = gson.toJson(task);
+		bw.write(taskAsString);
 		bw.newLine();
 	}
 
