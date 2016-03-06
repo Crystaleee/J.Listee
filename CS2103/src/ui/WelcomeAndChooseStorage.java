@@ -50,9 +50,10 @@ public class WelcomeAndChooseStorage extends Pane {
 			JFileChooser fileChooser = new JFileChooser("D:\\");
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = fileChooser.showOpenDialog(fileChooser);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {				
+				App.filePath=fileChooser.getSelectedFile().getAbsolutePath()+"\\J.Listee.txt";
 				// create file under the file folder chosen by user
-				ui.createFile(fileChooser.getSelectedFile().getAbsolutePath());
+				ui.createFile(App.filePath);				
 				//display starting page
 				ui.initializeList(App.stage, App.filePath);
 			}

@@ -7,9 +7,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import bean.DeadlineTask;
+import bean.TaskDeadline;
 import bean.Display;
-import bean.EventTask;
+import bean.TaskEvent;
 import bean.Task;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -51,16 +51,16 @@ public class ShowList extends Pane {
 									// construct JSON to pass to JS
 									//deadline tasks
 									if(display.getDeadlineTasks()!=null){
-										List<Task> deadlines=display.getDeadlineTasks();
+										List<TaskDeadline> deadlines=display.getDeadlineTasks();
 										JSONArray jsonDeadline = new JSONArray();
-										for (Task deadline: deadlines) {
+										for (TaskDeadline deadline: deadlines) {
 											JSONObject task = new JSONObject(deadline);
-											task.remove("startDateTime");
-											task.remove("endDateTime");
-											task.put("endDateTime",
+											task.remove("startDate");
+											task.remove("endDate");
+											task.put("endDate",
 													new SimpleDateFormat(
 															"yy-MM-dd HH:mm")
-															.format(((DeadlineTask)deadline).getEndDateTime()
+															.format(deadline.getEndDate()
 																	.getTime()));
 											jsonDeadline.put(task);
 										}
@@ -70,22 +70,22 @@ public class ShowList extends Pane {
 									
 									//event tasks
 									if(display.getEventTasks()!=null){
-										List<Task> events=display.getEventTasks();
+										List<TaskEvent> events=display.getEventTasks();
 										JSONArray jsonEvent = new JSONArray();
-										for (Task event: events) {
+										for (TaskEvent event: events) {
 											JSONObject task = new JSONObject(event);
-											task.remove("startDateTime");
-											task.remove("endDateTime");
-											task.put("startDateTime",
+											task.remove("startDate");
+											task.remove("endDate");
+											task.put("startDate",
 													new SimpleDateFormat(
 															"yy-MM-dd HH:mm")
-															.format(((EventTask) event)
-																	.getStartDateTime()
+															.format( event
+																	.getStartDate()
 																	.getTime()));
-											task.put("endDateTime",
+											task.put("endDate",
 													new SimpleDateFormat(
 															"yy-MM-dd HH:mm")
-															.format(((EventTask) event).getEndDateTime()
+															.format( event.getEndDate()
 																	.getTime()));
 											jsonEvent.put(task);
 										}

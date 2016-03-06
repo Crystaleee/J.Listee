@@ -185,15 +185,15 @@
         var task_location=document.getElementById("task_location"+i);
         task_location.innerHTML=taskList[index].location;
       }
-      //add startDateTime if necessary
-      if(taskList[index].startDateTime!=undefined){
+      //add startDate if necessary
+      if(taskList[index].startDate!=undefined){
         var task_start=document.getElementById("task_start"+i);
-        task_start.innerHTML=taskList[index].startDateTime;
+        task_start.innerHTML=taskList[index].startDate;
       }
-      //add startDateTime if necessary
-      if(taskList[index].startDateTime!=undefined){
+      //add startDate if necessary
+      if(taskList[index].startDate!=undefined){
         var task_end=document.getElementById("task_end"+i);
-        task_end.innerHTML= taskList[index].endDateTime;
+        task_end.innerHTML= taskList[index].endDate;
       }
       //add tags if necessary
       if(taskList[index].tags!=undefined){
