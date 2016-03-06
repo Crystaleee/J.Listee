@@ -1,8 +1,11 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import bean.Command;
+import bean.CommandAddEvent;
+import bean.CommandInvalid;
 
 public class Parser{
 	private  String commandType;
@@ -231,7 +234,7 @@ public class Parser{
 			}
 		} */
 
-	 Command invalidCommand = new InvalidCommand();
+	 Command invalidCommand = new CommandInvalid();
 	 return invalidCommand;
 	
 	}
