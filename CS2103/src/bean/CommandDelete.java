@@ -6,6 +6,7 @@
 package bean;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import History.History;
 import storage.Storage;
@@ -30,10 +31,10 @@ public class CommandDelete extends Command{
     public Display execute(Display oldDisplay){
         this.display = oldDisplay;
         if(hasInvalidTaskNumbers(display.getNumberOfTasks())){
-            display.setMessage(message_invalid_task_numbers);;
+            display.setMessage(message_invalid_task_numbers);
             return display;
         }
-        
+        Collections.sort(taskNumbers);
         deleteTasksFromList();
 
         if(updateFile()){
@@ -65,8 +66,9 @@ public class CommandDelete extends Command{
     
     public void deleteTasksFromList() {
         Task deletedTask;
+        System.out.println("Number ======" + taskNumbers.get(0));
         for(int i = 0; i < taskNumbers.size(); i++){
-            deletedTask = removeTask(taskNumbers.get(i) - 1);
+            deletedTask = removeTask(taskNumbers.get(i) - 1 - i);
             if(i==0){
                 deletedMessage += "\"" + deletedTask.getDescription() + "\"" ;
             }
@@ -81,16 +83,16 @@ public class CommandDelete extends Command{
     public Task removeTask(int taskNum){
         Task deletedTask;
         if(taskNum < display.getDeadlineTasks().size()){
-            deletedTask = display.getDeadlineTasks().remove(taskNum - 1);
+            deletedTask = display.getDeadlineTasks().remove(taskNum);
         }
         else{
             taskNum -= display.getDeadlineTasks().size();
             if(taskNum < display.getEventTasks().size()){
-                deletedTask = display.getEventTasks().remove(taskNum - 1);
+                deletedTask = display.getEventTasks().remove(taskNum);
             }
             else{
                 taskNum -= display.getEventTasks().size();
-                deletedTask = display.getFloatTasks().remove(taskNum- 1);
+                deletedTask = display.getFloatTasks().remove(taskNum);
             }
         }
         return deletedTask;
