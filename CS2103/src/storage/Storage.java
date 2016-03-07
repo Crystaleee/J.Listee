@@ -85,6 +85,7 @@ public class Storage {
 		}
 
 		br.close();
+		filePath = filepath;
 
 		Display display = new Display(MESSAGE_EMPTY, events, deadlineTasks, floatTasks, reservedTasks, completedTasks);
 		return display;
