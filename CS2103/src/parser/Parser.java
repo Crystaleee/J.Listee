@@ -1,5 +1,14 @@
+package parser;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import bean.Command;
+import bean.CommandAddDeadlineTask;
+import bean.CommandAddEvent;
+import bean.CommandAddFloatTask;
+import bean.CommandAddReserved;
+import bean.CommandDelete;
+import bean.CommandInvalid;
 
 public class Parser{
 	private  String commandType;
@@ -164,7 +173,7 @@ public class Parser{
 			}
 			
 			if (isDeadline){
-				Command deadlineTask = new CommandAddDeadline(taskDescription, location, endDateTime, tagLists);
+				Command deadLineTask = new CommandAddDeadlineTask(taskDescription, location, endDateTime, tagLists);
 				return deadLineTask;
 			}
 
@@ -174,7 +183,7 @@ public class Parser{
 			}
 
 			else {
-				Command floatingTask = new CommandAddFloat(taskDescription, location, tagLists);
+				Command floatingTask = new CommandAddFloatTask(taskDescription, location, tagLists);
 				return floatingTask;
 			} 
 
@@ -307,9 +316,9 @@ public class Parser{
 			}
 		} */
 
-	 /*Command invalidCommand = new InvalidCommand();
+	 Command invalidCommand = new CommandInvalid();
 	 return invalidCommand;
-		*/
+		
 	}
 
 }
