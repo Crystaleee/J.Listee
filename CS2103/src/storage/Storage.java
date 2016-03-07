@@ -31,13 +31,21 @@ public class Storage {
 
 	private static final String MESSAGE_EMPTY = "";
 
+	public static String getFilePath() {
+		return filePath;
+	}
+	
+	public static void setFilePath(String filepath) {
+		filePath = filepath;
+	}
+	
 	// @@author Chloe Odquier Fortuna A0149063E
 	public static void createFile(String filepath) throws IOException {
 		File file = new File(filepath);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		filePath = filepath;
+		setFilePath(filepath);
 	}
 
 	// @@author Chloe Odquier Fortuna A0149063E
@@ -85,7 +93,7 @@ public class Storage {
 		}
 
 		br.close();
-		filePath = filepath;
+		setFilePath(filepath);
 
 		Display display = new Display(MESSAGE_EMPTY, events, deadlineTasks, floatTasks, reservedTasks, completedTasks);
 		return display;
