@@ -62,7 +62,7 @@ public class ui {
 		try{
 			Scene scene = stage.getScene();
 			showList = new ShowList(display);
-			if (scene == null) {
+			if (scene == null) {			
 				scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
 				stage.setScene(scene);
 			} else {

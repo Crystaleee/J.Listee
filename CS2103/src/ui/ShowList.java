@@ -47,7 +47,10 @@ public class ShowList extends Pane {
 								if (newState == Worker.State.SUCCEEDED) {
 									JSObject win = (JSObject) webEngine
 											.executeScript("window");
-
+									
+									//reset task number
+									webEngine.executeScript("reset()");
+									
 									// construct JSON to pass to JS
 									//deadline tasks
 									if(display.getDeadlineTasks()!=null){
@@ -65,6 +68,7 @@ public class ShowList extends Pane {
 											jsonDeadline.put(task);
 										}
 										win.call("addTasks", jsonDeadline,"deadline");
+										System.out.println(jsonDeadline);
 									}
 									
 									
@@ -90,6 +94,7 @@ public class ShowList extends Pane {
 											jsonEvent.put(task);
 										}
 										win.call("addTasks", jsonEvent,"event");
+										System.out.println(jsonEvent);
 									}
 									
 									
@@ -104,6 +109,7 @@ public class ShowList extends Pane {
 											jsonFloating.put(task);
 										}
 										win.call("addTasks", jsonFloating,"floating");
+										System.out.println(jsonFloating);
 									}
 									
 									

@@ -46,7 +46,7 @@
     height: 100%;
     border-radius: 8px 0 0 8px;
     background-color: rgba(131,207,203,0.8);
-    font-size: 40px;
+    font-size: 35px;
     line-height: 75px;
     color: #444;
     float: left;
@@ -125,8 +125,12 @@
 </style>
 </head>
 <body>
-  <script>
-    var i=0;
+  <script  type="text/javascript">
+  var i=0;
+    function reset(){
+      i=0;
+    }
+
     function addTasks(jsonTasks, type){
       if(type=="deadline"){
         var tasklist_=document.getElementById("tasklist_deadline");
@@ -180,31 +184,51 @@
 
       tasklist_.appendChild(taskdiv);
 
-      //add location if necessary
-      if(taskList[index].location!=undefined){
-        var task_location=document.getElementById("task_location"+i);
-        task_location.innerHTML=taskList[index].location;
-      }
-      //add startDate if necessary
-      if(taskList[index].startDate!=undefined){
-        var task_start=document.getElementById("task_start"+i);
-        task_start.innerHTML=taskList[index].startDate;
-      }
-      //add startDate if necessary
-      if(taskList[index].startDate!=undefined){
-        var task_end=document.getElementById("task_end"+i);
-        task_end.innerHTML= taskList[index].endDate;
-      }
-      //add tags if necessary
-      if(taskList[index].tags!=undefined){
-       var task_tags=document.getElementById("task_tags"+i);
-       for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
-        var tagspan = document.createElement("span");
-        tagspan.innerHTML=taskList[index].tags[index2];
-        task_tags.appendChild(tagspan);
-      }
-    }
-    i=i+1;
+      var task_location=document.getElementById("task_location"+i);
+      var task_start=document.getElementById("task_start"+i);
+      var task_end=document.getElementById("task_end"+i);
+      var task_tags=document.getElementById("task_tags"+i);
+
+     //add location if necessary
+     if(taskList[index].location!=undefined){
+       var locationspan = document.createElement("span");
+       locationspan.innerHTML="@"+taskList[index].location;
+       task_location.appendChild(locationspan);
+     }
+     else{
+       task_location.style.display="none";
+     }
+
+     //add startDate if necessary
+     if(taskList[index].startDate!=undefined){        
+       task_start.innerHTML=taskList[index].startDate;
+     }
+     else{
+       task_start.style.display="none";
+     }
+
+     //add endDate if necessary
+     if(taskList[index].endDate!=undefined){
+       task_end.innerHTML= taskList[index].endDate;
+     }
+     else{
+       task_end.style.display="none";
+     }
+
+     //add tags if necessary
+     if(taskList[index].tags!=undefined){
+      
+      for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+       var tagspan = document.createElement("span");
+       tagspan.innerHTML="#"+taskList[index].tags[index2];
+       task_tags.appendChild(tagspan);
+     }
+   }
+   else{
+     task_tags.style.display="none";
+   }
+
+   i=i+1;
   }    
 }
 
