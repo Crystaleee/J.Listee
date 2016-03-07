@@ -30,12 +30,17 @@ public class CommandDelete extends Command{
     
     public Display execute(Display oldDisplay){
         this.display = oldDisplay;
-        if(hasInvalidTaskNumbers(display.getNumberOfTasks())){
+        if(taskNumbers == null){
+            display = new Display("All tasks delete");
+        }
+        else if(hasInvalidTaskNumbers(display.getNumberOfTasks())){
             display.setMessage(message_invalid_task_numbers);
             return display;
         }
-        Collections.sort(taskNumbers);
-        deleteTasksFromList();
+        else{
+            Collections.sort(taskNumbers);
+            deleteTasksFromList();
+        }
 
         if(updateFile()){
             History.saveDisplay(display);
