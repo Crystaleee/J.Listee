@@ -33,11 +33,8 @@ public class CommandAddEvent extends CommandAddDeadlineTask{
             display.setMessage(getMessageNoDescription());
             return display;
         }
-        System.out.println("Entering execute 0");
         ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
-        System.out.println("Entering execute 1");
         display.setEvents(events);
-        System.out.println("Entering execute 2");
         if(hasUpdateFile(display)){
             display.setMessage(getSuccessMessage());
             History.saveDisplay(display);
@@ -50,7 +47,6 @@ public class CommandAddEvent extends CommandAddDeadlineTask{
     
     
     public ArrayList<TaskEvent> addEvent(ArrayList<TaskEvent> taskList) {
-        System.out.println("Entering execute 0.1");
         int index = getAddIndex(taskList);
         taskList.add(index, new TaskEvent(getDescription(), getLocation(), startDate, getEndDate(), getTags()));
         return taskList;
@@ -62,14 +58,11 @@ public class CommandAddEvent extends CommandAddDeadlineTask{
      */
     public int getAddIndex(ArrayList<TaskEvent> taskList) {
         int i = 0;
-        System.out.println("Entering execute 0.2");
         for(i = 0; i < taskList.size(); i++){
-            System.out.println("Loop" + i);
             if(startDate.compareTo(taskList.get(i).getStartDate()) < 0){
                 break;
             }
         }
-        System.out.println("Entering execute 0.5");
         return i;
     }
 }
