@@ -190,9 +190,14 @@ public class Parser{
 		}
 
 		else if (commandType.equals("delete")){
-			args = inputLine.substring(7, inputLine.length()).split(",");
-			for (int i=0; i<args.length; i++){
-				taskNumbers.add(Integer.valueOf(args[i]));
+			if (args[1].equals("all")){
+				taskNumbers = null;
+			}
+			else {
+				args = inputLine.substring(7, inputLine.length()).split(",");
+				for (int i=0; i<args.length; i++){
+					taskNumbers.add(Integer.valueOf(args[i]));
+				}
 			}
 
 			Command deleteTask = new CommandDelete(taskNumbers);
