@@ -46,6 +46,7 @@ public class Logic {
         Parser myParser = new Parser();
         display = myParser.ParseCommand(userInput).execute(History.getDisplay(0));
         //display = Parser.ParseCommand(userInput).execute(History.getDisplay(0));
+        System.out.println("leaving logic");
         
         return display;
     }
