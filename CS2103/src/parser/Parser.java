@@ -9,6 +9,7 @@ import bean.CommandAddFloatTask;
 import bean.CommandAddReserved;
 import bean.CommandDelete;
 import bean.CommandInvalid;
+import bean.CommandUpdate;
 
 public class Parser{
 	private  String commandType;

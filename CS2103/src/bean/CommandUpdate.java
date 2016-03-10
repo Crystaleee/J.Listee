@@ -68,12 +68,12 @@ public class CommandUpdate extends Command{
     
     public void editTask() {
         if(description != null){
-            if(taskNumber < display.getDeadlineTasks().size() ){
+            if(taskNumber <= display.getDeadlineTasks().size() ){
                 display.getDeadlineTasks().get(taskNumber-1).setDescription(description);
             }
             else{
                 taskNumber -= display.getDeadlineTasks().size();
-                if(taskNumber < display.getEventTasks().size()){
+                if(taskNumber <= display.getEventTasks().size()){
                     display.getEventTasks().get(taskNumber-1).setDescription(description);
                 }
                 else{
