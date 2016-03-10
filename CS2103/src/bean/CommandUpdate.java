@@ -1,6 +1,10 @@
 package bean;
 
+import java.io.IOException;
 import java.util.Calendar;
+
+import History.History;
+import storage.Storage;
 
 public class CommandUpdate extends Command{
     private Integer taskNumber;
@@ -39,26 +43,32 @@ public class CommandUpdate extends Command{
     }
     
     public Display execute(Display oldDisplay){
+        display = oldDisplay;
         if(hasInvalidTaskNumber(display.getNumberOfTasks())){
             display.setMessage(MESSAGE_ERROR_INVALID_TASK_NUMBER);
             return display;
         }
-        display = oldDisplay;
         editTask();
         //editStartDate(taskList);
         //editEndDate(taskList);
         //setDisplay(null, taskList);
-        
+        if(updateFile()){
+            History.saveDisplay(display);
+        }
+        else{
+            display = new Display("IO Error");
+        }
         return display;
     }
     
     public boolean hasInvalidTaskNumber(int numOfTasks){
+        System.out.println("invalid");
         return ((taskNumber > numOfTasks) || (taskNumber < 1));
     }
     
     public void editTask() {
         if(description != null){
-            if(taskNumber < display.getDeadlineTasks().size()){
+            if(taskNumber < display.getDeadlineTasks().size() ){
                 display.getDeadlineTasks().get(taskNumber-1).setDescription(description);
             }
             else{
@@ -71,6 +81,14 @@ public class CommandUpdate extends Command{
                     display.getFloatTasks().get(taskNumber-1).setDescription(description);
                 }
             }
+        }
+    }
+    public boolean updateFile() {
+        try{
+            Storage.saveFile(display);
+            return true;
+        }catch(IOException error){
+            return false;
         }
     }
     /*
