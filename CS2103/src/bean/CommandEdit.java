@@ -45,7 +45,7 @@ public class CommandEdit extends Command{
             return display;
         }
         display = oldDisplay;
-        editDescription();
+        editTask();
         //editStartDate(taskList);
         //editEndDate(taskList);
         //setDisplay(null, taskList);
@@ -57,19 +57,19 @@ public class CommandEdit extends Command{
         return ((taskNumber > numOfTasks) || (taskNumber < 1));
     }
     
-    public void editDescription() {
+    public void editTask() {
         if(description != null){
             if(taskNumber < display.getDeadlineTasks().size()){
-                display.getDeadlineTasks().get(taskNumber-1).setDescription(description);;
+                display.getDeadlineTasks().get(taskNumber-1).setDescription(description);
             }
             else{
                 taskNumber -= display.getDeadlineTasks().size();
                 if(taskNumber < display.getEventTasks().size()){
-                    display.getEventTasks().get(taskNumber-1).setDescription(description);;
+                    display.getEventTasks().get(taskNumber-1).setDescription(description);
                 }
                 else{
                     taskNumber -= display.getEventTasks().size();
-                    display.getFloatTasks().get(taskNumber-1).setDescription(description);;
+                    display.getFloatTasks().get(taskNumber-1).setDescription(description);
                 }
             }
         }
