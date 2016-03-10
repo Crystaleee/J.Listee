@@ -65,11 +65,11 @@ public class CommandEdit extends Command{
             else{
                 taskNumber -= display.getDeadlineTasks().size();
                 if(taskNumber < display.getEventTasks().size()){
-                    display.getDeadlineTasks().get(taskNumber-1).setDescription(description);;
+                    display.getEventTasks().get(taskNumber-1).setDescription(description);;
                 }
                 else{
                     taskNumber -= display.getEventTasks().size();
-                    display.getDeadlineTasks().get(taskNumber-1).setDescription(description);;
+                    display.getFloatTasks().get(taskNumber-1).setDescription(description);;
                 }
             }
         }
