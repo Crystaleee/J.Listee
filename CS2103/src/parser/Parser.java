@@ -27,8 +27,9 @@ public class Parser{
 	private  ArrayList<String> calendarDescription = new ArrayList<String>();
 	private ArrayList<Calendar> startDateTimes = new ArrayList<Calendar>();
 	private ArrayList<Calendar> endDateTimes = new ArrayList<Calendar>();
+	private Integer updateTaskNumber;
 
-/*	public static void main(String[] args){ // for testing
+	/*public static void main(String[] args){ // for testing
 		Parser testTimeTask = new Parser();
 		testTimeTask.ParseCommand("add test Time task (12/2/16 15:05 - 15/2/15 07:00) @icube @LT27 #hihi #me");
 
@@ -46,7 +47,9 @@ public class Parser{
 		
 		Parser testReserve = new Parser();
 		testReserve.ParseCommand("reserve meeting with boss (12/2/15 15:00 - 15/2/15 14:32) (13/2/15 14:00 - 15/4/15 12:00) #hwork @icube");
-
+		
+		Parser testUpdateTask = new Parser();
+			testUpdateTask.ParseCommand("update 2 hello hello hello");
 	} */
 
 	public Command ParseCommand(String inputLine){
@@ -171,6 +174,7 @@ public class Parser{
 
 				}
 			}
+		
 			
 			if (isDeadline){
 				Command deadLineTask = new CommandAddDeadlineTask(taskDescription, location, endDateTime, tagLists);
@@ -186,8 +190,9 @@ public class Parser{
 				Command floatingTask = new CommandAddFloatTask(taskDescription, location, tagLists);
 				return floatingTask;
 			} 
-
 		}
+
+		
 
 		else if (commandType.equals("delete")){
 			if (args[1].equals("all")){
@@ -275,10 +280,16 @@ public class Parser{
 		}
 
 
-	/*	else if (command.getCommandType().equals("update")){
-			command.setTaskNumber(Integer.valueOf(args[1]));
-
-			for (int j=2; j<args.length;j++){
+		else if (commandType.equals("update")){
+			updateTaskNumber = (Integer.valueOf(args[1]));
+			
+			for (int i = 2; i<args.length; i++){
+				taskDescription += args[i] + " ";
+			}
+			
+			taskDescription = taskDescription.substring(4,taskDescription.length());
+			
+			/*for (int j=2; j<args.length;j++){
 				if (args[j].substring(0, 1).equals("@")){
 					command.setLocation(args[j]);
 				}
@@ -302,15 +313,18 @@ public class Parser{
 					}
 
 				}
-			}
+			}*/
+			
+			Command update = new CommandUpdate(updateTaskNumber, taskDescription);
+			return update;
 		} 
 
-		else if (command.getCommandType().equals("postpone")){
+	/*	else if (command.getCommandType().equals("postpone")){
 			command.setTaskNumber(Integer.valueOf(args[1]));
 			command.setNumberOfDaysToPostpone(Integer.valueOf(args[2]));
 		}
 
-		/*		else if (command.getCommandType().equals("show")){
+				else if (command.getCommandType().equals("show")){
 				(need to double cfm)
 		} 
 
