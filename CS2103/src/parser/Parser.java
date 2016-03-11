@@ -33,7 +33,9 @@ public class Parser{
 	/*public static void main(String[] args){ // for testing
 		Parser testTimeTask = new Parser();
 		testTimeTask.ParseCommand("add test Time task (12/2/16 15:05 - 15/2/15 07:00) @icube @LT27 #hihi #me");
-
+		
+		Parser testTimeTask2 = new Parser();
+		testTimeTask2.ParseCommand("add test Time task (12/3/16 15:05 - 12/4/15 07:00) @icube @LT27 #hihi #me");
 		Parser testFloat = new Parser();
 		testFloat.ParseCommand("add test floatingtask @zzz #arghhhhh #hi");
 
@@ -50,7 +52,7 @@ public class Parser{
 		testReserve.ParseCommand("reserve meeting with boss (12/2/15 15:00 - 15/2/15 14:32) (13/2/15 14:00 - 15/4/15 12:00) #hwork @icube");
 		
 		Parser testUpdateTask = new Parser();
-			testUpdateTask.ParseCommand("update 2 hello hello hello");
+			testUpdateTask.ParseCommand("update 2 hello hello hello"); 
 	} */
 
 	public Command ParseCommand(String inputLine){
@@ -105,7 +107,7 @@ public class Parser{
 						String[] startTimeHourMinute = startTime.split(":");
 
 						int startDateYear = Integer.valueOf(startDateYYMMDD[2]);
-						int startDateMonth = Integer.valueOf(startDateYYMMDD[1]);
+						int startDateMonth = Integer.valueOf(startDateYYMMDD[1])-1;
 						int startDateDay = Integer.valueOf(startDateYYMMDD[0]);
 
 						int startHour = Integer.valueOf(startTimeHourMinute[0]);
@@ -120,7 +122,7 @@ public class Parser{
 						String[] endTimeHourMinute = endTime.split(":");
 
 						endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));					
-						endDateMonth = Integer.valueOf(endDateYYMMDD[1]);
+						endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
 						endDateDay = Integer.valueOf(endDateYYMMDD[0]);
 
 						endHour = Integer.valueOf(endTimeHourMinute[0]);
@@ -144,7 +146,7 @@ public class Parser{
 							String[] endTimeHourMinute = endTime.split(":");
 
 							endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));
-							endDateMonth = Integer.valueOf(endDateYYMMDD[1]);
+							endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
 							endDateDay = Integer.valueOf(endDateYYMMDD[0]);
 
 							endHour = Integer.valueOf(endTimeHourMinute[0]);
@@ -156,7 +158,7 @@ public class Parser{
 						//consist of date only
 						else { 						
 							endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));
-							endDateMonth = Integer.valueOf(endDateYYMMDD[1]);
+							endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
 							endDateDay = Integer.valueOf(endDateYYMMDD[0]);
 							endHour = 23;
 							endMin = 59;
@@ -175,8 +177,8 @@ public class Parser{
 
 				}
 			}
-		
 			
+						
 			if (isDeadline){
 				Command deadLineTask = new CommandAddDeadlineTask(taskDescription, location, endDateTime, tagLists);
 				return deadLineTask;
@@ -249,7 +251,7 @@ public class Parser{
 					String[] startTimeHourMinute = startTime.split(":");
 
 					int startDateYear = Integer.valueOf(startDateYYMMDD[2]);
-					int startDateMonth = Integer.valueOf(startDateYYMMDD[1]);
+					int startDateMonth = Integer.valueOf(startDateYYMMDD[1])-1;
 					int startDateDay = Integer.valueOf(startDateYYMMDD[0]);
 
 					int startHour = Integer.valueOf(startTimeHourMinute[0]);
@@ -265,7 +267,7 @@ public class Parser{
 					String[] endTimeHourMinute = endTime.split(":");
 
 					endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));					
-					endDateMonth = Integer.valueOf(endDateYYMMDD[1]);
+					endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
 					endDateDay = Integer.valueOf(endDateYYMMDD[0]);
 
 					endHour = Integer.valueOf(endTimeHourMinute[0]);
