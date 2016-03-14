@@ -49,14 +49,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     public void editTask() {
         if (taskNumber <= display.getDeadlineTasks().size()) {
-            if (getDescription() != null) {
-                display.getDeadlineTasks().get(taskNumber - 1).setDescription(getDescription());
-            }
-            if (getLocation() != null) {
-                display.getDeadlineTasks().get(taskNumber - 1).setLocation(getLocation());
-            }
             editDeadline();
-
         } else {
             taskNumber -= display.getDeadlineTasks().size();
             if (taskNumber <= display.getEventTasks().size()) {
@@ -96,17 +89,17 @@ public class CommandUpdate extends TaskEvent implements Command {
         if (getLocation() != null) {
             display.getEventTasks().get(taskNumber - 1).setLocation(getLocation());
         }
-        changeEventTaskType();
+        //changeEventTaskType();
     }
 
     public void editFloat() {
         if (getDescription() != null) {
-            display.getFloatTasks().get(taskNumber - 1).setDescription(getDescription());
+            //display.getFloatTasks().get(taskNumber - 1).setDescription(getDescription());
         }
         if (getLocation() != null) {
             display.getFloatTasks().get(taskNumber - 1).setLocation(getLocation());
         }
-        changeFloatTaskType();
+        //changeFloatTaskType();
     }
 
     public void changeEventTaskType() {
