@@ -11,7 +11,7 @@ public class Display{
     private String message;
     private ArrayList<TaskEvent> events;
     private ArrayList<TaskDeadline> deadlineTasks;
-    private ArrayList<Task> floatTasks;
+    private ArrayList<TaskFloat> floatTasks;
     private ArrayList<TaskReserved> reservedTasks;
     private ArrayList<Task> completedTasks;
 
@@ -19,7 +19,7 @@ public class Display{
         message = "";
         events = new ArrayList<TaskEvent>();
         deadlineTasks = new ArrayList<TaskDeadline>();
-        floatTasks = new ArrayList<Task>();
+        floatTasks = new ArrayList<TaskFloat>();
         reservedTasks = new ArrayList<TaskReserved>();
         completedTasks = new ArrayList<Task>();
     }
@@ -28,13 +28,13 @@ public class Display{
         this.message = message;
         events = new ArrayList<TaskEvent>();
         deadlineTasks = new ArrayList<TaskDeadline>();
-        floatTasks = new ArrayList<Task>();
+        floatTasks = new ArrayList<TaskFloat>();
         reservedTasks = new ArrayList<TaskReserved>();
         completedTasks = new ArrayList<Task>();
     }
     
     public Display(String message, ArrayList<TaskEvent> events, ArrayList<TaskDeadline> deadlineTasks, 
-            ArrayList<Task> floatTasks, ArrayList<TaskReserved> reservedTasks, ArrayList<Task> completedTasks){
+            ArrayList<TaskFloat> floatTasks, ArrayList<TaskReserved> reservedTasks, ArrayList<Task> completedTasks){
         this.message = "";
         this.events = events;
         this.deadlineTasks = deadlineTasks;
@@ -71,11 +71,11 @@ public class Display{
         return deadlineTasks;
     }
     
-    public void setFloatTasks(ArrayList<Task> floatTasks){
+    public void setFloatTasks(ArrayList<TaskFloat> floatTasks){
         this.floatTasks = floatTasks;
     }
     
-    public ArrayList<Task> getFloatTasks(){
+    public ArrayList<TaskFloat> getFloatTasks(){
         return floatTasks;
     }
     

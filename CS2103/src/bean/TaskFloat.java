@@ -7,12 +7,12 @@ package bean;
 
 import java.util.ArrayList;
 
-public class TaskFloat extends Task{
-    public TaskFloat(){
+public class TaskFloat extends Task {
+    public TaskFloat() {
         super();
     }
-    
-    public TaskFloat(String description, String location, ArrayList<String> tags){
+
+    public TaskFloat(String description, String location, ArrayList<String> tags) {
         super(description, location, tags);
     }
 }

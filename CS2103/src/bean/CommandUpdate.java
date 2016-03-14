@@ -40,9 +40,6 @@ public class CommandUpdate extends TaskEvent implements Command {
             return (new Display(message_invalid_task_number));
         }
         editTask();
-        // editStartDate(taskList);
-        // editEndDate(taskList);
-        // setDisplay(null, taskList);
         return display;
     }
 
@@ -51,31 +48,98 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     public void editTask() {
-        if (getDescription() != null) {
-            if (taskNumber <= display.getDeadlineTasks().size()) {
+        if (taskNumber <= display.getDeadlineTasks().size()) {
+            if (getDescription() != null) {
                 display.getDeadlineTasks().get(taskNumber - 1).setDescription(getDescription());
+            }
+            if (getLocation() != null) {
+                display.getDeadlineTasks().get(taskNumber - 1).setLocation(getLocation());
+            }
+            editDeadline();
+
+        } else {
+            taskNumber -= display.getDeadlineTasks().size();
+            if (taskNumber <= display.getEventTasks().size()) {
+                editEvent();
             } else {
-                taskNumber -= display.getDeadlineTasks().size();
-                if (taskNumber <= display.getEventTasks().size()) {
-                    display.getEventTasks().get(taskNumber - 1).setDescription(getDescription());
-                } else {
-                    taskNumber -= display.getEventTasks().size();
-                    display.getFloatTasks().get(taskNumber - 1).setDescription(getDescription());
-                }
+                taskNumber -= display.getEventTasks().size();
+                editFloat();
             }
         }
     }
-    
+
+    public void editDeadline() {
+        if (getDescription() != null) {
+            display.getEventTasks().get(taskNumber - 1).setDescription(getDescription());
+        }
+        if (getLocation() != null) {
+            display.getEventTasks().get(taskNumber - 1).setLocation(getLocation());
+        }/*
+        TaskDeadline task;
+        if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() != 0)) {
+            task = display.getDeadlineTasks().remove(taskNumber - 1);
+            Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
+                    task.getTags());
+            display = addCommand.execute(display);
+        } else if (getStartDate().getTimeInMillis() == 0) {
+            task = display.getEventTasks().remove(taskNumber - 1);
+            Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                    task.getEndDate(), task.getTags());
+            display = addCommand.execute(display);
+        }*/
+    }
+
+    public void editEvent() {
+        if (getDescription() != null) {
+            display.getEventTasks().get(taskNumber - 1).setDescription(getDescription());
+        }
+        if (getLocation() != null) {
+            display.getEventTasks().get(taskNumber - 1).setLocation(getLocation());
+        }
+        changeEventTaskType();
+    }
+
+    public void editFloat() {
+        if (getDescription() != null) {
+            display.getFloatTasks().get(taskNumber - 1).setDescription(getDescription());
+        }
+        if (getLocation() != null) {
+            display.getFloatTasks().get(taskNumber - 1).setLocation(getLocation());
+        }
+        changeFloatTaskType();
+    }
+
+    public void changeEventTaskType() {
+        TaskEvent task;
+        if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() != 0)) {
+            task = display.getEventTasks().remove(taskNumber - 1);
+            Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
+                    task.getTags());
+            display = addCommand.execute(display);
+        } else if (getStartDate().getTimeInMillis() == 0) {
+            task = display.getEventTasks().remove(taskNumber - 1);
+            Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                    task.getEndDate(), task.getTags());
+            display = addCommand.execute(display);
+        }
+    }
+
+    public void changeFloatTaskType() {
+        TaskFloat task;
+        if ((getStartDate() != null) && (getEndDate() != null)) {
+            task = display.getFloatTasks().remove(taskNumber - 1);
+            Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
+                    getStartDate(), getEndDate(), task.getTags());
+            display = addCommand.execute(display);
+        } else if (getEndDate() != null) {
+            task = display.getFloatTasks().remove(taskNumber - 1);
+            Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                    getEndDate(), task.getTags());
+            display = addCommand.execute(display);
+        }
+    }
+
     public boolean getUpdateFile() {
         return updateFile;
     }
-    /*
-     * public void editEndDate(ArrayList<Task> taskList) { if(addEndDate !=
-     * null){ taskList.get(taskNumber - 1).setEndDate(addEndDate); }
-     * if(deleteEndDate){ taskList.get(taskNumber - 1).setEndDate(null); } }
-     * 
-     * public void editStartDate(ArrayList<Task> taskList) { if(addStartDate !=
-     * null){ taskList.get(taskNumber - 1).setStartDate(addStartDate); }
-     * if(deleteStartDate){ taskList.get(taskNumber - 1).setStartDate(null); } }
-     */
 }
