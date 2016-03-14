@@ -31,6 +31,7 @@ public class CommandAddEvent extends TaskEvent implements Command {
         }
         ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
         display.setEvents(events);
+        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, getDescription()));
         return display;
     }
 

@@ -4,46 +4,47 @@
  * CS2103
  */
 package bean;
+
 import java.util.ArrayList;
 
-public class Task{
+public class Task {
     private String description;
     private String location;
     private ArrayList<String> tags;
-    
-    public Task(){
+
+    public Task() {
         description = null;
         location = null;
         tags = null;
     }
-    
-    public Task(String description, String location, ArrayList<String> tags){
+
+    public Task(String description, String location, ArrayList<String> tags) {
         this.description = description;
-        this.location=location;
+        this.location = location;
         this.tags = tags;
     }
-    
-    public void setDescription(String description){
+
+    public void setDescription(String description) {
         this.description = description;
     }
-    
-    public String getDescription(){
+
+    public String getDescription() {
         return description;
     }
-    
-    public void setTags(ArrayList<String> tags){
-        this.tags= tags;
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
-    
-    public ArrayList<String> getTags(){
+
+    public ArrayList<String> getTags() {
         return tags;
     }
 
-	public String getLocation() {
-		return location;
-	}
+    public String getLocation() {
+        return location;
+    }
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

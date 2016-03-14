@@ -15,7 +15,7 @@ import storage.Storage;
 
 public class Logic {
 
-    public static String MESSAGE_ADD_SUCCESS = "added: \"%2$s\"";
+    public static String MESSAGE_ADD_SUCCESS = "added: \"%1$s\"";
     
     public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
     public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
