@@ -7,10 +7,11 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import bean.TaskDeadline;
 import bean.Display;
-import bean.TaskEvent;
 import bean.Task;
+import bean.TaskDeadline;
+import bean.TaskEvent;
+import bean.TaskFloat;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
@@ -100,7 +101,7 @@ public class ShowList extends Pane {
 									
 									//floating tasks
 									if(display.getFloatTasks()!=null){
-										List<Task> floatings=display.getFloatTasks();
+										List<TaskFloat> floatings=display.getFloatTasks();
 										JSONArray jsonFloating = new JSONArray();
 										for (Task floating: floatings) {
 											JSONObject task = new JSONObject(floating);

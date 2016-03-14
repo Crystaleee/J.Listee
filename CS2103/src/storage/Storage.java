@@ -17,6 +17,7 @@ import bean.Display;
 import bean.Task;
 import bean.TaskDeadline;
 import bean.TaskEvent;
+import bean.TaskFloat;
 import bean.TaskReserved;
 
 public class Storage {
@@ -54,7 +55,7 @@ public class Storage {
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
 		Gson gson = new Gson();
 
-		ArrayList<Task> floatTasks = new ArrayList<Task>();
+		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
 		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
 		ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
 		ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
@@ -64,7 +65,7 @@ public class Storage {
 
 		findHeaderInFile(br, line, HEADER_FLOATING);
 		while ((line = br.readLine()) != null && hasContent(line)) {
-			Task floatTask = gson.fromJson(line, Task.class);
+			TaskFloat floatTask = gson.fromJson(line, TaskFloat.class);
 			floatTasks.add(floatTask);
 		}
 
@@ -118,7 +119,7 @@ public class Storage {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
 		Gson gson = new Gson();
 
-		ArrayList<Task> floatTasks = thisDisplay.getFloatTasks();
+		ArrayList<TaskFloat> floatTasks = thisDisplay.getFloatTasks();
 		ArrayList<TaskDeadline> deadlineTasks = thisDisplay.getDeadlineTasks();
 		ArrayList<TaskEvent> events = thisDisplay.getEventTasks();
 		ArrayList<TaskReserved> reservedTasks = thisDisplay.getReservedTasks();
