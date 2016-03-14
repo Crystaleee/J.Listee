@@ -1,46 +1,33 @@
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 3/6/2016, 1:28am
+ * Last updated: 3/15/2016, 3:00am
  * CS2103
  */
 
 package bean;
-import java.io.IOException;
 
 import History.History;
-import storage.Storage;
 
-public class CommandUndo extends Command{
+public class CommandUndo implements Command {
     private final String MESSAGE_UNDO = "Undid last command";
     private final String MESSAGE_ERROR_UNDO = "You have reached the earliest point possible";
-    private final String MESSAGE_ERROR = "Error occured while updating to file";
-    
-    public CommandUndo(){
+    private boolean updateFile;
+
+    public CommandUndo() {
+        updateFile = false;
     }
-    
-    public Display execute(Display display){
-        if(History.atFirstState()){
-            display = new Display(MESSAGE_ERROR_UNDO);
-            return display;
+
+    public Display execute(Display display) {
+        if (History.atFirstState()) {
+            return (new Display(MESSAGE_ERROR_UNDO));
         }
-        
+
         display = History.getDisplay(-1);
-        if(updateFile(display)){
-            display.setMessage(MESSAGE_UNDO);
-            History.decrementIndex();
-        }
-        else{
-            display = new Display(MESSAGE_ERROR);
-        }
+        display.setMessage(MESSAGE_UNDO);
         return display;
     }
-    
-    public boolean updateFile(Display display) {
-        try{
-            Storage.saveFile(display);
-            return true;
-        }catch(IOException error){
-            return false;
-        }
+
+    public boolean getUpdateFile() {
+        return updateFile;
     }
 }
