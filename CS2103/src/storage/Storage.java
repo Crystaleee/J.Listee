@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import com.google.gson.Gson;
-
 import bean.Display;
 import bean.Task;
 import bean.TaskDeadline;
@@ -290,7 +288,7 @@ public class Storage {
 					}
 
 					TaskEvent eventTask = new TaskEvent(description, location, startDate, endDate, tags);
-					
+
 					if (location.isEmpty()) {
 						eventTask.setLocation(null);
 					}
@@ -339,7 +337,7 @@ public class Storage {
 						tags.remove(0);
 					}
 					TaskDeadline deadlineTask = new TaskDeadline(description, location, deadline, tags);
-					
+
 					if (location.isEmpty()) {
 						deadlineTask.setLocation(null);
 					}
@@ -389,7 +387,6 @@ public class Storage {
 
 					floatTasks.add(floatTask);
 
-
 				}
 			}
 		} catch (IOException ioe) {
@@ -399,7 +396,6 @@ public class Storage {
 			e.printStackTrace();
 		}
 	}
-
 
 	private static boolean isDivider(String line) {
 		return line.equals(HEADER_DIVIDER);
@@ -427,27 +423,32 @@ public class Storage {
 
 		writeHeaderToFile(bw, HEADER_FLOATING);
 		for (TaskFloat task : floatTasks) {
-			writeTaskFloatToFile(bw, task);
+			bw.write(task.toString());
+			// writeTaskFloatToFile(bw, task);
 		}
 
 		writeHeaderToFile(bw, HEADER_DEADLINE);
 		for (TaskDeadline task : deadlineTasks) {
-			writeTaskDeadlineToFile(bw, task);
+			bw.write(task.toString());
+			// writeTaskDeadlineToFile(bw, task);
 		}
 
 		writeHeaderToFile(bw, HEADER_EVENT);
 		for (TaskEvent event : events) {
-			writeTaskEventToFile(bw, event);
+			bw.write(event.toString());
+			// writeTaskEventToFile(bw, event);
 		}
 
 		writeHeaderToFile(bw, HEADER_RESERVED);
 		for (TaskReserved task : reservedTasks) {
-			writeTaskReservedToFile(bw, task);
+			bw.write(task.toString());
+			// writeTaskReservedToFile(bw, task);
 		}
 
 		writeHeaderToFile(bw, HEADER_COMPLETED);
 		for (Task task : completedTasks) {
-			writeTaskToFile(bw, task);
+			bw.write(task.toString());
+			//writeTaskToFile(bw, task);
 			/*
 			 * if (task instanceof Task) { writeTaskFloatingToFile(bw, task); }
 			 * else if (task instanceof TaskDeadline) {
@@ -463,111 +464,61 @@ public class Storage {
 		bw.close();
 	}
 
-	private static void writeTaskReservedToFile(BufferedWriter bw, TaskReserved task) throws IOException {
-		ArrayList<Calendar> startDates = task.getStartDates();
-		String startDate = "";
-		for (int i = 0; i < startDates.size(); i++) {
-			startDate += getDateAsString(startDates.get(i)) + ", ";
-			if (i == startDates.size() - 1) {
-				startDate += getDateAsString(startDates.get(i));
-			}
-		}
-
-		ArrayList<Calendar> endDates = task.getEndDates();
-		String endDate = "";
-		for (int i = 0; i < endDates.size(); i++) {
-			endDate += getDateAsString(endDates.get(i)) + ", ";
-			if (i == endDates.size() - 1) {
-				endDate += getDateAsString(endDates.get(i));
-			}
-		}
-
-		bw.write(ATTRIBUTE_DESCRIPTION + task.getDescription());
-		bw.newLine();
-		bw.write(ATTRIBUTE_START_DATES + startDate);
-		bw.newLine();
-		bw.write(ATTRIBUTE_END_DATES + endDate);
-		bw.newLine();
-		String location = task.getLocation();
-		if (location == null) {
-			location = "";
-		}
-		bw.write(ATTRIBUTE_LOCATION + location);
-		bw.newLine();
-		ArrayList<String> tagsList = task.getTags();
-		String tagsString = "";
-		for (String tag : tagsList) {
-			tagsString += " #" + tag;
-		}
-		bw.write(ATTRIBUTE_TAGS + tagsString);
-		bw.newLine();
-		bw.newLine();
-	}
-
-	private static void writeTaskEventToFile(BufferedWriter bw, TaskEvent event) throws IOException {
-		bw.write(ATTRIBUTE_DESCRIPTION + event.getDescription());
-		bw.newLine();
-		bw.write(ATTRIBUTE_START_DATE + getDateAsString(event.getStartDate()));
-		bw.newLine();
-		bw.write(ATTRIBUTE_END_DATE + getDateAsString(event.getEndDate()));
-		bw.newLine();
-		String location = event.getLocation();
-		if (location == null) {
-			location = "";
-		}
-		bw.write(ATTRIBUTE_LOCATION + location);
-		bw.newLine();
-		ArrayList<String> tagsList = event.getTags();
-		String tagsString = "";
-		for (String tag : tagsList) {
-			tagsString += " #" + tag;
-		}
-		bw.write(ATTRIBUTE_TAGS + tagsString);
-		bw.newLine();
-		bw.newLine();
-	}
-
-	private static void writeTaskDeadlineToFile(BufferedWriter bw, TaskDeadline task) throws IOException {
-		bw.write(ATTRIBUTE_DESCRIPTION + task.getDescription());
-		bw.newLine();
-		bw.write(ATTRIBUTE_DEADLINE + getDateAsString(task.getEndDate()));
-		bw.newLine();
-		String location = task.getLocation();
-		if (location == null) {
-			location = "";
-		}
-		bw.write(ATTRIBUTE_LOCATION + location);
-		bw.newLine();
-		ArrayList<String> tagsList = task.getTags();
-		String tagsString = "";
-		for (String tag : tagsList) {
-			tagsString += " #" + tag;
-		}
-		bw.write(ATTRIBUTE_TAGS + tagsString);
-		bw.newLine();
-		bw.newLine();
-	}
-
-	private static void writeTaskFloatToFile(BufferedWriter bw, TaskFloat task) throws IOException {
-		bw.write(ATTRIBUTE_DESCRIPTION + task.getDescription());
-		bw.newLine();
-	
-		String location = task.getLocation();
-		if (location == null) {
-			location = "";
-		}
-		bw.write(ATTRIBUTE_LOCATION + location);
-		
-		bw.newLine();
-		ArrayList<String> tagsList = task.getTags();
-		String tagsString = "";
-		for (String tag : tagsList) {
-			tagsString += " #" + tag;
-		}
-		bw.write(ATTRIBUTE_TAGS + tagsString);
-		bw.newLine();
-		bw.newLine();
-	}
+	/*
+	 * private static void writeTaskReservedToFile(BufferedWriter bw,
+	 * TaskReserved task) throws IOException { ArrayList<Calendar> startDates =
+	 * task.getStartDates(); String startDate = ""; for (int i = 0; i <
+	 * startDates.size(); i++) { startDate += getDateAsString(startDates.get(i))
+	 * + ", "; if (i == startDates.size() - 1) { startDate +=
+	 * getDateAsString(startDates.get(i)); } }
+	 * 
+	 * ArrayList<Calendar> endDates = task.getEndDates(); String endDate = "";
+	 * for (int i = 0; i < endDates.size(); i++) { endDate +=
+	 * getDateAsString(endDates.get(i)) + ", "; if (i == endDates.size() - 1) {
+	 * endDate += getDateAsString(endDates.get(i)); } }
+	 * 
+	 * bw.write(ATTRIBUTE_DESCRIPTION + task.getDescription()); bw.newLine();
+	 * bw.write(ATTRIBUTE_START_DATES + startDate); bw.newLine();
+	 * bw.write(ATTRIBUTE_END_DATES + endDate); bw.newLine(); String location =
+	 * task.getLocation(); if (location == null) { location = ""; }
+	 * bw.write(ATTRIBUTE_LOCATION + location); bw.newLine(); ArrayList<String>
+	 * tagsList = task.getTags(); String tagsString = ""; for (String tag :
+	 * tagsList) { tagsString += " #" + tag; } bw.write(ATTRIBUTE_TAGS +
+	 * tagsString); bw.newLine(); bw.newLine(); }
+	 * 
+	 * 
+	 * private static void writeTaskEventToFile(BufferedWriter bw, TaskEvent
+	 * event) throws IOException { bw.write(ATTRIBUTE_DESCRIPTION +
+	 * event.getDescription()); bw.newLine(); bw.write(ATTRIBUTE_START_DATE +
+	 * getDateAsString(event.getStartDate())); bw.newLine();
+	 * bw.write(ATTRIBUTE_END_DATE + getDateAsString(event.getEndDate()));
+	 * bw.newLine(); String location = event.getLocation(); if (location ==
+	 * null) { location = ""; } bw.write(ATTRIBUTE_LOCATION + location);
+	 * bw.newLine(); ArrayList<String> tagsList = event.getTags(); String
+	 * tagsString = ""; for (String tag : tagsList) { tagsString += " #" + tag;
+	 * } bw.write(ATTRIBUTE_TAGS + tagsString); bw.newLine(); bw.newLine(); }
+	 * 
+	 * private static void writeTaskDeadlineToFile(BufferedWriter bw,
+	 * TaskDeadline task) throws IOException { bw.write(ATTRIBUTE_DESCRIPTION +
+	 * task.getDescription()); bw.newLine(); bw.write(ATTRIBUTE_DEADLINE +
+	 * getDateAsString(task.getEndDate())); bw.newLine(); String location =
+	 * task.getLocation(); if (location == null) { location = ""; }
+	 * bw.write(ATTRIBUTE_LOCATION + location); bw.newLine(); ArrayList<String>
+	 * tagsList = task.getTags(); String tagsString = ""; for (String tag :
+	 * tagsList) { tagsString += " #" + tag; } bw.write(ATTRIBUTE_TAGS +
+	 * tagsString); bw.newLine(); bw.newLine(); }
+	 * 
+	 * private static void writeTaskFloatToFile(BufferedWriter bw, TaskFloat
+	 * task) throws IOException { bw.write(ATTRIBUTE_DESCRIPTION +
+	 * task.getDescription()); bw.newLine();
+	 * 
+	 * String location = task.getLocation(); if (location == null) { location =
+	 * ""; } bw.write(ATTRIBUTE_LOCATION + location);
+	 * 
+	 * bw.newLine(); ArrayList<String> tagsList = task.getTags(); String
+	 * tagsString = ""; for (String tag : tagsList) { tagsString += " #" + tag;
+	 * } bw.write(ATTRIBUTE_TAGS + tagsString); bw.newLine(); bw.newLine(); }
+	 */
 
 	private static void writeTaskToFile(BufferedWriter bw, Task task) throws IOException {
 		bw.write(ATTRIBUTE_DESCRIPTION + task.getDescription());
@@ -604,11 +555,10 @@ public class Storage {
 	 * writeTaskToFile(BufferedWriter bw, Gson gson, Task task) throws
 	 * IOException { String taskAsString = gson.toJson(task);
 	 * bw.write(taskAsString); bw.newLine(); }
+	 * 
+	 * 
+	 * private static String getDateAsString(Calendar date) { //
+	 * SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yy HH:mm"); String
+	 * dateString = sdf.format(date.getTime()); return dateString; }
 	 */
-
-	private static String getDateAsString(Calendar date) {
-		// SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yy HH:mm");
-		String dateString = sdf.format(date.getTime());
-		return dateString;
-	}
 }
