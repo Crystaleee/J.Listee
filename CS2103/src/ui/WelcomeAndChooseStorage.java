@@ -9,6 +9,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import main.App;
 import netscape.javascript.JSObject;
@@ -19,10 +20,17 @@ import netscape.javascript.JSObject;
  * @version 1.0
  */
 public class WelcomeAndChooseStorage extends Pane {
-	private static WebView browser = new WebView();
-	private static WebEngine webEngine = browser.getEngine();
+	private WebView browser = new WebView();
+	private WebEngine webEngine = browser.getEngine();
+	public static WelcomeAndChooseStorage welcome;
 
-	public WelcomeAndChooseStorage() {
+	public static WelcomeAndChooseStorage getInstance(){
+		if(welcome==null)
+			welcome=new WelcomeAndChooseStorage();
+		return welcome;
+	}
+	
+	private WelcomeAndChooseStorage() {
 		// load the web page
 		webEngine.load(WelcomeAndChooseStorage.class.getResource(
 				"/html/launch.html").toExternalForm());
@@ -46,16 +54,23 @@ public class WelcomeAndChooseStorage extends Pane {
 	// JavaScript interface object
 	public class WelcomeBridge {
 
-		public void chooseFolder() throws IOException {
+		public void chooseFolder()  {
 			JFileChooser fileChooser = new JFileChooser("D:\\");
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			//TODO directories only
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			int returnVal = fileChooser.showOpenDialog(fileChooser);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {				
 				App.filePath=fileChooser.getSelectedFile().getAbsolutePath()+"\\J.Listee.txt";
 				// create file under the file folder chosen by user
-				ui.createFile(App.filePath);				
-				//display starting page
-				ui.initializeList(App.stage, App.filePath);
+				UI ui=UI.getInstance();
+				//TODO EXCEPTION
+				try {
+					ui.createFile(App.filePath);
+					//display starting page
+					ui.initializeList(App.stage, App.filePath);
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(fileChooser, e.getMessage());
+				}
 			}
 		}
 	}

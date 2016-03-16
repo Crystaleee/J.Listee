@@ -2,10 +2,12 @@ package main;
 
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import storage.LogStorage;
-import ui.ui;
+import ui.UI;
 /**
  * @author Zhu Bingjing
  * @date 2016年3月1日 下午5:03:02
@@ -16,19 +18,23 @@ public class App extends Application{
 	public static Stage stage;
 	//this is the task file
 	public static String filePath;
-	
+	public UI ui=UI.getInstance();
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args){
 		Application.launch(args);			
 	}
 
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {	
+	public void start(Stage primaryStage) {	
 		stage = primaryStage;
 	    stage.setTitle("J.Listee");
-	    
-	    filePath=LogStorage.readLog();
+	    //TODO EXCEPTION
+	    try {
+			filePath=LogStorage.readLog();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}
 		//check if it's the first time that user use the application
 		if (filePath==null){
 			ui.displayWelcome(stage);

@@ -1,6 +1,5 @@
 package ui;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -26,8 +25,8 @@ import netscape.javascript.JSObject;
  * @version 1.0
  */
 public class ShowList extends Pane {
-	private static WebView browser = new WebView();
-	private static WebEngine webEngine = browser.getEngine();
+	private WebView browser = new WebView();
+	private WebEngine webEngine = browser.getEngine();
 	private Display display;
 
 	public ShowList(Display display) {
@@ -38,7 +37,7 @@ public class ShowList extends Pane {
 		// add the web view to the scene
 		this.getChildren().add(browser);
 
-		if (display != null) {
+		if (this.display != null) {
 			webEngine
 					.getLoadWorker()
 					.stateProperty()
@@ -122,8 +121,9 @@ public class ShowList extends Pane {
 
 	// JavaScript interface object
 	public class ListBridge {
-		public void receiveCommand(String command) throws IOException {
+		public void receiveCommand(String command){
 			System.out.println(command);
+			UI ui=UI.getInstance();
 			ui.feedback(command);
 		}
 	}

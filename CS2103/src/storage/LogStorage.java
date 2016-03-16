@@ -28,28 +28,26 @@ public class LogStorage {
 	 * @throws IOException
 	 *             If an I/O error occurs during readLine()
 	 */
-	public static String readLog() {
+	public static String readLog() throws IOException {
 		File file = new File(logFile);
-		try {	
 			if (!file.exists()) {
-				file.createNewFile();
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					throw new IOException("Error: Cannot create log file");
+				}
 				return null;
 			}else{
 				return readLogFile();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	/**
 	 * Write in the log file the filepath
-	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during operations of bw and fos
 	 */
-	public static void writeLogFile(String filePath) {
+	public static void writeLogFile(String filePath) throws IOException {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream(logFile);
@@ -59,9 +57,10 @@ public class LogStorage {
 			bw.flush();
 			fos.close();
 			bw.close();
-		} catch ( IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch ( FileNotFoundException e) {
+			throw new FileNotFoundException("Log file not found!");
+		} catch (IOException e) {
+			throw new IOException("Cannot write to log file!");
 		}
 		
 	}
@@ -70,18 +69,25 @@ public class LogStorage {
 	 * read from the log file to find the filePath
 	 * 
 	 * @return the file path in the log file, null if it doesn't exist
-	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private static String readLogFile() throws FileNotFoundException, IOException {
+	private static String readLogFile() throws IOException{
 		String filePath=null;
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(
-				logFile)));
-		String lineStr = br.readLine();
-		if(lineStr!=null){
-			filePath=lineStr;
-		}
-		br.close();
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(
+					logFile)));
+		String lineStr;
+			lineStr = br.readLine();
+			if(lineStr!=null){
+				filePath=lineStr;
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException("Log file not found!");
+		}catch (IOException e) {
+			throw new IOException("Cannot read from log file!");
+		}		
 		return filePath;
 	}
 }
