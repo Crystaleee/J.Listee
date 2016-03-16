@@ -2,6 +2,9 @@ package parser;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import bean.Command;
 import bean.CommandAddDeadlineTask;
 import bean.CommandAddEvent;
@@ -31,6 +34,9 @@ public class Parser{
 	private ArrayList<Calendar> startDateTimes = new ArrayList<Calendar>();
 	private ArrayList<Calendar> endDateTimes = new ArrayList<Calendar>();
 	private Integer updateTaskNumber;
+
+	private static Logger logger = Logger.getGlobal();
+
 
 	/*public static void main(String[] args){ // for testing
 		Parser testTimeTask = new Parser();
@@ -102,6 +108,7 @@ public class Parser{
 
 					//event -  have startTime & endTime
 					if (calendarDescription.contains("-")){
+						logger.log(Level.INFO, "Event task");
 						String startDate = calendarDescription.get(0).substring(1, calendarDescription.get(0).length());
 						String[] startDateYYMMDD = startDate.split("/");
 
@@ -137,6 +144,7 @@ public class Parser{
 
 					// deadline task
 					else {
+						logger.log(Level.INFO, "Deadline task");
 
 						String endDate = calendarDescription.get(0).substring(1, calendarDescription.get(0).length());
 						String[] endDateYYMMDD = endDate.split("/");
@@ -144,6 +152,8 @@ public class Parser{
 
 						//consist of date and time
 						if (calendarDescription.size() > 1){
+							logger.log(Level.INFO, "Deadline task has date and time");
+
 							String endTime = calendarDescription.get(1);
 							String[] endTimeHourMinute = endTime.split(":");
 
@@ -158,7 +168,8 @@ public class Parser{
 						}
 
 						//consist of date only
-						else { 						
+						else { 					
+							logger.log(Level.INFO, "Deadline task has date only");
 							endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));
 							endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
 							endDateDay = Integer.valueOf(endDateYYMMDD[0]);
@@ -216,6 +227,8 @@ public class Parser{
 		
 		
 		else if (commandType.equals("reserve")){
+			logger.log(Level.INFO, "Reserve task");
+
 			int i = 1;
 			while (i < args.length && (!args[i].substring(0,1).equals("(")) && (!args[i].substring(0,1).equals("@")) && (!args[i].substring(0,1).equals("#"))){
 				taskDescriptionList.add(args[i]);
@@ -227,14 +240,18 @@ public class Parser{
 			} 
 
 			taskDescription = taskDescription.substring(4,taskDescription.length());
-			
+			logger.log(Level.INFO, "taskDescription: ", taskDescription);
+
 
 			for ( ; i<args.length; i++){
 				if (args[i].substring(0, 1).equals("@")){
 					location = args[i].substring(1, args[i].length());
+					logger.log(Level.INFO, "reserve location: ", location);
+
 				}
 				
 				if (args[i].substring(0, 1).equals("#")){
+					logger.log(Level.INFO, "reserve hashtags: ", args[i].substring(1, args[i].length()));
 					tagLists.add(args[i].substring(1, args[i].length()));
 				}
 
@@ -286,13 +303,39 @@ public class Parser{
 
 
 		else if (commandType.equals("update")){
-			updateTaskNumber = (Integer.valueOf(args[1]));
+			boolean isTaskDescription = false;
 			
-			for (int i = 2; i<args.length; i++){
-				taskDescription += args[i] + " ";
+			updateTaskNumber = (Integer.valueOf(args[1]));
+
+			if (args[2].contains("-")) {
+				if (args[2].contains("@")){
+					System.out.println("Comes in remove location");
+					//remove location
+				}
+				
+				else if (args[2].contains("#")){
+					System.out.println("Comes in remove hashtags");
+					//remove hashtag
+				}
 			}
 			
-			taskDescription = taskDescription.substring(4,taskDescription.length());
+			else if (args[2].contains("@")){
+				System.out.println("comes in add new location");
+			}
+			
+			else if (args[2].contains("#")){
+				System.out.println("comes in add new location");
+			}
+			
+			
+			else {
+				for (int i = 2; i<args.length; i++){
+					taskDescription += args[i] + " ";
+				}
+			
+				taskDescription = taskDescription.substring(4,taskDescription.length());
+				isTaskDescription = true;
+			}
 			
 			/*for (int j=2; j<args.length;j++){
 				if (args[j].substring(0, 1).equals("@")){
