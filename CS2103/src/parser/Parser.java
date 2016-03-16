@@ -9,6 +9,8 @@ import bean.CommandAddFloatTask;
 import bean.CommandAddReserved;
 import bean.CommandDelete;
 import bean.CommandInvalid;
+import bean.CommandRedo;
+import bean.CommandUndo;
 import bean.CommandUpdate;
 
 public class Parser{
@@ -321,6 +323,18 @@ public class Parser{
 			Command update = new CommandUpdate(updateTaskNumber, taskDescription);
 			return update;
 		} 
+		
+		else if (commandType.equals("undo")){
+			Command undo = new CommandUndo();
+			return undo;
+		}
+		
+		else if (commandType.equals("redo")){
+			Command redo = new CommandRedo();
+			return redo;
+		}
+
+		
 
 	/*	else if (command.getCommandType().equals("postpone")){
 			command.setTaskNumber(Integer.valueOf(args[1]));
