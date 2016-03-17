@@ -1,9 +1,12 @@
 package parser;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import bean.Command;
 import bean.CommandAddDeadlineTask;
@@ -36,9 +39,22 @@ public class Parser{
 	private Integer updateTaskNumber;
 
 	private static Logger logger = Logger.getGlobal();
+	private static FileHandler fh; 
 
 
-	/*public static void main(String[] args){ // for testing
+/*	public static void main(String[] args){ // for testing
+		try {
+			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
+	        logger.addHandler(fh);
+	        SimpleFormatter formatter = new SimpleFormatter();  
+	        fh.setFormatter(formatter);  
+
+		} catch (SecurityException e) {  
+	        e.printStackTrace();  
+	    } catch (IOException e) {  
+	        e.printStackTrace();  
+	    } 
+		
 		Parser testTimeTask = new Parser();
 		testTimeTask.ParseCommand("add test Time task (12/2/16 15:05 - 15/2/15 07:00) @icube @LT27 #hihi #me");
 		
@@ -61,9 +77,11 @@ public class Parser{
 		
 		Parser testUpdateTask = new Parser();
 			testUpdateTask.ParseCommand("update 2 hello hello hello"); 
-	} */
+	}*/
 
 	public Command ParseCommand(String inputLine){
+	 
+
 
 		String[] args = inputLine.split(" ");	
 		ArrayList<String> taskDescriptionList = new ArrayList<String>();
@@ -108,7 +126,7 @@ public class Parser{
 
 					//event -  have startTime & endTime
 					if (calendarDescription.contains("-")){
-						logger.log(Level.INFO, "Event task");
+						logger.info("Event task");
 						String startDate = calendarDescription.get(0).substring(1, calendarDescription.get(0).length());
 						String[] startDateYYMMDD = startDate.split("/");
 
@@ -144,7 +162,7 @@ public class Parser{
 
 					// deadline task
 					else {
-						logger.log(Level.INFO, "Deadline task");
+						logger.info("Deadline task");
 
 						String endDate = calendarDescription.get(0).substring(1, calendarDescription.get(0).length());
 						String[] endDateYYMMDD = endDate.split("/");
@@ -152,7 +170,7 @@ public class Parser{
 
 						//consist of date and time
 						if (calendarDescription.size() > 1){
-							logger.log(Level.INFO, "Deadline task has date and time");
+							logger.info("Deadline task has date and time");
 
 							String endTime = calendarDescription.get(1);
 							String[] endTimeHourMinute = endTime.split(":");
@@ -169,7 +187,7 @@ public class Parser{
 
 						//consist of date only
 						else { 					
-							logger.log(Level.INFO, "Deadline task has date only");
+							logger.info("Deadline task has date only");
 							endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));
 							endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
 							endDateDay = Integer.valueOf(endDateYYMMDD[0]);
@@ -186,6 +204,7 @@ public class Parser{
 
 
 				else if (args[i].substring(0, 1).equals("#")){
+					
 					tagLists.add(args[i].substring(1, args[i].length()));
 
 				}
@@ -227,7 +246,7 @@ public class Parser{
 		
 		
 		else if (commandType.equals("reserve")){
-			logger.log(Level.INFO, "Reserve task");
+			logger.info("Reserve task");
 
 			int i = 1;
 			while (i < args.length && (!args[i].substring(0,1).equals("(")) && (!args[i].substring(0,1).equals("@")) && (!args[i].substring(0,1).equals("#"))){
@@ -240,18 +259,18 @@ public class Parser{
 			} 
 
 			taskDescription = taskDescription.substring(4,taskDescription.length());
-			logger.log(Level.INFO, "taskDescription: ", taskDescription);
+			logger.info("taskDescription: " + taskDescription);
 
 
 			for ( ; i<args.length; i++){
 				if (args[i].substring(0, 1).equals("@")){
 					location = args[i].substring(1, args[i].length());
-					logger.log(Level.INFO, "reserve location: ", location);
+					logger.info("reserve location: " + location);
 
 				}
 				
 				if (args[i].substring(0, 1).equals("#")){
-					logger.log(Level.INFO, "reserve hashtags: ", args[i].substring(1, args[i].length()));
+					logger.info("reserve hashtags: "+ args[i].substring(1, args[i].length()));
 					tagLists.add(args[i].substring(1, args[i].length()));
 				}
 
