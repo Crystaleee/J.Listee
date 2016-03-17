@@ -1,0 +1,21 @@
+Mar 17, 2016 11:26:11 AM storage.Storage getDisplay
+INFO: Reading all tasks from file.
+
+Mar 17, 2016 11:26:11 AM storage.Storage readTasksFloating
+INFO: Reading new floating task.
+
+Mar 17, 2016 11:26:11 AM storage.Storage readTasksFloating
+INFO: Successfully read: Floating Test
+
+Mar 17, 2016 11:26:11 AM storage.Storage readTasksDeadline
+INFO: Reading new deadline task.
+
+Mar 17, 2016 11:26:11 AM storage.Storage readTasksDeadline
+INFO: Successfully read: Deadline Test
+
+Mar 17, 2016 11:26:11 AM storage.Storage readTasksEvents
+INFO: Reading new event.
+
+Mar 17, 2016 11:26:11 AM storage.Storage readTasksEvents
+INFO: Successfully read: Event Test
+
