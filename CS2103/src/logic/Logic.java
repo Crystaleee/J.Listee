@@ -24,6 +24,7 @@ public class Logic {
     public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
 
     private static Display display;
+    private static String file;
     
     public static boolean createFile(String filePath){
         try{
@@ -35,6 +36,7 @@ public class Logic {
     }
     
     public static Display initializeProgram(String filePath){
+        file = filePath;
         try{
             display = Storage.getDisplay(filePath);
             display.setMessage(null);
@@ -50,7 +52,11 @@ public class Logic {
         History.saveUserInput(userInput);
         Parser myParser = new Parser();
         Command userCommand = myParser.ParseCommand(userInput);
-        display = userCommand.execute(History.getDisplay(0));
+        try {
+            display = userCommand.execute(Storage.getDisplay(file));
+        } catch (IOException e) {
+            //fail to get display
+        }
         
         if(userCommand.getUpdateFile()){
             if(successfullyUpdatesFile()){
