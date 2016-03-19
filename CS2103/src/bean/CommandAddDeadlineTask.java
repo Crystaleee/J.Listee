@@ -12,6 +12,7 @@ import logic.Logic;
 
 public class CommandAddDeadlineTask extends TaskDeadline implements Command {
     private boolean updateFile = true;
+    private boolean saveHistory = true;
 
     public CommandAddDeadlineTask() {
         super();
@@ -27,6 +28,7 @@ public class CommandAddDeadlineTask extends TaskDeadline implements Command {
     public Display execute(Display display) {
         if (getDescription() == null) {
             updateFile = false;
+            saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         ArrayList<TaskDeadline> deadlineTasks = addDeadlineTask(display.getDeadlineTasks());
@@ -54,6 +56,10 @@ public class CommandAddDeadlineTask extends TaskDeadline implements Command {
             }
         }
         return i;
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {

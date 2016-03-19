@@ -10,4 +10,5 @@ public interface Command {
     public Display execute(Display display);
 
     public boolean getUpdateFile();
+    public boolean getSaveHistory();
 }

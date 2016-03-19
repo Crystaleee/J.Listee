@@ -12,6 +12,7 @@ import logic.Logic;
 
 public class CommandAddEvent extends TaskEvent implements Command {
     private boolean updateFile;
+    private boolean saveHistory = true;
 
     public CommandAddEvent() {
         super();
@@ -27,6 +28,7 @@ public class CommandAddEvent extends TaskEvent implements Command {
     public Display execute(Display display) {
         if (getDescription() == null) {
             updateFile = false;
+            saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
@@ -56,6 +58,10 @@ public class CommandAddEvent extends TaskEvent implements Command {
         return i;
     }
 
+    public boolean getSaveHistory() {
+        return saveHistory;
+    }
+    
     public boolean getUpdateFile() {
         return updateFile;
     }

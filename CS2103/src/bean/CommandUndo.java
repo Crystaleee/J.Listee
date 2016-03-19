@@ -12,19 +12,26 @@ public class CommandUndo implements Command {
     private final String MESSAGE_UNDO = "Undid last command";
     private final String MESSAGE_ERROR_UNDO = "You have reached the earliest point possible";
     private boolean updateFile;
+    private boolean saveHistory = false;
 
     public CommandUndo() {
-        updateFile = false;
+        updateFile = true;
     }
 
     public Display execute(Display display) {
         if (History.atFirstState()) {
-            return (new Display(MESSAGE_ERROR_UNDO));
+            updateFile = false;
+            return display;
+            //return (new Display(MESSAGE_ERROR_UNDO));
         }
 
         display = History.getDisplay(-1);
         display.setMessage(MESSAGE_UNDO);
         return display;
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {

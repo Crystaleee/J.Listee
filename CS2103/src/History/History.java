@@ -45,7 +45,8 @@ public class History {
     }
 
     public static Display getDisplay(int offset) {
-        return oldDisplays.get(oldDisplaysIndex + offset);
+        oldDisplaysIndex += offset;
+        return oldDisplays.get(oldDisplaysIndex);
     }
 
 }

@@ -14,6 +14,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private Display display;
     private boolean updateFile;
     private final String message_invalid_task_number = "Pls specify a valid task number";
+    private boolean saveHistory = true;
 
     public CommandUpdate() {
         super();
@@ -41,6 +42,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         display = oldDisplay;
         if (hasInvalidTaskNumber(display.getNumberOfTasks())) {
             updateFile = false;
+            saveHistory = false;
             return (new Display(message_invalid_task_number));
         }
         editTask();
@@ -183,6 +185,10 @@ public class CommandUpdate extends TaskEvent implements Command {
                     getEndDate(), task.getTags());
             display = addCommand.execute(display);
         }
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {

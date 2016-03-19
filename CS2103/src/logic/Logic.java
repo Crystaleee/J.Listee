@@ -60,7 +60,9 @@ public class Logic {
         
         if(userCommand.getUpdateFile()){
             if(successfullyUpdatesFile()){
-                History.saveDisplay(display);
+                if(userCommand.getSaveHistory()){
+                    History.saveDisplay(display);
+                }
             }
             else{
                 display = new Display(MESSAGE_ERROR_UPDATE_FILE);

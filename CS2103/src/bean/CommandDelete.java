@@ -15,6 +15,7 @@ public class CommandDelete implements Command {
     private String deletedMessage = "deleted: ";
     private String message_invalid_task_numbers = "You have specified invalid task numbers: ";
     private String message_all_tasks_deleted = "All tasks deleted";
+    private boolean saveHistory = true;
 
     public CommandDelete() {
         updateFile = true;
@@ -34,6 +35,7 @@ public class CommandDelete implements Command {
             display = new Display(message_all_tasks_deleted);
         } else if (hasInvalidTaskNumbers(display.getNumberOfTasks())) {
             updateFile = false;
+            saveHistory = false;
             return (new Display(message_invalid_task_numbers));
         } else {
             Collections.sort(taskNumbers);
@@ -87,6 +89,10 @@ public class CommandDelete implements Command {
             }
         }
         return deletedTask;
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {

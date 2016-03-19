@@ -11,6 +11,7 @@ import logic.Logic;
 
 public class CommandAddFloatTask extends TaskFloat implements Command {
     private boolean updateFile;
+    private boolean saveHistory = true;
 
     public CommandAddFloatTask() {
         super();
@@ -25,11 +26,16 @@ public class CommandAddFloatTask extends TaskFloat implements Command {
     public Display execute(Display display) {
         if (getDescription() == null) {
             updateFile = false;
+            saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         display.getFloatTasks().add(new TaskFloat(getDescription(), getLocation(), getTags()));
         display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, getDescription()));
         return display;
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {
