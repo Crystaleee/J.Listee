@@ -36,14 +36,6 @@ public class History {
         return (oldDisplaysIndex == 0);
     }
 
-    public static void decrementIndex() {
-        oldDisplaysIndex--;
-    }
-
-    public static void incrementIndex() {
-        oldDisplaysIndex++;
-    }
-
     public static Display getDisplay(int offset) {
         oldDisplaysIndex += offset;
         return oldDisplays.get(oldDisplaysIndex);
