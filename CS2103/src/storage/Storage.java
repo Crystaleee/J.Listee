@@ -349,7 +349,7 @@ public class Storage {
 	}
 
 	private static FileHandler createLogHandler() throws IOException {
-		FileHandler handler = new FileHandler("logs\\StorageLog.txt");
+		FileHandler handler = new FileHandler("logs\\log.txt");
 		handler.setFormatter(new SimpleFormatter());
 		logger.addHandler(handler);
 		return handler;
