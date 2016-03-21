@@ -1,13 +1,16 @@
+/*
+ * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * Last updated: 21 Mar, 11:00pm
+ */
 package bean;
-
-import java.util.ArrayList;
 
 import History.History;
 
 public class CommandShow implements Command {
-    private boolean updateFile;
     private final String message_no_tasks = "No such tasks found";
     private final String message_show = "Showing tasks containing ";
+    private boolean updateFile = false;
+    private boolean saveHistory = true;
     private String keyword;
     private int count;
     private Display oldDisplay;
@@ -15,14 +18,12 @@ public class CommandShow implements Command {
 
     public CommandShow() {
         this.keyword = null;
-        updateFile = false;
         newDisplay = null;
         count = 0;
     }
 
     public CommandShow(String keyword) {
         this.keyword = keyword;
-        updateFile = false;
         newDisplay = new Display();
         count = 0;
     }
@@ -85,6 +86,10 @@ public class CommandShow implements Command {
                 count++;
             }
         }
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {
