@@ -1,7 +1,6 @@
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 3/15/2016, 2:50am
- * CS2103
+ * Last updated: 21 Mar, 11:00pm
  */
 
 package bean;
