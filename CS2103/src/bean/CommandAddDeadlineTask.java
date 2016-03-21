@@ -10,37 +10,36 @@ import java.util.Calendar;
 
 import logic.Logic;
 
-public class CommandAddDeadlineTask extends TaskDeadline implements Command {
+public class CommandAddDeadlineTask implements Command {
+    private TaskDeadline task;
     private boolean updateFile = true;
     private boolean saveHistory = true;
 
     public CommandAddDeadlineTask() {
-        super();
-        updateFile = true;
+        task = null;
     }
 
     public CommandAddDeadlineTask(String description, String location, Calendar endDate,
             ArrayList<String> tags) {
-        super(description, location, endDate, tags);
-        updateFile = true;
+        task = new TaskDeadline(description, location, endDate, tags);
     }
 
     public Display execute(Display display) {
-        if (getDescription() == null) {
+        if (task.getDescription() == null) {
             updateFile = false;
             saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         ArrayList<TaskDeadline> deadlineTasks = addDeadlineTask(display.getDeadlineTasks());
         display.setDeadlineTasks(deadlineTasks);
-        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, getDescription()));
+        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
 
         return display;
     }
 
     public ArrayList<TaskDeadline> addDeadlineTask(ArrayList<TaskDeadline> taskList) {
         int index = getIndex(taskList);
-        taskList.add(index, new TaskDeadline(getDescription(), getLocation(), getEndDate(), getTags()));
+        taskList.add(index, task);
         return taskList;
     }
 
@@ -51,7 +50,7 @@ public class CommandAddDeadlineTask extends TaskDeadline implements Command {
     public int getIndex(ArrayList<TaskDeadline> taskList) {
         int i = 0;
         for (i = 0; i < taskList.size(); i++) {
-            if (getEndDate().compareTo(taskList.get(i).getEndDate()) < 0) {
+            if (task.getEndDate().compareTo(taskList.get(i).getEndDate()) < 0) {
                 break;
             }
         }

@@ -10,37 +10,35 @@ import java.util.Calendar;
 
 import logic.Logic;
 
-public class CommandAddEvent extends TaskEvent implements Command {
-    private boolean updateFile;
+public class CommandAddEvent implements Command {
+    private TaskEvent task;
+    private boolean updateFile = true;
     private boolean saveHistory = true;
 
     public CommandAddEvent() {
-        super();
-        updateFile = true;
+        task = null;
     }
 
     public CommandAddEvent(String description, String location, Calendar startDate, Calendar endDate,
             ArrayList<String> tags) {
-        super(description, location, startDate, endDate, tags);
-        updateFile = true;
+        task = new TaskEvent(description, location, startDate, endDate, tags);
     }
 
     public Display execute(Display display) {
-        if (getDescription() == null) {
+        if (task.getDescription() == null) {
             updateFile = false;
             saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
         display.setEvents(events);
-        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, getDescription()));
+        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
         return display;
     }
 
     public ArrayList<TaskEvent> addEvent(ArrayList<TaskEvent> taskList) {
         int index = getAddIndex(taskList);
-        taskList.add(index,
-                new TaskEvent(getDescription(), getLocation(), getStartDate(), getEndDate(), getTags()));
+        taskList.add(index, task);
         return taskList;
     }
 
@@ -51,7 +49,7 @@ public class CommandAddEvent extends TaskEvent implements Command {
     public int getAddIndex(ArrayList<TaskEvent> taskList) {
         int i = 0;
         for (i = 0; i < taskList.size(); i++) {
-            if (getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {
+            if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {
                 break;
             }
         }

@@ -10,44 +10,22 @@ import java.util.Calendar;
 
 import logic.Logic;
 
-public class CommandAddReserved extends CommandAddFloatTask {
-    private ArrayList<Calendar> startDates;
-    private ArrayList<Calendar> endDates;
-    private boolean updateFile;
+public class CommandAddReserved implements Command{
+    private TaskReserved task;
+    private boolean updateFile = true;
+    private boolean saveHistory = true;
 
     public CommandAddReserved() {
-        super();
-        startDates = null;
-        endDates = null;
-        updateFile = true;
+        task = null;
     }
 
     public CommandAddReserved(String description, String location, ArrayList<Calendar> startDates,
             ArrayList<Calendar> endDates, ArrayList<String> tags) {
-        super(description, location, tags);
-        this.startDates = startDates;
-        this.endDates = endDates;
-        updateFile = true;
-    }
-
-    public void setEndDates(ArrayList<Calendar> endDates) {
-        this.endDates = endDates;
-    }
-
-    public ArrayList<Calendar> GetEndDates() {
-        return endDates;
-    }
-
-    public void setStartDates(ArrayList<Calendar> startDates) {
-        this.startDates = startDates;
-    }
-
-    public ArrayList<Calendar> GetStartDates() {
-        return startDates;
+        task = new TaskReserved(description, location, startDates, endDates, tags);
     }
 
     public Display execute(Display display) {
-        if (getDescription() == null) {
+        if (task.getDescription() == null) {
             updateFile = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
@@ -58,8 +36,7 @@ public class CommandAddReserved extends CommandAddFloatTask {
 
     public ArrayList<TaskReserved> addReservedTask(ArrayList<TaskReserved> taskList) {
         int index = getIndex(taskList);
-        taskList.add(index,
-                new TaskReserved(getDescription(), getLocation(), startDates, endDates, getTags()));
+        taskList.add(index, task);
         return taskList;
     }
 
@@ -70,7 +47,7 @@ public class CommandAddReserved extends CommandAddFloatTask {
      */
     public int getIndex(ArrayList<TaskReserved> taskList) {
         int i = 0;
-        Calendar addedTaskStartDate = startDates.get(0);
+        Calendar addedTaskStartDate = task.getStartDates().get(0);
         for (i = 0; i < taskList.size(); i++) {
             Calendar taskInListStartDate = taskList.get(i).getStartDates().get(0);
             if (addedTaskStartDate.compareTo(taskInListStartDate) < 0) {
@@ -78,6 +55,10 @@ public class CommandAddReserved extends CommandAddFloatTask {
             }
         }
         return i;
+    }
+
+    public boolean getSaveHistory() {
+        return saveHistory;
     }
 
     public boolean getUpdateFile() {

@@ -9,28 +9,28 @@ import java.util.ArrayList;
 
 import logic.Logic;
 
-public class CommandAddFloatTask extends TaskFloat implements Command {
-    private boolean updateFile;
+public class CommandAddFloatTask implements Command {
+    private TaskFloat task;
+    private boolean updateFile = true;
     private boolean saveHistory = true;
 
     public CommandAddFloatTask() {
-        super();
-        updateFile = true;
+        task = null;
     }
 
     public CommandAddFloatTask(String description, String location, ArrayList<String> tags) {
-        super(description, location, tags);
+        task = new TaskFloat(description, location, tags);
         updateFile = true;
     }
 
     public Display execute(Display display) {
-        if (getDescription() == null) {
+        if (task.getDescription() == null) {
             updateFile = false;
             saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
-        display.getFloatTasks().add(new TaskFloat(getDescription(), getLocation(), getTags()));
-        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, getDescription()));
+        display.getFloatTasks().add(task);
+        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
         return display;
     }
 
