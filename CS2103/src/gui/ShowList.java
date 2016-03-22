@@ -14,6 +14,7 @@ import bean.TaskFloat;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
+import javafx.scene.web.WebHistory.Entry;
 import netscape.javascript.JSObject;
 
 /**

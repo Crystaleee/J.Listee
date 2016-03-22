@@ -42,6 +42,12 @@
     margin: 8px 0;
     vertical-align: middle;
   }
+  .task:focus{
+    background-color: rgba(255,255,255,1.0);
+    outline: 0;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1.5px #ccc;
+  }
   .task_number{
     width:8%;
     height: 100%;
@@ -142,8 +148,7 @@
     margin-bottom: 0;
     width: 600px;
     height: 40px;
-    padding: 5px;
-    font-size:20px;
+    padding: 10px;
   }
   .reserved .reserve_list{
     padding: 0;
@@ -165,7 +170,7 @@
   }
   .reserved .task_right{
     padding: 0;
-    width: 62%;
+    width: 62.05%;
   }
   #timeslot1{
     border-radius: 0 8px 8px 0;
@@ -201,6 +206,8 @@
 
         var taskdiv = document.createElement("div");
         taskdiv.setAttribute("class", "task");
+        taskdiv.setAttribute("tabindex", "0");
+        taskdiv.setAttribute("id", i+1);
 
         taskdiv.innerHTML= "<section class='task_number'>"
         + (i+1)
@@ -313,6 +320,8 @@
 
       var taskdiv = document.createElement("div");
       taskdiv.setAttribute("class", "task");
+      taskdiv.setAttribute("tabindex", "0");
+      taskdiv.setAttribute("id", i+1);
 
       taskdiv.innerHTML= "<section class='task_number'>"
       + (i+1)
@@ -418,6 +427,10 @@
     app.receiveCommand(command);
   }
 
+function shortCutCommand(cmd){
+  app.receiveCommand(cmd);
+}
+
 function showFeedBack(feedback){
   $("#feedback").text(feedback);
   $("#feedback").slideToggle("slow");
@@ -427,6 +440,65 @@ function showFeedBack(feedback){
 function hideFeedBack(){
   $("#feedback").slideToggle();
 }
+
+//Prevent the backspace key from navigating back.
+$(document).unbind('keydown').bind('keydown', function (event) {
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+        var d = event.srcElement || event.target;
+        if ((d.tagName.toUpperCase() === 'INPUT' && 
+             (
+                 d.type.toUpperCase() === 'TEXT' ||
+                 d.type.toUpperCase() === 'PASSWORD' || 
+                 d.type.toUpperCase() === 'FILE' || 
+                 d.type.toUpperCase() === 'SEARCH' || 
+                 d.type.toUpperCase() === 'EMAIL' || 
+                 d.type.toUpperCase() === 'NUMBER' || 
+                 d.type.toUpperCase() === 'DATE' )
+             ) || 
+             d.tagName.toUpperCase() === 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else {
+            doPrevent = true;
+        }
+    }
+    if (doPrevent) {
+        event.preventDefault();
+    }
+});
+
+$(document).keydown(
+    function(e)
+    {   
+      switch(e.keyCode){
+        case 40://key down
+          if($(".task:focus").length==0){
+            $(".task:last").focus();
+          }else{
+            var id=parseInt($(".task:focus")[0].id)+1;
+            $("#"+id).focus();
+          }   
+        break;
+        case 38://key up
+          if($(".task:focus").length==0){
+            $(".task:first").focus();
+          }else{ 
+            var id=parseInt($(".task:focus")[0].id)-1;
+            $("#"+id).focus();
+          }
+        break;
+        case 46://delete
+        case 8://backspace
+          if($(".task:focus").length>0){
+            var id=parseInt($(".task:focus")[0].id);
+            shortCutCommand("delete "+id);
+          }
+        break;
+      }
+    }
+);
+
 
 </script>
 

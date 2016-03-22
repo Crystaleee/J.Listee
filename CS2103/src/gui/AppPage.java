@@ -1,5 +1,8 @@
 package gui;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -19,17 +22,15 @@ public abstract class AppPage extends Pane{
 		this.browser = new WebView();
 		this.webEngine = browser.getEngine();
 		this.html=html;
-		
+		browser. setContextMenuEnabled(false);
+
 		//load web page
 		webEngine.load(WelcomeAndChooseStorage.class.getResource(
 				this.html).toExternalForm());
 		
-//
-//										JSObject win = (JSObject) webEngine
-//												.executeScript("window");
-//										this.win=win;
-	
 		// add the web view to the scene
 		this.getChildren().add(browser);
 	}
+	
+	
 }

@@ -5,7 +5,11 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import bean.Display;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import logic.Logic;
 import storage.LogStorage;
@@ -48,6 +52,7 @@ public class GUIController {
 		welcome = new WelcomeAndChooseStorage();
 		if (scene == null) {
 			scene = new Scene(welcome, WINDOW_WIDTH, WINDOW_HEIGHT);
+			setCloseOnEsc(stage, scene);
 			stage.setScene(scene);
 		} else {
 			stage.getScene().setRoot(welcome);
@@ -64,15 +69,33 @@ public class GUIController {
 	 */
 	public static void displayList(Stage stage, Display display) {
 			Scene scene = stage.getScene();
+			
 			((ShowList) showList).setList(display);
 			if (scene == null) {			
 				scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
+				//set Esc key for close
+				setCloseOnEsc(stage, scene);
 				stage.setScene(scene);
 			} else {
 				stage.getScene().setRoot(showList);
 			}
 			stage.sizeToScene();
 			stage.show();		
+	}
+
+	/**
+	 * @param stage
+	 * @param scene
+	 */
+	private static void setCloseOnEsc(Stage stage, Scene scene) {
+		scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>
+		  () {@Override
+		        public void handle(KeyEvent t) {
+		          if(t.getCode()==KeyCode.ESCAPE){
+		              stage.close();
+		          }
+		        }
+		    });
 	}
 
 	/**
