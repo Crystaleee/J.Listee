@@ -94,4 +94,11 @@ public class Display{
     public void setCompletedTasks(ArrayList<Task> completedTasks){
         this.completedTasks = completedTasks;
     }
+
+	@Override
+	public String toString() {
+		return "Display [message=" + message + ", events=" + events + ", deadlineTasks=" + deadlineTasks
+				+ ", floatTasks=" + floatTasks + ", reservedTasks=" + reservedTasks + ", completedTasks="
+				+ completedTasks + "]";
+	}
 }

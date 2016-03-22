@@ -121,7 +121,11 @@ public class Storage {
 		return storageInstance;
 	}
 
-	private static void setFilePath(String filepath) {
+	public static String getFilePath() {
+		return filePath;
+	}
+
+	public static void setFilePath(String filepath) {
 		filePath = filepath;
 	}
 
@@ -209,33 +213,40 @@ public class Storage {
 		String location = null;
 		ArrayList<String> tags = null;
 
-		try {
-			readHeader(br);
+		// try {
+		readHeader(br);
 
-			while ((line = br.readLine()) != null) {
-				line = br.readLine();
-				if (isInvalidLine(line)) {
-					break;
-				} else {
-					logger.log(Level.INFO, "Reading new deadline task.\r\n");
-					description = readDescription(line);
+		while ((line = br.readLine()) != null) {
+			line = br.readLine();
+			if (isInvalidLine(line)) {
+				break;
+			} else {
+				logger.log(Level.INFO, "Reading new deadline task.\r\n");
+				description = readDescription(line);
+				try {
 					deadline = readDate(br, ATTRIBUTE_DEADLINE);
-					location = readLocation(br);
-					tags = readTags(br);
-
-					TaskDeadline deadlineTask = new TaskDeadline(description, location, deadline, tags);
-					deadlineTasks.add(deadlineTask);
-					logger.log(Level.INFO, "Successfully read: " + deadlineTask.getDescription() + "\r\n");
+				} catch (ParseException e) {
+					logger.log(Level.WARNING, description + " doesn't have a deadline and can't be read.\r\n");
+					br.readLine();
+					br.readLine();
+					continue;
 				}
-			}
-		} catch (IOException ioe) {
-			logger.log(Level.WARNING, "IOException: Could not read deadline task.\r\n");
-			throw ioe;
+				location = readLocation(br);
+				tags = readTags(br);
 
-		} catch (ParseException pe) {
-			logger.log(Level.WARNING, "Could not read deadline task.\r\n");
-			pe.printStackTrace();
+				TaskDeadline deadlineTask = new TaskDeadline(description, location, deadline, tags);
+				deadlineTasks.add(deadlineTask);
+				logger.log(Level.INFO, "Successfully read: " + deadlineTask.getDescription() + "\r\n");
+			}
 		}
+		// } catch (IOException ioe) {
+		// logger.log(Level.WARNING, "IOException: Could not read deadline
+		// task.\r\n");
+		// throw ioe;
+
+		// } catch (ParseException pe) {
+		// logger.log(Level.WARNING, "Could not read deadline task.\r\n");
+		// }
 	}
 
 	private static void readTasksEvents(BufferedReader br, ArrayList<TaskEvent> events) throws IOException {
@@ -246,7 +257,7 @@ public class Storage {
 		String location = null;
 		ArrayList<String> tags = null;
 
-		try {
+	//	try {
 			readHeader(br);
 			while ((line = br.readLine()) != null) {
 				line = br.readLine();
@@ -255,8 +266,23 @@ public class Storage {
 				} else {
 					logger.log(Level.INFO, "Reading new event.\r\n");
 					description = readDescription(line);
-					startDate = readDate(br, ATTRIBUTE_START_DATE);
-					endDate = readDate(br, ATTRIBUTE_END_DATE);
+					try {
+						startDate = readDate(br, ATTRIBUTE_START_DATE);
+					} catch (ParseException e) {
+						logger.log(Level.WARNING, description + " doesn't have a start date and can't be read.\r\n");
+						br.readLine();
+						br.readLine();
+						br.readLine();
+						continue;
+					}
+					try {
+						endDate = readDate(br, ATTRIBUTE_END_DATE);
+					} catch (ParseException e) {
+						logger.log(Level.WARNING, description + " doesn't have an end date and can't be read.\r\n");
+						br.readLine();
+						br.readLine();
+						continue;
+					}
 					location = readLocation(br);
 					tags = readTags(br);
 
@@ -265,14 +291,14 @@ public class Storage {
 					logger.log(Level.INFO, "Successfully read: " + eventTask.getDescription() + "\r\n");
 				}
 			}
-		} catch (IOException ioe) {
-			logger.log(Level.WARNING, "IOException: Could not read reserved task.\r\n");
-			throw ioe;
-
-		} catch (ParseException pe) {
-			logger.log(Level.WARNING, "Could not read reserved task.\r\n");
-			pe.printStackTrace();
-		}
+//		} catch (IOException ioe) {
+//			logger.log(Level.WARNING, "IOException: Could not read reserved task.\r\n");
+//			throw ioe;
+//
+//		} catch (ParseException pe) {
+//			logger.log(Level.WARNING, "Could not read reserved task.\r\n");
+//			pe.printStackTrace();
+//		}
 	}
 
 	private static void readTasksReserved(BufferedReader br, ArrayList<TaskReserved> reservedTasks) throws IOException {
@@ -365,7 +391,7 @@ public class Storage {
 		if (line.startsWith(ATTRIBUTE_DESCRIPTION)) {
 			description = line.replaceFirst(ATTRIBUTE_DESCRIPTION, "").trim();
 			if (description.isEmpty()) {
-				description = null;
+				description = "undefined";
 			}
 		}
 		return description;
@@ -460,6 +486,7 @@ public class Storage {
 		bw.newLine();
 		bw.newLine();
 	}
+
 	private static void writeFloatingTasks(BufferedWriter bw, ArrayList<TaskFloat> floatTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_FLOATING);
 		for (TaskFloat task : floatTasks) {
@@ -467,6 +494,7 @@ public class Storage {
 			bw.write(task.toString());
 		}
 	}
+
 	private static void writeDeadlineTasks(BufferedWriter bw, ArrayList<TaskDeadline> deadlineTasks)
 			throws IOException {
 		writeHeaderToFile(bw, HEADER_DEADLINE);
@@ -475,6 +503,7 @@ public class Storage {
 			bw.write(task.toString());
 		}
 	}
+
 	private static void writeEventTasks(BufferedWriter bw, ArrayList<TaskEvent> events) throws IOException {
 		writeHeaderToFile(bw, HEADER_EVENT);
 		for (TaskEvent event : events) {
@@ -482,6 +511,7 @@ public class Storage {
 			bw.write(event.toString());
 		}
 	}
+
 	private static void writeReservedTasks(BufferedWriter bw, ArrayList<TaskReserved> reservedTasks)
 			throws IOException {
 		writeHeaderToFile(bw, HEADER_RESERVED);
@@ -498,7 +528,7 @@ public class Storage {
 			bw.write(task.toString());
 		}
 	}
-	
+
 	private static void closeWriterClasses(FileHandler handler, BufferedWriter bw) throws IOException {
 		bw.flush();
 		bw.close();

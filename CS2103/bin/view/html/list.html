@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>J.Listee</title>
+ <link href="../css/bootstrap.min.css" rel="stylesheet">
+ <script src="../js/jquery-1.11.1.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+ <style>
+   .center {
+     width: 600px;
+     min-height: 400px;
+     text-align: center;
+   }
+   .list{ 
+    height:530px;
+    padding: 15px;
+    padding-right: 5px;
+    background-color:rgba(238,238,238,0.8);
+    overflow-y:scroll;
+  }
+
+  .commandline{
+    background-color: #726e6e;
+    height: 60px;
+  }
+
+  .grouptitle{
+    font-size: 25px;
+    color: #888;
+    font-weight: 100;
+    margin: 5px;
+  }
+  section{
+    display: inline-block;
+  }
+  .task{
+    width: 100%;
+    height:65px;
+    border-radius: 8px;
+    background-color: rgba(255,255,255,0.6);
+    margin: 8px 0;
+    vertical-align: middle;
+  }
+  .task:focus{
+    background-color: rgba(255,255,255,1.0);
+    outline: 0;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1.5px #ccc;
+  }
+  .task_number{
+    width:8%;
+    height: 100%;
+    border-radius: 8px 0 0 8px;
+    background-color: rgba(131,207,203,0.8);
+    font-size: 35px;
+    line-height: 65px;
+    color: #444;
+    float: left;
+  }
+  .overdue .task_number{
+    background-color: rgba(235,131,99,0.8);
+  }
+  .task_middle{
+    display:table;
+    float: left;
+    width:69%;
+    height: 100%;
+    text-align: left;
+    padding:5px 0px 5px 10px;
+  }
+  .task_right{
+    float: left;
+    width: 23%;
+    height: 100%;
+    padding: 5px 8px 5px 5px;
+    text-align: left;
+  }
+
+  .task_description{
+    font-size: 18px;
+  }
+  .time{
+    font-size: 14px;
+    line-height: 27px;
+  }
+  .task_components,.task_location,.task_tags{
+    margin: 4px 5px 4px 0px;
+  }
+  .task_middle .task_components{
+    display:table-row;
+    height: 50%;
+  }
+  #description{
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .task_middle section,.task_middle span{
+    line-height: 14px;
+    height:20px;
+    border-radius: 3px;
+    padding: 2px;
+    text-align: center;
+  }
+  .task_location{    
+    background-color: rgba(63,190,122,0.4);    
+  }
+  .task_tags span{
+    background-color: #d8d8d8;
+    margin-right: 5px;
+  }
+  .task_right>div{
+    line-height: 22px;
+    height:22px;
+    width:95%;
+    border-radius: 3px;
+    padding-left: 5px;
+  }
+  .task_lowertime{
+    background-color: rgba(240,108,125,0.4);
+  }
+  .task_uppertime{
+    background-color: rgba(0,181,242,0.4);
+  }
+  #tasklist_deadline .time{
+    position: relative;
+    top: 23%;
+  }
+  form{
+    width: 100%;
+    height: 60px;
+  }
+  input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: #fff;
+    border: 0;
+    outline:none;
+    line-height: 30px;
+    font-size: 20px;
+    padding: 15px;
+  }
+  .alert{
+    position:absolute;
+    display:none;
+    bottom: 70px;
+    margin-bottom: 0;
+    width: 600px;
+    height: 40px;
+    padding: 10px;
+  }
+  .reserved .reserve_list{
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .timeslot{
+    width: 33%;
+    padding: 10px 7px;
+    float: right;
+    height: 65px;
+    background-color: #dfdfdf;
+    margin-left: 1px;
+  }
+  .reserved .task_middle{
+    width:30%;
+  }
+  .reserved .task_right{
+    padding: 0;
+    width: 62.05%;
+  }
+  #timeslot1{
+    border-radius: 0 8px 8px 0;
+  }
+</style>
+</head>
+<body>
+  <script  type="text/javascript">
+    var i=0;
+    function reset(){
+      i=0;
+    }
+
+    function reload() {
+      window.location.reload();
+    }
+    
+    function addReservedTask(jsonTasks){
+      var taskList = JSON.parse(jsonTasks);
+
+      if(taskList.length==0)
+        return;
+
+      var tasklist_=document.getElementById("tasklist_reserved");
+      $(reserved_title).text("Reserved");
+      
+      //remove all existing children
+      while (tasklist_.firstChild) {
+        tasklist_.removeChild(tasklist_.firstChild);
+      }
+
+      for  (index = 0; index < taskList.length; index++){
+
+        var taskdiv = document.createElement("div");
+        taskdiv.setAttribute("class", "task");
+        taskdiv.setAttribute("tabindex", "0");
+        taskdiv.setAttribute("id", i+1);
+
+        taskdiv.innerHTML= "<section class='task_number'>"
+        + (i+1)
+        + "</section>"
+        + "<section class='task_middle' id='task_middle'>"
+        + "<div class='task_components task_description' id='task_description"
+        + i
+        + "'>"
+        + "<div id='description'>"
+        + taskList[index].description
+        +"</div>"
+        + "</div>"
+        + "<div class='task_components' id='task_details"
+        + i
+        +"'>"
+        + "<section class='task_location' id='task_location"
+        + i
+        +"'>"
+
+        + "</section>"
+        + "<section class='task_tags' id='task_tags"
+        + i
+        +"'>"
+
+        + "</section>"
+        + "</div>"
+        + "</section>"
+        + "<section class='task_right'>"
+        + "<div class='reserve_list' id='timeslot_list"
+        + i
+        +"'>"
+       
+        + "</div> "
+        + "</section>"
+
+        tasklist_.appendChild(taskdiv);
+
+        var task_location=document.getElementById("task_location"+i);
+        var task_tags=document.getElementById("task_tags"+i);
+        var task_details=document.getElementById("task_details"+i);
+        var timeslot_list=document.getElementById("timeslot_list"+i);
+
+        if(taskList[index].location==undefined && taskList[index].tags.length==0){
+          task_details.style.display="none";
+         // var task_description=document.getElementById("task_description"+i);
+         // task_description.style.lineHeight="55px";
+        }else{
+         //add location if necessary
+         if(taskList[index].location!=undefined){
+           var locationspan = document.createElement("span");
+           locationspan.innerHTML="@"+taskList[index].location;
+           task_location.appendChild(locationspan);
+         }
+         else{
+           task_location.style.display="none";
+         }
+
+         //add tags if necessary
+         if(taskList[index].tags!=undefined){
+
+          for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+           var tagspan = document.createElement("span");
+           tagspan.innerHTML="#"+taskList[index].tags[index2];
+           task_tags.appendChild(tagspan);
+          }
+         }
+         else{
+           task_tags.style.display="none";
+         }
+        }
+        var len=taskList[index].startDates.length;
+        //add timeslots
+        for( index3 =len-1; index3>=0 && len-index3<4; index3--){
+           var timeslot = document.createElement("div");
+           timeslot.setAttribute("class", "timeslot");
+           timeslot.setAttribute("id", "timeslot"+(len-index3));
+           timeslot.innerHTML=taskList[index].startDates[index3]+"<br>"+taskList[index].endDates[index3];
+           timeslot_list.appendChild(timeslot);
+        }
+
+        i=i+1;
+      }
+    }
+
+    function addTasks(jsonTasks, type){
+      var taskList = JSON.parse(jsonTasks);
+
+      if(taskList.length==0)
+        return;
+
+      if(type=="deadline"){
+        var tasklist_=document.getElementById("tasklist_deadline");
+        $(deadline_title).text("Deadlines");
+      }else if(type=="event"){
+        var tasklist_=document.getElementById("tasklist_event");
+        $(event_title).text("Events");
+      }else if(type=="floating"){
+        var tasklist_=document.getElementById("tasklist_floating");
+        $(float_title).text("Floating");
+      }
+
+      
+
+    //remove all existing children
+    while (tasklist_.firstChild) {
+      tasklist_.removeChild(tasklist_.firstChild);
+    }
+
+    for  (index = 0; index < taskList.length; index++){
+
+      var taskdiv = document.createElement("div");
+      taskdiv.setAttribute("class", "task");
+      taskdiv.setAttribute("tabindex", "0");
+      taskdiv.setAttribute("id", i+1);
+
+      taskdiv.innerHTML= "<section class='task_number'>"
+      + (i+1)
+      +"</section>"
+      + "<section class='task_middle' id='task_middle'>"
+      + "<div class='task_components task_description' id='task_description"
+      + i
+      + "'>"
+    + "<div id=description>"
+      + taskList[index].description
+    + "</div>"
+      +"</div>"
+      + "<div class='task_components' id='task_details"
+      + i
+      +"'>"
+      + "<section class='task_location'id='task_location"
+      + i
+      +"'>"
+
+      +"</section>"
+      + "<section class='task_tags' id='task_tags"
+      + i
+      +"'>"
+      + "</div>"
+      + "</section>"
+      + "</section>"
+      + "<section class='task_right'>"
+      + "<div class='task_components time task_uppertime' id='task_start"
+      + i
+      +"'>"
+
+      +"</div>"
+      + " <div class='task_components time task_lowertime' id='task_end"
+      + i
+      +"'>"
+
+      +"</div>"
+      + "</section>"
+
+      tasklist_.appendChild(taskdiv);
+
+      var task_location=document.getElementById("task_location"+i);
+      var task_start=document.getElementById("task_start"+i);
+      var task_end=document.getElementById("task_end"+i);
+      var task_tags=document.getElementById("task_tags"+i);
+      var task_details=document.getElementById("task_details"+i);
+      var task_description=document.getElementById("task_description"+i);
+
+      if(taskList[index].location==undefined && taskList[index].tags.length==0){
+       // task_description.style.lineHeight="55px";
+        task_details.style.display="none";
+      }else{
+         //add location if necessary
+         if(taskList[index].location!=undefined){
+           var locationspan = document.createElement("span");
+           locationspan.innerHTML="@"+taskList[index].location;
+           task_location.appendChild(locationspan);
+         }
+         else{
+           task_location.style.display="none";
+         }
+
+         //add tags if necessary
+         if(taskList[index].tags!=undefined){
+
+          for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+           var tagspan = document.createElement("span");
+           tagspan.innerHTML="#"+taskList[index].tags[index2];
+           task_tags.appendChild(tagspan);
+         }
+       }
+       else{
+         task_tags.style.display="none";
+       }
+     }
+
+
+     //add startDate if necessary
+     if(taskList[index].startDate!=undefined){        
+       task_start.innerHTML=taskList[index].startDate;
+     }
+     else{
+       task_start.style.display="none";
+     }
+
+     //add endDate if necessary
+     if(taskList[index].endDate!=undefined){
+       task_end.innerHTML= taskList[index].endDate;
+     }
+     else{
+       task_end.style.display="none";
+     }
+
+     
+
+     i=i+1;
+   }    
+ }
+
+ function sendCommand() {
+  var command = cmd.elements['command'].value;
+    // Invoke the 'receive' Java callback
+    app.receiveCommand(command);
+  }
+
+function shortCutCommand(cmd){
+  app.receiveCommand(cmd);
+}
+
+function showFeedBack(feedback){
+  $("#feedback").text(feedback);
+  $("#feedback").slideToggle("slow");
+  setTimeout("hideFeedBack()",1800);
+}
+
+function hideFeedBack(){
+  $("#feedback").slideToggle();
+}
+
+//Prevent the backspace key from navigating back.
+$(document).unbind('keydown').bind('keydown', function (event) {
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+        var d = event.srcElement || event.target;
+        if ((d.tagName.toUpperCase() === 'INPUT' && 
+             (
+                 d.type.toUpperCase() === 'TEXT' ||
+                 d.type.toUpperCase() === 'PASSWORD' || 
+                 d.type.toUpperCase() === 'FILE' || 
+                 d.type.toUpperCase() === 'SEARCH' || 
+                 d.type.toUpperCase() === 'EMAIL' || 
+                 d.type.toUpperCase() === 'NUMBER' || 
+                 d.type.toUpperCase() === 'DATE' )
+             ) || 
+             d.tagName.toUpperCase() === 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else {
+            doPrevent = true;
+        }
+    }
+    if (doPrevent) {
+        event.preventDefault();
+    }
+});
+
+$(document).keydown(
+    function(e)
+    {   
+      switch(e.keyCode){
+        case 40://key down
+          if($(".task:focus").length==0){
+            $(".task:last").focus();
+          }else{
+            var id=parseInt($(".task:focus")[0].id)+1;
+            $("#"+id).focus();
+          }   
+        break;
+        case 38://key up
+          if($(".task:focus").length==0){
+            $(".task:first").focus();
+          }else{ 
+            var id=parseInt($(".task:focus")[0].id)-1;
+            $("#"+id).focus();
+          }
+        break;
+        case 46://delete
+        case 8://backspace
+          if($(".task:focus").length>0){
+            var id=parseInt($(".task:focus")[0].id);
+            shortCutCommand("delete "+id);
+          }
+        break;
+      }
+    }
+);
+
+
+</script>
+
+<div id="wrapper">
+ <div class="center">
+  <div class="main">
+    <div class="alert alert-success" id="feedback" role="alert"></div>
+  
+    <div class="list">
+
+      <div class="group deadline">
+        <div class="grouptitle" id="deadline_title"></div>
+        <div class="tasklist" id="tasklist_deadline">
+
+        </div>
+      </div>
+
+      <div class="group event">
+        <div class="grouptitle" id="event_title"></div>
+        <div class="tasklist" id="tasklist_event">
+
+        </div>
+      </div>
+      <div class="group floating">    
+       <div class="grouptitle" id="float_title"></div> 
+       <div class="tasklist" id="tasklist_floating">
+
+       </div>
+     </div>
+     <div class="group reserved">    
+       <div class="grouptitle" id="reserved_title"></div> 
+       <div class="tasklist" id="tasklist_reserved">
+          </div>
+        </div>
+
+   </div>
+   <div class="commandline">
+    <form name="cmd">
+      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here"/>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+</body>
+</html>
