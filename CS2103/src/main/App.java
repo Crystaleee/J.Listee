@@ -6,8 +6,9 @@ import javax.swing.JOptionPane;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+
 import storage.LogStorage;
-import ui.UI;
+import gui.GUIController;
 /**
  * @author Zhu Bingjing
  * @date 2016年3月1日 下午5:03:02
@@ -18,7 +19,6 @@ public class App extends Application{
 	public static Stage stage;
 	//this is the task file
 	public static String filePath;
-	public UI ui=UI.getInstance();
 
 	public static void main(String[] args){
 		Application.launch(args);			
@@ -29,18 +29,28 @@ public class App extends Application{
 	public void start(Stage primaryStage) {	
 		stage = primaryStage;
 	    stage.setTitle("J.Listee");
-	    //TODO EXCEPTION
-	    try {
+	    GUIController.setStage(stage);    
+	    judgeAndShowStart();		
+	}
+
+
+	/**
+	 * judge if it's the first time user use this app and show start page
+	 */
+	private void judgeAndShowStart() {
+		//read log file
+		try {
 			filePath=LogStorage.readLog();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null,e.getMessage());
 		}
+		
 		//check if it's the first time that user use the application
 		if (filePath==null){
-			ui.displayWelcome(stage);
+			GUIController.displayWelcome(stage);
 		}else{		
-			ui.initializeList(stage, filePath);
-		}		
+			GUIController.initializeList(stage, filePath);
+		}
 	}
 
 }

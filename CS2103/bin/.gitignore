@@ -1,8 +1,12 @@
-/org/
-/parser/
-/storage/
 /ui/
+/main/
+<<<<<<< HEAD
+/gui/
+/storage/
+/html/
+/view/
+=======
+/History/
+>>>>>>> branch 'master' of https://github.com/cs2103jan2016-t15-2j/main.git
 /bean/
 /logic/
-/main/
-/History/
