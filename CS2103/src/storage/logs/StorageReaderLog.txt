@@ -1,0 +1,21 @@
+三月 22, 2016 11:04:50 上午 storage.Storage getDisplay
+信息: Reading all tasks from file.
+
+三月 22, 2016 11:04:50 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 22, 2016 11:04:50 上午 storage.Storage readTasksFloating
+信息: Successfully read: float
+
+三月 22, 2016 11:04:50 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 22, 2016 11:04:50 上午 storage.Storage readTasksFloating
+信息: Successfully read: sdlfkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+
+三月 22, 2016 11:04:50 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 22, 2016 11:04:50 上午 storage.Storage readTasksDeadline
+信息: Successfully read: event
+
