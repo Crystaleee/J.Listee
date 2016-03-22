@@ -106,6 +106,8 @@ public class ShowList extends AppPage {
 							win.call("addTasks", jsonFloating,"floating");
 							System.out.println(jsonFloating);
 						}
+						if( this.display.getMessage()!=null)
+							win.call("showFeedBack", this.display.getMessage());
 					}
 				});
 	}

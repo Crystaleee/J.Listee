@@ -138,11 +138,12 @@
   .alert{
     position:absolute;
     display:none;
-    bottom: 113px;
+    bottom: 70px;
     margin-bottom: 0;
     width: 600px;
     height: 40px;
-    padding: 10px;
+    padding: 5px;
+    font-size:20px;
   }
   .reserved .reserve_list{
     padding: 0;
@@ -320,9 +321,9 @@
       + "<div class='task_components task_description' id='task_description"
       + i
       + "'>"
-   	  + "<div id=description>"
+    + "<div id=description>"
       + taskList[index].description
-      + "</div>"
+    + "</div>"
       +"</div>"
       + "<div class='task_components' id='task_details"
       + i
@@ -358,7 +359,7 @@
       var task_end=document.getElementById("task_end"+i);
       var task_tags=document.getElementById("task_tags"+i);
       var task_details=document.getElementById("task_details"+i);
-      //var task_description=document.getElementById("task_description"+i);
+      var task_description=document.getElementById("task_description"+i);
 
       if(taskList[index].location==undefined && taskList[index].tags.length==0){
        // task_description.style.lineHeight="55px";
@@ -418,8 +419,9 @@
   }
 
 function showFeedBack(feedback){
+  $("#feedback").text(feedback);
   $("#feedback").slideToggle("slow");
-  setTimeout("hideFeedBack()",2000);
+  setTimeout("hideFeedBack()",1800);
 }
 
 function hideFeedBack(){
@@ -431,7 +433,7 @@ function hideFeedBack(){
 <div id="wrapper">
  <div class="center">
   <div class="main">
-    <div class="alert alert-success" id="feedback" role="alert">Task added:lkjlkjlkjlkj</div>
+    <div class="alert alert-success" id="feedback" role="alert"></div>
   
     <div class="list">
 
