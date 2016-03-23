@@ -6,9 +6,13 @@
 package logic;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import History.History;
 import bean.Command;
+import bean.CommandAddDeadlineTask;
+import bean.CommandUndo;
 import bean.Display;
 import parser.Parser;
 import storage.Storage;
@@ -28,6 +32,7 @@ public class Logic {
     private static String file;
     
     public static boolean createFile(String filePath){
+        file = filePath;
         try{
             storage.createFile(filePath);
             return true;
@@ -46,23 +51,37 @@ public class Logic {
     
     public static Display executeUserCommand(String userInput) {
         History.saveUserInput(userInput);
-        Parser myParser = new Parser();
-        Command userCommand = myParser.ParseCommand(userInput);
+        Command userCommand = parseUserInput(userInput);
+        display = executeCommand(userCommand);
+        
+        return display;
+    }
+
+    private static void saveToHistory(Command userCommand) {
+        if(userCommand.getSaveHistory()){
+            History.saveDisplay(display);
+        }
+    }
+
+    public static Display executeCommand(Command userCommand) {
         getDisplayFromStorage();
         display = userCommand.execute(display);
         
         if(userCommand.getUpdateFile()){
             if(successfullyUpdatesFile()){
-                if(userCommand.getSaveHistory()){
-                    History.saveDisplay(display);
-                }
+                saveToHistory(userCommand);
             }
             else{
                 display = new Display(MESSAGE_ERROR_UPDATE_FILE);
             }
         }
-        
         return display;
+    }
+
+    private static Command parseUserInput(String userInput) {
+        Parser myParser = new Parser();
+        Command userCommand = myParser.ParseCommand(userInput);
+        return userCommand;
     }
 
     private static void getDisplayFromStorage() {
