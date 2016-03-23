@@ -28,7 +28,7 @@ import bean.TaskReserved;
 
 public class Storage {
 
-	private static String filePath;
+	public static String filePath;
 	private static Storage storageInstance;
 
 	private static final String HEADER_FLOATING = "     TASKS";
@@ -44,8 +44,8 @@ public class Storage {
 	private static final String ATTRIBUTE_DEADLINE = "Deadline:";
 	private static final String ATTRIBUTE_START_DATE = "Start Date:";
 	private static final String ATTRIBUTE_END_DATE = "End Date:";
-	private static final String ATTRIBUTE_START_DATES = "Start Dates: ";
-	private static final String ATTRIBUTE_END_DATES = "End Dates: ";
+	private static final String ATTRIBUTE_START_DATES = "Start Dates:";
+	private static final String ATTRIBUTE_END_DATES = "End Dates:";
 
 	private static final String MESSAGE_EMPTY = "";
 
@@ -59,10 +59,10 @@ public class Storage {
 		return storageInstance;
 	}
 
-	public String getFilePath() {
-		return filePath;
+	private void initializeFilePath() throws IOException {
+		filePath = LogStorage.readLogFile();
 	}
-
+	
 	private void setFilePath(String filepath) {
 		filePath = filepath;
 	}
@@ -164,8 +164,8 @@ public class Storage {
 					deadline = readDate(br, ATTRIBUTE_DEADLINE);
 				} catch (ParseException e) {
 					logger.log(Level.WARNING, description + " doesn't have a deadline and can't be read.\r\n");
-					//br.readLine();
-					//br.readLine();
+					// br.readLine();
+					// br.readLine();
 					handleInvalidDate(ATTRIBUTE_DEADLINE, br);
 					continue;
 				}
@@ -199,17 +199,14 @@ public class Storage {
 					startDate = readDate(br, ATTRIBUTE_START_DATE);
 				} catch (ParseException e) {
 					logger.log(Level.WARNING, description + " doesn't have a start date and can't be read.\r\n");
-					br.readLine();
-					br.readLine();
-					br.readLine();
+					handleInvalidDate(ATTRIBUTE_START_DATE, br);
 					continue;
 				}
 				try {
 					endDate = readDate(br, ATTRIBUTE_END_DATE);
 				} catch (ParseException e) {
 					logger.log(Level.WARNING, description + " doesn't have an end date and can't be read.\r\n");
-					br.readLine();
-					br.readLine();
+					handleInvalidDate(ATTRIBUTE_END_DATE, br);
 					continue;
 				}
 				location = readLocation(br);
@@ -230,48 +227,37 @@ public class Storage {
 		String location = null;
 		ArrayList<String> tags = null;
 
-//		try {
-			readHeader(br);
+		readHeader(br);
 
-			while ((line = br.readLine()) != null) {
-				line = br.readLine();
-				if (isInvalidLine(line)) {
-					break;
-				} else {
-					logger.log(Level.INFO, "Reading new reserved task.\r\n");
-					description = readDescription(line);
-					try {
-						startDates = readDates(br, ATTRIBUTE_START_DATES);
-					} catch (ParseException e) {
-						br.readLine();
-						br.readLine();
-						br.readLine();
-						continue;
-					}
-					try {
-						endDates = readDates(br, ATTRIBUTE_END_DATES);
-					} catch (ParseException e) {
-						br.readLine();
-						br.readLine();
-						continue;
-					}
-					location = readLocation(br);
-					tags = readTags(br);
+		while ((line = br.readLine()) != null) {
+			line = br.readLine();
+			if (isInvalidLine(line)) {
+				break;
+			} else {
+				logger.log(Level.INFO, "Reading new reserved task.\r\n");
+				description = readDescription(line);
 
-					TaskReserved reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
-					reservedTasks.add(reservedTask);
-					logger.log(Level.INFO, "Successfully read: " + reservedTask.getDescription() + "\r\n");
+				try {
+					startDates = readDates(br, ATTRIBUTE_START_DATES);
+				} catch (ParseException e) {
+					handleInvalidDate(ATTRIBUTE_START_DATE, br);
+					continue;
 				}
 
-			}
-	//	} catch (IOException ioe) {
-		//	logger.log(Level.WARNING, "Could not read reserved task.\r\n");
-			//throw ioe;
+				try {
+					endDates = readDates(br, ATTRIBUTE_END_DATES);
+				} catch (ParseException e) {
+					handleInvalidDate(ATTRIBUTE_END_DATE, br);
+					continue;
+				}
+				location = readLocation(br);
+				tags = readTags(br);
 
-	//	} catch (ParseException pe) {
-		//	logger.log(Level.WARNING, "Could not read reserved task.\r\n");
-			//pe.printStackTrace();
-		//}
+				TaskReserved reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
+				reservedTasks.add(reservedTask);
+				logger.log(Level.INFO, "Successfully read: " + reservedTask.getDescription() + "\r\n");
+			}
+		}
 	}
 
 	private void readTasksCompleted(BufferedReader br, ArrayList<Task> completedTasks) throws IOException {
@@ -383,7 +369,7 @@ public class Storage {
 	private boolean isInvalidLine(String line) {
 		return line == null || line.equals(HEADER_DIVIDER);
 	}
-	
+
 	private void handleInvalidDate(String dateType, BufferedReader br) throws IOException {
 		if (dateType.equals(ATTRIBUTE_START_DATE)) {
 			br.readLine();

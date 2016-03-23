@@ -56,18 +56,20 @@ public class TaskReserved extends Task {
 
 		String startDates = "";
 		for (int i = 0; i < this.startDates.size(); i++) {
-			startDates += sdf.format(this.startDates.get(i).getTime()) + ", ";
 			if (i == this.startDates.size() - 1) {
 				startDates += sdf.format(this.startDates.get(i).getTime());
+			} else {
+				startDates += sdf.format(this.startDates.get(i).getTime()) + ", ";
 			}
 		}
 		sb.append("Start Dates: " + startDates + "\r\n");
 
 		String endDates = "";
 		for (int i = 0; i < this.endDates.size(); i++) {
-			endDates += sdf.format(this.endDates.get(i).getTime()) + ", ";
 			if (i == this.endDates.size() - 1) {
 				endDates += sdf.format(this.endDates.get(i).getTime());
+			} else {
+			endDates += sdf.format(this.endDates.get(i).getTime()) + ", ";
 			}
 		}
 		sb.append("End Dates: " + endDates + "\r\n");

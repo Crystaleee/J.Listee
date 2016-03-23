@@ -1,18 +1,45 @@
-三月 23, 2016 11:50:36 下午 storage.Storage saveFile
-信息: Writing all tasks to file.
+Mar 24, 2016 2:08:52 AM storage.Storage getDisplay
+INFO: Reading all tasks from file.
 
-三月 23, 2016 11:50:36 下午 storage.Storage writeFloatingTasks
-信息: Writing hello to file.
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksFloating
+INFO: Reading new floating task.
 
-三月 23, 2016 11:50:36 下午 storage.Storage writeDeadlineTasks
-信息: Writing deadline to file.
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksFloating
+INFO: Successfully read: float
 
-三月 23, 2016 11:50:36 下午 storage.Storage writeDeadlineTasks
-信息: Writing hello to file.
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksDeadline
+INFO: Reading new deadline task.
 
-三月 23, 2016 11:50:36 下午 storage.Storage writeDeadlineTasks
-信息: Writing hello to file.
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksDeadline
+INFO: Successfully read: deadline
 
-三月 23, 2016 11:50:36 下午 storage.Storage writeEventTasks
-信息: Writing timed to file.
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksEvents
+INFO: Reading new event.
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksEvents
+INFO: Successfully read: event
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Reading new reserved task.
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Successfully read: another
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Reading new reserved task.
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Successfully read: again  4pm to 6pm saturday 2pm to 4pm
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Reading new reserved task.
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Successfully read: meeting thingy  2pm to 5pm
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Reading new reserved task.
+
+Mar 24, 2016 2:08:52 AM storage.Storage readTasksReserved
+INFO: Successfully read: test
 
