@@ -23,12 +23,13 @@ public class Logic {
     public static final String MESSAGE_NO_DESCRIPTION = "Pls enter a description";
     public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
 
+    private static Storage storage = Storage.getInstance();
     private static Display display;
     private static String file;
     
     public static boolean createFile(String filePath){
         try{
-            Storage.createFile(filePath);
+            storage.createFile(filePath);
             return true;
         }catch(IOException error){
             return false;
@@ -38,7 +39,7 @@ public class Logic {
     public static Display initializeProgram(String filePath){
         file = filePath;
         try{
-            display = Storage.getDisplay(filePath);
+            display = storage.getDisplay(filePath);
             display.setMessage(null);
             History.saveDisplay(display);
             return display;
@@ -53,7 +54,7 @@ public class Logic {
         Parser myParser = new Parser();
         Command userCommand = myParser.ParseCommand(userInput);
         try {
-            display = userCommand.execute(Storage.getDisplay(file));
+            display = userCommand.execute(storage.getDisplay(file));
         } catch (IOException e) {
             //fail to get display
         }
@@ -74,7 +75,7 @@ public class Logic {
     
     public static boolean successfullyUpdatesFile() {
         try{
-            Storage.saveFile(display);
+            storage.saveFile(display);
             return true;
         }catch(IOException error){
             return false;

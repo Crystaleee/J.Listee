@@ -1,12 +1,12 @@
-Mar 22, 2016 11:52:25 PM storage.Storage saveFile
+Mar 23, 2016 12:04:43 PM storage.Storage saveFile
 INFO: Writing all tasks to file.
 
-Mar 22, 2016 11:52:25 PM storage.Storage writeFloatingTasks
-INFO: Writing floating test  to file.
+Mar 23, 2016 12:04:43 PM storage.Storage writeFloatingTasks
+INFO: Writing Floating Test to file.
 
-Mar 22, 2016 11:52:25 PM storage.Storage writeDeadlineTasks
-INFO: Writing banana 2 to file.
+Mar 23, 2016 12:04:43 PM storage.Storage writeDeadlineTasks
+INFO: Writing Deadline Test to file.
 
-Mar 22, 2016 11:52:25 PM storage.Storage writeEventTasks
-INFO: Writing event to file.
+Mar 23, 2016 12:04:43 PM storage.Storage writeEventTasks
+INFO: Writing Event Test to file.
 

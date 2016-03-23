@@ -19,8 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import com.google.gson.Gson;
-
 import bean.Display;
 import bean.Task;
 import bean.TaskDeadline;
@@ -51,85 +49,25 @@ public class Storage {
 
 	private static final String MESSAGE_EMPTY = "";
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
-	private static Logger logger = Logger.getLogger(Storage.class.getName());
-	static Gson gson = new Gson();
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private Logger logger = Logger.getLogger(Storage.class.getName());
 
-	// public static void main(String[] args) throws IOException, ParseException
-	// {
-	// FileHandler handler = new FileHandler("storagelogfile.txt");
-	// handler.setFormatter(new SimpleFormatter());
-	// logger.addHandler(handler);
-	//
-	// createFile("C:\\Users\\Chloe\\Documents\\Spring2016\\test.txt");
-	// System.out.println(filePath);
-	//
-	// ArrayList<String> tag = new ArrayList<String>();
-	// tag.add("test");
-	// tag.add("test2");
-	//
-	// ArrayList<Calendar> startDates = new ArrayList<Calendar>();
-	// startDates.add(Calendar.getInstance());
-	//
-	// ArrayList<Calendar> endDates = new ArrayList<Calendar>();
-	// endDates.add(Calendar.getInstance());
-	//
-	// ArrayList<TaskFloat> fTasks = new ArrayList<TaskFloat>();
-	// TaskFloat fTask = new TaskFloat("Test Description Floating", "Here",
-	// tag);
-	// fTasks.add(fTask);
-	// fTasks.add(fTask);
-	//
-	// ArrayList<TaskDeadline> dTasks = new ArrayList<TaskDeadline>();
-	// TaskDeadline dTask = new TaskDeadline("Test Description Deadline",
-	// "Here", Calendar.getInstance(), tag);
-	// dTasks.add(dTask);
-	// dTasks.add(dTask);
-	//
-	// ArrayList<TaskEvent> eTasks = new ArrayList<TaskEvent>();
-	// TaskEvent eTask = new TaskEvent("Test Description Event", "Here",
-	// Calendar.getInstance(),
-	// Calendar.getInstance(), tag);
-	// eTasks.add(eTask);
-	// eTasks.add(eTask);
-	//
-	// ArrayList<TaskReserved> rTasks = new ArrayList<TaskReserved>();
-	// TaskReserved rTask = new TaskReserved("Test Description Reserved",
-	// "Here", startDates, endDates, tag);
-	// rTasks.add(rTask);
-	// rTasks.add(rTask);
-	//
-	// ArrayList<Task> cTasks = new ArrayList<Task>();
-	// Task cTask = new Task("Test Description Completed", "Here", tag);
-	// cTasks.add(cTask);
-	// cTasks.add(cTask);
-	//
-	// Display display = new Display(MESSAGE_EMPTY, eTasks, dTasks, fTasks,
-	// rTasks, cTasks);
-	// saveFile(display);
-	//
-	// Display testDisplay = getDisplay(filePath);
-	// String test = gson.toJson(testDisplay);
-	// System.out.println(test);
-	// handler.flush();
-	// }
-
-	public Storage getInstance() {
+	public static Storage getInstance() {
 		if (storageInstance == null) {
 			return new Storage();
 		}
 		return storageInstance;
 	}
 
-	public static String getFilePath() {
+	public String getFilePath() {
 		return filePath;
 	}
 
-	public static void setFilePath(String filepath) {
+	private void setFilePath(String filepath) {
 		filePath = filepath;
 	}
 
-	public static void createFile(String filepath) throws IOException {
+	public void createFile(String filepath) throws IOException {
 		File file = new File(filepath);
 		if (!file.exists()) {
 			file.createNewFile();
@@ -137,7 +75,7 @@ public class Storage {
 		setFilePath(filepath);
 	}
 
-	public static Display getDisplay(String filepath) throws IOException {
+	public Display getDisplay(String filepath) throws IOException {
 		FileHandler handler = createLogHandler();
 		logger.log(Level.INFO, "Reading all tasks from file.\r\n");
 
@@ -172,7 +110,7 @@ public class Storage {
 		return display;
 	}
 
-	private static void readTasksFloating(BufferedReader br, ArrayList<TaskFloat> floatTasks) throws IOException {
+	private void readTasksFloating(BufferedReader br, ArrayList<TaskFloat> floatTasks) throws IOException {
 		String line = null;
 		String description = null;
 		String location = null;
@@ -206,14 +144,13 @@ public class Storage {
 		}
 	}
 
-	private static void readTasksDeadline(BufferedReader br, ArrayList<TaskDeadline> deadlineTasks) throws IOException {
+	private void readTasksDeadline(BufferedReader br, ArrayList<TaskDeadline> deadlineTasks) throws IOException {
 		String line = null;
 		String description = null;
 		Calendar deadline = null;
 		String location = null;
 		ArrayList<String> tags = null;
 
-		// try {
 		readHeader(br);
 
 		while ((line = br.readLine()) != null) {
@@ -227,8 +164,9 @@ public class Storage {
 					deadline = readDate(br, ATTRIBUTE_DEADLINE);
 				} catch (ParseException e) {
 					logger.log(Level.WARNING, description + " doesn't have a deadline and can't be read.\r\n");
-					br.readLine();
-					br.readLine();
+					//br.readLine();
+					//br.readLine();
+					handleInvalidDate(ATTRIBUTE_DEADLINE, br);
 					continue;
 				}
 				location = readLocation(br);
@@ -239,17 +177,9 @@ public class Storage {
 				logger.log(Level.INFO, "Successfully read: " + deadlineTask.getDescription() + "\r\n");
 			}
 		}
-		// } catch (IOException ioe) {
-		// logger.log(Level.WARNING, "IOException: Could not read deadline
-		// task.\r\n");
-		// throw ioe;
-
-		// } catch (ParseException pe) {
-		// logger.log(Level.WARNING, "Could not read deadline task.\r\n");
-		// }
 	}
 
-	private static void readTasksEvents(BufferedReader br, ArrayList<TaskEvent> events) throws IOException {
+	private void readTasksEvents(BufferedReader br, ArrayList<TaskEvent> events) throws IOException {
 		String line;
 		String description = null;
 		Calendar startDate = null;
@@ -257,51 +187,42 @@ public class Storage {
 		String location = null;
 		ArrayList<String> tags = null;
 
-	//	try {
-			readHeader(br);
-			while ((line = br.readLine()) != null) {
-				line = br.readLine();
-				if (isInvalidLine(line)) {
-					break;
-				} else {
-					logger.log(Level.INFO, "Reading new event.\r\n");
-					description = readDescription(line);
-					try {
-						startDate = readDate(br, ATTRIBUTE_START_DATE);
-					} catch (ParseException e) {
-						logger.log(Level.WARNING, description + " doesn't have a start date and can't be read.\r\n");
-						br.readLine();
-						br.readLine();
-						br.readLine();
-						continue;
-					}
-					try {
-						endDate = readDate(br, ATTRIBUTE_END_DATE);
-					} catch (ParseException e) {
-						logger.log(Level.WARNING, description + " doesn't have an end date and can't be read.\r\n");
-						br.readLine();
-						br.readLine();
-						continue;
-					}
-					location = readLocation(br);
-					tags = readTags(br);
-
-					TaskEvent eventTask = new TaskEvent(description, location, startDate, endDate, tags);
-					events.add(eventTask);
-					logger.log(Level.INFO, "Successfully read: " + eventTask.getDescription() + "\r\n");
+		readHeader(br);
+		while ((line = br.readLine()) != null) {
+			line = br.readLine();
+			if (isInvalidLine(line)) {
+				break;
+			} else {
+				logger.log(Level.INFO, "Reading new event.\r\n");
+				description = readDescription(line);
+				try {
+					startDate = readDate(br, ATTRIBUTE_START_DATE);
+				} catch (ParseException e) {
+					logger.log(Level.WARNING, description + " doesn't have a start date and can't be read.\r\n");
+					br.readLine();
+					br.readLine();
+					br.readLine();
+					continue;
 				}
+				try {
+					endDate = readDate(br, ATTRIBUTE_END_DATE);
+				} catch (ParseException e) {
+					logger.log(Level.WARNING, description + " doesn't have an end date and can't be read.\r\n");
+					br.readLine();
+					br.readLine();
+					continue;
+				}
+				location = readLocation(br);
+				tags = readTags(br);
+
+				TaskEvent eventTask = new TaskEvent(description, location, startDate, endDate, tags);
+				events.add(eventTask);
+				logger.log(Level.INFO, "Successfully read: " + eventTask.getDescription() + "\r\n");
 			}
-//		} catch (IOException ioe) {
-//			logger.log(Level.WARNING, "IOException: Could not read reserved task.\r\n");
-//			throw ioe;
-//
-//		} catch (ParseException pe) {
-//			logger.log(Level.WARNING, "Could not read reserved task.\r\n");
-//			pe.printStackTrace();
-//		}
+		}
 	}
 
-	private static void readTasksReserved(BufferedReader br, ArrayList<TaskReserved> reservedTasks) throws IOException {
+	private void readTasksReserved(BufferedReader br, ArrayList<TaskReserved> reservedTasks) throws IOException {
 		String line = null;
 		String description = null;
 		ArrayList<Calendar> startDates = null;
@@ -309,7 +230,7 @@ public class Storage {
 		String location = null;
 		ArrayList<String> tags = null;
 
-		try {
+//		try {
 			readHeader(br);
 
 			while ((line = br.readLine()) != null) {
@@ -319,8 +240,21 @@ public class Storage {
 				} else {
 					logger.log(Level.INFO, "Reading new reserved task.\r\n");
 					description = readDescription(line);
-					startDates = readDates(br, ATTRIBUTE_START_DATES);
-					endDates = readDates(br, ATTRIBUTE_END_DATES);
+					try {
+						startDates = readDates(br, ATTRIBUTE_START_DATES);
+					} catch (ParseException e) {
+						br.readLine();
+						br.readLine();
+						br.readLine();
+						continue;
+					}
+					try {
+						endDates = readDates(br, ATTRIBUTE_END_DATES);
+					} catch (ParseException e) {
+						br.readLine();
+						br.readLine();
+						continue;
+					}
 					location = readLocation(br);
 					tags = readTags(br);
 
@@ -330,17 +264,17 @@ public class Storage {
 				}
 
 			}
-		} catch (IOException ioe) {
-			logger.log(Level.WARNING, "Could not read reserved task.\r\n");
-			throw ioe;
+	//	} catch (IOException ioe) {
+		//	logger.log(Level.WARNING, "Could not read reserved task.\r\n");
+			//throw ioe;
 
-		} catch (ParseException pe) {
-			logger.log(Level.WARNING, "Could not read reserved task.\r\n");
-			pe.printStackTrace();
-		}
+	//	} catch (ParseException pe) {
+		//	logger.log(Level.WARNING, "Could not read reserved task.\r\n");
+			//pe.printStackTrace();
+		//}
 	}
 
-	private static void readTasksCompleted(BufferedReader br, ArrayList<Task> completedTasks) throws IOException {
+	private void readTasksCompleted(BufferedReader br, ArrayList<Task> completedTasks) throws IOException {
 		String line;
 		String description = null;
 		String location = null;
@@ -374,19 +308,19 @@ public class Storage {
 		}
 	}
 
-	private static FileHandler createLogHandler() throws IOException {
+	private FileHandler createLogHandler() throws IOException {
 		FileHandler handler = new FileHandler("logs\\log.txt");
 		handler.setFormatter(new SimpleFormatter());
 		logger.addHandler(handler);
 		return handler;
 	}
 
-	private static void readHeader(BufferedReader br) throws IOException {
+	private void readHeader(BufferedReader br) throws IOException {
 		br.readLine();
 		br.readLine();
 	}
 
-	private static String readDescription(String line) {
+	private String readDescription(String line) {
 		String description = null;
 		if (line.startsWith(ATTRIBUTE_DESCRIPTION)) {
 			description = line.replaceFirst(ATTRIBUTE_DESCRIPTION, "").trim();
@@ -397,7 +331,7 @@ public class Storage {
 		return description;
 	}
 
-	private static String readLocation(BufferedReader br) throws IOException {
+	private String readLocation(BufferedReader br) throws IOException {
 		String location = null;
 		String line = br.readLine();
 		if (line.startsWith(ATTRIBUTE_LOCATION)) {
@@ -409,7 +343,7 @@ public class Storage {
 		return location;
 	}
 
-	private static ArrayList<String> readTags(BufferedReader br) throws IOException {
+	private ArrayList<String> readTags(BufferedReader br) throws IOException {
 		ArrayList<String> tags = null;
 		String line = br.readLine();
 		if (line.startsWith(ATTRIBUTE_TAGS)) {
@@ -419,7 +353,7 @@ public class Storage {
 		return tags;
 	}
 
-	private static Calendar readDate(BufferedReader br, String dateType) throws IOException, ParseException {
+	private Calendar readDate(BufferedReader br, String dateType) throws IOException, ParseException {
 		Calendar date = null;
 		String line = br.readLine();
 		if (line.startsWith(dateType)) {
@@ -429,8 +363,7 @@ public class Storage {
 		return date;
 	}
 
-	private static ArrayList<Calendar> readDates(BufferedReader br, String dateType)
-			throws IOException, ParseException {
+	private ArrayList<Calendar> readDates(BufferedReader br, String dateType) throws IOException, ParseException {
 		ArrayList<Calendar> dates = new ArrayList<Calendar>();
 		String line = br.readLine();
 
@@ -447,16 +380,27 @@ public class Storage {
 		return dates;
 	}
 
-	private static boolean isInvalidLine(String line) {
+	private boolean isInvalidLine(String line) {
 		return line == null || line.equals(HEADER_DIVIDER);
 	}
+	
+	private void handleInvalidDate(String dateType, BufferedReader br) throws IOException {
+		if (dateType.equals(ATTRIBUTE_START_DATE)) {
+			br.readLine();
+			br.readLine();
+			br.readLine();
+		} else if (dateType.equals(ATTRIBUTE_END_DATE) || dateType.equals(ATTRIBUTE_DEADLINE)) {
+			br.readLine();
+			br.readLine();
+		}
+	}
 
-	private static void closeReaderClasses(FileHandler handler, BufferedReader br) throws IOException {
+	private void closeReaderClasses(FileHandler handler, BufferedReader br) throws IOException {
 		br.close();
 		handler.close();
 	}
 
-	public static void saveFile(Display thisDisplay) throws IOException {
+	public void saveFile(Display thisDisplay) throws IOException {
 		FileHandler handler = createLogHandler();
 
 		logger.log(Level.INFO, "Writing all tasks to file.\r\n");
@@ -477,7 +421,7 @@ public class Storage {
 		closeWriterClasses(handler, bw);
 	}
 
-	private static void writeHeaderToFile(BufferedWriter bw, String header) throws IOException {
+	private void writeHeaderToFile(BufferedWriter bw, String header) throws IOException {
 		bw.write(HEADER_DIVIDER);
 		bw.newLine();
 		bw.write(header);
@@ -487,7 +431,7 @@ public class Storage {
 		bw.newLine();
 	}
 
-	private static void writeFloatingTasks(BufferedWriter bw, ArrayList<TaskFloat> floatTasks) throws IOException {
+	private void writeFloatingTasks(BufferedWriter bw, ArrayList<TaskFloat> floatTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_FLOATING);
 		for (TaskFloat task : floatTasks) {
 			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
@@ -495,8 +439,7 @@ public class Storage {
 		}
 	}
 
-	private static void writeDeadlineTasks(BufferedWriter bw, ArrayList<TaskDeadline> deadlineTasks)
-			throws IOException {
+	private void writeDeadlineTasks(BufferedWriter bw, ArrayList<TaskDeadline> deadlineTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_DEADLINE);
 		for (TaskDeadline task : deadlineTasks) {
 			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
@@ -504,7 +447,7 @@ public class Storage {
 		}
 	}
 
-	private static void writeEventTasks(BufferedWriter bw, ArrayList<TaskEvent> events) throws IOException {
+	private void writeEventTasks(BufferedWriter bw, ArrayList<TaskEvent> events) throws IOException {
 		writeHeaderToFile(bw, HEADER_EVENT);
 		for (TaskEvent event : events) {
 			logger.log(Level.INFO, "Writing " + event.getDescription() + " to file.\r\n");
@@ -512,8 +455,7 @@ public class Storage {
 		}
 	}
 
-	private static void writeReservedTasks(BufferedWriter bw, ArrayList<TaskReserved> reservedTasks)
-			throws IOException {
+	private void writeReservedTasks(BufferedWriter bw, ArrayList<TaskReserved> reservedTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_RESERVED);
 		for (TaskReserved task : reservedTasks) {
 			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
@@ -521,7 +463,7 @@ public class Storage {
 		}
 	}
 
-	private static void writeCompletedTasks(BufferedWriter bw, ArrayList<Task> completedTasks) throws IOException {
+	private void writeCompletedTasks(BufferedWriter bw, ArrayList<Task> completedTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_COMPLETED);
 		for (Task task : completedTasks) {
 			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
@@ -529,7 +471,7 @@ public class Storage {
 		}
 	}
 
-	private static void closeWriterClasses(FileHandler handler, BufferedWriter bw) throws IOException {
+	private void closeWriterClasses(FileHandler handler, BufferedWriter bw) throws IOException {
 		bw.flush();
 		bw.close();
 		handler.close();
