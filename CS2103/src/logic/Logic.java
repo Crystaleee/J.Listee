@@ -37,27 +37,19 @@ public class Logic {
     }
     
     public static Display initializeProgram(String filePath){
-        file = filePath;
-        try{
-            display = storage.getDisplay(filePath);
+            file = filePath;
+            getDisplayFromStorage();
             display.setMessage(null);
             History.saveDisplay(display);
             return display;
-        }catch(IOException error){
-            display = new Display(MESSAGE_ERROR_FILE_EXISTS);
-            return display;
-        }
     }
     
     public static Display executeUserCommand(String userInput) {
         History.saveUserInput(userInput);
         Parser myParser = new Parser();
         Command userCommand = myParser.ParseCommand(userInput);
-        try {
-            display = userCommand.execute(storage.getDisplay(file));
-        } catch (IOException e) {
-            //fail to get display
-        }
+        getDisplayFromStorage();
+        display = userCommand.execute(display);
         
         if(userCommand.getUpdateFile()){
             if(successfullyUpdatesFile()){
@@ -72,6 +64,15 @@ public class Logic {
         System.out.println(display.toString());
         
         return display;
+    }
+
+    private static void getDisplayFromStorage() {
+        try {
+            display = storage.getDisplay(file);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     private static boolean successfullyUpdatesFile() {
