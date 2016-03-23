@@ -10,16 +10,16 @@ import History.History;
 public class CommandRedo implements Command {
     private final String MESSAGE_REDO = "Redid last command";
     private final String MESSAGE_ERROR_REDO = "You have reached the latest point possible";
-    private boolean updateFile;
+    private boolean updateFile = true;
     private boolean saveHistory = false;
 
     public CommandRedo() {
-        updateFile = true;
     }
 
     public Display execute(Display display) {
         if (History.atLastState()) {
             updateFile = false;
+            display.setMessage(MESSAGE_ERROR_REDO);
             return display;
             //return (new Display(MESSAGE_ERROR_REDO));
         }

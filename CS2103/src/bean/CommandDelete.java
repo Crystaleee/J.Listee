@@ -35,7 +35,9 @@ public class CommandDelete implements Command {
         } else if (hasInvalidTaskNumbers(display.getNumberOfTasks())) {
             updateFile = false;
             saveHistory = false;
-            return (new Display(message_invalid_task_numbers));
+            display.setMessage(message_invalid_task_numbers);
+            return oldDisplay;
+            //return (new Display(message_invalid_task_numbers));
         } else {
             Collections.sort(taskNumbers);
             deleteTasksFromList();

@@ -1,12 +1,9 @@
-三月 23, 2016 4:22:23 下午 storage.Storage saveFile
-信息: Writing all tasks to file.
+Mar 23, 2016 4:49:25 PM storage.Storage getDisplay
+INFO: Reading all tasks from file.
 
-三月 23, 2016 4:22:23 下午 storage.Storage writeFloatingTasks
-信息: Writing float to file.
+Mar 23, 2016 4:49:25 PM storage.Storage readTasksFloating
+INFO: Reading new floating task.
 
-三月 23, 2016 4:22:23 下午 storage.Storage writeFloatingTasks
-信息: Writing float to file.
-
-三月 23, 2016 4:22:23 下午 storage.Storage writeDeadlineTasks
-信息: Writing event to file.
+Mar 23, 2016 4:49:25 PM storage.Storage readTasksFloating
+INFO: Successfully read: 1
 

@@ -13,6 +13,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private Display display;
     private boolean updateFile = true;;
     private boolean saveHistory = true;
+    private String message = "Edited : \"";
     private final String message_invalid_task_number = "Pls specify a valid task number";
 
     public CommandUpdate() {
@@ -40,9 +41,12 @@ public class CommandUpdate extends TaskEvent implements Command {
         if (hasInvalidTaskNumber(display.getNumberOfTasks())) {
             updateFile = false;
             saveHistory = false;
-            return (new Display(message_invalid_task_number));
+            display.setMessage(message_invalid_task_number);
+            return display;
+            //return (new Display(message_invalid_task_number));
         }
         editTask();
+        display.setMessage(message);
         return display;
     }
 
@@ -67,6 +71,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     public void editDeadline() {
         TaskDeadline task = display.getDeadlineTasks().remove(taskNumber - 1);
+        message += task.getDescription() + "\"";
         task = (TaskDeadline) editDescription(task);
         task = (TaskDeadline) editLocation(task);
         task = (TaskDeadline) editTags(task);
@@ -103,6 +108,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     public void editEvent() {
         TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
+        message += task.getDescription() + "\"";
         task = (TaskEvent) editDescription(task);
         task = (TaskEvent) editLocation(task);
         task = (TaskEvent) editTags(task);
@@ -113,6 +119,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     public void editFloat() {
         TaskFloat task = display.getFloatTasks().remove(taskNumber - 1);
+        message += task.getDescription() + "\"";
         task = (TaskFloat) editDescription(task);
         task = (TaskFloat) editLocation(task);
         task = (TaskFloat) editTags(task);
