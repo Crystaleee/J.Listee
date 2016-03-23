@@ -306,7 +306,7 @@
         $(event_title).text("Events");
       }else if(type=="floating"){
         var tasklist_=document.getElementById("tasklist_floating");
-        $(float_title).text("Floating");
+        $(float_title).text("Untimed");
       }
 
       
@@ -477,6 +477,8 @@ $(document).keydown(
             $(".task:last").focus();
           }else{
             var id=parseInt($(".task:focus")[0].id)+1;
+            if(id==$(".task").length+1)
+            	id=1;
             $("#"+id).focus();
           }   
         break;
@@ -485,6 +487,8 @@ $(document).keydown(
             $(".task:first").focus();
           }else{ 
             var id=parseInt($(".task:focus")[0].id)-1;
+            if(id==0)
+            	id=$(".task").length;
             $("#"+id).focus();
           }
         break;
@@ -544,7 +548,7 @@ $(document).keydown(
    </div>
    <div class="commandline">
     <form name="cmd">
-      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here"/>
+      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here" autofocus/>
     </form>
   </div>
 </div>
