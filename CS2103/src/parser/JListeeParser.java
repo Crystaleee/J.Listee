@@ -16,6 +16,7 @@ import bean.Command;
 import bean.CommandAddDeadlineTask;
 import bean.CommandAddEvent;
 import bean.CommandAddFloatTask;
+import bean.CommandAddReserved;
 import bean.CommandDelete;
 import bean.CommandInvalid;
 import bean.CommandRedo;
@@ -54,7 +55,7 @@ public class JListeeParser{
 
 
 
-/*	public static void main(String[] separateInputLine){ // for testing
+/* public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
 			logger.addHandler(fh);
@@ -88,11 +89,12 @@ public class JListeeParser{
 		testShow.ParseCommand("show hiiiiii 23rd march 2016 to 12/4/16 #hihi @location ");
 		
 		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve meeting with boss (12/2/15 15:00 - 15/2/15 14:32) (13/2/15 14:00 - 15/4/15 12:00) #hwork @icube");
+		testReserve.ParseCommand("reserve meeting with boss 12/2/15 4pm to 5pm and 11/4/15 4pm to 5pm #hwork @icube");
 
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 2 hello hello hello"); 
-	} */
+	} 
+*/
 
 
 	public Command ParseCommand(String inputLine){
@@ -116,10 +118,10 @@ public class JListeeParser{
 		case COMMAND_SHOW:
 			return parseShow(inputLine);
 						
-	/*	case COMMAND_RESERVE:
-			return parseReserve(separateInputLine);
+		case COMMAND_RESERVE:
+			return parseReserve(inputLine);
 
-		case COMMAND_UPDATE:
+		/*case COMMAND_UPDATE:
 			return parseUpdate(separateInputLine);
 
 			 */
@@ -136,7 +138,6 @@ public class JListeeParser{
 		String taskDescription = null;
 
 		inputLine = inputLine.replaceFirst("show", "").trim();
-
 		//natty library to extract dates
 		List<DateGroup> groups = dateParser.parse(inputLine);
 
@@ -202,7 +203,7 @@ public class JListeeParser{
 		return new CommandUndo();
 	}
 
-	/*	public Command parseUpdate(String[] separateInputLine) {
+	/*public Command parseUpdate(String[] separateInputLine) {
 		boolean isTaskDescription = false;
 
 		updateTaskNumber = (Integer.valueOf(separateInputLine[1]));
@@ -240,89 +241,68 @@ public class JListeeParser{
 		Command update = new CommandUpdate(updateTaskNumber, taskDescription);
 		return update;
 	}
+*/
 
+	public Command parseReserve(String inputLine) {
+		Calendar startDate = null;
+		Calendar endDate = null;
+		String location = null;
+		ArrayList<String> tagLists = new ArrayList<String>();
+		ArrayList<Calendar> startDates = new ArrayList<Calendar>();
+		ArrayList<Calendar> endDates = new ArrayList<Calendar>();
 
-	public Command parseReserve(String[] separateInputLine) {
-		int endDateYear;
-		int endDateMonth;
-		int endDateDay;
-		int endMin;
-		int endHour;
-		ArrayList<String> taskDescriptionList = new ArrayList<String>();
+		inputLine = inputLine.replaceFirst("reserve", "").trim();
 
-		int i = 1;
-		while (i < separateInputLine.length && (!separateInputLine[i].substring(0,1).equals("(")) && (!separateInputLine[i].substring(0,1).equals("@")) && (!separateInputLine[i].substring(0,1).equals("#"))){
-			taskDescriptionList.add(separateInputLine[i]);
-			i++;
-		}
+		System.out.println(inputLine);
 
-		for (String word : taskDescriptionList) {
-			taskDescription += word + " ";
-		} 
+		//natty library to extract dates
+		List<DateGroup> groups = dateParser.parse(inputLine);
 
-		taskDescription = taskDescription.substring(4,taskDescription.length());
-		logger.info("taskDescription: " + taskDescription);
+		for(DateGroup group:groups) {
+			List<Date> dates = group.getDates();
+			System.out.println(dates.toString());
+			/*has start date and end date, event task*/
 
-
-		for ( ; i<separateInputLine.length; i++){
-			if (separateInputLine[i].substring(0, 1).equals("@")){
-				location = separateInputLine[i].substring(1, separateInputLine[i].length());
-				logger.info("reserve location: " + location);
-
-			}
-
-			if (separateInputLine[i].substring(0, 1).equals("#")){
-				logger.info("reserve hashtags: "+ separateInputLine[i].substring(1, separateInputLine[i].length()));
-				tagLists.add(separateInputLine[i].substring(1, separateInputLine[i].length()));
-			}
-
-			else if (separateInputLine[i].substring(0, 1).equals("(")){
-				int j = i;
-
-				while (j < separateInputLine.length && (!separateInputLine[j].substring(0,1).equals("@")) && (!separateInputLine[j].substring(0,1).equals("#"))){
-					calendarDescription.add(separateInputLine[j]);
-					j++;
+			if (dates.size() >= 2){
+				for (int i=0;i<dates.size()-1;i+=2){
+					startDate = dateToCalendar(dates.get(i));
+					endDate = dateToCalendar(dates.get(i+1));
+					
+					/* Swap date if necessary */
+					if (startDate.after(endDate)) {
+						Calendar temp = endDate;
+						endDate = startDate;
+						startDate = temp;
+					}
+					
+					startDates.add(startDate);
+					endDates.add(endDate);
 				}
+				
+			
+				if (group.isTimeInferred()) {
+					setStartDateTimeDefault(startDate);
+					setEndDateTimeDefault(endDate);
+				}	
+			}
 
-				String startDate = calendarDescription.get(0).substring(1, calendarDescription.get(0).length());
-				String[] startDateYYMMDD = startDate.split("/");
-
-				String startTime = calendarDescription.get(1);
-				String[] startTimeHourMinute = startTime.split(":");
-
-				int startDateYear = Integer.valueOf(startDateYYMMDD[2]);
-				int startDateMonth = Integer.valueOf(startDateYYMMDD[1])-1;
-				int startDateDay = Integer.valueOf(startDateYYMMDD[0]);
-
-				int startHour = Integer.valueOf(startTimeHourMinute[0]);
-				int startMin = Integer.valueOf(startTimeHourMinute[1]);
-
-				startDateTime.set(startDateYear,startDateMonth,startDateDay,startHour,startMin);
-				startDateTimes.add(startDateTime);
-
-				String endDate = calendarDescription.get(3);
-				String[] endDateYYMMDD = endDate.split("/");
-
-				String endTime = calendarDescription.get(4).substring(0,calendarDescription.get(4).length()-1);	
-				String[] endTimeHourMinute = endTime.split(":");
-
-				endDateYear = Integer.valueOf(endDateYYMMDD[2].substring(0, 2));					
-				endDateMonth = Integer.valueOf(endDateYYMMDD[1])-1;
-				endDateDay = Integer.valueOf(endDateYYMMDD[0]);
-
-				endHour = Integer.valueOf(endTimeHourMinute[0]);
-				endMin = Integer.valueOf(endTimeHourMinute[1]);
-
-				endDateTime.set(endDateYear,endDateMonth,endDateDay,endHour,endMin);
-				endDateTimes.add(endDateTime);						
+			/*remove group of dates from inputLine*/
+			if (inputLine.contains(group.getText())){
+				inputLine = inputLine.replace(group.getText(), "");
 			}
 		}
 
-		Command reserveTask = new CommandAddReserved(taskDescription, location, startDateTimes, endDateTimes, tagLists);
-		return reserveTask;
+		tagLists = findHashTags(inputLine);	
+
+		location = findLocation(inputLine);
+
+		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+		
+		return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
+	
 	}
 
-*/
+
 	public Command parseDelete(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace("delete","").trim();
@@ -412,8 +392,6 @@ public class JListeeParser{
 
 		return new CommandAddFloatTask(taskDescription, location, tagLists);
 	}
-
-
 
 	public String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
 		for (int i =0;i <tagLists.size(); i++){
