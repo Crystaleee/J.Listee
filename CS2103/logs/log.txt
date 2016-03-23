@@ -1,6 +1,18 @@
-Mar 23, 2016 5:18:15 PM storage.Storage saveFile
-INFO: Writing all tasks to file.
+三月 23, 2016 11:50:36 下午 storage.Storage saveFile
+信息: Writing all tasks to file.
 
-Mar 23, 2016 5:18:15 PM storage.Storage writeFloatingTasks
-INFO: Writing 2  to file.
+三月 23, 2016 11:50:36 下午 storage.Storage writeFloatingTasks
+信息: Writing hello to file.
+
+三月 23, 2016 11:50:36 下午 storage.Storage writeDeadlineTasks
+信息: Writing deadline to file.
+
+三月 23, 2016 11:50:36 下午 storage.Storage writeDeadlineTasks
+信息: Writing hello to file.
+
+三月 23, 2016 11:50:36 下午 storage.Storage writeDeadlineTasks
+信息: Writing hello to file.
+
+三月 23, 2016 11:50:36 下午 storage.Storage writeEventTasks
+信息: Writing timed to file.
 

@@ -496,6 +496,7 @@ $(document).keydown(
         case 8://backspace
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
+            console.log("delete "+id);
             shortCutCommand("delete "+id);
           }
         break;

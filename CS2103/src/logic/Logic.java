@@ -14,7 +14,7 @@ import bean.Command;
 import bean.CommandAddDeadlineTask;
 import bean.CommandUndo;
 import bean.Display;
-import parser.Parser;
+import parser.JListeeParser;
 import storage.Storage;
 
 public class Logic {
@@ -79,7 +79,7 @@ public class Logic {
     }
 
     private static Command parseUserInput(String userInput) {
-        Parser myParser = new Parser();
+    	JListeeParser myParser = new JListeeParser();
         Command userCommand = myParser.ParseCommand(userInput);
         return userCommand;
     }

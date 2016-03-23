@@ -53,7 +53,7 @@ public class JListeeParser{
 	private static FileHandler fh; 
     private com.joestelmach.natty.Parser dateParser;
    
-    private JListeeParser() {
+    public JListeeParser() {
         dateParser = new com.joestelmach.natty.Parser();
     }
 

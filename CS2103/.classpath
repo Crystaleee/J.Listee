@@ -11,5 +11,9 @@
 	<classpathentry kind="lib" path="lib/gson-2.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.6.2-javadoc.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/antlr-3.5.2-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/natty-0.12.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-nop-1.7.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
