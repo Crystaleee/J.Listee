@@ -495,6 +495,13 @@ $(document).keydown(
             shortCutCommand("delete "+id);
           }
         break;
+        case 90://ctrl+z
+        	if(e.ctrlKey)
+        		shortCutCommand("undo");
+        break;
+        case 89://ctrl+y
+        	if(e.ctrlKey)
+        		shortCutCommand("redo");
       }
     }
 );
