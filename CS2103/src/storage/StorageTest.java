@@ -76,7 +76,7 @@ public class StorageTest {
 	@Test
 	public void testSaveAndRead() throws IOException {
 		storage.saveFile(display);
-		assertEquals(display.toString(), storage.getDisplay(storage.getFilePath()).toString());
+		assertEquals(display.toString(), storage.getDisplay(storage.filePath).toString());
 	}
 	
 	/* This is a case for the reading from a file with empty descriptions partition */

@@ -26,10 +26,12 @@ public class CommandAddReserved implements Command{
     public Display execute(Display display) {
         if (task.getDescription() == null) {
             updateFile = false;
+            saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         ArrayList<TaskReserved> reservedTasks = addReservedTask(display.getReservedTasks());
         display.setReservedTasks(reservedTasks);
+        display.setMessage("Reserved: " + task.getDescription());
         return display;
     }
 
