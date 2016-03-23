@@ -61,7 +61,6 @@ public class Logic {
                 display = new Display(MESSAGE_ERROR_UPDATE_FILE);
             }
         }
-        System.out.println(display.toString());
         
         return display;
     }

@@ -27,8 +27,11 @@ public class CommandAddEvent implements Command {
         if (task.getDescription() == null) {
             updateFile = false;
             saveHistory = false;
-            return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
+            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
+            return display;
+            //return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
+        task.setDescription(task.getDescription().trim());
         ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
         display.setEvents(events);
         display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
