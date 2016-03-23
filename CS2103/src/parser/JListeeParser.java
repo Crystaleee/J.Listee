@@ -19,6 +19,7 @@ import bean.CommandAddFloatTask;
 import bean.CommandDelete;
 import bean.CommandInvalid;
 import bean.CommandRedo;
+import bean.CommandShow;
 import bean.CommandUndo;
 
 public class JListeeParser{
@@ -82,7 +83,10 @@ public class JListeeParser{
 
 		JListeeParser testDelete = new JListeeParser();
 		testDelete.ParseCommand("delete 1,2,3,4");
-
+		
+		JListeeParser testShow = new JListeeParser();
+		testShow.ParseCommand("show hiiiiii 23rd march 2016 to 12/4/16 #hihi @location ");
+		
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve meeting with boss (12/2/15 15:00 - 15/2/15 14:32) (13/2/15 14:00 - 15/4/15 12:00) #hwork @icube");
 
@@ -110,10 +114,8 @@ public class JListeeParser{
 			return parseRedo();
 			
 		case COMMAND_SHOW:
-	//		inputLine = inputLine.replaceFirst("show", "").trim();
-		
-		//	return new CommandShow(keyword);
-			
+			return parseShow(inputLine);
+						
 
 	/*	case COMMAND_RESERVE:
 			return parseReserve(separateInputLine);
@@ -126,6 +128,66 @@ public class JListeeParser{
 			return parseInvalid();
 		}
 	}
+
+	private Command parseShow(String inputLine) {
+		Calendar startDate = null;
+		Calendar endDate = null;
+		String location = null;
+		ArrayList<String> tagLists = new ArrayList<String>();
+
+		inputLine = inputLine.replaceFirst("show", "").trim();
+
+		//natty library to extract dates
+		List<DateGroup> groups = dateParser.parse(inputLine);
+
+		for(DateGroup group:groups) {
+			List<Date> dates = group.getDates();
+
+			/*has start date and end date, search inbetween 2 dates*/
+			if (dates.size() == 2){
+				startDate = dateToCalendar(dates.get(0));
+				endDate = dateToCalendar(dates.get(1));
+
+				/* Swap date if necessary */
+				if (startDate.after(endDate)) {
+					Calendar temp = endDate;
+					endDate = startDate;
+					startDate = temp;
+				}
+
+				if (group.isTimeInferred()) {
+					setStartDateTimeDefault(startDate);
+					setEndDateTimeDefault(endDate);
+				}	
+			}
+
+			/*only 1 set of date, search for that specific dates*/
+			else if(dates.size() == 1){
+				endDate = dateToCalendar(dates.get(0));
+
+				/*set default end date if no time specified*/
+				if (group.isTimeInferred()) {
+					setEndDateTimeDefault(endDate);
+				}
+			} 
+
+			/*remove group of dates from inputLine*/
+			if (inputLine.contains(group.getText())){
+				inputLine = inputLine.replace(group.getText(), "");
+			}
+		}
+
+		tagLists = findHashTags(inputLine);	
+
+		location = findLocation(inputLine);
+
+		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+
+		return new CommandShow(taskDescription);
+
+	}
+
+
 
 	public Command parseInvalid() {
 		return new CommandInvalid();
