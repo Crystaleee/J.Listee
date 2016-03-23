@@ -23,7 +23,7 @@ public class CommandShow implements Command {
     }
 
     public CommandShow(String keyword) {
-        this.keyword = keyword;
+        this.keyword = keyword.toLowerCase();
         newDisplay = new Display();
         count = 0;
     }
@@ -59,7 +59,7 @@ public class CommandShow implements Command {
         TaskDeadline task;
         for (int i = 0; i < oldDisplay.getDeadlineTasks().size(); i++) {
             task = oldDisplay.getDeadlineTasks().get(i);
-            if(task.getDescription().contains(keyword)){
+            if(task.getDescription().toLowerCase().contains(keyword)){
                 newDisplay.getDeadlineTasks().add(task);
                 count++;
             }
@@ -70,7 +70,7 @@ public class CommandShow implements Command {
         TaskEvent task;
         for (int i = 0; i < oldDisplay.getEventTasks().size(); i++) {
             task = oldDisplay.getEventTasks().get(i);
-            if(task.getDescription().contains(keyword)){
+            if(task.getDescription().toLowerCase().contains(keyword)){
                 newDisplay.getEventTasks().add(task);
                 count++;
             }
@@ -81,7 +81,7 @@ public class CommandShow implements Command {
         TaskFloat task;
         for (int i = 0; i < oldDisplay.getFloatTasks().size(); i++) {
             task = oldDisplay.getFloatTasks().get(i);
-            if(task.getDescription().contains(keyword)){
+            if(task.getDescription().toLowerCase().contains(keyword)){
                 newDisplay.getFloatTasks().add(task);
                 count++;
             }
