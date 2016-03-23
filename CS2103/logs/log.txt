@@ -1,9 +1,6 @@
-Mar 23, 2016 4:49:25 PM storage.Storage getDisplay
-INFO: Reading all tasks from file.
+Mar 23, 2016 5:18:15 PM storage.Storage saveFile
+INFO: Writing all tasks to file.
 
-Mar 23, 2016 4:49:25 PM storage.Storage readTasksFloating
-INFO: Reading new floating task.
-
-Mar 23, 2016 4:49:25 PM storage.Storage readTasksFloating
-INFO: Successfully read: 1
+Mar 23, 2016 5:18:15 PM storage.Storage writeFloatingTasks
+INFO: Writing 2  to file.
 

@@ -50,11 +50,11 @@ public class CommandUpdate extends TaskEvent implements Command {
         return display;
     }
 
-    public boolean hasInvalidTaskNumber(int numOfTasks) {
+    private boolean hasInvalidTaskNumber(int numOfTasks) {
         return ((taskNumber > numOfTasks) || (taskNumber < 1));
     }
 
-    public void editTask() {
+    private void editTask() {
         if (taskNumber <= display.getDeadlineTasks().size()) {
             editDeadline();
         } else {
@@ -69,7 +69,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    public void editDeadline() {
+    private void editDeadline() {
         TaskDeadline task = display.getDeadlineTasks().remove(taskNumber - 1);
         message += task.getDescription() + "\"";
         task = (TaskDeadline) editDescription(task);
@@ -79,7 +79,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         changeDeadlineTaskType(task);
     }
 
-    public void changeDeadlineTaskType(TaskDeadline task) {
+    private void changeDeadlineTaskType(TaskDeadline task) {
         // assertFalse endDate==0 AND startDate != 0&null
         boolean hasTaskChanged = false;
         if (getEndDate() != null) {
@@ -106,7 +106,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    public void editEvent() {
+    private void editEvent() {
         TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
         message += task.getDescription() + "\"";
         task = (TaskEvent) editDescription(task);
@@ -117,7 +117,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         changeEventTaskType(task);
     }
 
-    public void editFloat() {
+    private void editFloat() {
         TaskFloat task = display.getFloatTasks().remove(taskNumber - 1);
         message += task.getDescription() + "\"";
         task = (TaskFloat) editDescription(task);
@@ -126,7 +126,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         changeFloatTaskType(task);
     }
 
-    public Task editTags(Task task) {
+    private Task editTags(Task task) {
         if (getTags() != null) {
             for (int i = 0; i < getTags().size(); i++) {
                 String tag = getTags().get(i);
@@ -142,7 +142,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         return task;
     }
 
-    public TaskEvent editStartDate(TaskEvent task) {
+    private TaskEvent editStartDate(TaskEvent task) {
         if (getStartDate() != null) {
             task.setStartDate(getEndDate());
         }
@@ -150,7 +150,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     // for event tasks
-    public TaskEvent editEndDate(TaskEvent task) {
+    private TaskEvent editEndDate(TaskEvent task) {
         if (getEndDate() != null) {
             task.setEndDate(getEndDate());
         }
@@ -158,28 +158,28 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     // for deadline tasks
-    public TaskDeadline editEndDate(TaskDeadline task) {
+    private TaskDeadline editEndDate(TaskDeadline task) {
         if (getEndDate() != null) {
             task.setEndDate(getEndDate());
         }
         return task;
     }
 
-    public Task editLocation(Task task) {
+    private Task editLocation(Task task) {
         if (getLocation() != null) {
             task.setLocation(getLocation());
         }
         return task;
     }
 
-    public Task editDescription(Task task) {
+    private Task editDescription(Task task) {
         if (getDescription() != null) {
             task.setDescription(getDescription());
         }
         return task;
     }
 
-    public void changeEventTaskType(TaskEvent task) {
+    private void changeEventTaskType(TaskEvent task) {
         boolean hasTaskChanged = false;
         if ((getStartDate() != null) && (getEndDate() != null)) {
             // if user wants to change to floating task
@@ -206,7 +206,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    public void changeFloatTaskType(TaskFloat task) {
+    private void changeFloatTaskType(TaskFloat task) {
         boolean hasTaskChanged = false;
         if ((getStartDate() != null) && (getEndDate() != null)) {
             if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {

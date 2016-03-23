@@ -36,7 +36,7 @@ public class CommandAddDeadlineTask implements Command {
         return display;
     }
 
-    public ArrayList<TaskDeadline> addDeadlineTask(ArrayList<TaskDeadline> taskList) {
+    private ArrayList<TaskDeadline> addDeadlineTask(ArrayList<TaskDeadline> taskList) {
         int index = getIndex(taskList);
         taskList.add(index, task);
         return taskList;
@@ -46,7 +46,7 @@ public class CommandAddDeadlineTask implements Command {
      * This method searches for the index to slot the deadline task in since we
      * are sorting the list in order of earliest deadline first
      */
-    public int getIndex(ArrayList<TaskDeadline> taskList) {
+    private int getIndex(ArrayList<TaskDeadline> taskList) {
         int i = 0;
         for (i = 0; i < taskList.size(); i++) {
             if (task.getEndDate().compareTo(taskList.get(i).getEndDate()) < 0) {

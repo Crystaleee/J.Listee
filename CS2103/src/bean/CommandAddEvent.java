@@ -35,7 +35,7 @@ public class CommandAddEvent implements Command {
         return display;
     }
 
-    public ArrayList<TaskEvent> addEvent(ArrayList<TaskEvent> taskList) {
+    private ArrayList<TaskEvent> addEvent(ArrayList<TaskEvent> taskList) {
         int index = getAddIndex(taskList);
         taskList.add(index, task);
         return taskList;
@@ -45,7 +45,7 @@ public class CommandAddEvent implements Command {
      * This method searches for the index to slot the deadline task in since we
      * are sorting the list in order of earliest start time first
      */
-    public int getAddIndex(ArrayList<TaskEvent> taskList) {
+    private int getAddIndex(ArrayList<TaskEvent> taskList) {
         int i = 0;
         for (i = 0; i < taskList.size(); i++) {
             if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {

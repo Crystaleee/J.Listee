@@ -69,11 +69,12 @@ public class Logic {
                 display = new Display(MESSAGE_ERROR_UPDATE_FILE);
             }
         }
+        System.out.println(display.toString());
         
         return display;
     }
     
-    public static boolean successfullyUpdatesFile() {
+    private static boolean successfullyUpdatesFile() {
         try{
             storage.saveFile(display);
             return true;

@@ -48,14 +48,14 @@ public class CommandShow implements Command {
         return newDisplay;
     }
 
-    public Display getTasksContainingKeyword() {
+    private Display getTasksContainingKeyword() {
         getFloatTasks();
         getEventTasks();
         getDeadLineTasks();
         return newDisplay;
     }
     
-    public void getDeadLineTasks() {
+    private void getDeadLineTasks() {
         TaskDeadline task;
         for (int i = 0; i < oldDisplay.getDeadlineTasks().size(); i++) {
             task = oldDisplay.getDeadlineTasks().get(i);
@@ -66,7 +66,7 @@ public class CommandShow implements Command {
         }
     }
     
-    public void getEventTasks() {
+    private void getEventTasks() {
         TaskEvent task;
         for (int i = 0; i < oldDisplay.getEventTasks().size(); i++) {
             task = oldDisplay.getEventTasks().get(i);
@@ -77,7 +77,7 @@ public class CommandShow implements Command {
         }
     }
 
-    public void getFloatTasks() {
+    private void getFloatTasks() {
         TaskFloat task;
         for (int i = 0; i < oldDisplay.getFloatTasks().size(); i++) {
             task = oldDisplay.getFloatTasks().get(i);

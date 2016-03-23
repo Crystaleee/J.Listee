@@ -46,7 +46,7 @@ public class CommandDelete implements Command {
         return display;
     }
 
-    public boolean hasInvalidTaskNumbers(int numOfTasks) {
+    private boolean hasInvalidTaskNumbers(int numOfTasks) {
         ArrayList<Integer> invalidTaskNumbers = new ArrayList<Integer>();
         int taskNum;
         for (int i = 0; i < taskNumbers.size(); i++) {
@@ -63,7 +63,7 @@ public class CommandDelete implements Command {
         return (invalidTaskNumbers.size() > 0);
     }
 
-    public void deleteTasksFromList() {
+    private void deleteTasksFromList() {
         Task deletedTask;
         for (int i = 0; i < taskNumbers.size(); i++) {
             deletedTask = removeTask(taskNumbers.get(i) - 1 - i);
@@ -76,7 +76,7 @@ public class CommandDelete implements Command {
         return;
     }
 
-    public Task removeTask(int taskNum) {
+    private Task removeTask(int taskNum) {
         Task deletedTask;
         if (taskNum < display.getDeadlineTasks().size()) {
             deletedTask = display.getDeadlineTasks().remove(taskNum);
