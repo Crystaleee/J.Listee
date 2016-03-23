@@ -1,15 +1,10 @@
 package parser;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
@@ -21,14 +16,13 @@ import bean.Command;
 import bean.CommandAddDeadlineTask;
 import bean.CommandAddEvent;
 import bean.CommandAddFloatTask;
-import bean.CommandAddReserved;
 import bean.CommandDelete;
 import bean.CommandInvalid;
 import bean.CommandRedo;
 import bean.CommandUndo;
-import bean.CommandUpdate;
 
 public class JListeeParser{
+	private static final String COMMAND_SHOW = "show";
 	private static final String COMMAND_REDO = "redo";
 	private static final String COMMAND_UNDO = "undo";
 	private static final String COMMAND_UPDATE = "update";
@@ -36,30 +30,30 @@ public class JListeeParser{
 	private static final String COMMAND_ADD = "add";
 	private static final String COMMAND_RESERVE = "reserve";
 
-    private static final int DEFAULT_START_HOUR = 0;
-    private static final int DEFAULT_START_MINUTE = 0;
-    private static final int DEFAULT_START_SECOND = 0;
-    private static final int DEFAULT_START_MILLISECOND = 0;
-    private static final int DEFAULT_END_HOUR = 23;
-    private static final int DEFAULT_END_MINUTE = 59;
-    private static final int DEFAULT_END_SECOND = 0;
-    private static final int DEFAULT_END_MILLISECOND = 0;
-    private static final int DAYS_IN_WEEK = 7;
-    private static final int DESC_NO_OR = 1;
-    private static final int NO_DATE_PARSED = -1;
+	private static final int DEFAULT_START_HOUR = 0;
+	private static final int DEFAULT_START_MINUTE = 0;
+	private static final int DEFAULT_START_SECOND = 0;
+	private static final int DEFAULT_START_MILLISECOND = 0;
+	private static final int DEFAULT_END_HOUR = 23;
+	private static final int DEFAULT_END_MINUTE = 59;
+	private static final int DEFAULT_END_SECOND = 0;
+	private static final int DEFAULT_END_MILLISECOND = 0;
+	private static final int DAYS_IN_WEEK = 7;
+	private static final int DESC_NO_OR = 1;
+	private static final int NO_DATE_PARSED = -1;
 
-	
+
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh; 
-    private com.joestelmach.natty.Parser dateParser;
-   
-    public JListeeParser() {
-        dateParser = new com.joestelmach.natty.Parser();
-    }
+	private com.joestelmach.natty.Parser dateParser;
+
+	public JListeeParser() {
+		dateParser = new com.joestelmach.natty.Parser();
+	}
 
 
 
-	public static void main(String[] separateInputLine){ // for testing
+/*	public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
 			logger.addHandler(fh);
@@ -71,8 +65,8 @@ public class JListeeParser{
 		} catch (IOException e) {  
 			e.printStackTrace();  
 		} 
-	
-	
+
+
 		JListeeParser testEvent = new JListeeParser();
 		testEvent.ParseCommand("add event  (03/17/2016 2pm to 03/27/2016 5pm) add event @LT27 #hihi #me");
 
@@ -86,15 +80,15 @@ public class JListeeParser{
 		JListeeParser testDeadLine2 = new JListeeParser();
 		testDeadLine2.ParseCommand("add deadLine date and time @location today 3:00 #hashtag");
 
-	/*	JListeeParser testDelete = new JListeeParser();
+		JListeeParser testDelete = new JListeeParser();
 		testDelete.ParseCommand("delete 1,2,3,4");
 
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve meeting with boss (12/2/15 15:00 - 15/2/15 14:32) (13/2/15 14:00 - 15/4/15 12:00) #hwork @icube");
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 hello hello hello"); */
-	}
+		testUpdateTask.ParseCommand("update 2 hello hello hello"); 
+	} */
 
 
 	public Command ParseCommand(String inputLine){
@@ -106,21 +100,28 @@ public class JListeeParser{
 		case COMMAND_ADD:
 			return parseAdd(inputLine);
 
-	/*	case COMMAND_DELETE:
-			return parseDelete(inputLine, separateInputLine);
-
-		case COMMAND_RESERVE:
-			return parseReserve(separateInputLine);
-
-		case COMMAND_UPDATE:
-			return parseUpdate(separateInputLine);
-
+		case COMMAND_DELETE:
+			return parseDelete(inputLine);
+		
 		case COMMAND_UNDO:		
 			return parseUndo();
 
 		case COMMAND_REDO:
 			return parseRedo();
-*/
+			
+		case COMMAND_SHOW:
+	//		inputLine = inputLine.replaceFirst("show", "").trim();
+		
+		//	return new CommandShow(keyword);
+			
+
+	/*	case COMMAND_RESERVE:
+			return parseReserve(separateInputLine);
+
+		case COMMAND_UPDATE:
+			return parseUpdate(separateInputLine);
+
+			 */
 		default :
 			return parseInvalid();
 		}
@@ -138,7 +139,7 @@ public class JListeeParser{
 		return new CommandUndo();
 	}
 
-/*	public Command parseUpdate(String[] separateInputLine) {
+	/*	public Command parseUpdate(String[] separateInputLine) {
 		boolean isTaskDescription = false;
 
 		updateTaskNumber = (Integer.valueOf(separateInputLine[1]));
@@ -258,22 +259,24 @@ public class JListeeParser{
 		return reserveTask;
 	}
 
-
-	public Command parseDelete(String inputLine, String[] separateInputLine) {
-
-		if (separateInputLine[1].equals("all")){
+*/
+	public Command parseDelete(String inputLine) {
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		inputLine = inputLine.replace("delete","").trim();
+		
+		if (inputLine.contains("all")){
 			taskNumbers = null;
 		}
+		
 		else {
-			separateInputLine = inputLine.substring(7, inputLine.length()).split(",");
+			String [] separateInputLine = inputLine.split(",");
 			for (int i=0; i<separateInputLine.length; i++){
 				taskNumbers.add(Integer.valueOf(separateInputLine[i]));
 			}
 		}
-
-		Command deleteTask = new CommandDelete(taskNumbers);
-		return deleteTask;
-	}*/
+		
+		return new CommandDelete(taskNumbers);
+	}
 
 	public Command parseAdd(String inputLine) {		
 		boolean isEvent = false;
@@ -282,150 +285,140 @@ public class JListeeParser{
 		Calendar endDate = null;
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
-		
+
 		inputLine = inputLine.replaceFirst("add", "").trim();
-		System.out.println(inputLine);
-		
-		
+
+
 		//natty library to extract dates
-        List<DateGroup> groups = dateParser.parse(inputLine);
-        
+		List<DateGroup> groups = dateParser.parse(inputLine);
+
 		for(DateGroup group:groups) {
 			List<Date> dates = group.getDates();
-			
+
 			/*has start date and end date, event task*/
 
 			if (dates.size() == 2){
 				isEvent = true; 
 				startDate = dateToCalendar(dates.get(0));
 				endDate = dateToCalendar(dates.get(1));
-				
+
 				/* Swap date if necessary */
-                if (startDate.after(endDate)) {
-                    Calendar temp = endDate;
-                    endDate = startDate;
-                    startDate = temp;
-                }
-                
+				if (startDate.after(endDate)) {
+					Calendar temp = endDate;
+					endDate = startDate;
+					startDate = temp;
+				}
+
 				if (group.isTimeInferred()) {
-                    setStartDateTimeDefault(startDate);
-                    setEndDateTimeDefault(endDate);
-                }	
+					setStartDateTimeDefault(startDate);
+					setEndDateTimeDefault(endDate);
+				}	
 			}
-			
+
 			/*only 1 set of date, deadlineTask*/
 			else if(dates.size() == 1){
 				isDeadline = true;
 				endDate = dateToCalendar(dates.get(0));
-				
+
 				/*set default end date if no time specified*/
 				if (group.isTimeInferred()) {
 					setEndDateTimeDefault(endDate);
 				}
 			} 
-			
+
 			/*remove group of dates from inputLine*/
 			if (inputLine.contains(group.getText())){
 				inputLine = inputLine.replace(group.getText(), "");
 			}
 		}
-		
+
 		tagLists = findHashTags(inputLine);	
-		
+
 		location = findLocation(inputLine);
-		
+
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-	
+
 
 		if (isEvent){
 			return new CommandAddEvent(taskDescription, location, startDate, endDate, tagLists);
 		}
-		
+
 		else if (isDeadline){
 			return new CommandAddDeadlineTask(taskDescription, location, endDate, tagLists);
 		}
-		
-		System.out.println("Floating:" + taskDescription + location);
+
 		return new CommandAddFloatTask(taskDescription, location, tagLists);
 	}
 
 
 
-public String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
-	for (int i =0;i <tagLists.size(); i++){
-		inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
+	public String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
+		for (int i =0;i <tagLists.size(); i++){
+			inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
+		}
+
+		inputLine = inputLine.replace("@" + location, "").trim();
+		inputLine = inputLine.replace("(", "").replace(")", "").replace("@", "");
+
+		return inputLine;
 	}
-	
-	inputLine = inputLine.replace("@" + location, "").trim();
-	inputLine = inputLine.replace("(", "").replace(")", "").replace("@", "");
-	
-	return inputLine;
-}
 
 
-
-public String findLocation(String inputLine) {
-	String location = null;
-	Matcher retrieveLocation = Pattern.compile("@\\s*(\\w+)").matcher(inputLine);
-	while (retrieveLocation.find()) {
+	public String findLocation(String inputLine) {
+		String location = null;
+		Matcher retrieveLocation = Pattern.compile("@\\s*(\\w+)").matcher(inputLine);
+		while (retrieveLocation.find()) {
 			location = retrieveLocation.group(1);
+		}
+		return location;
 	}
-	return location;
-}
 
+	public ArrayList<String> findHashTags(String inputLine) {
+		ArrayList<String> tags = new ArrayList<String>();
+		Matcher retrieveHashTags = Pattern.compile("#\\s*(\\w+)").matcher(inputLine);
 
+		while (retrieveHashTags.find()) {
+			tags.add(retrieveHashTags.group(1));
+		}
 
-
-
-
-public ArrayList<String> findHashTags(String inputLine) {
-	ArrayList<String> tags = new ArrayList<String>();
-	Matcher retrieveHashTags = Pattern.compile("#\\s*(\\w+)").matcher(inputLine);
-	
-	while (retrieveHashTags.find()) {
-	  tags.add(retrieveHashTags.group(1));
+		return tags;
 	}
-	
-	return tags;
-}
 
 
 
 	public void setEndDateTimeDefault(Calendar endDate) {
 		endDate.set(Calendar.HOUR_OF_DAY,
-		            DEFAULT_END_HOUR);
+				DEFAULT_END_HOUR);
 		endDate.set(Calendar.MINUTE,
-		            DEFAULT_END_MINUTE);
+				DEFAULT_END_MINUTE);
 		endDate.set(Calendar.SECOND,
-		            DEFAULT_END_SECOND);
+				DEFAULT_END_SECOND);
 		endDate.set(Calendar.MILLISECOND,
-		            DEFAULT_END_MILLISECOND);
+				DEFAULT_END_MILLISECOND);
 	}
 
 
 
-public void setStartDateTimeDefault(Calendar startDate) {
-	startDate.set(Calendar.HOUR_OF_DAY,
-	              DEFAULT_START_HOUR);
-	startDate.set(Calendar.MINUTE,
-	              DEFAULT_START_MINUTE);
-	startDate.set(Calendar.SECOND,
-	              DEFAULT_START_SECOND);
-	startDate.set(Calendar.MILLISECOND,
-	              DEFAULT_START_MILLISECOND);
-}
+	public void setStartDateTimeDefault(Calendar startDate) {
+		startDate.set(Calendar.HOUR_OF_DAY,
+				DEFAULT_START_HOUR);
+		startDate.set(Calendar.MINUTE,
+				DEFAULT_START_MINUTE);
+		startDate.set(Calendar.SECOND,
+				DEFAULT_START_SECOND);
+		startDate.set(Calendar.MILLISECOND,
+				DEFAULT_START_MILLISECOND);
+	}
 
 	public String determineCommandType(String[] separateInputLine) {
 		return separateInputLine[0].trim();
 	}
-	
-	 private static Calendar dateToCalendar(Date date) {
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(date);
-	        return cal;
-	 }
-	
+
+	private static Calendar dateToCalendar(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
+	}
+
 
 }
-
-
