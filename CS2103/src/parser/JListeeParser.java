@@ -22,6 +22,7 @@ import bean.CommandInvalid;
 import bean.CommandRedo;
 import bean.CommandShow;
 import bean.CommandUndo;
+import bean.CommandUpdate;
 
 public class JListeeParser{
 	private static final String COMMAND_SHOW = "show";
@@ -55,7 +56,7 @@ public class JListeeParser{
 
 
 
-/* public static void main(String[] separateInputLine){ // for testing
+ public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
 			logger.addHandler(fh);
@@ -89,12 +90,12 @@ public class JListeeParser{
 		testShow.ParseCommand("show hiiiiii 23rd march 2016 to 12/4/16 #hihi @location ");
 		
 		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve meeting with boss 12/2/15 4pm to 5pm and 11/4/15 4pm to 5pm #hwork @icube");
+		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm");
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 hello hello hello"); 
+		testUpdateTask.ParseCommand("update 2 what @location -@deletelocation #hashtag -#deleteHashtag "); 
 	} 
-*/
+
 
 
 	public Command ParseCommand(String inputLine){
@@ -121,10 +122,10 @@ public class JListeeParser{
 		case COMMAND_RESERVE:
 			return parseReserve(inputLine);
 
-		/*case COMMAND_UPDATE:
-			return parseUpdate(separateInputLine);
+		case COMMAND_UPDATE:
+			return parseUpdate(inputLine);
 
-			 */
+		
 		default : 
 			return parseInvalid();
 		}
@@ -189,8 +190,6 @@ public class JListeeParser{
 
 	}
 
-
-
 	public Command parseInvalid() {
 		return new CommandInvalid();
 	}
@@ -203,45 +202,74 @@ public class JListeeParser{
 		return new CommandUndo();
 	}
 
-	/*public Command parseUpdate(String[] separateInputLine) {
-		boolean isTaskDescription = false;
+/*	public Command parseUpdate(String inputLine) {
+		Calendar startDate = null;
+		Calendar endDate = null;
+		String location = null;
+		ArrayList<String> tagLists = new ArrayList<String>();
+		ArrayList<Calendar> startDates = new ArrayList<Calendar>();
+		ArrayList<Calendar> endDates = new ArrayList<Calendar>();
+		Integer taskNumber; 
+		
+		inputLine = inputLine.replaceFirst("update", "").trim();
+		taskNumber = extractTaskNumber(inputLine);
+		System.out.println(inputLine);
+		System.out.println(taskNumber);
+		//natty library to extract dates
+		List<DateGroup> groups = dateParser.parse(inputLine);
 
-		updateTaskNumber = (Integer.valueOf(separateInputLine[1]));
+		for(DateGroup group:groups) {
+			List<Date> dates = group.getDates();
 
-		if (separateInputLine[2].contains("-")) {
-			if (separateInputLine[2].contains("@")){
-				System.out.println("Comes in remove location");
-				//remove location
+			if (dates.size() == 2){
+				for (int i=0;i<dates.size()-1;i+=2){
+					startDate = dateToCalendar(dates.get(i));
+					endDate = dateToCalendar(dates.get(i+1));
+					
+					if (startDate.after(endDate)) {
+						Calendar temp = endDate;
+						endDate = startDate;
+						startDate = temp;
+					}
+					
+					startDates.add(startDate);
+					endDates.add(endDate);
+				}
+				
+				for (int i=0;i<startDates.size();i++){
+					System.out.println(startDates.get(i).getTime());
+				}
+				
+			
+				if (group.isTimeInferred()) {
+					setStartDateTimeDefault(startDate);
+					setEndDateTimeDefault(endDate);
+				}	
 			}
 
-			else if (separateInputLine[2].contains("#")){
-				System.out.println("Comes in remove hashtags");
-				//remove hashtag
+			if (inputLine.contains(group.getText())){
+				inputLine = inputLine.replace(group.getText(), "");
 			}
 		}
 
-		else if (separateInputLine[2].contains("@")){
-			System.out.println("comes in add new location");
-		}
+		tagLists = findHashTags(inputLine);	
 
-		else if (separateInputLine[2].contains("#")){
-			System.out.println("comes in add new location");
-		}
+		location = findLocation(inputLine);
 
+		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 
-		else {
-			for (int i = 2; i<separateInputLine.length; i++){
-				taskDescription += separateInputLine[i] + " ";
-			}
-
-			taskDescription = taskDescription.substring(4,taskDescription.length());
-			isTaskDescription = true;
-		}
-
-		Command update = new CommandUpdate(updateTaskNumber, taskDescription);
-		return update;
+		return new CommandUpdate();
 	}
-*/
+	*/
+
+
+
+	public Integer extractTaskNumber(String inputLine) {
+		Integer taskNumber;
+		String[] splitInputLine = inputLine.split(" ");
+		return Integer.valueOf(splitInputLine[0]);
+	}
+
 
 	public Command parseReserve(String inputLine) {
 		Calendar startDate = null;
@@ -253,14 +281,12 @@ public class JListeeParser{
 
 		inputLine = inputLine.replaceFirst("reserve", "").trim();
 
-		System.out.println(inputLine);
 
 		//natty library to extract dates
 		List<DateGroup> groups = dateParser.parse(inputLine);
 
 		for(DateGroup group:groups) {
 			List<Date> dates = group.getDates();
-			System.out.println(dates.toString());
 			/*has start date and end date, event task*/
 
 			if (dates.size() >= 2){
@@ -279,6 +305,7 @@ public class JListeeParser{
 					endDates.add(endDate);
 				}
 				
+		
 			
 				if (group.isTimeInferred()) {
 					setStartDateTimeDefault(startDate);
