@@ -8,7 +8,7 @@ import History.History;
 
 public class CommandShow implements Command {
     private final String message_no_tasks = "No such tasks found";
-    private final String message_show = "Showing tasks containing ";
+    private final String message_show = "Displaying tasks containing ";
     private boolean updateFile = false;
     private boolean saveHistory = true;
     private String keyword;
@@ -31,7 +31,7 @@ public class CommandShow implements Command {
     public Display execute(Display oldDisplay) {
         if (keyword == null) {
             newDisplay = History.getDisplay(0);
-            newDisplay.setMessage("Pls enter keyword");
+            newDisplay.setMessage("Displaying all tasks");
             return newDisplay;
         }
 
@@ -42,7 +42,7 @@ public class CommandShow implements Command {
         if (count == 0) {
             newDisplay = new Display(message_no_tasks);
         } else {
-            newDisplay.setMessage(message_show);;
+            newDisplay.setMessage(message_show+keyword);;
         }
 
         return newDisplay;
