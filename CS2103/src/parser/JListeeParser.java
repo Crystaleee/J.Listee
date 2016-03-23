@@ -116,7 +116,6 @@ public class JListeeParser{
 		case COMMAND_SHOW:
 			return parseShow(inputLine);
 						
-
 	/*	case COMMAND_RESERVE:
 			return parseReserve(separateInputLine);
 
@@ -124,7 +123,7 @@ public class JListeeParser{
 			return parseUpdate(separateInputLine);
 
 			 */
-		default :
+		default : 
 			return parseInvalid();
 		}
 	}
@@ -134,6 +133,7 @@ public class JListeeParser{
 		Calendar endDate = null;
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
+		String taskDescription = null;
 
 		inputLine = inputLine.replaceFirst("show", "").trim();
 
@@ -181,8 +181,9 @@ public class JListeeParser{
 
 		location = findLocation(inputLine);
 
-		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-
+		if (!inputLine.contains("all")){
+		 taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+		}
 		return new CommandShow(taskDescription);
 
 	}
