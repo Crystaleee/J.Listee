@@ -59,9 +59,9 @@ public class Storage {
 		return storageInstance;
 	}
 
-	private void initializeFilePath() throws IOException {
-		filePath = LogStorage.readLogFile();
-	}
+//	private void initializeFilePath() throws IOException {
+//		filePath = LogStorage.readLogFile();
+//	}
 	
 	private void setFilePath(String filepath) {
 		filePath = filepath;
