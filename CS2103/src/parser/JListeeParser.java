@@ -56,7 +56,7 @@ public class JListeeParser{
 
 
 
- public static void main(String[] separateInputLine){ // for testing
+ /*public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
 			logger.addHandler(fh);
@@ -96,7 +96,7 @@ public class JListeeParser{
 		testUpdateTask.ParseCommand("update 2 what @location -@deletelocation #hashtag -#deleteHashtag "); 
 	} 
 
-
+*/
 
 	public Command ParseCommand(String inputLine){
 
@@ -305,11 +305,6 @@ public class JListeeParser{
 					endDates.add(endDate);
 				}
 				
-<<<<<<< HEAD
-		
-			
-=======
->>>>>>> 5219d24f7ba30f88b7ab9bff185ad281da767fd5
 				if (group.isTimeInferred()) {
 					setStartDateTimeDefault(startDate);
 					setEndDateTimeDefault(endDate);
