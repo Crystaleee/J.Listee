@@ -52,7 +52,19 @@ public class CommandShow implements Command {
         getFloatTasks();
         getEventTasks();
         getDeadLineTasks();
+        getReservedTasks();
         return newDisplay;
+    }
+    
+    private void getReservedTasks() {
+        TaskReserved task;
+        for (int i = 0; i < oldDisplay.getReservedTasks().size(); i++) {
+            task = oldDisplay.getReservedTasks().get(i);
+            if(task.getDescription().toLowerCase().contains(keyword)){
+                newDisplay.getReservedTasks().add(task);
+                count++;
+            }
+        }
     }
     
     private void getDeadLineTasks() {

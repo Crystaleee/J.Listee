@@ -1,15 +1,27 @@
-Mar 24, 2016 11:26:38 AM storage.Storage saveFile
-INFO: Writing all tasks to file.
+Mar 24, 2016 12:01:34 PM storage.Storage getDisplay
+INFO: Reading all tasks from file.
 
-Mar 24, 2016 11:26:38 AM storage.Storage writeDeadlineTasks
-INFO: Writing deadline to file.
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksDeadline
+INFO: Reading new deadline task.
 
-Mar 24, 2016 11:26:38 AM storage.Storage writeEventTasks
-INFO: Writing Event Test to file.
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksDeadline
+INFO: Successfully read: deadline
 
-Mar 24, 2016 11:26:38 AM storage.Storage writeReservedTasks
-INFO: Writing blah to file.
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksEvents
+INFO: Reading new event.
 
-Mar 24, 2016 11:26:38 AM storage.Storage writeReservedTasks
-INFO: Writing another test to file.
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksEvents
+INFO: Successfully read: Event Test
+
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksReserved
+INFO: Reading new reserved task.
+
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksReserved
+INFO: Successfully read: blah
+
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksReserved
+INFO: Reading new reserved task.
+
+Mar 24, 2016 12:01:34 PM storage.Storage readTasksReserved
+INFO: Successfully read: another test
 
