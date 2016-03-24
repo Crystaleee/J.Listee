@@ -41,9 +41,7 @@ public class JListeeParser{
 	private static final int DEFAULT_END_MINUTE = 59;
 	private static final int DEFAULT_END_SECOND = 0;
 	private static final int DEFAULT_END_MILLISECOND = 0;
-	private static final int DAYS_IN_WEEK = 7;
-	private static final int DESC_NO_OR = 1;
-	private static final int NO_DATE_PARSED = -1;
+
 
 
 	private static Logger logger = Logger.getGlobal();
@@ -56,7 +54,7 @@ public class JListeeParser{
 
 
 
- /*public static void main(String[] separateInputLine){ // for testing
+/* public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
 			logger.addHandler(fh);
@@ -90,13 +88,13 @@ public class JListeeParser{
 		testShow.ParseCommand("show hiiiiii 23rd march 2016 to 12/4/16 #hihi @location ");
 		
 		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm");
+		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 what @location -@deletelocation #hashtag -#deleteHashtag "); 
+		testUpdateTask.ParseCommand("update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "); 
 	} 
-
 */
+
 
 	public Command ParseCommand(String inputLine){
 
@@ -173,10 +171,7 @@ public class JListeeParser{
 				}
 			} 
 
-			/*remove group of dates from inputLine*/
-			if (inputLine.contains(group.getText())){
-				inputLine = inputLine.replace(group.getText(), "");
-			}
+			inputLine = removeDateFromInputLine(inputLine, group);
 		}
 
 		tagLists = findHashTags(inputLine);	
@@ -202,70 +197,139 @@ public class JListeeParser{
 		return new CommandUndo();
 	}
 
-/*	public Command parseUpdate(String inputLine) {
+	public Command parseUpdate(String inputLine) {
 		Calendar startDate = null;
 		Calendar endDate = null;
 		String location = null;
+		String taskDescription = null;
+		ArrayList<String> removeTagLists = new ArrayList<String>();
 		ArrayList<String> tagLists = new ArrayList<String>();
-		ArrayList<Calendar> startDates = new ArrayList<Calendar>();
-		ArrayList<Calendar> endDates = new ArrayList<Calendar>();
 		Integer taskNumber; 
-		
+		System.out.println(inputLine);
 		inputLine = inputLine.replaceFirst("update", "").trim();
 		taskNumber = extractTaskNumber(inputLine);
-		System.out.println(inputLine);
-		System.out.println(taskNumber);
+		
+		if (inputLine.contains(String.valueOf(taskNumber))){
+			inputLine = inputLine.replace(String.valueOf(taskNumber), "").trim();		
+		}
 		//natty library to extract dates
+		if (inputLine.contains("-")){
+
+			List<DateGroup> groups = dateParser.parse(inputLine);
+
+			for(DateGroup group:groups) {
+				List<Date> dates = group.getDates();
+	
+				if (dates.size() == 2){
+					for (int i=0;i<dates.size()-1;i+=2){
+						startDate = dateToCalendar(dates.get(i));
+						startDate.setTimeInMillis(0);
+						endDate = dateToCalendar(dates.get(i+1));
+						endDate.setTimeInMillis(0);
+						
+						//swap dates if start after end date
+						if (startDate.after(endDate)) {
+							Calendar temp = endDate;
+							endDate = startDate;
+							startDate = temp;
+						}
+
+					}
+					
+				}
+				
+				else if (dates.size() == 1){
+					endDate = dateToCalendar(dates.get(0));
+					endDate.setTimeInMillis(0);
+				} 
+
+				inputLine = removeRemoveDateFromInputLine(inputLine, group);
+				
+			}
+			
+			removeTagLists = findHashTags(inputLine);	
+			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
+
+		}
+		
 		List<DateGroup> groups = dateParser.parse(inputLine);
 
 		for(DateGroup group:groups) {
 			List<Date> dates = group.getDates();
+			/*has start date and end date, event task*/
 
 			if (dates.size() == 2){
 				for (int i=0;i<dates.size()-1;i+=2){
 					startDate = dateToCalendar(dates.get(i));
 					endDate = dateToCalendar(dates.get(i+1));
 					
+					/* Swap date if necessary */
 					if (startDate.after(endDate)) {
 						Calendar temp = endDate;
 						endDate = startDate;
 						startDate = temp;
 					}
-					
-					startDates.add(startDate);
-					endDates.add(endDate);
 				}
 				
-				for (int i=0;i<startDates.size();i++){
-					System.out.println(startDates.get(i).getTime());
-				}
-				
-			
 				if (group.isTimeInferred()) {
 					setStartDateTimeDefault(startDate);
 					setEndDateTimeDefault(endDate);
 				}	
 			}
+			
+			else if (dates.size() == 1){
+				endDate = dateToCalendar(dates.get(0));
 
-			if (inputLine.contains(group.getText())){
-				inputLine = inputLine.replace(group.getText(), "");
-			}
+				/*set default end date if no time specified*/
+				if (group.isTimeInferred()) {
+					setEndDateTimeDefault(endDate);
+				}
+			} 
+
+			inputLine = removeDateFromInputLine(inputLine, group).trim();
 		}
-
+		
 		tagLists = findHashTags(inputLine);	
-
 		location = findLocation(inputLine);
+		
 
-		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-
-		return new CommandUpdate();
+		taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	}
-	*/
+
+
+
+	private String removeRemoveDateFromInputLine(String inputLine, DateGroup group) {
+		if (inputLine.contains(group.getText())){
+			inputLine = inputLine.replace("-" + group.getText(), "");
+		}
+		return inputLine;
+	}
+
+
+
+	public String trimInputLineWithoutRemoveHashTags(String inputLine,	ArrayList<String> removeTagLists) {
+		
+		for (int i =0;i<removeTagLists.size(); i++){
+			 inputLine = inputLine.replace("-#" + removeTagLists.get(i), "").trim();
+		}
+		
+		return inputLine;
+	}
+
+
+
+	public String removeDateFromInputLine(String inputLine, DateGroup group) {
+		if (inputLine.contains(group.getText())){
+			inputLine = inputLine.replace(group.getText(), "");
+		}
+		return inputLine;
+	}
+	
 
 
 
 	public Integer extractTaskNumber(String inputLine) {
-		Integer taskNumber;
 		String[] splitInputLine = inputLine.split(" ");
 		return Integer.valueOf(splitInputLine[0]);
 	}
@@ -311,10 +375,7 @@ public class JListeeParser{
 				}	
 			}
 
-			/*remove group of dates from inputLine*/
-			if (inputLine.contains(group.getText())){
-				inputLine = inputLine.replace(group.getText(), "");
-			}
+			inputLine = removeDateFromInputLine(inputLine, group);
 		}
 
 		tagLists = findHashTags(inputLine);	
@@ -394,10 +455,7 @@ public class JListeeParser{
 				}
 			} 
 
-			/*remove group of dates from inputLine*/
-			if (inputLine.contains(group.getText())){
-				inputLine = inputLine.replace(group.getText(), "");
-			}
+			inputLine = removeDateFromInputLine(inputLine, group);
 		}
 
 		tagLists = findHashTags(inputLine);	
@@ -419,10 +477,12 @@ public class JListeeParser{
 	}
 
 	public String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
-		for (int i =0;i <tagLists.size(); i++){
-			inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
+		if (tagLists != null){
+			for (int i =0;i <tagLists.size(); i++){
+				inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
+			}
 		}
-
+		
 		inputLine = inputLine.replace("@" + location, "").trim();
 		inputLine = inputLine.replace("(", "").replace(")", "").replace("@", "");
 
@@ -441,10 +501,23 @@ public class JListeeParser{
 
 	public ArrayList<String> findHashTags(String inputLine) {
 		ArrayList<String> tags = new ArrayList<String>();
-		Matcher retrieveHashTags = Pattern.compile("#\\s*(\\w+)").matcher(inputLine);
+		Matcher retrieveHashTags; 
 
-		while (retrieveHashTags.find()) {
-			tags.add(retrieveHashTags.group(1));
+		if (inputLine.contains("-")){
+			retrieveHashTags = Pattern.compile("-#\\s*(\\w+)").matcher(inputLine);
+			while (retrieveHashTags.find()) {
+				tags.add(retrieveHashTags.group(1));
+			}
+		
+		}
+		
+	
+		else {
+			retrieveHashTags = Pattern.compile("#\\s*(\\w+)").matcher(inputLine);
+
+			while (retrieveHashTags.find()) {
+				tags.add(retrieveHashTags.group(1));
+			}
 		}
 
 		return tags;
