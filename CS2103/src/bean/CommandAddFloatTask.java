@@ -31,6 +31,12 @@ public class CommandAddFloatTask implements Command {
             //return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
         task.setDescription(task.getDescription().trim());
+        if(task.getDescription().isEmpty()){
+            updateFile = false;
+            saveHistory = false;
+            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
+            return display;
+        }
         display.getFloatTasks().add(task);
         display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
         return display;
