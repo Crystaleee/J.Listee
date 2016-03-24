@@ -435,7 +435,7 @@ public class JListeeParser{
 					endDate = startDate;
 					startDate = temp;
 				}
-
+				
 				if (group.isTimeInferred()) {
 					setStartDateTimeDefault(startDate);
 					setEndDateTimeDefault(endDate);
