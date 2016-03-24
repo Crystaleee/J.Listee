@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import bean.Display;
 import bean.Task;
 import bean.TaskDeadline;
+import bean.TaskReserved;
 import bean.TaskEvent;
 import bean.TaskFloat;
 import javafx.beans.value.ObservableValue;
@@ -91,8 +92,7 @@ public class ShowList extends AppPage {
 							}
 							win.call("addTasks", jsonEvent,"event");
 							System.out.println(jsonEvent);
-						}
-						
+						}				
 						
 						//floating tasks
 						if(this.display.getFloatTasks()!=null){
@@ -107,6 +107,35 @@ public class ShowList extends AppPage {
 							win.call("addTasks", jsonFloating,"floating");
 							System.out.println(jsonFloating);
 						}
+						
+						//reserved tasks
+						if(this.display.getReservedTasks()!=null){
+							List<TaskReserved> reservations=this.display.getReservedTasks();
+							JSONArray jsonReserved = new JSONArray();
+							for (TaskReserved reserved: reservations) {
+								JSONObject  task= new JSONObject(reserved);
+								System.out.println(task);
+								task.remove("startDates");
+								task.remove("endDates");
+								for(int i=0;i<reserved.getStartDates().size();i++){
+									task.append("startDates",
+											new SimpleDateFormat(
+													"yy-MM-dd HH:mm")
+													.format( reserved
+															.getStartDates().get(i)
+															.getTime()));
+									task.append("endDates",
+											new SimpleDateFormat(
+													"yy-MM-dd HH:mm")
+													.format( reserved.getEndDates().get(i)
+															.getTime()));
+								}						
+								jsonReserved.put(task);
+							}
+							System.out.println(jsonReserved);
+							win.call("addReservedTask", jsonReserved);							
+						}
+						
 						if( this.display.getMessage()!=null)
 							win.call("showFeedBack", this.display.getMessage());
 					}
