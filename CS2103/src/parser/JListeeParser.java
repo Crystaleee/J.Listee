@@ -1,12 +1,10 @@
 package parser;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -510,7 +508,6 @@ public class JListeeParser{
 			}
 		
 		}
-		
 	
 		else {
 			retrieveHashTags = Pattern.compile("#\\s*(\\w+)").matcher(inputLine);
