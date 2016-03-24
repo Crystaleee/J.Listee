@@ -23,23 +23,19 @@ import bean.TaskReserved;
 
 public class StorageTest {
 
-	ArrayList<String> tags = new ArrayList<>(Arrays.asList("tag1, tag2"));
-	Calendar date = Calendar.getInstance();
-
-	TaskFloat floatTask = new TaskFloat("Test Floating", "NUS", tags);
-	TaskDeadline deadlineTask = new TaskDeadline("Test Deadline", "NUS", date, tags);
-	TaskEvent eventTask = new TaskEvent("Test Event", "NUS", date, date, tags);
-
 	Storage storage = Storage.getInstance();
 	Display display;
 
-	@Before
-	public void prepareTextFileForTests() throws IOException {
-		storage.createFile("src\\storage\\tests\\test.txt");
-	}
-
+	/* Creates a display to be used for the unit tests */
 	@Before
 	public void setUpDisplay() {
+		ArrayList<String> tags = new ArrayList<>(Arrays.asList("tag1, tag2"));
+		Calendar date = Calendar.getInstance();
+
+		TaskFloat floatTask = new TaskFloat("Test Floating", "NUS", tags);
+		TaskDeadline deadlineTask = new TaskDeadline("Test Deadline", "NUS", date, tags);
+		TaskEvent eventTask = new TaskEvent("Test Event", "NUS", date, date, tags);
+
 		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
 		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
 		ArrayList<TaskEvent> eventTasks = new ArrayList<TaskEvent>();
@@ -58,6 +54,11 @@ public class StorageTest {
 		display = new Display("", eventTasks, deadlineTasks, floatTasks, reservedTasks, completedTasks);
 	}
 
+	@Before
+	public void prepareTextFileForTests() throws IOException {
+		storage.createFile("src\\storage\\tests\\test.txt");
+	}
+
 	/* This is a case for the successful createFile() partition */
 	@Test
 	public void testfileExists() {
@@ -65,10 +66,13 @@ public class StorageTest {
 		assertTrue(file.exists());
 	}
 
-	/* This is a case for what createFile() doesn't create partition */
+	/*
+	 * This is a case for the createFile() partition proving that it creates a
+	 * file in the correct location
+	 */
 	@Test
-	public void testFileDoesNotExist() {
-		File file = new File("invalid.txt");
+	public void testfileLocation() {
+		File file = new File("src\\storage\\test.txt");
 		assertFalse(file.exists());
 	}
 
@@ -78,8 +82,11 @@ public class StorageTest {
 		storage.saveFile(display);
 		assertEquals(display.toString(), storage.getDisplay(storage.filePath).toString());
 	}
-	
-	/* This is a case for the reading from a file with empty descriptions partition */
+
+	/*
+	 * This is a case for the reading from a file with empty descriptions
+	 * partition
+	 */
 	@Test
 	public void testReadEmptyDescription() throws IOException {
 		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDescriptionTest.txt");
@@ -92,7 +99,10 @@ public class StorageTest {
 		assertEquals("undefined", emptyDeadline.get(0).getDescription());
 		assertEquals("undefined", emptyEvent.get(0).getDescription());
 	}
-	/* This is a case for the reading from a file with empty locations partition */
+
+	/*
+	 * This is a case for the reading from a file with empty locations partition
+	 */
 	@Test
 	public void testReadEmptyLocation() throws IOException {
 		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyLocationTest.txt");
@@ -122,7 +132,9 @@ public class StorageTest {
 		assertEquals(emptyTagList, emptyEvent.get(0).getTags());
 	}
 
-	/* This is a case for the reading from a file with empty deadlines partition */
+	/*
+	 * This is a case for the reading from a file with empty deadlines partition
+	 */
 	@Test
 	public void testReadEmptyDeadline() throws IOException {
 		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDeadlineTest.txt");
