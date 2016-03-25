@@ -26,7 +26,7 @@ public class WelcomeAndChooseStorage extends AppPage {
 	public class WelcomeBridge {
 
 		public void chooseFolder()  {
-			JFileChooser fileChooser = new JFileChooser("D:\\");
+			JFileChooser fileChooser = new JFileChooser("");
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = fileChooser.showOpenDialog(fileChooser);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {				

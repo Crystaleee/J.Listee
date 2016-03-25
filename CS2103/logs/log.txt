@@ -1,15 +1,9 @@
-Mar 24, 2016 12:38:08 PM storage.Storage saveFile
-INFO: Writing all tasks to file.
+三月 25, 2016 5:53:22 下午 storage.Storage saveFile
+信息: Writing all tasks to file.
 
-Mar 24, 2016 12:38:08 PM storage.Storage writeDeadlineTasks
-INFO: Writing Deadline Test to file.
+三月 25, 2016 5:53:22 下午 storage.Storage writeFloatingTasks
+信息: Writing my first task to file.
 
-Mar 24, 2016 12:38:08 PM storage.Storage writeEventTasks
-INFO: Writing Event Test to file.
-
-Mar 24, 2016 12:38:08 PM storage.Storage writeReservedTasks
-INFO: Writing blah to file.
-
-Mar 24, 2016 12:38:08 PM storage.Storage writeReservedTasks
-INFO: Writing another test to file.
+三月 25, 2016 5:53:22 下午 storage.Storage writeFloatingTasks
+信息: Writing second to file.
 

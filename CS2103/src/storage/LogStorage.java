@@ -17,7 +17,7 @@ import java.io.OutputStreamWriter;
  */
 public class LogStorage {
 	  //this is the log file path, storing the location of the task file
-		public static String logFile="D:\\J.Listee.log";
+		public static String logFile="logs\\J.Listee.log";
 		
 		
 	/**
