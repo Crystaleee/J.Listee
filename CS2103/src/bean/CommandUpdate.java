@@ -63,7 +63,6 @@ public class CommandUpdate extends TaskEvent implements Command {
                 editEvent();
             } else {
                 taskNumber -= display.getEventTasks().size();
-                System.out.println("2");
                 editFloat();
             }
         }
@@ -118,25 +117,28 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editFloat() {
-        TaskFloat task = display.getFloatTasks().remove(taskNumber - 1);
+        TaskFloat task = display.getFloatTasks().get(taskNumber - 1);
         message += task.getDescription() + "\"";
         task = (TaskFloat) editDescription(task);
         task = (TaskFloat) editLocation(task);
         task = (TaskFloat) editTags(task);
-        changeFloatTaskType(task);
+        if(changeFloatTaskType(task)){
+            display.getFloatTasks().remove(taskNumber - 1);
+        }
     }
 
     private Task editTags(Task task) {
+        if (removeTags != null) {
+            for (int i = 0; i < removeTags.size(); i++) {
+                String tag = removeTags.get(i);
+                task.getTags().remove(tag);
+            }
+        }
+
         if (getTags() != null) {
             for (int i = 0; i < getTags().size(); i++) {
                 String tag = getTags().get(i);
                 task.getTags().add(tag);
-            }
-        }
-        if (removeTags != null) {
-            for (int i = 0; i < getTags().size(); i++) {
-                String tag = removeTags.get(i);
-                task.getTags().remove(tag);
             }
         }
         return task;
@@ -167,7 +169,9 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private Task editLocation(Task task) {
         if (getLocation() != null) {
-            task.setLocation(getLocation());
+            if(!getLocation().trim().isEmpty()){
+                task.setLocation(getLocation().trim());
+            }
         }
         return task;
     }
@@ -175,7 +179,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private Task editDescription(Task task) {
         if (getDescription() != null) {
             if(!getDescription().trim().isEmpty()){
-                task.setDescription(getDescription());
+                task.setDescription(getDescription().trim());
             }
         }
         return task;
@@ -208,7 +212,8 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    private void changeFloatTaskType(TaskFloat task) {
+    
+    private boolean changeFloatTaskType(TaskFloat task) {
         boolean hasTaskChanged = false;
         if ((getStartDate() != null) && (getEndDate() != null)) {
             if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
@@ -228,13 +233,7 @@ public class CommandUpdate extends TaskEvent implements Command {
                 hasTaskChanged = true;
             }
         }
-
-        if (!hasTaskChanged) {
-            System.out.println("nochange");
-            Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
-                    task.getTags());
-            display = addCommand.execute(display);
-        }
+        return hasTaskChanged;
     }
 
     public boolean getSaveHistory() {
