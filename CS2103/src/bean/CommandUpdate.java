@@ -43,7 +43,7 @@ public class CommandUpdate extends TaskEvent implements Command {
             saveHistory = false;
             display.setMessage(message_invalid_task_number);
             return display;
-            //return (new Display(message_invalid_task_number));
+            // return (new Display(message_invalid_task_number));
         }
         editTask();
         display.setMessage(message);
@@ -63,7 +63,13 @@ public class CommandUpdate extends TaskEvent implements Command {
                 editEvent();
             } else {
                 taskNumber -= display.getEventTasks().size();
-                editFloat();
+                if (taskNumber <= display.getFloatTasks().size()) {
+                    editFloat();
+                }
+                else{
+                    taskNumber -= display.getFloatTasks().size();
+                    editReserved();
+                }
             }
         }
     }
@@ -76,6 +82,37 @@ public class CommandUpdate extends TaskEvent implements Command {
         task = (TaskDeadline) editTags(task);
         task = editEndDate(task);
         changeDeadlineTaskType(task);
+    }
+
+    private void editEvent() {
+        TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
+        message += task.getDescription() + "\"";
+        task = (TaskEvent) editDescription(task);
+        task = (TaskEvent) editLocation(task);
+        task = (TaskEvent) editTags(task);
+        task = editStartDate(task);
+        task = editEndDate(task);
+        changeEventTaskType(task);
+    }
+
+    private void editFloat() {
+        TaskFloat task = display.getFloatTasks().get(taskNumber - 1);
+        message += task.getDescription() + "\"";
+        task = (TaskFloat) editDescription(task);
+        task = (TaskFloat) editLocation(task);
+        task = (TaskFloat) editTags(task);
+        if (hasChangeFloatTaskType(task)) {
+            display.getFloatTasks().remove(taskNumber - 1);
+        }
+    }
+    
+    private void editReserved() {
+        TaskReserved task = display.getReservedTasks().get(taskNumber - 1);
+        message += task.getDescription() + "\"";
+        task = (TaskReserved) editDescription(task);
+        task = (TaskReserved) editLocation(task);
+        task = (TaskReserved) editTags(task);
+        
     }
 
     private void changeDeadlineTaskType(TaskDeadline task) {
@@ -102,28 +139,6 @@ public class CommandUpdate extends TaskEvent implements Command {
             Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                     task.getEndDate(), task.getTags());
             display = addCommand.execute(display);
-        }
-    }
-
-    private void editEvent() {
-        TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
-        message += task.getDescription() + "\"";
-        task = (TaskEvent) editDescription(task);
-        task = (TaskEvent) editLocation(task);
-        task = (TaskEvent) editTags(task);
-        task = editStartDate(task);
-        task = editEndDate(task);
-        changeEventTaskType(task);
-    }
-
-    private void editFloat() {
-        TaskFloat task = display.getFloatTasks().get(taskNumber - 1);
-        message += task.getDescription() + "\"";
-        task = (TaskFloat) editDescription(task);
-        task = (TaskFloat) editLocation(task);
-        task = (TaskFloat) editTags(task);
-        if(changeFloatTaskType(task)){
-            display.getFloatTasks().remove(taskNumber - 1);
         }
     }
 
@@ -169,7 +184,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private Task editLocation(Task task) {
         if (getLocation() != null) {
-            if(!getLocation().trim().isEmpty()){
+            if (!getLocation().trim().isEmpty()) {
                 task.setLocation(getLocation().trim());
             }
         }
@@ -178,7 +193,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private Task editDescription(Task task) {
         if (getDescription() != null) {
-            if(!getDescription().trim().isEmpty()){
+            if (!getDescription().trim().isEmpty()) {
                 task.setDescription(getDescription().trim());
             }
         }
@@ -212,8 +227,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    
-    private boolean changeFloatTaskType(TaskFloat task) {
+    private boolean hasChangeFloatTaskType(TaskFloat task) {
         boolean hasTaskChanged = false;
         if ((getStartDate() != null) && (getEndDate() != null)) {
             if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
