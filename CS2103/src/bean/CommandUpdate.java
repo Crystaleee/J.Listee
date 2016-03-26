@@ -1,6 +1,6 @@
 /*
  * Written by Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 21 Mar, 11:00pm
+ * Last updated: 27 Mar, 2:22am
  */
 package bean;
 
@@ -161,7 +161,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private TaskEvent editStartDate(TaskEvent task) {
         if (getStartDate() != null) {
-            task.setStartDate(getEndDate());
+            task.setStartDate(getStartDate());
         }
         return task;
     }
@@ -184,9 +184,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private Task editLocation(Task task) {
         if (getLocation() != null) {
-            if (!getLocation().trim().isEmpty()) {
-                task.setLocation(getLocation().trim());
-            }
+            task.setLocation(getLocation().trim());
         }
         return task;
     }
@@ -236,14 +234,14 @@ public class CommandUpdate extends TaskEvent implements Command {
                 display = addCommand.execute(display);
                 hasTaskChanged = true;
             }
-        }
-        if (getEndDate() != null) {
-            if (getEndDate().getTimeInMillis() != 0) {
-                //System.out.println("DL");
-                Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
-                        getEndDate(), task.getTags());
-                display = addCommand.execute(display);
-                hasTaskChanged = true;
+        }else{
+            if (getEndDate() != null) {
+                if (getEndDate().getTimeInMillis() != 0) {
+                    Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                            getEndDate(), task.getTags());
+                    display = addCommand.execute(display);
+                    hasTaskChanged = true;
+                }
             }
         }
         return hasTaskChanged;
