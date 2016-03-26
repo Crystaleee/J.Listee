@@ -89,6 +89,7 @@ public class CommandDelete implements Command {
 				if (taskNum < display.getFloatTasks().size()) {
 					deletedTask = display.getFloatTasks().remove(taskNum);
 				} else {
+	                taskNum -= display.getFloatTasks().size();
 					deletedTask = display.getReservedTasks().remove(taskNum);
 				}
 			}
