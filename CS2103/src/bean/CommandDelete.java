@@ -51,30 +51,42 @@ public class CommandDelete implements Command {
 		int taskNum;
 		for (int i = 0; i < taskNumbers.size(); i++) {
 			taskNum = taskNumbers.get(i);
-			if ((taskNum > numOfTasks) || (taskNum < 1)) {
-				if (invalidTaskNumbers.size() == 0) {
-					message_invalid_task_numbers += taskNum;
-				} else {
-					message_invalid_task_numbers += ", " + taskNum;
-				}
+			if (isTaskNumberInvalid(numOfTasks, taskNum)) {
+				feedbackInvalidNumbers(invalidTaskNumbers, taskNum);
 				invalidTaskNumbers.add(taskNum);
 			}
 		}
 		return (invalidTaskNumbers.size() > 0);
 	}
 
+    private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
+        if (invalidTaskNumbers.size() == 0) {
+        	message_invalid_task_numbers += taskNum;
+        } else {
+        	message_invalid_task_numbers += ", " + taskNum;
+        }
+    }
+
+    private boolean isTaskNumberInvalid(int numOfTasks, int taskNum) {
+        return (taskNum > numOfTasks) || (taskNum < 1);
+    }
+
 	private void deleteTasksFromList() {
 		Task deletedTask;
 		for (int i = 0; i < taskNumbers.size(); i++) {
 			deletedTask = removeTask(taskNumbers.get(i) - 1 - i);
-			if (i == 0) {
-				deletedMessage += "\"" + deletedTask.getDescription() + "\"";
-			} else {
-				deletedMessage += ", \"" + deletedTask.getDescription() + "\"";
-			}
+			feedbackDeletedTasks(deletedTask, i);
 		}
 		return;
 	}
+
+    private void feedbackDeletedTasks(Task deletedTask, int i) {
+        if (i == 0) {
+        	deletedMessage += "\"" + deletedTask.getDescription() + "\"";
+        } else {
+        	deletedMessage += ", \"" + deletedTask.getDescription() + "\"";
+        }
+    }
 
 	private Task removeTask(int taskNum) {
 		Task deletedTask;

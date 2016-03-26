@@ -231,7 +231,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         boolean hasTaskChanged = false;
         if ((getStartDate() != null) && (getEndDate() != null)) {
             if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
-                System.out.println("Event");
+                //System.out.println("Event");
                 Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                         getStartDate(), getEndDate(), task.getTags());
                 display = addCommand.execute(display);
@@ -240,7 +240,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
         if (getEndDate() != null) {
             if (getEndDate().getTimeInMillis() != 0) {
-                System.out.println("DL");
+                //System.out.println("DL");
                 Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                         getEndDate(), task.getTags());
                 display = addCommand.execute(display);

@@ -27,7 +27,8 @@ public class CommandAddReserved implements Command{
         if (task.getDescription() == null) {
             updateFile = false;
             saveHistory = false;
-            return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
+            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
+            return display;
         }
         task.setDescription(task.getDescription().trim());
         if(task.getDescription().isEmpty()){
@@ -42,7 +43,7 @@ public class CommandAddReserved implements Command{
         return display;
     }
 
-    public ArrayList<TaskReserved> addReservedTask(ArrayList<TaskReserved> taskList) {
+    private ArrayList<TaskReserved> addReservedTask(ArrayList<TaskReserved> taskList) {
         int index = getIndex(taskList);
         taskList.add(index, task);
         return taskList;
@@ -53,7 +54,7 @@ public class CommandAddReserved implements Command{
      * are sorting the list in order of earliest start date of the first time
      * slot.
      */
-    public int getIndex(ArrayList<TaskReserved> taskList) {
+    private int getIndex(ArrayList<TaskReserved> taskList) {
         int i = 0;
         Calendar addedTaskStartDate = task.getStartDates().get(0);
         for (i = 0; i < taskList.size(); i++) {
