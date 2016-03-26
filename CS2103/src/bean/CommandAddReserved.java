@@ -29,6 +29,13 @@ public class CommandAddReserved implements Command{
             saveHistory = false;
             return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
+        task.setDescription(task.getDescription().trim());
+        if(task.getDescription().isEmpty()){
+            updateFile = false;
+            saveHistory = false;
+            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
+            return display;
+        }
         ArrayList<TaskReserved> reservedTasks = addReservedTask(display.getReservedTasks());
         display.setReservedTasks(reservedTasks);
         display.setMessage("Reserved: " + task.getDescription());

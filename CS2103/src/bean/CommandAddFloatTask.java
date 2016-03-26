@@ -30,6 +30,7 @@ public class CommandAddFloatTask implements Command {
             return display;
             //return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
         }
+        
         task.setDescription(task.getDescription().trim());
         if(task.getDescription().isEmpty()){
             updateFile = false;

@@ -174,7 +174,9 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private Task editDescription(Task task) {
         if (getDescription() != null) {
-            task.setDescription(getDescription());
+            if(!getDescription().trim().isEmpty()){
+                task.setDescription(getDescription());
+            }
         }
         return task;
     }
