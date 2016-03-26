@@ -4,13 +4,14 @@
  */
 package bean;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandShow implements Command {
     private final String message_no_tasks = "No such tasks found";
     private final String message_show_all = "Displaying all tasks";
-    private final String message_show = "Displaying tasks containing ";
+    private String message_show = "Displaying tasks";
     private boolean updateFile = false;
     private boolean saveHistory = true;
     private TaskEvent searchedTask;
@@ -33,13 +34,17 @@ public class CommandShow implements Command {
 
     public CommandShow(String keyword, String location, Calendar start, Calendar end,
             ArrayList<String> tags) {
-        searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
-                tags);
+        searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), 
+                start, end, tags);
         newDisplay = new Display();
         count = 0;
     }
 
     public Display execute(Display oldDisplay) {
+        if(showAll()){
+            oldDisplay.setMessage(message_show_all);
+            return oldDisplay;
+        }
         this.oldDisplay = oldDisplay;
 
         newDisplay = getTasksContainingKeyword();
@@ -47,13 +52,51 @@ public class CommandShow implements Command {
         if (count == 0) {
             newDisplay = new Display(message_no_tasks);
         } else {
-            newDisplay.setMessage(message_show + searchedTask.getDescription());
-        }
-        if(searchedTask.getDescription().isEmpty()){
-            newDisplay.setMessage(message_show_all);
+            newDisplay.setMessage(getFeedback());
         }
 
         return newDisplay;
+    }
+    
+    private boolean showAll(){
+        if(searchedTask.getDescription().isEmpty()){
+            if(searchedTask.getLocation().isEmpty()){
+                if((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)){
+                    if(searchedTask.getTags().isEmpty()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private String getFeedback() {
+        if(!searchedTask.getDescription().isEmpty()){
+            message_show += " containing " + searchedTask.getDescription();
+        }
+        if(!searchedTask.getLocation().isEmpty()){
+            message_show += " at " + searchedTask.getLocation();
+        }
+        if((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)){
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy HH:mm");
+            String startDate = format1.format(searchedTask.getStartDate().getTime());
+            String endDate = format1.format(searchedTask.getEndDate().getTime());
+            
+            message_show += " from " + startDate + " to " + endDate;
+        }
+        if(!searchedTask.getTags().isEmpty()){
+            message_show += " tagged";
+            for(int i = 0; i < searchedTask.getTags().size(); i++){
+                if(i==0){
+                    message_show += " " + searchedTask.getTags().get(i);
+                }
+                else{
+                    message_show += ", " + searchedTask.getTags().get(i);
+                }
+            }
+        }
+        return message_show;
     }
 
     private Display getTasksContainingKeyword() {
@@ -135,15 +178,21 @@ public class CommandShow implements Command {
         if (searchedTask.getTags().isEmpty()) {
             return true;
         }
-        for (int i = 0; i < task.getTags().size(); i++) {
-            for (int j = 0; j < searchedTask.getTags().size(); j++) {
-                if (task.getTags().get(i).toLowerCase()
-                        .equals(searchedTask.getTags().get(j).trim().toLowerCase())) {
-                    return true;
+        boolean containsTags = false;
+        for (int i = 0; i < searchedTask.getTags().size(); i++) {
+            for (int j = 0; j < task.getTags().size(); j++) {
+                containsTags = false;
+                if (searchedTask.getTags().get(i).toLowerCase()
+                        .equals(task.getTags().get(j).trim().toLowerCase())) {
+                    containsTags = true;
+                    break;
                 }
             }
+            if(containsTags == false){
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     private boolean withinTimeRange(TaskDeadline task) {
@@ -163,14 +212,12 @@ public class CommandShow implements Command {
             return true;
         }
         for (int i = 0; i < task.getStartDates().size(); i++) {
-            if (task.getStartDates().get(i).after(searchedTask.getStartDate())) {
-                if (task.getStartDates().get(i).before(searchedTask.getEndDate())) {
+            if (!task.getStartDates().get(i).before(searchedTask.getStartDate())) {
+                if (!task.getStartDates().get(i).after(searchedTask.getEndDate())) {
                     return true;
                 }
-            } else if (task.getEndDates().get(i).after(searchedTask.getStartDate())) {
-                if (task.getEndDates().get(i).before(searchedTask.getEndDate())) {
-                    return true;
-                }
+            } else if (!task.getEndDates().get(i).before(searchedTask.getStartDate())){
+                return true;
             }
 
         }
@@ -181,14 +228,12 @@ public class CommandShow implements Command {
         if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
             return true;
         }
-        if (task.getStartDate().after(searchedTask.getStartDate())) {
-            if (task.getStartDate().before(searchedTask.getEndDate())) {
+        if (!task.getStartDate().before(searchedTask.getStartDate())) {
+            if (!task.getStartDate().after(searchedTask.getEndDate())) {
                 return true;
             }
-        } else if (task.getEndDate().after(searchedTask.getStartDate())) {
-            if (task.getEndDate().before(searchedTask.getEndDate())) {
-                return true;
-            }
+        } else if (!task.getEndDate().before(searchedTask.getStartDate())){
+            return true;
         }
         return false;
     }
@@ -197,7 +242,10 @@ public class CommandShow implements Command {
         if(searchedTask.getLocation().isEmpty()){
             return true;
         }
-        if (task.getLocation().toLowerCase().equals(searchedTask.getLocation())) {
+        if(task.getLocation() == null){
+            return false;
+        }
+        if (task.getLocation().equalsIgnoreCase(searchedTask.getLocation())) {
             return true;
         }
         return false;
