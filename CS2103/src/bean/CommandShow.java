@@ -25,8 +25,8 @@ public class CommandShow implements Command {
     }
 
     public CommandShow(String keyword) {
-        searchedTask = new TaskEvent();
-        searchedTask.setDescription(keyword.toLowerCase().trim());
+        searchedTask = new TaskEvent(keyword.trim().toLowerCase(), "", 
+                null, null, new ArrayList<String>());
         newDisplay = new Display();
         count = 0;
     }
@@ -62,95 +62,6 @@ public class CommandShow implements Command {
         return newDisplay;
     }
 
-    private void getReservedTasks() {
-        TaskReserved task;
-        for (int i = 0; i < oldDisplay.getReservedTasks().size(); i++) {
-            task = oldDisplay.getReservedTasks().get(i);
-            if (containsKeyword(task)) {
-                if (atLocation(task)) {
-                    if (containsTag(task)) {
-                        if (withinTimeRange(task)) {
-                            newDisplay.getReservedTasks().add(task);
-                            count++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean containsTag(Task task) {
-        if (searchedTask.getTags().isEmpty()) {
-            return true;
-        }
-        for (int i = 0; i < task.getTags().size(); i++) {
-            for (int j = 0; j < searchedTask.getTags().size(); j++) {
-                if (task.getTags().get(i).toLowerCase()
-                        .equals(searchedTask.getTags().get(j).trim().toLowerCase())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean withinTimeRange(TaskDeadline task) {
-        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
-            if (task.getEndDate().after(searchedTask.getStartDate())) {
-                if (task.getEndDate().before(searchedTask.getEndDate())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean withinTimeRange(TaskReserved task) {
-        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
-            for (int i = 0; i < task.getStartDates().size(); i++) {
-                if (task.getStartDates().get(i).after(searchedTask.getStartDate())) {
-                    if (task.getStartDates().get(i).before(searchedTask.getEndDate())) {
-                        return true;
-                    }
-                } else if (task.getEndDates().get(i).after(searchedTask.getStartDate())) {
-                    if (task.getEndDates().get(i).before(searchedTask.getEndDate())) {
-                        return true;
-                    }
-                }
-
-            }
-        }
-        return false;
-    }
-
-    private boolean withinTimeRange(TaskEvent task) {
-        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
-            if (task.getStartDate().after(searchedTask.getStartDate())) {
-                if (task.getStartDate().before(searchedTask.getEndDate())) {
-                    return true;
-                }
-            } else if (task.getEndDate().after(searchedTask.getStartDate())) {
-                if (task.getEndDate().before(searchedTask.getEndDate())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean atLocation(Task task) {
-        if (task.getLocation().toLowerCase().equals(searchedTask.getLocation())) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean containsKeyword(Task task) {
-        if (task.getDescription().toLowerCase().contains(searchedTask.getDescription())) {
-            return true;
-        }
-        return false;
-    }
 
     private void getDeadLineTasks() {
         TaskDeadline task;
@@ -163,7 +74,7 @@ public class CommandShow implements Command {
                             newDisplay.getDeadlineTasks().add(task);
                             count++;
                         }
-                    }
+                   }
                 }
             }
         }
@@ -199,6 +110,102 @@ public class CommandShow implements Command {
                 }
             }
         }
+    }
+
+    private void getReservedTasks() {
+        TaskReserved task;
+        for (int i = 0; i < oldDisplay.getReservedTasks().size(); i++) {
+            task = oldDisplay.getReservedTasks().get(i);
+            if (containsKeyword(task)) {
+                if (atLocation(task)) {
+                    if (containsTag(task)) {
+                        if (withinTimeRange(task)) {
+                            newDisplay.getReservedTasks().add(task);
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean containsTag(Task task) {
+        if (searchedTask.getTags().isEmpty()) {
+            return true;
+        }
+        for (int i = 0; i < task.getTags().size(); i++) {
+            for (int j = 0; j < searchedTask.getTags().size(); j++) {
+                if (task.getTags().get(i).toLowerCase()
+                        .equals(searchedTask.getTags().get(j).trim().toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean withinTimeRange(TaskDeadline task) {
+        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+            return true;
+        }
+        if (task.getEndDate().after(searchedTask.getStartDate())) {
+            if (task.getEndDate().before(searchedTask.getEndDate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean withinTimeRange(TaskReserved task) {
+        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+            return true;
+        }
+        for (int i = 0; i < task.getStartDates().size(); i++) {
+            if (task.getStartDates().get(i).after(searchedTask.getStartDate())) {
+                if (task.getStartDates().get(i).before(searchedTask.getEndDate())) {
+                    return true;
+                }
+            } else if (task.getEndDates().get(i).after(searchedTask.getStartDate())) {
+                if (task.getEndDates().get(i).before(searchedTask.getEndDate())) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    private boolean withinTimeRange(TaskEvent task) {
+        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+            return true;
+        }
+        if (task.getStartDate().after(searchedTask.getStartDate())) {
+            if (task.getStartDate().before(searchedTask.getEndDate())) {
+                return true;
+            }
+        } else if (task.getEndDate().after(searchedTask.getStartDate())) {
+            if (task.getEndDate().before(searchedTask.getEndDate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean atLocation(Task task) {
+        if(searchedTask.getLocation().isEmpty()){
+            return true;
+        }
+        if (task.getLocation().toLowerCase().equals(searchedTask.getLocation())) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean containsKeyword(Task task) {
+        if (task.getDescription().toLowerCase().contains(searchedTask.getDescription())) {
+            return true;
+        }
+        return false;
     }
 
     public boolean getSaveHistory() {

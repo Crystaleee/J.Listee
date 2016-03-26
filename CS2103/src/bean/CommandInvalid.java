@@ -6,7 +6,7 @@
 package bean;
 
 public class CommandInvalid implements Command {
-    private final String MESSAGE_INVALID_COMMAND = "Pls enter a valid command";
+    private final String MESSAGE_INVALID_COMMAND = "You have specified an invalid command";
     private boolean updateFile = false;
     private boolean saveHistory = false;
 
