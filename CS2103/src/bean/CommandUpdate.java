@@ -231,7 +231,6 @@ public class CommandUpdate extends TaskEvent implements Command {
         boolean hasTaskChanged = false;
         if ((getStartDate() != null) && (getEndDate() != null)) {
             if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
-                //System.out.println("Event");
                 Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                         getStartDate(), getEndDate(), task.getTags());
                 display = addCommand.execute(display);

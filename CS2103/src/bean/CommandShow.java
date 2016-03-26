@@ -9,8 +9,8 @@ import java.util.Calendar;
 
 public class CommandShow implements Command {
     private final String message_no_tasks = "No such tasks found";
+    private final String message_show_all = "Displaying all tasks";
     private final String message_show = "Displaying tasks containing ";
-
     private boolean updateFile = false;
     private boolean saveHistory = true;
     private TaskEvent searchedTask;
@@ -48,7 +48,9 @@ public class CommandShow implements Command {
             newDisplay = new Display(message_no_tasks);
         } else {
             newDisplay.setMessage(message_show + searchedTask.getDescription());
-            ;
+        }
+        if(searchedTask.getDescription().isEmpty()){
+            newDisplay.setMessage(message_show_all);
         }
 
         return newDisplay;

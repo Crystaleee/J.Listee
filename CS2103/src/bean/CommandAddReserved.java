@@ -59,7 +59,7 @@ public class CommandAddReserved implements Command{
         Calendar addedTaskStartDate = task.getStartDates().get(0);
         for (i = 0; i < taskList.size(); i++) {
             Calendar taskInListStartDate = taskList.get(i).getStartDates().get(0);
-            if (addedTaskStartDate.compareTo(taskInListStartDate) < 0) {
+            if (addedTaskStartDate.compareTo(taskInListStartDate) <= 0) {
                 break;
             }
         }
