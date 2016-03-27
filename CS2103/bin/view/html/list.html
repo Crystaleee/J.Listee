@@ -180,6 +180,7 @@
 <body>
   <script  type="text/javascript">
     var i=0;
+
     function reset(){
       i=0;
     }
@@ -423,8 +424,8 @@
 
  function sendCommand() {
   var command = cmd.elements['command'].value;
-    // Invoke the 'receive' Java callback
-    app.receiveCommand(command);
+  // Invoke the 'receive' Java callback
+  app.receiveCommand(command);
   }
 
 function shortCutCommand(cmd){
@@ -468,6 +469,7 @@ $(document).unbind('keydown').bind('keydown', function (event) {
     }
 });
 
+
 $(document).keydown(
     function(e)
     {   
@@ -491,6 +493,20 @@ $(document).keydown(
             	id=$(".task").length;
             $("#"+id).focus();
           }
+        break;
+        case 37://key left
+           var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() == 'INPUT' && $("#command").val()=="")
+           {
+              $("#command").val(app.getPreviousCmd());
+           }
+        break;
+        case 39://key right
+        var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() == 'INPUT' && $("#command").val()=="")
+           {
+        	  $("#command").val(app.getLaterCmd());
+           }
         break;
         case 46://delete
         case 8://backspace

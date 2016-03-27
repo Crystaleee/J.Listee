@@ -1,6 +1,7 @@
 package gui;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -15,7 +16,6 @@ import bean.TaskFloat;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
-import javafx.scene.web.WebHistory.Entry;
 import netscape.javascript.JSObject;
 
 /**
@@ -24,6 +24,8 @@ import netscape.javascript.JSObject;
  * @version 1.0
  */
 public class ShowList extends AppPage {
+	private List<String> userCmd=new ArrayList<String>();//store user's commands
+	private int cmdIndex;//the presenting cmd's index
 	private Display display=new Display();
 	private JSObject win;
 	
@@ -152,8 +154,26 @@ public class ShowList extends AppPage {
 	// JavaScript interface object
 	public class ListBridge {
 		public void receiveCommand(String command){
-			System.out.println(command);
+			userCmd.add(command);
+			cmdIndex=userCmd.size()-1;
+			
 			GUIController.handelUserInput(command);
+		}
+		
+		public String getPreviousCmd(){
+			System.out.println(cmdIndex);
+			if(cmdIndex>0){
+				return userCmd.get(cmdIndex--);
+			}else{
+				return userCmd.get(0);
+			}			
+		}
+		
+		public String getLaterCmd(){
+			System.out.println(cmdIndex);
+			if(cmdIndex<userCmd.size()-1){
+				return userCmd.get(++cmdIndex);
+			}else return "";
 		}
 	}
 }
