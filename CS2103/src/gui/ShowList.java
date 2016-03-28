@@ -2,7 +2,9 @@ package gui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,11 +63,13 @@ public class ShowList extends AppPage {
 								task.remove("endDate");
 								task.put("endDate",
 										new SimpleDateFormat(
-												"yy-MM-dd HH:mm")
+												"EEE MM.dd HH:mm",Locale.ENGLISH)
 												.format(deadline.getEndDate()
 														.getTime()));
 								jsonDeadline.put(task);
+								System.out.println("week day: "+deadline.getEndDate().get(Calendar.DAY_OF_WEEK));
 							}
+							
 							win.call("addTasks", jsonDeadline,"deadline");
 							System.out.println(jsonDeadline);
 						}
