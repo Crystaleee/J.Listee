@@ -38,7 +38,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
 	public Display execute(Display oldDisplay) {
 		display = oldDisplay;
-		if (hasInvalidTaskNumber(display.getNumberOfTasks())) {
+		if (hasInvalidTaskNumber()) {
 			updateFile = false;
 			saveHistory = false;
 			display.setMessage(message_invalid_task_number);
@@ -50,8 +50,8 @@ public class CommandUpdate extends TaskEvent implements Command {
 		return display;
 	}
 
-	private boolean hasInvalidTaskNumber(int numOfTasks) {
-		return ((taskNumber > numOfTasks) || (taskNumber < 1));
+	private boolean hasInvalidTaskNumber() {
+		return ((taskNumber > display.getNumberOfTasks()) || (taskNumber < 1));
 	}
 
 	private void editTask() {

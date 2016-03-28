@@ -32,7 +32,7 @@ public class CommandDelete implements Command {
 		this.display = oldDisplay;
 		if (taskNumbers == null) {
 			display = new Display(message_all_tasks_deleted);
-		} else if (hasInvalidTaskNumbers(display.getNumberOfTasks())) {
+		} else if (hasInvalidTaskNumbers()) {
 			updateFile = false;
 			saveHistory = false;
 			display.setMessage(message_invalid_task_numbers);
@@ -46,12 +46,12 @@ public class CommandDelete implements Command {
 		return display;
 	}
 
-	private boolean hasInvalidTaskNumbers(int numOfTasks) {
+	private boolean hasInvalidTaskNumbers() {
 		ArrayList<Integer> invalidTaskNumbers = new ArrayList<Integer>();
 		int taskNum;
 		for (int i = 0; i < taskNumbers.size(); i++) {
 			taskNum = taskNumbers.get(i);
-			if (isTaskNumberInvalid(numOfTasks, taskNum)) {
+			if (isTaskNumberInvalid(taskNum)) {
 				feedbackInvalidNumbers(invalidTaskNumbers, taskNum);
 				invalidTaskNumbers.add(taskNum);
 			}
@@ -67,8 +67,8 @@ public class CommandDelete implements Command {
 		}
 	}
 
-	private boolean isTaskNumberInvalid(int numOfTasks, int taskNum) {
-		return (taskNum > numOfTasks) || (taskNum < 1);
+	private boolean isTaskNumberInvalid(int taskNum) {
+		return (taskNum > display.getNumberOfTasks()) || (taskNum < 1);
 	}
 
 	private void deleteTasksFromList() {
