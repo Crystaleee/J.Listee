@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 import storage.LogStorage;
 import gui.GUIController;
 /**
- * @author Zhu Bingjing
- * @date 2016年3月1日 下午5:03:02
+ * @@author Zhu Bingjing (A0149527W)
+ * @date 2016å¹´3æœˆ1æ—¥ ä¸‹å�ˆ5:03:02
  * @version 1.0
  */
 public class App extends Application{	

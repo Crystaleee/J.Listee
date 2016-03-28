@@ -9,8 +9,8 @@ import netscape.javascript.JSObject;
 import main.App;
 
 /**
- * @author Zhu Bingjing
- * @date 2016年3月1日 下午10:08:56
+ * @@author Zhu Bingjing (A0149527W)
+ * @date 2016å¹´3æœˆ1æ—¥ ä¸‹å�ˆ10:08:56
  * @version 1.0
  */
 public class WelcomeAndChooseStorage extends AppPage {

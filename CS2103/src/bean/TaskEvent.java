@@ -1,5 +1,5 @@
 /*
- * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author Boh Tuang Hwee, Jehiel (A0139995E)
  * Last updated: 3/5/2016, 9:12pm
  * CS2103
  */
@@ -37,6 +37,7 @@ public class TaskEvent extends TaskDeadline {
 		return startDate;
 	}
 
+	// @@author Chloe Odquier Fortuna (A0149063E)
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

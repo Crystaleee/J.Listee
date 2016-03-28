@@ -1,5 +1,5 @@
 /*
- * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author Boh Tuang Hwee, Jehiel (A0139995E)
  * Last updated: 21 Mar, 11:00pm
  */
 package bean;
@@ -59,17 +59,17 @@ public class CommandDelete implements Command {
 		return (invalidTaskNumbers.size() > 0);
 	}
 
-    private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
-        if (invalidTaskNumbers.size() == 0) {
-        	message_invalid_task_numbers += taskNum;
-        } else {
-        	message_invalid_task_numbers += ", " + taskNum;
-        }
-    }
+	private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
+		if (invalidTaskNumbers.size() == 0) {
+			message_invalid_task_numbers += taskNum;
+		} else {
+			message_invalid_task_numbers += ", " + taskNum;
+		}
+	}
 
-    private boolean isTaskNumberInvalid(int numOfTasks, int taskNum) {
-        return (taskNum > numOfTasks) || (taskNum < 1);
-    }
+	private boolean isTaskNumberInvalid(int numOfTasks, int taskNum) {
+		return (taskNum > numOfTasks) || (taskNum < 1);
+	}
 
 	private void deleteTasksFromList() {
 		Task deletedTask;
@@ -80,13 +80,13 @@ public class CommandDelete implements Command {
 		return;
 	}
 
-    private void feedbackDeletedTasks(Task deletedTask, int i) {
-        if (i == 0) {
-        	deletedMessage += "\"" + deletedTask.getDescription() + "\"";
-        } else {
-        	deletedMessage += ", \"" + deletedTask.getDescription() + "\"";
-        }
-    }
+	private void feedbackDeletedTasks(Task deletedTask, int i) {
+		if (i == 0) {
+			deletedMessage += "\"" + deletedTask.getDescription() + "\"";
+		} else {
+			deletedMessage += ", \"" + deletedTask.getDescription() + "\"";
+		}
+	}
 
 	private Task removeTask(int taskNum) {
 		Task deletedTask;
@@ -101,7 +101,7 @@ public class CommandDelete implements Command {
 				if (taskNum < display.getFloatTasks().size()) {
 					deletedTask = display.getFloatTasks().remove(taskNum);
 				} else {
-	                taskNum -= display.getFloatTasks().size();
+					taskNum -= display.getFloatTasks().size();
 					deletedTask = display.getReservedTasks().remove(taskNum);
 				}
 			}
