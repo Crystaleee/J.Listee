@@ -22,7 +22,7 @@ import netscape.javascript.JSObject;
 
 /**
  * @@author Zhu Bingjing (A0149527W)
- * @date 2016å¹´3æœˆ2æ—¥ ä¸Šå�ˆ12:06:39
+ * @date 2016年3月2日 上午12:06:39
  * @version 1.0
  */
 public class ShowList extends AppPage {

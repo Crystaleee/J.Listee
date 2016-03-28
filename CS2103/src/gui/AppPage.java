@@ -6,7 +6,7 @@ import javafx.scene.web.WebView;
 
 /**
  * @@author  Zhu Bingjing (A0149527W)
- * @date 2016å¹´3æœˆ21æ—¥ ä¸Šå�ˆ10:54:00 
+ * @date 2016年3月21日 上午10:54:00 
  * @version 1.0 
  */
 public abstract class AppPage extends Pane{

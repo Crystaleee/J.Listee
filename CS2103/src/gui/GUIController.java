@@ -15,7 +15,7 @@ import storage.LogStorage;
 
 /**
  * @@author Zhu Bingjing (A0149527W)
- * @date 2016å¹´3æœˆ5æ—¥ ä¸Šå�ˆ10:52:04
+ * @date 2016年3月5日 上午10:52:04
  * @version 1.0
  */
 public class GUIController {
