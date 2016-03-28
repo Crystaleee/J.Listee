@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * @@author  Zhu Bingjing (A0149527W)
+ * @@author A0149527W
  * @date 2016年3月23日 下午7:10:13 
  * @version 1.0 
  */

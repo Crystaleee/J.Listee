@@ -21,7 +21,7 @@ import javafx.concurrent.Worker.State;
 import netscape.javascript.JSObject;
 
 /**
- * @@author Zhu Bingjing (A0149527W)
+ * @@author A0149527W
  * @date 2016年3月2日 上午12:06:39
  * @version 1.0
  */

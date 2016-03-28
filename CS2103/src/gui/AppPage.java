@@ -5,7 +5,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 /**
- * @@author  Zhu Bingjing (A0149527W)
+ * @@author A0149527W
  * @date 2016年3月21日 上午10:54:00 
  * @version 1.0 
  */

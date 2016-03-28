@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * @@author  Zhu Bingjing (A0149527W)
+ * @@author  A0149527W
  * @date 2016年3月2日 下午1:16:22 
  * @version 1.0 
  */

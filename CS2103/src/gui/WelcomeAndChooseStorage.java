@@ -9,7 +9,7 @@ import netscape.javascript.JSObject;
 import main.App;
 
 /**
- * @@author Zhu Bingjing (A0149527W)
+ * @@author A0149527W
  * @date 2016年3月1日 下午10:08:56
  * @version 1.0
  */
