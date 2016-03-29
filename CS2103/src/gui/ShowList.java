@@ -54,8 +54,8 @@ public class ShowList extends AppPage {
 						
 						// construct JSON to pass to JS
 						//deadline tasks
-						if(this.display.getDeadlineTasks()!=null){
-							List<TaskDeadline> deadlines=this.display.getDeadlineTasks();
+						if(this.display.getVisibleDeadlineTasks()!=null){
+							List<TaskDeadline> deadlines=this.display.getVisibleDeadlineTasks();
 							JSONArray jsonDeadline = new JSONArray();
 							for (TaskDeadline deadline: deadlines) {
 								JSONObject task = new JSONObject(deadline);
@@ -76,8 +76,8 @@ public class ShowList extends AppPage {
 						
 						
 						//event tasks
-						if(this.display.getEventTasks()!=null){
-							List<TaskEvent> events=this.display.getEventTasks();
+						if(this.display.getVisibleEvents()!=null){
+							List<TaskEvent> events=this.display.getVisibleEvents();
 							JSONArray jsonEvent = new JSONArray();
 							for (TaskEvent event: events) {
 								JSONObject task = new JSONObject(event);
@@ -101,8 +101,8 @@ public class ShowList extends AppPage {
 						}				
 						
 						//floating tasks
-						if(this.display.getFloatTasks()!=null){
-							List<TaskFloat> floatings=this.display.getFloatTasks();
+						if(this.display.getVisibleFloatTasks()!=null){
+							List<TaskFloat> floatings=this.display.getVisibleFloatTasks();
 							JSONArray jsonFloating = new JSONArray();
 							for (Task floating: floatings) {
 								JSONObject task = new JSONObject(floating);
@@ -115,8 +115,8 @@ public class ShowList extends AppPage {
 						}
 						
 						//reserved tasks
-						if(this.display.getReservedTasks()!=null){
-							List<TaskReserved> reservations=this.display.getReservedTasks();
+						if(this.display.getVisibleReservedTasks()!=null){
+							List<TaskReserved> reservations=this.display.getVisibleReservedTasks();
 							JSONArray jsonReserved = new JSONArray();
 							for (TaskReserved reserved: reservations) {
 								JSONObject  task= new JSONObject(reserved);

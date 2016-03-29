@@ -58,7 +58,7 @@ public class CommandAddEvent implements Command {
 	private int getAddIndex(ArrayList<TaskEvent> taskList) {
 		int i = 0;
 		for (i = 0; i < taskList.size(); i++) {
-			if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) <= 0) {
+			if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {
 				break;
 			}
 		}

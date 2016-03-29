@@ -21,8 +21,16 @@ public class History {
 				oldDisplays.remove(i);
 			}
 		}
+		
+        System.out.println("Fs " + display.getFloatTasks().size());
 		oldDisplays.add(display);
 		oldDisplaysIndex++;
+		for(int i =0; i<oldDisplaysIndex+1; i++){
+            for(int j =0; j<oldDisplays.get(i).getFloatTasks().size(); j++){
+                System.out.println(oldDisplays.get(i).getFloatTasks().get(j).getDescription());
+            }
+        }
+		System.out.println();
 	}
 
 	public static void saveUserInput(String userInput) {
@@ -39,6 +47,7 @@ public class History {
 
 	public static Display getDisplay(int offset) {
 		oldDisplaysIndex += offset;
+		System.out.println(oldDisplays.get(oldDisplaysIndex).getFloatTasks().size());
 		return oldDisplays.get(oldDisplaysIndex);
 	}
 

@@ -7,7 +7,7 @@ package bean;
 
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements java.io.Serializable{
 	private String description;
 	private String location;
 	private ArrayList<String> tags;

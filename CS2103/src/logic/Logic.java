@@ -19,85 +19,91 @@ import storage.Storage;
 
 public class Logic {
 
-	public static String MESSAGE_ADD_SUCCESS = "added: \"%1$s\"";
+    public static String MESSAGE_ADD_SUCCESS = "added: \"%1$s\"";
 
-	public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
-	public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
-	public static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
-	public static final String MESSAGE_NO_DESCRIPTION = "Pls enter a description";
-	public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
+    public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
+    public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
+    public static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
+    public static final String MESSAGE_NO_DESCRIPTION = "Pls enter a description";
+    public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
 
-	private static Storage storage = Storage.getInstance();
-	private static Display display;
-	private static String file;
+    private static Storage storage = Storage.getInstance();
+    private static Display display;
+    private static String file;
 
-	public static boolean createFile(String filePath) {
-		file = filePath;
-		try {
-			storage.createFile(filePath);
-			return true;
-		} catch (IOException error) {
-			return false;
-		}
-	}
+    public static boolean createFile(String filePath) {
+        file = filePath;
+        try {
+            storage.createFile(filePath);
+            return true;
+        } catch (IOException error) {
+            return false;
+        }
+    }
 
-	public static Display initializeProgram(String filePath) {
-		file = filePath;
-		getDisplayFromStorage();
-		display.setMessage(null);
-		History.saveDisplay(display);
-		return display;
-	}
+    public static Display initializeProgram(String filePath) {
+        file = filePath;
+        display = getDisplayFromStorage();
+        display.setMessage(null);
+        History.saveDisplay(getDisplayFromStorage());
+        return display;
+    }
 
-	public static Display executeUserCommand(String userInput) {
-		History.saveUserInput(userInput);
-		Command userCommand = parseUserInput(userInput);
-		display = executeCommand(userCommand);
+    public static Display executeUserCommand(String userInput) {
+        History.saveUserInput(userInput);
+        Command userCommand = parseUserInput(userInput);
+        display = executeCommand(userCommand);
 
-		return display;
-	}
+        return display;
+    }
 
-	private static void saveToHistory(Command userCommand) {
-		if (userCommand.getSaveHistory()) {
-			History.saveDisplay(display);
-		}
-	}
+    private static void saveDisplayToHistory(Command userCommand) {
+        if (userCommand.getSaveHistory()) {
+            long time = System.currentTimeMillis();
+            History.saveDisplay(display.deepClone());
+            System.out.println(System.currentTimeMillis() - time);
+        }
+    }
 
-	public static Display executeCommand(Command userCommand) {
-		getDisplayFromStorage();
-		display = userCommand.execute(display);
+    public static Display executeCommand(Command userCommand) {
+        // getDisplayFromStorage();
+        display = userCommand.execute(display);
 
-		if (userCommand.getUpdateFile()) {
-			if (successfullyUpdatesFile()) {
-				saveToHistory(userCommand);
-			} else {
-				display = new Display(MESSAGE_ERROR_UPDATE_FILE);
-			}
-		}
-		return display;
-	}
+        if (userCommand.getUpdateFile()) {
+            if (successfullyUpdatesFile()) {
+                saveDisplayToHistory(userCommand);
+            } else {
+                display.setMessage(MESSAGE_ERROR_UPDATE_FILE);
+            }
+        } else {
+            saveDisplayToHistory(userCommand);
+        }
+        return display;
+    }
 
-	private static Command parseUserInput(String userInput) {
-		JListeeParser myParser = new JListeeParser();
-		Command userCommand = myParser.ParseCommand(userInput);
-		return userCommand;
-	}
+    private static Command parseUserInput(String userInput) {
+        JListeeParser myParser = new JListeeParser();
+        Command userCommand = myParser.ParseCommand(userInput);
+        return userCommand;
+    }
 
-	private static void getDisplayFromStorage() {
-		try {
-			display = storage.getDisplay();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    private static Display getDisplayFromStorage() {
+        Display thisDisplay = null;
+        try {
+            thisDisplay = storage.getDisplay();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return thisDisplay;
+    }
 
-	private static boolean successfullyUpdatesFile() {
-		try {
-			storage.saveFile(display);
-			return true;
-		} catch (IOException error) {
-			return false;
-		}
-	}
+    private static boolean successfullyUpdatesFile() {
+        try {
+            storage.saveFile(display);
+            return true;
+        } catch (IOException error) {
+            return false;
+        }
+    }
 }

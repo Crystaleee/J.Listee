@@ -24,7 +24,8 @@ public class CommandRedo implements Command {
 			// return (new Display(MESSAGE_ERROR_REDO));
 		}
 
-		display = History.getDisplay(1);
+        Display nextDisplay = History.getDisplay(1);
+        display = nextDisplay.deepClone();
 		display.setMessage(MESSAGE_REDO);
 		return display;
 	}
