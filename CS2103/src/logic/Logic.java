@@ -85,7 +85,7 @@ public class Logic {
 
 	private static void getDisplayFromStorage() {
 		try {
-			display = storage.getDisplay(file);
+			display = storage.getDisplay();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
