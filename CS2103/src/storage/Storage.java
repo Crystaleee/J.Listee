@@ -59,9 +59,9 @@ public class Storage {
 		return storageInstance;
 	}
 
-	// private void initializeFilePath() throws IOException {
-	// filePath = LogStorage.readLogFile();
-	// }
+	 private void initializeFilePath() throws IOException {
+	 filePath = LogStorage.readLogFile();
+	 }
 
 	private void setFilePath(String filepath) {
 		filePath = filepath;
@@ -75,11 +75,14 @@ public class Storage {
 		setFilePath(filepath);
 	}
 
-	public Display getDisplay(String filepath) throws IOException {
+	public Display getDisplay() throws IOException {
 		FileHandler handler = createLogHandler();
 		logger.log(Level.INFO, "Reading all tasks from file.\r\n");
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
+		initializeFilePath();
+		
+		System.out.println(filePath);
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
 
 		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
 		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
@@ -104,7 +107,7 @@ public class Storage {
 		}
 
 		closeReaderClasses(handler, br);
-		setFilePath(filepath);
+		//setFilePath(filepath);
 
 		Display display = new Display(MESSAGE_EMPTY, events, deadlineTasks, floatTasks, reservedTasks, completedTasks);
 		return display;
@@ -263,8 +266,6 @@ public class Storage {
 	private void readTasksCompleted(BufferedReader br, ArrayList<Task> completedTasks) throws IOException {
 		String line;
 		String description = null;
-		String location = null;
-		ArrayList<String> tags = null;
 
 		try {
 			readHeader(br);
@@ -288,15 +289,6 @@ public class Storage {
 					} else {
 						logger.log(Level.WARNING, "Could not read: " + description + "\r\n");
 					}
-
-					// location = readLocation(br);
-					// tags = readTags(br);
-
-					// Task completedTask = new Task(description, location,
-					// tags);
-					// completedTasks.add(completedTask);
-					// logger.log(Level.INFO, "Successfully read: " +
-					// completedTask.getDescription() + "\r\n");
 				}
 			}
 		} catch (IOException ioe) {

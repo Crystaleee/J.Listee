@@ -1,93 +1,27 @@
-Mar 29, 2016 1:28:25 PM storage.Storage getDisplay
+Mar 29, 2016 2:44:34 PM storage.Storage getDisplay
 INFO: Reading all tasks from file.
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksFloating
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksFloating
 INFO: Reading new floating task.
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksFloating
-INFO: Successfully read: Floating Task
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksFloating
+INFO: Successfully read: Floating Test
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksFloating
-INFO: Reading new floating task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksFloating
-INFO: Successfully read: I LOVE POTATOES
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksDeadline
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksDeadline
 INFO: Reading new deadline task.
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksDeadline
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksDeadline
 INFO: Successfully read: Deadline
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksEvents
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksEvents
 INFO: Reading new event.
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksEvents
-INFO: Successfully read: Event
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksEvents
+INFO: Successfully read: event
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksReserved
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksReserved
 INFO: Reading new reserved task.
 
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksReserved
-INFO: Successfully read: testing
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksReserved
-INFO: Reading new reserved task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksReserved
+Mar 29, 2016 2:44:34 PM storage.Storage readTasksReserved
 INFO: Successfully read: Meeting
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksReserved
-INFO: Reading new reserved task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksReserved
-INFO: Successfully read: Test
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskFloat
-INFO: Successfully read: Floating Task
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskFloat
-INFO: Successfully read: Floating Task
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskEvent
-INFO: Successfully read: Event
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskEvent
-INFO: Successfully read: Event
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskDeadline
-INFO: Successfully read: Deadline
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskDeadline
-INFO: Successfully read: Deadline
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskReserved
-INFO: Successfully read: testing
-
-Mar 29, 2016 1:28:25 PM storage.Storage readTasksCompleted
-INFO: Reading new completed task.
-
-Mar 29, 2016 1:28:25 PM storage.Storage readCompletedTaskReserved
-INFO: Successfully read: testing
 

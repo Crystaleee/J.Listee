@@ -71,7 +71,7 @@ public class LogStorage {
 	 * @return the file path in the log file, null if it doesn't exist
 	 * @throws IOException
 	 */
-	private static String readLogFile() throws IOException{
+	public static String readLogFile() throws IOException{
 		String filePath=null;
 		BufferedReader br;
 		try {
