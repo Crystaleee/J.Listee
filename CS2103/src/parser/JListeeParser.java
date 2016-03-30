@@ -91,7 +91,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 omg omg hihihi start april 13 #hashtag -#sigh @icube "); 
+		testUpdateTask.ParseCommand("update 2 start april 13 #hashtag -#sigh @icube "); 
 	} 
 
 
@@ -269,11 +269,18 @@ public class JListeeParser {
 
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
-				
 				startDate = dateToCalendar(dates.get(0));
+
+				if (group.isTimeInferred()) {
+					setStartDateTimeDefault(startDate);
+				}
+				
 				inputLine = removeRemoveDateFromInputLine(inputLine, group);
 		
+				
 			}
+			
+			
 
 		}
 		
@@ -283,8 +290,11 @@ public class JListeeParser {
 
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
-				
 				endDate = dateToCalendar(dates.get(0));	
+
+				if (group.isTimeInferred()) {
+					setEndDateTimeDefault(endDate);
+				}
 				inputLine = removeRemoveDateFromInputLine(inputLine, group);
 				inputLine = inputLine.replaceFirst("end", "").trim();
 
@@ -343,8 +353,13 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 
 		taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-
+		
+		if (taskDescription.equals("")){
+			taskDescription = null;
+		}
+		
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
+	
 	}
 
 	private String removeRemoveDateFromInputLine(String inputLine, DateGroup group) {
@@ -422,7 +437,7 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-
+		
 		return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
 
 	}
