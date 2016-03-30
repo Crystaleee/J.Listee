@@ -173,4 +173,67 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
+	
+	/************************
+	 * Deleting Tasks Tests *
+	 ************************/
+	
+	@Test
+	public void testDeleteFloating() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("delete 1");
+		String expected = "deleted: \"Floating Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testDeleteDeadline() {
+		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
+		display = Logic.executeUserCommand("delete 1");
+		String expected = "deleted: \"Deadline Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testDeleteEvent() {
+		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("delete 1");
+		String expected = "deleted: \"Event Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testDeleteAll() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
+		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("delete all");
+		String expected = "All tasks deleted";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testDeleteMultiple() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
+		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("delete 1,2,3");
+		String expected = "deleted: \"Deadline Test\", \"Event Test\", \"Floating Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testDeleteInvalidTaskNumber() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("delete 5");
+		String expected = "You have specified invalid task numbers: 5";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
 }
