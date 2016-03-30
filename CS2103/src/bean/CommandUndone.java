@@ -1,6 +1,6 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 31 Mar, 11:00pm
+ * Last updated: 31 Mar
  */
 package bean;
 
@@ -30,7 +30,6 @@ public class CommandUndone implements Command {
 
     public Display execute(Display oldDisplay) {
         this.display = oldDisplay;
-        System.out.println("undone");
         if (taskNumbers != null) {
             if (hasInvalidTaskNumbers()) {
                 updateFile = false;
@@ -42,8 +41,6 @@ public class CommandUndone implements Command {
         }
 
         undoneTasksFromList();
-        System.out.println("undone");
-        display.setMessage(undoneMessage);
 
         return display;
     }
@@ -80,19 +77,18 @@ public class CommandUndone implements Command {
 
     private void undoneTasksFromList() {
         Task undoneTask;
-        int numOfTasks = 0;
         if (taskNumbers == null) {
-            for (int i = 0; i < display.getCompletedTasks().size(); i++) {
+            for (int i = display.getCompletedTasks().size() - 1; i >= 0; i--) {
                 undoneTask = markUndoneTask(i);
-                feedbackUndoneTasks(undoneTask, i);
             }
+            display.setMessage(message_all_tasks_undone);
         }else{
             for (int i = 0; i < taskNumbers.size(); i++) {
                 undoneTask = markUndoneTask(taskNumbers.get(i) - 1 - i);
                 feedbackUndoneTasks(undoneTask, i);
             }
+            display.setMessage(undoneMessage);
         }
-        System.out.println(numOfTasks);
         return;
     }
 
@@ -112,17 +108,22 @@ public class CommandUndone implements Command {
             Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                     task.getStartDate(), task.getEndDate(), task.getTags());
             display = addCommand.execute(display);
+            //System.out.println(task.getDescription());
         }
         else if(completedTask instanceof TaskDeadline){
             TaskDeadline task = (TaskDeadline)completedTask;
             Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                     task.getEndDate(), task.getTags());
             display = addCommand.execute(display);
+            //System.out.println(task.getDescription());
         }
-        else{
+        else if(completedTask instanceof TaskFloat){
             TaskFloat task = (TaskFloat)completedTask;
             Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(), task.getTags());
             display = addCommand.execute(display);
+            //System.out.println(task.getDescription());
+        }else{
+            System.out.println("Err");
         }
         return completedTask;
     }
