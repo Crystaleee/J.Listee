@@ -48,9 +48,6 @@ public class CommandDone implements Command {
     }
 
     private Display completeAllTasks(Display oldDisplay) {
-       /* for(int i =0; i< oldDisplay.getFloatTasks().size();i++){
-            oldDisplay.getCompletedTasks().add(oldDisplay.getFloatTasks().get(i));
-        }*/
         oldDisplay.getCompletedTasks().addAll(oldDisplay.getDeadlineTasks());
         oldDisplay.getCompletedTasks().addAll(oldDisplay.getEventTasks());
         oldDisplay.getCompletedTasks().addAll(oldDisplay.getFloatTasks());
@@ -82,7 +79,6 @@ public class CommandDone implements Command {
 	    int numOfTasks = 0;
 	    numOfTasks += display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
 	            + display.getVisibleFloatTasks().size();
-	    //System.out.println("num " + numOfTasks);
 	    return numOfTasks;
 	}
 

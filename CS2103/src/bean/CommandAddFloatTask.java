@@ -39,6 +39,9 @@ public class CommandAddFloatTask implements Command {
 			return display;
 		}
 		display.getFloatTasks().add(task);
+		if(!display.getVisibleFloatTasks().equals(display.getFloatTasks())){
+	        display.getVisibleFloatTasks().add(task);
+		}
 		display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
 		return display;
 	}

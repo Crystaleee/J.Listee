@@ -39,6 +39,9 @@ public class CommandAddReserved implements Command {
 		}
 		ArrayList<TaskReserved> reservedTasks = addReservedTask(display.getReservedTasks());
 		display.setReservedTasks(reservedTasks);
+        if(!display.getVisibleReservedTasks().equals(display.getReservedTasks())){
+            display.getVisibleReservedTasks().add(task);
+        }
 		display.setMessage("Reserved: " + task.getDescription());
 		return display;
 	}

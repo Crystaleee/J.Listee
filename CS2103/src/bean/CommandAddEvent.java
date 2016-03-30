@@ -41,6 +41,9 @@ public class CommandAddEvent implements Command {
 		}
 		ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
 		display.setEvents(events);
+        if(!display.getVisibleEvents().equals(display.getEventTasks())){
+            display.getVisibleEvents().add(task);
+        }
 		display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
 		return display;
 	}
@@ -58,7 +61,7 @@ public class CommandAddEvent implements Command {
 	private int getAddIndex(ArrayList<TaskEvent> taskList) {
 		int i = 0;
 		for (i = 0; i < taskList.size(); i++) {
-			if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) <= 0) {
+			if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {
 				break;
 			}
 		}

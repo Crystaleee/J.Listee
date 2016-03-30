@@ -40,6 +40,9 @@ public class CommandAddDeadlineTask implements Command {
 		}
 		ArrayList<TaskDeadline> deadlineTasks = addDeadlineTask(display.getDeadlineTasks());
 		display.setDeadlineTasks(deadlineTasks);
+        if(!display.getVisibleDeadlineTasks().equals(display.getDeadlineTasks())){
+            display.getVisibleDeadlineTasks().add(task);
+        }
 		display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
 
 		return display;
@@ -58,7 +61,7 @@ public class CommandAddDeadlineTask implements Command {
 	private int getIndex(ArrayList<TaskDeadline> taskList) {
 		int i = 0;
 		for (i = 0; i < taskList.size(); i++) {
-			if (task.getEndDate().compareTo(taskList.get(i).getEndDate()) <= 0) {
+			if (task.getEndDate().compareTo(taskList.get(i).getEndDate()) < 0) {
 				break;
 			}
 		}
