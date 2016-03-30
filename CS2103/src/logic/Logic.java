@@ -59,16 +59,13 @@ public class Logic {
 
     private static void saveDisplayToHistory(Command userCommand) {
         if (userCommand.getSaveHistory()) {
-            long time = System.currentTimeMillis();
             History.saveDisplay(display.deepClone());
-            System.out.println(System.currentTimeMillis() - time);
         }
     }
 
     public static Display executeCommand(Command userCommand) {
-        // getDisplayFromStorage();
         display = userCommand.execute(display);
-
+        
         if (userCommand.getUpdateFile()) {
             if (successfullyUpdatesFile()) {
                 saveDisplayToHistory(userCommand);

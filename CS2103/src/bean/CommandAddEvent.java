@@ -42,7 +42,7 @@ public class CommandAddEvent implements Command {
 		ArrayList<TaskEvent> events = addEvent(display.getEventTasks());
 		display.setEvents(events);
         if(!display.getVisibleEvents().equals(display.getEventTasks())){
-            display.getVisibleEvents().add(task);
+            addEvent(display.getVisibleEvents());
         }
 		display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
 		return display;

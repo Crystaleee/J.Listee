@@ -226,8 +226,8 @@ public class CommandShow implements Command {
 		if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
 			return true;
 		}
-		if (task.getEndDate().after(searchedTask.getStartDate())) {
-			if (task.getEndDate().before(searchedTask.getEndDate())) {
+		if (!task.getEndDate().before(searchedTask.getStartDate())) {
+			if (!task.getEndDate().after(searchedTask.getEndDate())) {
 				return true;
 			}
 		}

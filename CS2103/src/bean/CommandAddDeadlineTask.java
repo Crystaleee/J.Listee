@@ -40,8 +40,9 @@ public class CommandAddDeadlineTask implements Command {
 		}
 		ArrayList<TaskDeadline> deadlineTasks = addDeadlineTask(display.getDeadlineTasks());
 		display.setDeadlineTasks(deadlineTasks);
+        System.out.println("eq "+display.getVisibleDeadlineTasks().equals(display.getDeadlineTasks()));
         if(!display.getVisibleDeadlineTasks().equals(display.getDeadlineTasks())){
-            display.getVisibleDeadlineTasks().add(task);
+            addDeadlineTask(display.getVisibleDeadlineTasks());
         }
 		display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
 

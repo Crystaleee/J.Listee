@@ -38,7 +38,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
 	public Display execute(Display oldDisplay) {
 		display = oldDisplay;
-		if (hasInvalidTaskNumber(display.getNumberOfTasks())) {
+		if (hasInvalidTaskNumber()) {
 			updateFile = false;
 			saveHistory = false;
 			display.setMessage(message_invalid_task_number);
@@ -50,7 +50,10 @@ public class CommandUpdate extends TaskEvent implements Command {
 		return display;
 	}
 
-	private boolean hasInvalidTaskNumber(int numOfTasks) {
+	private boolean hasInvalidTaskNumber() {
+        int numOfTasks = 0;
+        numOfTasks += display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
+                + display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size();
 		return ((taskNumber > numOfTasks) || (taskNumber < 1));
 	}
 
@@ -74,34 +77,42 @@ public class CommandUpdate extends TaskEvent implements Command {
 	}
 
 	private void editDeadline() {
-		TaskDeadline task = display.getDeadlineTasks().remove(taskNumber - 1);
+		TaskDeadline task = display.getVisibleDeadlineTasks().remove(taskNumber - 1);
 		message += task.getDescription() + "\"";
 		task = (TaskDeadline) editDescription(task);
 		task = (TaskDeadline) editLocation(task);
 		task = (TaskDeadline) editTags(task);
 		task = editEndDate(task);
-		changeDeadlineTaskType(task);
+		if(changeDeadlineTaskType(task)){
+		    display.getVisibleDeadlineTasks().remove(task);
+            display.getDeadlineTasks().remove(task);
+		}
 	}
 
 	private void editEvent() {
-		TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
-		message += task.getDescription() + "\"";
-		task = (TaskEvent) editDescription(task);
-		task = (TaskEvent) editLocation(task);
-		task = (TaskEvent) editTags(task);
-		task = editStartDate(task);
-		task = editEndDate(task);
-		changeEventTaskType(task);
+        TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
+        message += task.getDescription() + "\"";
+        task = (TaskEvent) editDescription(task);
+        task = (TaskEvent) editLocation(task);
+        task = (TaskEvent) editTags(task);
+        task = editStartDate(task);
+        task = editEndDate(task);
+        if(changeEventTaskType(task)){
+            display.getVisibleEvents().remove(task);
+            display.getEventTasks().remove(task);
+            
+        }
 	}
 
 	private void editFloat() {
-		TaskFloat task = display.getFloatTasks().get(taskNumber - 1);
+		TaskFloat task = display.getVisibleFloatTasks().get(taskNumber - 1);
 		message += task.getDescription() + "\"";
 		task = (TaskFloat) editDescription(task);
 		task = (TaskFloat) editLocation(task);
 		task = (TaskFloat) editTags(task);
 		if (hasChangeFloatTaskType(task)) {
-			display.getFloatTasks().remove(taskNumber - 1);
+            display.getVisibleFloatTasks().remove(taskNumber - 1);
+			display.getFloatTasks().remove(task);
 		}
 	}
 
@@ -114,7 +125,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
 	}
 
-	private void changeDeadlineTaskType(TaskDeadline task) {
+	private boolean changeDeadlineTaskType(TaskDeadline task) {
 		// assertFalse endDate==0 AND startDate != 0&null
 		boolean hasTaskChanged = false;
 		if (getEndDate() != null) {
@@ -133,11 +144,12 @@ public class CommandUpdate extends TaskEvent implements Command {
 			}
 		}
 
-		if (!hasTaskChanged) {
-			Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
-					task.getEndDate(), task.getTags());
-			display = addCommand.execute(display);
-		}
+        if (!hasTaskChanged) {
+            Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                    task.getEndDate(), task.getTags());
+            display = addCommand.execute(display);
+        }
+		return hasTaskChanged;
 	}
 
 	private Task editTags(Task task) {
@@ -196,31 +208,34 @@ public class CommandUpdate extends TaskEvent implements Command {
 		return task;
 	}
 
-	private void changeEventTaskType(TaskEvent task) {
-		boolean hasTaskChanged = false;
-		if ((getStartDate() != null) && (getEndDate() != null)) {
-			// if user wants to change to floating task
-			if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() == 0)) {
-				Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(), task.getTags());
-				display = addCommand.execute(display);
-				hasTaskChanged = true;
-			}
-		}
-		if (getStartDate() != null) {
-			if ((getStartDate().getTimeInMillis() == 0) && (!hasTaskChanged)) {
-				Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
-						task.getEndDate(), task.getTags());
-				display = addCommand.execute(display);
-				hasTaskChanged = true;
-			}
-		}
+	private boolean changeEventTaskType(TaskEvent task) {
+        boolean hasTaskChanged = false;
+        System.out.println(getStartDate());
+        if ((getStartDate() != null) && (getEndDate() != null)) {
+            // if user wants to change to floating task
+            if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() == 0)) {
+                Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(), task.getTags());
+                display = addCommand.execute(display);
+                hasTaskChanged = true;
+            }
+        }
+        if (getStartDate() != null) {
+            if ((getStartDate().getTimeInMillis() == 0) && (!hasTaskChanged)) {
+                Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                        task.getEndDate(), task.getTags());
+                display = addCommand.execute(display);
+                hasTaskChanged = true;
+            }
+        }
 
-		if (!hasTaskChanged) {
-			Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(), task.getStartDate(),
-					task.getEndDate(), task.getTags());
-			display = addCommand.execute(display);
-		}
-	}
+        if (!hasTaskChanged) {
+            Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(), task.getStartDate(),
+                    task.getEndDate(), task.getTags());
+            display = addCommand.execute(display);
+        }
+        System.out.println("htc " + hasTaskChanged);
+        return hasTaskChanged;
+    }
 
 	private boolean hasChangeFloatTaskType(TaskFloat task) {
 		boolean hasTaskChanged = false;
