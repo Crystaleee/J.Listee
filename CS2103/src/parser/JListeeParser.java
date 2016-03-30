@@ -91,7 +91,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "); 
+		testUpdateTask.ParseCommand("update 2 omg omg hihihi start april 13 #hashtag -#sigh @icube "); 
 	} 
 
 
@@ -258,96 +258,98 @@ public class JListeeParser {
 		taskNumber = extractTaskNumber(inputLine);
 
 		if (inputLine.contains(String.valueOf(taskNumber))) {
-			inputLine = inputLine.replace(String.valueOf(taskNumber), "").trim();
+			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
 		}
 		
-		// natty library to extract dates
-		if (inputLine.contains("-")) {
+		//change event task start date
+		if (inputLine.contains("start")) {
+			inputLine = inputLine.replaceFirst("start", "").trim();
 
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
+				
+				startDate = dateToCalendar(dates.get(0));
+				inputLine = removeRemoveDateFromInputLine(inputLine, group);
+		
+			}
+
+		}
+		
+		//change event task end date
+		else if (inputLine.contains("end")){
+			List<DateGroup> groups = dateParser.parse(inputLine);
+
+			for (DateGroup group : groups) {
+				List<Date> dates = group.getDates();
+				
+				endDate = dateToCalendar(dates.get(0));	
+				inputLine = removeRemoveDateFromInputLine(inputLine, group);
+				inputLine = inputLine.replaceFirst("end", "").trim();
+
+			}
+			
+		}
+		
+		//change event task start & end date
+		// or change deadline end date
+		else {
+			List<DateGroup> groups = dateParser.parse(inputLine);
+
+			for (DateGroup group : groups) {
+				List<Date> dates = group.getDates();
+				/* has start date and end date, event task */
 
 				if (dates.size() == 2) {
 					for (int i = 0; i < dates.size() - 1; i += 2) {
 						startDate = dateToCalendar(dates.get(i));
-						startDate.setTimeInMillis(0);
 						endDate = dateToCalendar(dates.get(i + 1));
-						endDate.setTimeInMillis(0);
 
-						// swap dates if start after end date
+						/* Swap date if necessary */
 						if (startDate.after(endDate)) {
 							Calendar temp = endDate;
 							endDate = startDate;
 							startDate = temp;
 						}
-
 					}
 
+					if (group.isTimeInferred()) {
+						setStartDateTimeDefault(startDate);
+						setEndDateTimeDefault(endDate);
+					}
 				}
 
 				else if (dates.size() == 1) {
 					endDate = dateToCalendar(dates.get(0));
-					endDate.setTimeInMillis(0);
-				}
 
-				inputLine = removeRemoveDateFromInputLine(inputLine, group);
-
-			}
-
-			removeTagLists = findHashTags(inputLine);
-			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
-
-		}
-
-		List<DateGroup> groups = dateParser.parse(inputLine);
-
-		for (DateGroup group : groups) {
-			List<Date> dates = group.getDates();
-			/* has start date and end date, event task */
-
-			if (dates.size() == 2) {
-				for (int i = 0; i < dates.size() - 1; i += 2) {
-					startDate = dateToCalendar(dates.get(i));
-					endDate = dateToCalendar(dates.get(i + 1));
-
-					/* Swap date if necessary */
-					if (startDate.after(endDate)) {
-						Calendar temp = endDate;
-						endDate = startDate;
-						startDate = temp;
+					/* set default end date if no time specified */
+					if (group.isTimeInferred()) {
+						setEndDateTimeDefault(endDate);
 					}
 				}
 
-				if (group.isTimeInferred()) {
-					setStartDateTimeDefault(startDate);
-					setEndDateTimeDefault(endDate);
-				}
+				inputLine = removeDateFromInputLine(inputLine, group).trim();
 			}
-
-			else if (dates.size() == 1) {
-				endDate = dateToCalendar(dates.get(0));
-
-				/* set default end date if no time specified */
-				if (group.isTimeInferred()) {
-					setEndDateTimeDefault(endDate);
-				}
-			}
-
-			inputLine = removeDateFromInputLine(inputLine, group).trim();
 		}
+		
+		if (inputLine.contains("-")){
+			removeTagLists = findHashTags(inputLine);
+			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
+		}
+		
 		
 		tagLists = findHashTags(inputLine);
 		location = findLocation(inputLine);
 
 		taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	}
 
 	private String removeRemoveDateFromInputLine(String inputLine, DateGroup group) {
 		if (inputLine.contains(group.getText())) {
-			inputLine = inputLine.replace("-" + group.getText(), "");
+			inputLine = inputLine.replaceFirst(group.getText(), "");
 		}
 		return inputLine;
 	}
