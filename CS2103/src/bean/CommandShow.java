@@ -34,7 +34,9 @@ public class CommandShow implements Command {
 	}
 
 	public Display execute(Display oldDisplay) {
-        //System.out.println("fs " + oldDisplay.getFloatTasks().size());
+	    if(searchedTask.getDescription().equals("done")){
+	        showDone(oldDisplay);
+	    }
 		if (isShowAll()) {
 			setShowAll(oldDisplay);
 			return oldDisplay;
@@ -52,6 +54,14 @@ public class CommandShow implements Command {
 
 		return oldDisplay;
 	}
+
+    private void showDone(Display oldDisplay) {
+        oldDisplay.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
+        oldDisplay.setVisibleEvents(new ArrayList<TaskEvent>());
+        oldDisplay.setVisibleFloatTasks(new ArrayList<TaskFloat>());
+        oldDisplay.setVisibleReservedTasks(new ArrayList<TaskReserved>());
+        oldDisplay.setVisibleCompletedTasks(oldDisplay.getCompletedTasks());
+    }
 
     private void setShowAll(Display oldDisplay) {
         oldDisplay.setMessage(message_show_all);
