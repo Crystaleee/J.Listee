@@ -30,8 +30,8 @@ public class CommandDone implements Command {
 
     public Display execute(Display oldDisplay) {
         if (taskNumbers == null) {
-            completeAllTasks(oldDisplay);
-            return display;
+            oldDisplay = completeAllTasks(oldDisplay);
+            return oldDisplay;
         }
         this.display = oldDisplay;
         if (hasInvalidTaskNumbers()) {
@@ -47,18 +47,22 @@ public class CommandDone implements Command {
         return display;
     }
 
-    private void completeAllTasks(Display oldDisplay) {
-        oldDisplay.getCompletedTasks().addAll(oldDisplay.getFloatTasks());
+    private Display completeAllTasks(Display oldDisplay) {
+       /* for(int i =0; i< oldDisplay.getFloatTasks().size();i++){
+            oldDisplay.getCompletedTasks().add(oldDisplay.getFloatTasks().get(i));
+        }*/
         oldDisplay.getCompletedTasks().addAll(oldDisplay.getDeadlineTasks());
         oldDisplay.getCompletedTasks().addAll(oldDisplay.getEventTasks());
+        oldDisplay.getCompletedTasks().addAll(oldDisplay.getFloatTasks());
         oldDisplay.setEvents(new ArrayList<TaskEvent>());
         oldDisplay.setFloatTasks(new ArrayList<TaskFloat>());
         oldDisplay.setDeadlineTasks(new ArrayList<TaskDeadline>());
         
         oldDisplay.setVisibleEvents(oldDisplay.getEventTasks());
         oldDisplay.setVisibleFloatTasks(oldDisplay.getFloatTasks());
-        oldDisplay.setDeadlineTasks(oldDisplay.getDeadlineTasks());
-        display.setMessage(message_all_tasks_completed);
+        oldDisplay.setVisibleDeadlineTasks(oldDisplay.getDeadlineTasks());
+        oldDisplay.setMessage(message_all_tasks_completed);
+        return oldDisplay;
     }
 
     private boolean hasInvalidTaskNumbers() {
