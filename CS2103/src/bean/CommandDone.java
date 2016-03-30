@@ -30,7 +30,7 @@ public class CommandDone implements Command {
 
     public Display execute(Display oldDisplay) {
         if (taskNumbers == null) {
-            display = new Display(message_all_tasks_completed);
+            completeAllTasks(oldDisplay);
             return display;
         }
         this.display = oldDisplay;
@@ -45,6 +45,20 @@ public class CommandDone implements Command {
             display.setMessage(completedMessage);
         }
         return display;
+    }
+
+    private void completeAllTasks(Display oldDisplay) {
+        oldDisplay.getCompletedTasks().addAll(oldDisplay.getFloatTasks());
+        oldDisplay.getCompletedTasks().addAll(oldDisplay.getDeadlineTasks());
+        oldDisplay.getCompletedTasks().addAll(oldDisplay.getEventTasks());
+        oldDisplay.setEvents(new ArrayList<TaskEvent>());
+        oldDisplay.setFloatTasks(new ArrayList<TaskFloat>());
+        oldDisplay.setDeadlineTasks(new ArrayList<TaskDeadline>());
+        
+        oldDisplay.setVisibleEvents(oldDisplay.getEventTasks());
+        oldDisplay.setVisibleFloatTasks(oldDisplay.getFloatTasks());
+        oldDisplay.setDeadlineTasks(oldDisplay.getDeadlineTasks());
+        display.setMessage(message_all_tasks_completed);
     }
 
     private boolean hasInvalidTaskNumbers() {
