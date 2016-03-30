@@ -54,7 +54,7 @@ public class JListeeParser{
 
 /* public static void main(String[] separateInputLine){ // for testing
 		try {
-			fh = new FileHandler("/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log");
+			fh = new FileHandler("log\\log.txt");
 			logger.addHandler(fh);
 			SimpleFormatter formatter = new SimpleFormatter();  
 			fh.setFormatter(formatter);  
