@@ -101,7 +101,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 1 CS2103 lecture"); 
+		testUpdateTask.ParseCommand("update 4 dinner with friends"); 
 		
 		JListeeParser testDone = new JListeeParser();
 		testDone.ParseCommand("done 1,2,3,4"); 
@@ -196,9 +196,9 @@ public class JListeeParser {
 		ArrayList<String> tagLists = new ArrayList<String>();
 	
 		inputLine = inputLine.replaceFirst(COMMAND_ADD, "").trim();
-	
-		if (inputLine.contains("from") || (inputLine.contains("to")) ||
-				inputLine.contains("due")){
+		
+		if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
+				Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
 			
 			// natty library to extract dates
 			List<DateGroup> groups = dateParser.parse(inputLine);
@@ -279,9 +279,9 @@ public class JListeeParser {
 	
 		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
 		
-		if (inputLine.contains("from") || (inputLine.contains("to")) ||
-				inputLine.contains("due")){
-			
+		if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
+				Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
+		
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
 			inputLine = extractDateAndInputLine(inputLine, groups);
@@ -303,7 +303,7 @@ public class JListeeParser {
 		if (location == null && startDate == null && endDate == null && tagLists == null){
 			return new CommandShow(taskDescription);
 		}
-			
+
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 	}
 
@@ -317,8 +317,9 @@ public class JListeeParser {
 	
 		inputLine = inputLine.replaceFirst(COMMAND_RESERVE, "").trim();
 	
-		if (inputLine.contains("from") || (inputLine.contains("to")) ||
-				inputLine.contains("due")){
+		if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
+				Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
+			
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
 			for (DateGroup group : groups) {
@@ -346,6 +347,7 @@ public class JListeeParser {
 	}
 
 	public Command parseUpdate(String inputLine) {
+		
 		String location = null;
 		String taskDescription = null;
 		ArrayList<String> removeTagLists = new ArrayList<String>();
@@ -361,22 +363,24 @@ public class JListeeParser {
 		
 		
 		//change event task start date
-		if (inputLine.contains(CONTAINING_START)) {
-			inputLine = inputLine.replaceFirst(CONTAINING_START, "").trim();
-	
-			List<DateGroup> groups = dateParser.parse(inputLine);
-	
-			inputLine = extractStartTimeAndInputLine(inputLine, groups);
+		if (Pattern.compile("\\bstart\\b").matcher(inputLine).find()) {
+				inputLine = inputLine.replaceFirst(CONTAINING_START, "").trim();
+
+				List<DateGroup> groups = dateParser.parse(inputLine);
+
+				inputLine = extractStartTimeAndInputLine(inputLine, groups);
+			
 			
 		}
 		
 		//change event task end date
-		else if (inputLine.contains(CONTAINING_END)){
+		else if (Pattern.compile("\\bend\\b").matcher(inputLine).find()){
 			inputLine = inputLine.replaceFirst(CONTAINING_END, "").trim();
-	
+
 			List<DateGroup> groups = dateParser.parse(inputLine);
-	
+
 			inputLine = extractEndTimeAndInputLine(inputLine, groups);
+			
 			
 		}
 		
@@ -385,15 +389,14 @@ public class JListeeParser {
 
 
 		else {	
+			if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
+					Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
+				List<DateGroup> groups = dateParser.parse(inputLine);
+				inputLine = extractDateAndInputLine(inputLine, groups);
+				inputLine = inputLine.replaceFirst("from", "").trim();
+				inputLine = inputLine.replaceFirst("to", "").trim();
+				inputLine = inputLine.replaceFirst("due", "").trim();
 
-			if (inputLine.contains("from") || (inputLine.contains("to")) ||
-					inputLine.contains("due")){
-			List<DateGroup> groups = dateParser.parse(inputLine);
-			inputLine = extractDateAndInputLine(inputLine, groups);
-			inputLine = inputLine.replaceFirst("from", "").trim();
-			inputLine = inputLine.replaceFirst("to", "").trim();
-			inputLine = inputLine.replaceFirst("due", "").trim();
-			
 			}
 		}
 		
@@ -411,8 +414,7 @@ public class JListeeParser {
 		if (taskDescription.equals("")){
 			taskDescription = null;
 		}
-
-
+		
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
