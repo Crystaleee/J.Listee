@@ -25,9 +25,7 @@ public class CommandUndo implements Command {
 			// return (new Display(MESSAGE_ERROR_UNDO));
 		}
 
-		Display prevDisplay = History.getDisplay(-1);
-		display = prevDisplay.deepClone();
-		
+		display = History.getDisplay(-1);
 		display.setMessage(MESSAGE_UNDO);
 		return display;
 	}

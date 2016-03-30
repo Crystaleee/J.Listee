@@ -1,27 +1,6 @@
-Mar 29, 2016 2:44:34 PM storage.Storage getDisplay
-INFO: Reading all tasks from file.
+三月 30, 2016 8:48:53 下午 storage.Storage saveFile
+信息: Writing all tasks to file.
 
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksFloating
-INFO: Reading new floating task.
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksFloating
-INFO: Successfully read: Floating Test
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksDeadline
-INFO: Reading new deadline task.
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksDeadline
-INFO: Successfully read: Deadline
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksEvents
-INFO: Reading new event.
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksEvents
-INFO: Successfully read: event
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksReserved
-INFO: Reading new reserved task.
-
-Mar 29, 2016 2:44:34 PM storage.Storage readTasksReserved
-INFO: Successfully read: Meeting
+三月 30, 2016 8:48:53 下午 storage.Storage writeDeadlineTasks
+信息: Writing lab5 to file.
 

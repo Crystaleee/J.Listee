@@ -22,8 +22,6 @@ import netscape.javascript.JSObject;
 
 /**
  * @@author A0149527W
- * @date 2016年3月2日 上午12:06:39
- * @version 1.0
  */
 public class ShowList extends AppPage {
 	private List<String> userCmd=new ArrayList<String>();//store user's commands
@@ -54,8 +52,8 @@ public class ShowList extends AppPage {
 						
 						// construct JSON to pass to JS
 						//deadline tasks
-						if(this.display.getVisibleDeadlineTasks()!=null){
-							List<TaskDeadline> deadlines=this.display.getVisibleDeadlineTasks();
+						if(this.display.getDeadlineTasks()!=null){
+							List<TaskDeadline> deadlines=this.display.getDeadlineTasks();
 							JSONArray jsonDeadline = new JSONArray();
 							for (TaskDeadline deadline: deadlines) {
 								JSONObject task = new JSONObject(deadline);
@@ -76,8 +74,8 @@ public class ShowList extends AppPage {
 						
 						
 						//event tasks
-						if(this.display.getVisibleEvents()!=null){
-							List<TaskEvent> events=this.display.getVisibleEvents();
+						if(this.display.getEventTasks()!=null){
+							List<TaskEvent> events=this.display.getEventTasks();
 							JSONArray jsonEvent = new JSONArray();
 							for (TaskEvent event: events) {
 								JSONObject task = new JSONObject(event);
@@ -101,8 +99,8 @@ public class ShowList extends AppPage {
 						}				
 						
 						//floating tasks
-						if(this.display.getVisibleFloatTasks()!=null){
-							List<TaskFloat> floatings=this.display.getVisibleFloatTasks();
+						if(this.display.getFloatTasks()!=null){
+							List<TaskFloat> floatings=this.display.getFloatTasks();
 							JSONArray jsonFloating = new JSONArray();
 							for (Task floating: floatings) {
 								JSONObject task = new JSONObject(floating);
@@ -115,8 +113,8 @@ public class ShowList extends AppPage {
 						}
 						
 						//reserved tasks
-						if(this.display.getVisibleReservedTasks()!=null){
-							List<TaskReserved> reservations=this.display.getVisibleReservedTasks();
+						if(this.display.getReservedTasks()!=null){
+							List<TaskReserved> reservations=this.display.getReservedTasks();
 							JSONArray jsonReserved = new JSONArray();
 							for (TaskReserved reserved: reservations) {
 								JSONObject  task= new JSONObject(reserved);

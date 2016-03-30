@@ -2,14 +2,12 @@
 
 package parser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +42,7 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MINUTE = 59;
 	private static final int DEFAULT_END_SECOND = 0;
 	private static final int DEFAULT_END_MILLISECOND = 0;
-	
+
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
@@ -53,52 +51,7 @@ public class JListeeParser {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
 
-
-
- public static void main(String[] separateInputLine){ // for testing
-		try {
-			fh = new FileHandler("log\\log.txt");
-			logger.addHandler(fh);
-			SimpleFormatter formatter = new SimpleFormatter();  
-			fh.setFormatter(formatter);  
-
-		} catch (SecurityException e) {  
-			e.printStackTrace();  
-		} catch (IOException e) {  
-			e.printStackTrace();  
-		} 
-
-
-		JListeeParser testEvent = new JListeeParser();
-		testEvent.ParseCommand("add event  (03/17/2016 2pm to 03/27/2016 5pm) add event @LT27 #hihi #me");
-
-		JListeeParser testFloat = new JListeeParser();
-		testFloat.ParseCommand("add floatingtask @zzz #arghhhhh #hi");
-
-		JListeeParser testDeadLine = new JListeeParser();
-		testDeadLine.ParseCommand("add deadLine date only @whatthe 12/2/14 #hey");
-
-		JListeeParser testDeadLine2 = new JListeeParser();
-		testDeadLine2.ParseCommand("add deadLine date and time @location today 3:00 #hashtag");
-
-		JListeeParser testDelete = new JListeeParser();
-		testDelete.ParseCommand("delete 1,2,3,4");
-		
-		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show hiiiiii  12/4/16 #hihi @location ");
-		
-		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
-
-		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 end april 29 #hashtag -#sigh @icube "); 
-	} 
-
-
-
-
-	
-		/*
+	/*
 	 * public static void main(String[] separateInputLine){ // for testing try {
 	 * fh = new FileHandler(
 	 * "/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log"
@@ -139,7 +92,6 @@ public class JListeeParser {
 	 * "update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "
 	 * ); }
 	 */
-	
 
 	public Command ParseCommand(String inputLine) {
 
@@ -225,12 +177,8 @@ public class JListeeParser {
 		if (!inputLine.contains("all")) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-		
-		if (location == null && startDate == null && endDate == null && tagLists == null){
-			return new CommandShow(taskDescription);
-		}
+		return new CommandShow(taskDescription);
 
-		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 	}
 
 	public Command parseInvalid() {
@@ -253,120 +201,100 @@ public class JListeeParser {
 		ArrayList<String> removeTagLists = new ArrayList<String>();
 		ArrayList<String> tagLists = new ArrayList<String>();
 		Integer taskNumber;
-
+		System.out.println(inputLine);
 		inputLine = inputLine.replaceFirst("update", "").trim();
 		taskNumber = extractTaskNumber(inputLine);
 
 		if (inputLine.contains(String.valueOf(taskNumber))) {
-			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
+			inputLine = inputLine.replace(String.valueOf(taskNumber), "").trim();
 		}
-		
-		//change event task start date
-		if (inputLine.contains("start")) {
-			inputLine = inputLine.replaceFirst("start", "").trim();
+		// natty library to extract dates
+		if (inputLine.contains("-")) {
 
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
-				startDate = dateToCalendar(dates.get(0));
-
-				if (group.isTimeInferred()) {
-					setStartDateTimeDefault(startDate);
-				}
-				
-				inputLine = removeRemoveDateFromInputLine(inputLine, group);
-		
-				
-			}
-			
-			
-
-		}
-		
-		//change event task end date
-		else if (inputLine.contains("end")){
-			inputLine = inputLine.replaceFirst("end", "").trim();
-
-			List<DateGroup> groups = dateParser.parse(inputLine);
-
-			for (DateGroup group : groups) {
-				List<Date> dates = group.getDates();
-				endDate = dateToCalendar(dates.get(0));	
-
-				if (group.isTimeInferred()) {
-					setEndDateTimeDefault(endDate);
-				}
-				inputLine = removeRemoveDateFromInputLine(inputLine, group);
-
-			}
-			
-		}
-		
-		//change event task start & end date
-		// or change deadline end date
-		else {
-			List<DateGroup> groups = dateParser.parse(inputLine);
-
-			for (DateGroup group : groups) {
-				List<Date> dates = group.getDates();
-				/* has start date and end date, event task */
 
 				if (dates.size() == 2) {
 					for (int i = 0; i < dates.size() - 1; i += 2) {
 						startDate = dateToCalendar(dates.get(i));
+						startDate.setTimeInMillis(0);
 						endDate = dateToCalendar(dates.get(i + 1));
+						endDate.setTimeInMillis(0);
 
-						/* Swap date if necessary */
+						// swap dates if start after end date
 						if (startDate.after(endDate)) {
 							Calendar temp = endDate;
 							endDate = startDate;
 							startDate = temp;
 						}
+
 					}
 
-					if (group.isTimeInferred()) {
-						setStartDateTimeDefault(startDate);
-						setEndDateTimeDefault(endDate);
-					}
 				}
 
 				else if (dates.size() == 1) {
 					endDate = dateToCalendar(dates.get(0));
+					endDate.setTimeInMillis(0);
+				}
 
-					/* set default end date if no time specified */
-					if (group.isTimeInferred()) {
-						setEndDateTimeDefault(endDate);
+				inputLine = removeRemoveDateFromInputLine(inputLine, group);
+
+			}
+
+			removeTagLists = findHashTags(inputLine);
+			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
+
+		}
+
+		List<DateGroup> groups = dateParser.parse(inputLine);
+
+		for (DateGroup group : groups) {
+			List<Date> dates = group.getDates();
+			/* has start date and end date, event task */
+
+			if (dates.size() == 2) {
+				for (int i = 0; i < dates.size() - 1; i += 2) {
+					startDate = dateToCalendar(dates.get(i));
+					endDate = dateToCalendar(dates.get(i + 1));
+
+					/* Swap date if necessary */
+					if (startDate.after(endDate)) {
+						Calendar temp = endDate;
+						endDate = startDate;
+						startDate = temp;
 					}
 				}
 
-				inputLine = removeDateFromInputLine(inputLine, group).trim();
+				if (group.isTimeInferred()) {
+					setStartDateTimeDefault(startDate);
+					setEndDateTimeDefault(endDate);
+				}
 			}
+
+			else if (dates.size() == 1) {
+				endDate = dateToCalendar(dates.get(0));
+
+				/* set default end date if no time specified */
+				if (group.isTimeInferred()) {
+					setEndDateTimeDefault(endDate);
+				}
+			}
+
+			inputLine = removeDateFromInputLine(inputLine, group).trim();
 		}
-		
-		if (inputLine.contains("-")){
-			removeTagLists = findHashTags(inputLine);
-			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
-		}
-		
-		
+
 		tagLists = findHashTags(inputLine);
 		location = findLocation(inputLine);
 
 		taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-		
-		if (taskDescription.equals("")){
-			taskDescription = null;
-		}
-		
-		System.out.println(taskDescription);
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
-	
 	}
 
 	private String removeRemoveDateFromInputLine(String inputLine, DateGroup group) {
 		if (inputLine.contains(group.getText())) {
-			inputLine = inputLine.replaceFirst(group.getText(), "");
+			inputLine = inputLine.replace("-" + group.getText(), "");
 		}
 		return inputLine;
 	}
@@ -439,7 +367,7 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-		
+
 		return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
 
 	}

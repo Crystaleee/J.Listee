@@ -59,9 +59,9 @@ public class Storage {
 		return storageInstance;
 	}
 
-	 private void initializeFilePath() throws IOException {
-	 filePath = LogStorage.readLogFile();
-	 }
+	// private void initializeFilePath() throws IOException {
+	// filePath = LogStorage.readLogFile();
+	// }
 
 	private void setFilePath(String filepath) {
 		filePath = filepath;
@@ -75,14 +75,11 @@ public class Storage {
 		setFilePath(filepath);
 	}
 
-	public Display getDisplay() throws IOException {
+	public Display getDisplay(String filepath) throws IOException {
 		FileHandler handler = createLogHandler();
 		logger.log(Level.INFO, "Reading all tasks from file.\r\n");
 
-		initializeFilePath();
-		
-		System.out.println(filePath);
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
 
 		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
 		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
@@ -107,7 +104,7 @@ public class Storage {
 		}
 
 		closeReaderClasses(handler, br);
-		//setFilePath(filepath);
+		setFilePath(filepath);
 
 		Display display = new Display(MESSAGE_EMPTY, events, deadlineTasks, floatTasks, reservedTasks, completedTasks);
 		return display;
@@ -266,6 +263,8 @@ public class Storage {
 	private void readTasksCompleted(BufferedReader br, ArrayList<Task> completedTasks) throws IOException {
 		String line;
 		String description = null;
+		String location = null;
+		ArrayList<String> tags = null;
 
 		try {
 			readHeader(br);
@@ -276,19 +275,12 @@ public class Storage {
 				} else {
 					logger.log(Level.INFO, "Reading new completed task.\r\n");
 					description = readDescription(line);
+					location = readLocation(br);
+					tags = readTags(br);
 
-					line = br.readLine();
-					if (line.startsWith(ATTRIBUTE_LOCATION)) {
-						readCompletedTaskFloat(description, line, completedTasks, br);
-					} else if (line.startsWith(ATTRIBUTE_DEADLINE)) {
-						readCompletedTaskDeadline(description, line, completedTasks, br);
-					} else if (line.startsWith(ATTRIBUTE_START_DATE)) {
-						readCompletedTaskEvent(description, line, completedTasks, br);
-					} else if (line.startsWith(ATTRIBUTE_START_DATES)) {
-						readCompletedTaskReserved(description, line, completedTasks, br);
-					} else {
-						logger.log(Level.WARNING, "Could not read: " + description + "\r\n");
-					}
+					Task completedTask = new Task(description, location, tags);
+					completedTasks.add(completedTask);
+					logger.log(Level.INFO, "Successfully read: " + completedTask.getDescription() + "\r\n");
 				}
 			}
 		} catch (IOException ioe) {
@@ -300,65 +292,6 @@ public class Storage {
 			logger.log(Level.WARNING, "Could not read completed task.\r\n");
 			e.printStackTrace();
 		}
-	}
-
-	private void readCompletedTaskFloat(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException {
-		String location = line.replaceFirst(ATTRIBUTE_LOCATION, "").trim();
-		ArrayList<String> tags = readTags(br);
-		TaskFloat floatTask = new TaskFloat(description, location, tags);
-		completedTasks.add(floatTask);
-		logger.log(Level.INFO, "Successfully read: " + floatTask.getDescription() + "\r\n");
-		System.out.println(floatTask);
-	}
-
-	private void readCompletedTaskDeadline(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException, ParseException {
-		Calendar deadline = Calendar.getInstance();
-		deadline.setTime(sdf.parse(line.replaceFirst(ATTRIBUTE_DEADLINE, "").trim()));
-		String location = readLocation(br);
-		ArrayList<String> tags = readTags(br);
-		TaskDeadline deadlineTask = new TaskDeadline(description, location, deadline, tags);
-		completedTasks.add(deadlineTask);
-		logger.log(Level.INFO, "Successfully read: " + deadlineTask.getDescription() + "\r\n");
-		System.out.println(deadlineTask);
-	}
-
-	private void readCompletedTaskEvent(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException, ParseException {
-		Calendar startDate = Calendar.getInstance();
-		startDate.setTime(sdf.parse(line.replaceFirst(ATTRIBUTE_START_DATE, "").trim()));
-		Calendar endDate = readDate(br, ATTRIBUTE_END_DATE);
-		String location = readLocation(br);
-		ArrayList<String> tags = readTags(br);
-		TaskEvent eventTask = new TaskEvent(description, location, startDate, endDate, tags);
-		completedTasks.add(eventTask);
-		logger.log(Level.INFO, "Successfully read: " + eventTask.getDescription() + "\r\n");
-		System.out.println(eventTask);
-	}
-
-	private void readCompletedTaskReserved(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException, ParseException {
-		ArrayList<Calendar> startDates = new ArrayList<Calendar>();
-
-		if (line.startsWith(ATTRIBUTE_START_DATES)) {
-			ArrayList<String> datesString = new ArrayList<String>(
-					Arrays.asList(line.replaceFirst(ATTRIBUTE_START_DATES, "").trim().split("\\s*,\\s*")));
-
-			for (String dateString : datesString) {
-				Calendar date = Calendar.getInstance();
-				date.setTime(sdf.parse(dateString));
-				startDates.add(date);
-			}
-		}
-		ArrayList<Calendar> endDates = readDates(br, ATTRIBUTE_END_DATES);
-		String location = readLocation(br);
-		ArrayList<String> tags = readTags(br);
-
-		TaskReserved reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
-		completedTasks.add(reservedTask);
-		logger.log(Level.INFO, "Successfully read: " + reservedTask.getDescription() + "\r\n");
-		System.out.println(reservedTask);
 	}
 
 	private FileHandler createLogHandler() throws IOException {

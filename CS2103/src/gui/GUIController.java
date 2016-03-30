@@ -15,8 +15,6 @@ import storage.LogStorage;
 
 /**
  * @@author A0149527W
- * @date 2016年3月5日 上午10:52:04
- * @version 1.0
  */
 public class GUIController {
 	private static Stage stage;
