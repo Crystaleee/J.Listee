@@ -51,7 +51,6 @@ public class JListeeParser {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
 
-<<<<<<< HEAD
 
 
 /* public static void main(String[] separateInputLine){ // for testing
@@ -96,14 +95,9 @@ public class JListeeParser {
 */
 
 
-	public Command ParseCommand(String inputLine){
 
-		String[] separateInputLine = inputLine.split(" ");	
-		String commandType = determineCommandType(separateInputLine);	
-
-		switch (commandType){
-=======
-	/*
+	
+		/*
 	 * public static void main(String[] separateInputLine){ // for testing try {
 	 * fh = new FileHandler(
 	 * "/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log"
@@ -144,14 +138,14 @@ public class JListeeParser {
 	 * "update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "
 	 * ); }
 	 */
+	
 
-	public Command ParseCommand(String inputLine) {
+	public Command JListeeParser(String inputLine) {
 
 		String[] separateInputLine = inputLine.split(" ");
 		String commandType = determineCommandType(separateInputLine);
 
 		switch (commandType) {
->>>>>>> 51b228b6c667abd24d44dc2780f66d8eb0025b18
 		case COMMAND_ADD:
 			return parseAdd(inputLine);
 
