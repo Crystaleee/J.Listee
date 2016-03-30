@@ -1,5 +1,5 @@
 /*
- * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author Boh Tuang Hwee, Jehiel (A0139995E)
  * Last updated: 3/15/2016, 1:45am
  * CS2103
  */
@@ -16,6 +16,7 @@ public class TaskFloat extends Task {
 		super(description, location, tags);
 	}
 
+	// @@author Chloe Odquier Fortuna (A0149063E)
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

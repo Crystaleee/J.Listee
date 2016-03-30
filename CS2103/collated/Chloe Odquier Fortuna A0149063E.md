@@ -1,4 +1,175 @@
-//@@author Chloe Odquier Fortuna (A0149063E)
+# Chloe Odquier Fortuna A0149063E
+###### src\bean\Display.java
+``` java
+	@Override
+	public String toString() {
+		return "Display [message=" + message + ", events=" + events + ", deadlineTasks=" + deadlineTasks
+				+ ", floatTasks=" + floatTasks + ", reservedTasks=" + reservedTasks + ", completedTasks="
+				+ completedTasks + "]";
+	}
+}
+```
+###### src\bean\Task.java
+``` java
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Description: " + this.getDescription() + "\r\n");
+		String location = this.getLocation();
+		if (location == null) {
+			location = "";
+		}
+		sb.append("Location: " + location + "\r\n");
+
+		ArrayList<String> tagsList = this.getTags();
+		String tagsString = "";
+		for (String tag : tagsList) {
+			tagsString += " #" + tag;
+		}
+
+		sb.append("Tags:" + tagsString + "\r\n");
+		sb.append("\r\n");
+		return sb.toString();
+	}
+}
+```
+###### src\bean\TaskDeadline.java
+``` java
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Description: " + this.getDescription() + "\r\n");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+		String dateString = sdf.format(this.endDate.getTime());
+		sb.append("Deadline: " + dateString + "\r\n");
+
+		String location = this.getLocation();
+		if (location == null) {
+			location = "";
+		}
+		sb.append("Location: " + location + "\r\n");
+
+		ArrayList<String> tagsList = this.getTags();
+		String tagsString = "";
+		for (String tag : tagsList) {
+			tagsString += " #" + tag;
+		}
+
+		sb.append("Tags:" + tagsString + "\r\n");
+		sb.append("\r\n");
+		return sb.toString();
+	}
+
+}
+```
+###### src\bean\TaskEvent.java
+``` java
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Description: " + this.getDescription() + "\r\n");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+		String startDate = sdf.format(this.startDate.getTime());
+		sb.append("Start Date: " + startDate + "\r\n");
+
+		String endDate = sdf.format(this.getEndDate().getTime());
+		sb.append("End Date: " + endDate + "\r\n");
+
+		String location = this.getLocation();
+		if (location == null) {
+			location = "";
+		}
+		sb.append("Location: " + location + "\r\n");
+
+		ArrayList<String> tagsList = this.getTags();
+		String tagsString = "";
+		for (String tag : tagsList) {
+			tagsString += " #" + tag;
+		}
+
+		sb.append("Tags:" + tagsString + "\r\n");
+		sb.append("\r\n");
+		return sb.toString();
+	}
+
+}
+```
+###### src\bean\TaskFloat.java
+``` java
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Description: " + this.getDescription() + "\r\n");
+		String location = this.getLocation();
+		if (location == null) {
+			location = "";
+		}
+		sb.append("Location: " + location + "\r\n");
+
+		ArrayList<String> tagsList = this.getTags();
+		String tagsString = "";
+		for (String tag : tagsList) {
+			tagsString += " #" + tag;
+		}
+
+		sb.append("Tags:" + tagsString + "\r\n");
+		sb.append("\r\n");
+		return sb.toString();
+	}
+
+}
+```
+###### src\bean\TaskReserved.java
+``` java
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Description: " + this.getDescription() + "\r\n");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+
+		String startDates = "";
+		for (int i = 0; i < this.startDates.size(); i++) {
+			if (i == this.startDates.size() - 1) {
+				startDates += sdf.format(this.startDates.get(i).getTime());
+			} else {
+				startDates += sdf.format(this.startDates.get(i).getTime()) + ", ";
+			}
+		}
+		sb.append("Start Dates: " + startDates + "\r\n");
+
+		String endDates = "";
+		for (int i = 0; i < this.endDates.size(); i++) {
+			if (i == this.endDates.size() - 1) {
+				endDates += sdf.format(this.endDates.get(i).getTime());
+			} else {
+				endDates += sdf.format(this.endDates.get(i).getTime()) + ", ";
+			}
+		}
+		sb.append("End Dates: " + endDates + "\r\n");
+
+		String location = this.getLocation();
+		if (location == null) {
+			location = "";
+		}
+		sb.append("Location: " + location + "\r\n");
+
+		ArrayList<String> tagsList = this.getTags();
+		String tagsString = "";
+		for (String tag : tagsList) {
+			tagsString += " #" + tag;
+		}
+
+		sb.append("Tags:" + tagsString + "\r\n");
+		sb.append("\r\n");
+		return sb.toString();
+	}
+
+}
+```
+###### src\storage\Storage.java
+``` java
 package storage;
 
 import java.io.BufferedReader;
@@ -59,9 +230,9 @@ public class Storage {
 		return storageInstance;
 	}
 
-	 private void initializeFilePath() throws IOException {
-	 filePath = LogStorage.readLogFile();
-	 }
+	// private void initializeFilePath() throws IOException {
+	// filePath = LogStorage.readLogFile();
+	// }
 
 	private void setFilePath(String filepath) {
 		filePath = filepath;
@@ -75,14 +246,11 @@ public class Storage {
 		setFilePath(filepath);
 	}
 
-	public Display getDisplay() throws IOException {
+	public Display getDisplay(String filepath) throws IOException {
 		FileHandler handler = createLogHandler();
 		logger.log(Level.INFO, "Reading all tasks from file.\r\n");
 
-		initializeFilePath();
-		
-		System.out.println(filePath);
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
 
 		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
 		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
@@ -107,7 +275,7 @@ public class Storage {
 		}
 
 		closeReaderClasses(handler, br);
-		//setFilePath(filepath);
+		setFilePath(filepath);
 
 		Display display = new Display(MESSAGE_EMPTY, events, deadlineTasks, floatTasks, reservedTasks, completedTasks);
 		return display;
@@ -266,6 +434,8 @@ public class Storage {
 	private void readTasksCompleted(BufferedReader br, ArrayList<Task> completedTasks) throws IOException {
 		String line;
 		String description = null;
+		String location = null;
+		ArrayList<String> tags = null;
 
 		try {
 			readHeader(br);
@@ -276,19 +446,12 @@ public class Storage {
 				} else {
 					logger.log(Level.INFO, "Reading new completed task.\r\n");
 					description = readDescription(line);
+					location = readLocation(br);
+					tags = readTags(br);
 
-					line = br.readLine();
-					if (line.startsWith(ATTRIBUTE_LOCATION)) {
-						readCompletedTaskFloat(description, line, completedTasks, br);
-					} else if (line.startsWith(ATTRIBUTE_DEADLINE)) {
-						readCompletedTaskDeadline(description, line, completedTasks, br);
-					} else if (line.startsWith(ATTRIBUTE_START_DATE)) {
-						readCompletedTaskEvent(description, line, completedTasks, br);
-					} else if (line.startsWith(ATTRIBUTE_START_DATES)) {
-						readCompletedTaskReserved(description, line, completedTasks, br);
-					} else {
-						logger.log(Level.WARNING, "Could not read: " + description + "\r\n");
-					}
+					Task completedTask = new Task(description, location, tags);
+					completedTasks.add(completedTask);
+					logger.log(Level.INFO, "Successfully read: " + completedTask.getDescription() + "\r\n");
 				}
 			}
 		} catch (IOException ioe) {
@@ -300,65 +463,6 @@ public class Storage {
 			logger.log(Level.WARNING, "Could not read completed task.\r\n");
 			e.printStackTrace();
 		}
-	}
-
-	private void readCompletedTaskFloat(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException {
-		String location = line.replaceFirst(ATTRIBUTE_LOCATION, "").trim();
-		ArrayList<String> tags = readTags(br);
-		TaskFloat floatTask = new TaskFloat(description, location, tags);
-		completedTasks.add(floatTask);
-		logger.log(Level.INFO, "Successfully read: " + floatTask.getDescription() + "\r\n");
-		System.out.println(floatTask);
-	}
-
-	private void readCompletedTaskDeadline(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException, ParseException {
-		Calendar deadline = Calendar.getInstance();
-		deadline.setTime(sdf.parse(line.replaceFirst(ATTRIBUTE_DEADLINE, "").trim()));
-		String location = readLocation(br);
-		ArrayList<String> tags = readTags(br);
-		TaskDeadline deadlineTask = new TaskDeadline(description, location, deadline, tags);
-		completedTasks.add(deadlineTask);
-		logger.log(Level.INFO, "Successfully read: " + deadlineTask.getDescription() + "\r\n");
-		System.out.println(deadlineTask);
-	}
-
-	private void readCompletedTaskEvent(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException, ParseException {
-		Calendar startDate = Calendar.getInstance();
-		startDate.setTime(sdf.parse(line.replaceFirst(ATTRIBUTE_START_DATE, "").trim()));
-		Calendar endDate = readDate(br, ATTRIBUTE_END_DATE);
-		String location = readLocation(br);
-		ArrayList<String> tags = readTags(br);
-		TaskEvent eventTask = new TaskEvent(description, location, startDate, endDate, tags);
-		completedTasks.add(eventTask);
-		logger.log(Level.INFO, "Successfully read: " + eventTask.getDescription() + "\r\n");
-		System.out.println(eventTask);
-	}
-
-	private void readCompletedTaskReserved(String description, String line, ArrayList<Task> completedTasks,
-			BufferedReader br) throws IOException, ParseException {
-		ArrayList<Calendar> startDates = new ArrayList<Calendar>();
-
-		if (line.startsWith(ATTRIBUTE_START_DATES)) {
-			ArrayList<String> datesString = new ArrayList<String>(
-					Arrays.asList(line.replaceFirst(ATTRIBUTE_START_DATES, "").trim().split("\\s*,\\s*")));
-
-			for (String dateString : datesString) {
-				Calendar date = Calendar.getInstance();
-				date.setTime(sdf.parse(dateString));
-				startDates.add(date);
-			}
-		}
-		ArrayList<Calendar> endDates = readDates(br, ATTRIBUTE_END_DATES);
-		String location = readLocation(br);
-		ArrayList<String> tags = readTags(br);
-
-		TaskReserved reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
-		completedTasks.add(reservedTask);
-		logger.log(Level.INFO, "Successfully read: " + reservedTask.getDescription() + "\r\n");
-		System.out.println(reservedTask);
 	}
 
 	private FileHandler createLogHandler() throws IOException {
@@ -531,3 +635,167 @@ public class Storage {
 	}
 
 }
+```
+###### src\storage\StorageTest.java
+``` java
+
+package storage;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import bean.Display;
+import bean.Task;
+import bean.TaskDeadline;
+import bean.TaskEvent;
+import bean.TaskFloat;
+import bean.TaskReserved;
+
+public class StorageTest {
+
+	Storage storage = Storage.getInstance();
+	Display display;
+
+	/* Creates a display to be used for the unit tests */
+	@Before
+	public void setUpDisplay() {
+		ArrayList<String> tags = new ArrayList<>(Arrays.asList("tag1, tag2"));
+		Calendar date = Calendar.getInstance();
+
+		TaskFloat floatTask = new TaskFloat("Test Floating", "NUS", tags);
+		TaskDeadline deadlineTask = new TaskDeadline("Test Deadline", "NUS", date, tags);
+		TaskEvent eventTask = new TaskEvent("Test Event", "NUS", date, date, tags);
+
+		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
+		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
+		ArrayList<TaskEvent> eventTasks = new ArrayList<TaskEvent>();
+		ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
+		ArrayList<Task> completedTasks = new ArrayList<Task>();
+
+		floatTasks.add(floatTask);
+		floatTasks.add(floatTask);
+
+		deadlineTasks.add(deadlineTask);
+		deadlineTasks.add(deadlineTask);
+
+		eventTasks.add(eventTask);
+		eventTasks.add(eventTask);
+
+		display = new Display("", eventTasks, deadlineTasks, floatTasks, reservedTasks, completedTasks);
+	}
+
+	@Before
+	public void prepareTextFileForTests() throws IOException {
+		storage.createFile("src\\storage\\tests\\test.txt");
+	}
+
+	/* This is a case for the successful createFile() partition */
+	@Test
+	public void testfileExists() {
+		File file = new File("src\\storage\\tests\\test.txt");
+		assertTrue(file.exists());
+	}
+
+	/*
+	 * This is a case for the createFile() partition proving that it creates a
+	 * file in the correct location
+	 */
+	@Test
+	public void testfileLocation() {
+		File file = new File("src\\storage\\test.txt");
+		assertFalse(file.exists());
+	}
+
+	/* This is a case for the normal reading from file partition */
+	@Test
+	public void testSaveAndRead() throws IOException {
+		storage.saveFile(display);
+		assertEquals(display.toString(), storage.getDisplay(storage.filePath).toString());
+	}
+
+	/*
+	 * This is a case for the reading from a file with empty descriptions
+	 * partition
+	 */
+	@Test
+	public void testReadEmptyDescription() throws IOException {
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDescriptionTest.txt");
+
+		ArrayList<TaskFloat> emptyFloat = emptyDescriptionDisplay.getFloatTasks();
+		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
+		ArrayList<TaskEvent> emptyEvent = emptyDescriptionDisplay.getEventTasks();
+
+		assertEquals("undefined", emptyFloat.get(0).getDescription());
+		assertEquals("undefined", emptyDeadline.get(0).getDescription());
+		assertEquals("undefined", emptyEvent.get(0).getDescription());
+	}
+
+	/*
+	 * This is a case for the reading from a file with empty locations partition
+	 */
+	@Test
+	public void testReadEmptyLocation() throws IOException {
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyLocationTest.txt");
+
+		ArrayList<TaskFloat> emptyFloat = emptyDescriptionDisplay.getFloatTasks();
+		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
+		ArrayList<TaskEvent> emptyEvent = emptyDescriptionDisplay.getEventTasks();
+
+		assertEquals(null, emptyFloat.get(0).getLocation());
+		assertEquals(null, emptyDeadline.get(0).getLocation());
+		assertEquals(null, emptyEvent.get(0).getLocation());
+	}
+
+	/* This is a case for the reading from a file with empty tags partition */
+	@Test
+	public void testReadEmptyTags() throws IOException {
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyTagsTest.txt");
+
+		ArrayList<TaskFloat> emptyFloat = emptyDescriptionDisplay.getFloatTasks();
+		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
+		ArrayList<TaskEvent> emptyEvent = emptyDescriptionDisplay.getEventTasks();
+
+		ArrayList<Task> emptyTagList = new ArrayList<Task>();
+
+		assertEquals(emptyTagList, emptyFloat.get(0).getTags());
+		assertEquals(emptyTagList, emptyDeadline.get(0).getTags());
+		assertEquals(emptyTagList, emptyEvent.get(0).getTags());
+	}
+
+	/*
+	 * This is a case for the reading from a file with empty deadlines partition
+	 */
+	@Test
+	public void testReadEmptyDeadline() throws IOException {
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDeadlineTest.txt");
+		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
+		assertTrue(emptyDeadline.isEmpty());
+	}
+
+	/* This is a case for the reading from a file with empty dates partition */
+	@Test
+	public void testReadEmptyDates() throws IOException {
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDatesTest.txt");
+		ArrayList<TaskEvent> emptyEvent = emptyDescriptionDisplay.getEventTasks();
+		assertTrue(emptyEvent.isEmpty());
+	}
+
+	@After
+	public void closeDownAfterTests() {
+		File file = new File("src\\storage\\tests\\test.txt");
+		file.delete();
+	}
+
+}
+```

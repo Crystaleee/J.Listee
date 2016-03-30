@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- @@author A0149527W -->
 <html>
 <head>
  <meta charset="utf-8" />
@@ -64,17 +65,16 @@
   .task_middle{
     display:table;
     float: left;
-    width:69%;
+    width:66%;
     height: 100%;
     text-align: left;
     padding:5px 0px 5px 10px;
   }
   .task_right{
-    float: left;
-    width: 23%;
+    float: right;
     height: 100%;
     padding: 5px 8px 5px 5px;
-    text-align: left;
+    text-align: right;
   }
 
   .task_description{
@@ -112,9 +112,8 @@
   .task_right>div{
     line-height: 22px;
     height:22px;
-    width:95%;
     border-radius: 3px;
-    padding-left: 5px;
+    padding: 0 8.5px;
   }
   .task_lowertime{
     background-color: rgba(240,108,125,0.4);
@@ -155,22 +154,21 @@
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    text-align: left;
   }
   .timeslot{
     width: 33%;
-    padding: 10px 7px;
+    padding: 10px 9px 10px 0;
     float: right;
     height: 65px;
     background-color: #dfdfdf;
     margin-left: 1px;
   }
   .reserved .task_middle{
-    width:30%;
+    width:25%;
   }
   .reserved .task_right{
     padding: 0;
-    width: 62.05%;
+    width: 67.05%;
   }
   #timeslot1{
     border-radius: 0 8px 8px 0;
@@ -180,6 +178,7 @@
 <body>
   <script  type="text/javascript">
     var i=0;
+
     function reset(){
       i=0;
     }
@@ -266,7 +265,7 @@
          }
 
          //add tags if necessary
-         if(taskList[index].tags!=undefined){
+         if(taskList[index].tags.length>0){
 
           for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
            var tagspan = document.createElement("span");
@@ -423,8 +422,8 @@
 
  function sendCommand() {
   var command = cmd.elements['command'].value;
-    // Invoke the 'receive' Java callback
-    app.receiveCommand(command);
+  // Invoke the 'receive' Java callback
+  app.receiveCommand(command);
   }
 
 function shortCutCommand(cmd){
@@ -468,6 +467,7 @@ $(document).unbind('keydown').bind('keydown', function (event) {
     }
 });
 
+
 $(document).keydown(
     function(e)
     {   
@@ -492,6 +492,20 @@ $(document).keydown(
             $("#"+id).focus();
           }
         break;
+        case 37://key left
+           var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() == 'INPUT' && $("#command").val()=="")
+           {
+              $("#command").val(app.getPreviousCmd());
+           }
+        break;
+        case 39://key right
+        var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() == 'INPUT' && $("#command").val()=="")
+           {
+        	  $("#command").val(app.getLaterCmd());
+           }
+        break;
         case 46://delete
         case 8://backspace
           if($(".task:focus").length>0){
@@ -500,6 +514,18 @@ $(document).keydown(
             shortCutCommand("delete "+id);
           }
         break;
+        case 68://d
+          if($(".task:focus").length>0){
+            var id=parseInt($(".task:focus")[0].id);
+            // console.log("done/undone "+id);
+            // shortCutCommand("postpone "+id);
+          }
+        case 80://p
+          if($(".task:focus").length>0){
+            var id=parseInt($(".task:focus")[0].id);
+            console.log("postpone "+id);
+            shortCutCommand("postpone "+id);
+          }
         case 90://ctrl+z
         	if(e.ctrlKey)
         		shortCutCommand("undo");

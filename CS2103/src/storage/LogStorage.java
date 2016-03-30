@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * @author  Zhu Bingjing
+ * @@author  A0149527W
  * @date 2016年3月2日 下午1:16:22 
  * @version 1.0 
  */
@@ -71,7 +71,7 @@ public class LogStorage {
 	 * @return the file path in the log file, null if it doesn't exist
 	 * @throws IOException
 	 */
-	private static String readLogFile() throws IOException{
+	public static String readLogFile() throws IOException{
 		String filePath=null;
 		BufferedReader br;
 		try {

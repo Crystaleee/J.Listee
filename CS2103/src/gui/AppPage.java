@@ -1,14 +1,11 @@
 package gui;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 /**
- * @author  Zhu Bingjing
+ * @@author A0149527W
  * @date 2016年3月21日 上午10:54:00 
  * @version 1.0 
  */

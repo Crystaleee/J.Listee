@@ -1,4 +1,6 @@
-// @@author Her Kai Lin (A0126070U)
+# Her Kai Lin A0126070U
+###### src\parser\JListeeParser.java
+``` java
 
 package parser;
 
@@ -51,58 +53,6 @@ public class JListeeParser {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
 
-<<<<<<< HEAD
-
-
-/* public static void main(String[] separateInputLine){ // for testing
-		try {
-			fh = new FileHandler("log\\log.txt");
-			logger.addHandler(fh);
-			SimpleFormatter formatter = new SimpleFormatter();  
-			fh.setFormatter(formatter);  
-
-		} catch (SecurityException e) {  
-			e.printStackTrace();  
-		} catch (IOException e) {  
-			e.printStackTrace();  
-		} 
-
-
-		JListeeParser testEvent = new JListeeParser();
-		testEvent.ParseCommand("add event  (03/17/2016 2pm to 03/27/2016 5pm) add event @LT27 #hihi #me");
-
-
-		JListeeParser testFloat = new JListeeParser();
-		testFloat.ParseCommand("add floatingtask @zzz #arghhhhh #hi");
-
-		JListeeParser testDeadLine = new JListeeParser();
-		testDeadLine.ParseCommand("add deadLine date only @whatthe 12/2/14 #hey");
-
-		JListeeParser testDeadLine2 = new JListeeParser();
-		testDeadLine2.ParseCommand("add deadLine date and time @location today 3:00 #hashtag");
-
-		JListeeParser testDelete = new JListeeParser();
-		testDelete.ParseCommand("delete 1,2,3,4");
-		
-		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show hiiiiii 23rd march 2016 to 12/4/16 #hihi @location ");
-		
-		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
-
-		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "); 
-	} 
-*/
-
-
-	public Command ParseCommand(String inputLine){
-
-		String[] separateInputLine = inputLine.split(" ");	
-		String commandType = determineCommandType(separateInputLine);	
-
-		switch (commandType){
-=======
 	/*
 	 * public static void main(String[] separateInputLine){ // for testing try {
 	 * fh = new FileHandler(
@@ -151,7 +101,6 @@ public class JListeeParser {
 		String commandType = determineCommandType(separateInputLine);
 
 		switch (commandType) {
->>>>>>> 51b228b6c667abd24d44dc2780f66d8eb0025b18
 		case COMMAND_ADD:
 			return parseAdd(inputLine);
 
@@ -580,3 +529,94 @@ public class JListeeParser {
 	}
 
 }
+```
+###### src\parser\JListeeParserTest.java
+``` java
+
+package parser;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class JListeeParserTest {
+	private static JListeeParser parse;
+
+	@BeforeClass
+	public static void createParser() {
+		parse = new JListeeParser();
+	}
+
+	/* This is a test for the add command partition */
+	@Test
+	public void testAddCommandType() {
+		String[] separateInputLine = "add cs2103 lecture (03/17/2016 2pm to 03/27/2016 5pm) @LT27 #hihi #me".split(" ");
+		String expected = separateInputLine[0];
+		String actual = parse.determineCommandType(separateInputLine);
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test for the delete command partition */
+	@Test
+	public void testDeleteCommandType() {
+		String[] separateInputLine = ("delete 1,2,3,4".split(" "));
+		String expected = separateInputLine[0];
+		String actual = parse.determineCommandType(separateInputLine);
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test for the show command partition */
+	@Test
+	public void testShowCommandType() {
+		String[] separateInputLine = ("show keyword".split(" "));
+		String expected = separateInputLine[0];
+		String actual = parse.determineCommandType(separateInputLine);
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test to find hash tags when hash tag exists */
+	@Test
+	public void testHashTagExist() {
+		ArrayList<String> expected = new ArrayList<String>();
+		expected.add("one");
+		expected.add("two");
+		expected.add("three");
+		ArrayList<String> actual = parse.findHashTags("add #one #two #three");
+		assertEquals(expected.size(), actual.size());
+	}
+
+	/* This is a test to find hash tags when hash tag dosen't exist */
+	@Test
+	public void testHashTagDontExist() {
+		ArrayList<String> actual = parse.findHashTags("add @location description");
+		assertTrue(actual.isEmpty());
+	}
+
+	/* This is a test to find location exist */
+	@Test
+	public void testLocationExist() {
+		String expected = "location";
+		String actual = parse.findLocation("add @location description");
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test to find location dont exist */
+	@Test
+	public void testLocationDontExist() {
+		String expected = null;
+		String actual = parse.findLocation("add location description");
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test to get TaskDescription */
+	@Test
+	public void getTaskDescription() {
+		String expected = "hello this is task";
+		String actual = parse.trimInputLineToDescriptionOnly("hello this is task @location", "location", null);
+		assertEquals(expected, actual);
+	}
+
+}
+```

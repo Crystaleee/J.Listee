@@ -1,7 +1,10 @@
 package gui;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,15 +18,16 @@ import bean.TaskFloat;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
-import javafx.scene.web.WebHistory.Entry;
 import netscape.javascript.JSObject;
 
 /**
- * @author Zhu Bingjing
+ * @@author A0149527W
  * @date 2016年3月2日 上午12:06:39
  * @version 1.0
  */
 public class ShowList extends AppPage {
+	private List<String> userCmd=new ArrayList<String>();//store user's commands
+	private int cmdIndex;//the presenting cmd's index
 	private Display display=new Display();
 	private JSObject win;
 	
@@ -50,8 +54,8 @@ public class ShowList extends AppPage {
 						
 						// construct JSON to pass to JS
 						//deadline tasks
-						if(this.display.getDeadlineTasks()!=null){
-							List<TaskDeadline> deadlines=this.display.getDeadlineTasks();
+						if(this.display.getVisibleDeadlineTasks()!=null){
+							List<TaskDeadline> deadlines=this.display.getVisibleDeadlineTasks();
 							JSONArray jsonDeadline = new JSONArray();
 							for (TaskDeadline deadline: deadlines) {
 								JSONObject task = new JSONObject(deadline);
@@ -59,19 +63,21 @@ public class ShowList extends AppPage {
 								task.remove("endDate");
 								task.put("endDate",
 										new SimpleDateFormat(
-												"yy-MM-dd HH:mm")
+												"EEE MM.dd HH:mm",Locale.ENGLISH)
 												.format(deadline.getEndDate()
 														.getTime()));
 								jsonDeadline.put(task);
+								System.out.println("week day: "+deadline.getEndDate().get(Calendar.DAY_OF_WEEK));
 							}
+							
 							win.call("addTasks", jsonDeadline,"deadline");
 							System.out.println(jsonDeadline);
 						}
 						
 						
 						//event tasks
-						if(this.display.getEventTasks()!=null){
-							List<TaskEvent> events=this.display.getEventTasks();
+						if(this.display.getVisibleEvents()!=null){
+							List<TaskEvent> events=this.display.getVisibleEvents();
 							JSONArray jsonEvent = new JSONArray();
 							for (TaskEvent event: events) {
 								JSONObject task = new JSONObject(event);
@@ -95,8 +101,8 @@ public class ShowList extends AppPage {
 						}				
 						
 						//floating tasks
-						if(this.display.getFloatTasks()!=null){
-							List<TaskFloat> floatings=this.display.getFloatTasks();
+						if(this.display.getVisibleFloatTasks()!=null){
+							List<TaskFloat> floatings=this.display.getVisibleFloatTasks();
 							JSONArray jsonFloating = new JSONArray();
 							for (Task floating: floatings) {
 								JSONObject task = new JSONObject(floating);
@@ -109,8 +115,8 @@ public class ShowList extends AppPage {
 						}
 						
 						//reserved tasks
-						if(this.display.getReservedTasks()!=null){
-							List<TaskReserved> reservations=this.display.getReservedTasks();
+						if(this.display.getVisibleReservedTasks()!=null){
+							List<TaskReserved> reservations=this.display.getVisibleReservedTasks();
 							JSONArray jsonReserved = new JSONArray();
 							for (TaskReserved reserved: reservations) {
 								JSONObject  task= new JSONObject(reserved);
@@ -152,8 +158,26 @@ public class ShowList extends AppPage {
 	// JavaScript interface object
 	public class ListBridge {
 		public void receiveCommand(String command){
-			System.out.println(command);
+			userCmd.add(command);
+			cmdIndex=userCmd.size()-1;
+			
 			GUIController.handelUserInput(command);
+		}
+		
+		public String getPreviousCmd(){
+			System.out.println(cmdIndex);
+			if(cmdIndex>0){
+				return userCmd.get(cmdIndex--);
+			}else{
+				return userCmd.get(0);
+			}			
+		}
+		
+		public String getLaterCmd(){
+			System.out.println(cmdIndex);
+			if(cmdIndex<userCmd.size()-1){
+				return userCmd.get(++cmdIndex);
+			}else return "";
 		}
 	}
 }

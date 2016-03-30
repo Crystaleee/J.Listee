@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * @author  Zhu Bingjing
+ * @@author A0149527W
  * @date 2016年3月23日 下午7:10:13 
  * @version 1.0 
  */
@@ -32,7 +32,7 @@ public class LogStorageTest {
 	}
 
 	//Test read log file
-	//This is the test case  for the ‘read nonexistent log file’ partition
+	//This is the test case  for the 'nonexistent log file' partition
 	@Test
 	public void testReadNonExistentLog() throws IOException {
 		assertEquals(null, LogStorage.readLog());

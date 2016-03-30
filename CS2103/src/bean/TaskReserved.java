@@ -1,5 +1,5 @@
 /*
- * Written by Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author Boh Tuang Hwee, Jehiel (A0139995E)
  * Last updated: 3/5/2016, 8:55pm
  * CS2103
  */
@@ -47,6 +47,7 @@ public class TaskReserved extends Task {
 		return endDates;
 	}
 
+	// @@author Chloe Odquier Fortuna (A0149063E)
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -69,7 +70,7 @@ public class TaskReserved extends Task {
 			if (i == this.endDates.size() - 1) {
 				endDates += sdf.format(this.endDates.get(i).getTime());
 			} else {
-			endDates += sdf.format(this.endDates.get(i).getTime()) + ", ";
+				endDates += sdf.format(this.endDates.get(i).getTime()) + ", ";
 			}
 		}
 		sb.append("End Dates: " + endDates + "\r\n");
