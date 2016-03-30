@@ -7,7 +7,7 @@ package bean;
 
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements java.io.Serializable{
 	private String description;
 	private String location;
 	private ArrayList<String> tags;
@@ -48,24 +48,24 @@ public class Task {
 		this.location = location;
 	}
 
-	// @@author Chloe Odquier Fortuna (A0149063E)
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Description: " + this.getDescription() + "\r\n");
-		String location = this.getLocation();
-		if (location == null) {
-			location = "";
-		}
-		sb.append("Location: " + location + "\r\n");
-
-		ArrayList<String> tagsList = this.getTags();
-		String tagsString = "";
-		for (String tag : tagsList) {
-			tagsString += " #" + tag;
-		}
-
-		sb.append("Tags:" + tagsString + "\r\n");
-		sb.append("\r\n");
-		return sb.toString();
-	}
+//	// @@author Chloe Odquier Fortuna (A0149063E)
+//	public String toString() {
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("Description: " + this.getDescription() + "\r\n");
+//		String location = this.getLocation();
+//		if (location == null) {
+//			location = "";
+//		}
+//		sb.append("Location: " + location + "\r\n");
+//
+//		ArrayList<String> tagsList = this.getTags();
+//		String tagsString = "";
+//		for (String tag : tagsList) {
+//			tagsString += " #" + tag;
+//		}
+//
+//		sb.append("Tags:" + tagsString + "\r\n");
+//		sb.append("\r\n");
+//		return sb.toString();
+//	}
 }
