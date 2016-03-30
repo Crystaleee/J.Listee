@@ -91,7 +91,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 start april 13 #hashtag -#sigh @icube "); 
+		testUpdateTask.ParseCommand("update 2 end april 29 #hashtag -#sigh @icube "); 
 	} 
 
 
@@ -286,6 +286,8 @@ public class JListeeParser {
 		
 		//change event task end date
 		else if (inputLine.contains("end")){
+			inputLine = inputLine.replaceFirst("end", "").trim();
+
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
 			for (DateGroup group : groups) {
@@ -296,7 +298,6 @@ public class JListeeParser {
 					setEndDateTimeDefault(endDate);
 				}
 				inputLine = removeRemoveDateFromInputLine(inputLine, group);
-				inputLine = inputLine.replaceFirst("end", "").trim();
 
 			}
 			
@@ -358,6 +359,7 @@ public class JListeeParser {
 			taskDescription = null;
 		}
 		
+		System.out.println(taskDescription);
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
