@@ -32,6 +32,11 @@
     font-weight: 100;
     margin: 5px;
   }
+  .title{
+    font-size: 26px;
+    color: #555;
+    font-weight: 100;
+  }
   section{
     display: inline-block;
   }
@@ -73,6 +78,7 @@
   .task_right{
     float: right;
     height: 100%;
+    display: table;
     width: 26%;
     padding: 5px 8px 5px 5px;
     text-align: right;
@@ -84,6 +90,15 @@
   .time{
     font-size: 14px;
     line-height: 27px;
+  }
+  .time>div{
+    vertical-align: middle;
+    display: table-cell;
+  }
+  .time span{
+    line-height: 22px;
+    height:22px;
+    border-radius: 3px;
   }
   .task_components,.task_location,.task_tags{
     margin: 4px 5px 4px 0px;
@@ -111,15 +126,13 @@
     margin-right: 5px;
   }
   .task_right>div{
-    line-height: 22px;
-    height:22px;
-    border-radius: 3px;
+    display: table-row;
     padding: 0 11px;
   }
-  .task_lowertime{
+  .task_lowertime span{
     background-color: rgba(240,108,125,0.4);
   }
-  .task_uppertime{
+  .task_uppertime span{
     background-color: rgba(0,181,242,0.4);
   }
   #tasklist_deadline .time{
@@ -307,9 +320,10 @@
       }else if(type=="floating"){
         var tasklist_=document.getElementById("tasklist_floating");
         $(float_title).text("Untimed");
+      }else if(type=="completed"){
+        var tasklist_=document.getElementById("tasklist_mixed");
+        $(title).text("Completed Tasks");
       }
-
-      
 
     //remove all existing children
     while (tasklist_.firstChild) {
@@ -349,15 +363,21 @@
       + "</section>"
       + "</section>"
       + "<section class='task_right'>"
-      + "<div class='task_components time task_uppertime' id='task_start"
+      + "<div class='task_components time task_uppertime'>"
+      + "<div>"
+      + "<span id='task_start"
       + i
-      +"'>"
-
+      + "'>"
+      + "</span>"
+      + "</div>"
       +"</div>"
-      + " <div class='task_components time task_lowertime' id='task_end"
+      + " <div class='task_components time task_lowertime'>"
+        + "<div>"
+      + "<span id='task_end"
       + i
-      +"'>"
-
+      + "'>"
+      + "</span>"
+      + "</div>"
       +"</div>"
       + "</section>"
 
@@ -371,7 +391,6 @@
       var task_description=document.getElementById("task_description"+i);
 
       if(taskList[index].location==undefined && taskList[index].tags.length==0){
-       // task_description.style.lineHeight="55px";
         task_details.style.display="none";
       }else{
          //add location if necessary
@@ -414,8 +433,6 @@
      else{
        task_end.style.display="none";
      }
-
-     
 
      i=i+1;
    }    
@@ -541,9 +558,9 @@ $(document).keydown(
  <div class="center">
   <div class="main">
     <div class="alert alert-success" id="feedback" role="alert"></div>
-  
+    
     <div class="list">
-
+      <div class="title" id="title"></div>
       <div class="group deadline">
         <div class="grouptitle" id="deadline_title"></div>
         <div class="tasklist" id="tasklist_deadline">
@@ -557,6 +574,7 @@ $(document).keydown(
 
         </div>
       </div>
+
       <div class="group floating">    
        <div class="grouptitle" id="float_title"></div> 
        <div class="tasklist" id="tasklist_floating">
@@ -567,7 +585,13 @@ $(document).keydown(
        <div class="grouptitle" id="reserved_title"></div> 
        <div class="tasklist" id="tasklist_reserved">
           </div>
+     </div>
+    <div class="group mixed">
+        <div class="grouptitle" id="mixed_title"></div>
+        <div class="tasklist" id="tasklist_mixed">
+
         </div>
+      </div>
 
    </div>
    <div class="commandline">

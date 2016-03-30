@@ -2,7 +2,6 @@ package gui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,7 +51,7 @@ public class ShowList extends AppPage {
 						
 						// construct JSON to pass to JS
 						//deadline tasks
-						if(this.display.getDeadlineTasks()!=null){
+						if(this.display.getVisibleDeadlineTasks()!=null){
 							List<TaskDeadline> deadlines=this.display.getVisibleDeadlineTasks();
 							JSONArray jsonDeadline = new JSONArray();
 							for (TaskDeadline deadline: deadlines) {
@@ -73,7 +72,7 @@ public class ShowList extends AppPage {
 						
 						
 						//event tasks
-						if(this.display.getEventTasks()!=null){
+						if(this.display.getVisibleEvents()!=null){
 							List<TaskEvent> events=this.display.getVisibleEvents();
 							JSONArray jsonEvent = new JSONArray();
 							for (TaskEvent event: events) {
@@ -98,7 +97,7 @@ public class ShowList extends AppPage {
 						}				
 						
 						//floating tasks
-						if(this.display.getFloatTasks()!=null){
+						if(this.display.getVisibleFloatTasks()!=null){
 							List<TaskFloat> floatings=this.display.getVisibleFloatTasks();
 							JSONArray jsonFloating = new JSONArray();
 							for (Task floating: floatings) {
@@ -112,7 +111,7 @@ public class ShowList extends AppPage {
 						}
 						
 						//reserved tasks
-						if(this.display.getReservedTasks()!=null){
+						if(this.display.getVisibleReservedTasks()!=null){
 							List<TaskReserved> reservations=this.display.getVisibleReservedTasks();
 							JSONArray jsonReserved = new JSONArray();
 							for (TaskReserved reserved: reservations) {
@@ -138,6 +137,36 @@ public class ShowList extends AppPage {
 							System.out.println(jsonReserved);
 							win.call("addReservedTask", jsonReserved);							
 						}
+						
+						//completed tasks
+						if(this.display.getCompletedTasks()!=null){
+							List<Task> completeds=this.display.getCompletedTasks();
+							JSONArray jsonTask= new JSONArray();
+							
+							for (Task completed: completeds) {
+								JSONObject task = new JSONObject(completed);
+								task.remove("startDate");
+								task.remove("endDate");
+								if(completed instanceof TaskEvent){
+									task.put("startDate",
+											new SimpleDateFormat(
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
+													.format( ((TaskEvent) completed)
+															.getStartDate()
+															.getTime()));
+								}
+								if(completed instanceof TaskDeadline || completed instanceof TaskEvent){
+									task.put("endDate",
+											new SimpleDateFormat(
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
+													.format( ((TaskDeadline)completed).getEndDate()
+															.getTime()));								
+								}
+								jsonTask.put(task);
+							}
+							win.call("addTasks", jsonTask,"completed");
+							System.out.println(jsonTask);
+						}				
 						
 						if( this.display.getMessage()!=null)
 							win.call("showFeedBack", this.display.getMessage());
