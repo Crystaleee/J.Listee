@@ -2,12 +2,14 @@
 
 package parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,7 +55,7 @@ public class JListeeParser {
 
 
 
-/* public static void main(String[] separateInputLine){ // for testing
+ public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("log\\log.txt");
 			logger.addHandler(fh);
@@ -70,7 +72,6 @@ public class JListeeParser {
 		JListeeParser testEvent = new JListeeParser();
 		testEvent.ParseCommand("add event  (03/17/2016 2pm to 03/27/2016 5pm) add event @LT27 #hihi #me");
 
-
 		JListeeParser testFloat = new JListeeParser();
 		testFloat.ParseCommand("add floatingtask @zzz #arghhhhh #hi");
 
@@ -84,7 +85,7 @@ public class JListeeParser {
 		testDelete.ParseCommand("delete 1,2,3,4");
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show hiiiiii 23rd march 2016 to 12/4/16 #hihi @location ");
+		testShow.ParseCommand("show hiiiiii  12/4/16 #hihi @location ");
 		
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
@@ -92,7 +93,7 @@ public class JListeeParser {
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "); 
 	} 
-*/
+
 
 
 
@@ -140,7 +141,7 @@ public class JListeeParser {
 	 */
 	
 
-	public Command JListeeParser(String inputLine) {
+	public Command ParseCommand(String inputLine) {
 
 		String[] separateInputLine = inputLine.split(" ");
 		String commandType = determineCommandType(separateInputLine);
@@ -224,7 +225,8 @@ public class JListeeParser {
 		if (!inputLine.contains("all")) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-		return new CommandShow(taskDescription);
+		
+		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 
 	}
 
@@ -248,13 +250,14 @@ public class JListeeParser {
 		ArrayList<String> removeTagLists = new ArrayList<String>();
 		ArrayList<String> tagLists = new ArrayList<String>();
 		Integer taskNumber;
-		System.out.println(inputLine);
+
 		inputLine = inputLine.replaceFirst("update", "").trim();
 		taskNumber = extractTaskNumber(inputLine);
 
 		if (inputLine.contains(String.valueOf(taskNumber))) {
 			inputLine = inputLine.replace(String.valueOf(taskNumber), "").trim();
 		}
+		
 		// natty library to extract dates
 		if (inputLine.contains("-")) {
 
