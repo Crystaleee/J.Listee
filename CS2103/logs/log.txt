@@ -1,6 +1,111 @@
-三月 30, 2016 8:48:53 下午 storage.Storage saveFile
-信息: Writing all tasks to file.
+三月 31, 2016 12:06:31 上午 storage.Storage getDisplay
+信息: Reading all tasks from file.
 
-三月 30, 2016 8:48:53 下午 storage.Storage writeDeadlineTasks
-信息: Writing lab5 to file.
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Successfully read: send intern email
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Successfully read: check Taobao express delivery
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Successfully read: borrow key and check mail box
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Successfully read: confirm family tour schedule
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Successfully read: photoshop photos
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Reading new floating task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksFloating
+信息: Successfully read: fetch clothes from balcony
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: SE project due
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: lab5
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: peer evaluation
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: UI project
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: UI presentation
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: SE FINAL
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: UI FINAL
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: CN FINAL
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Reading new deadline task.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksDeadline
+信息: Successfully read: CG FINAL
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksEvents
+信息: Reading new event.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksEvents
+信息: Successfully read: Lankawi travel
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksEvents
+信息: Reading new event.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksEvents
+信息: Successfully read: Bali travel
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksEvents
+信息: Reading new event.
+
+三月 31, 2016 12:06:31 上午 storage.Storage readTasksEvents
+信息: Successfully read: family Singapore tour
 

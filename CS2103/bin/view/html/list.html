@@ -73,6 +73,7 @@
   .task_right{
     float: right;
     height: 100%;
+    width: 26%;
     padding: 5px 8px 5px 5px;
     text-align: right;
   }
@@ -113,7 +114,7 @@
     line-height: 22px;
     height:22px;
     border-radius: 3px;
-    padding: 0 8.5px;
+    padding: 0 11px;
   }
   .task_lowertime{
     background-color: rgba(240,108,125,0.4);
@@ -473,37 +474,35 @@ $(document).keydown(
     {   
       switch(e.keyCode){
         case 40://key down
-          if($(".task:focus").length==0){
-            $(".task:last").focus();
-          }else{
-            var id=parseInt($(".task:focus")[0].id)+1;
-            if(id==$(".task").length+1)
-            	id=1;
-            $("#"+id).focus();
-          }   
-        break;
-        case 38://key up
-          if($(".task:focus").length==0){
-            $(".task:first").focus();
-          }else{ 
-            var id=parseInt($(".task:focus")[0].id)-1;
-            if(id==0)
-            	id=$(".task").length;
-            $("#"+id).focus();
-          }
-        break;
-        case 37://key left
-           var d = e.srcElement || e.target;
-           if (d.tagName.toUpperCase() == 'INPUT' && $("#command").val()=="")
+          var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() == 'INPUT')
            {
-              $("#command").val(app.getPreviousCmd());
+            $("#command").val(app.getLaterCmd());
+           }else{
+              if($(".task:focus").length==0){
+                $(".task:last").focus();
+              }else{
+                var id=parseInt($(".task:focus")[0].id)+1;
+                if(id==$(".task").length+1)
+                  id=1;
+                $("#"+id).focus();
+              }   
            }
         break;
-        case 39://key right
-        var d = e.srcElement || e.target;
-           if (d.tagName.toUpperCase() == 'INPUT' && $("#command").val()=="")
+        case 38://key up
+           var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() == 'INPUT')
            {
-        	  $("#command").val(app.getLaterCmd());
+              $("#command").val(app.getPreviousCmd());
+           }else{
+              if($(".task:focus").length==0){
+                $(".task:first").focus();
+              }else{ 
+                var id=parseInt($(".task:focus")[0].id)-1;
+                if(id==0)
+                  id=$(".task").length;
+                $("#"+id).focus();
+              }
            }
         break;
         case 46://delete
@@ -517,13 +516,11 @@ $(document).keydown(
         case 68://d
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
-            // console.log("done/undone "+id);
-            // shortCutCommand("postpone "+id);
+            //shortCutCommand("done "+id);
           }
         case 80://p
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
-            console.log("postpone "+id);
             shortCutCommand("postpone "+id);
           }
         case 90://ctrl+z
