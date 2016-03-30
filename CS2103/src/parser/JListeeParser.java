@@ -225,6 +225,10 @@ public class JListeeParser {
 		if (!inputLine.contains("all")) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
+		
+		if (location == null && startDate == null && endDate == null && tagLists == null){
+			return new CommandShow(taskDescription);
+		}
 
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 	}
@@ -333,7 +337,7 @@ public class JListeeParser {
 
 			inputLine = removeDateFromInputLine(inputLine, group).trim();
 		}
-
+		
 		tagLists = findHashTags(inputLine);
 		location = findLocation(inputLine);
 
