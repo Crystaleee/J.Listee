@@ -101,14 +101,11 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 4 dinner with friends"); 
+		testUpdateTask.ParseCommand("update 4 delete files delete all"); 
 		
 		JListeeParser testDone = new JListeeParser();
 		testDone.ParseCommand("done 1,2,3,4"); 
 	} 
-
-
-
 
 	
 		/*
@@ -361,16 +358,33 @@ public class JListeeParser {
 			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
 		}
 		
+		//delete all
+		if (Pattern.compile("\\bdelete\\b").matcher(inputLine).find()) {
+			if (Pattern.compile("\\ball\\b").matcher(inputLine).find()) {
+
+			inputLine = inputLine.replaceFirst("delete", "").trim();
+			inputLine = inputLine.replaceFirst("all", "").trim();
+
+			startDate = Calendar.getInstance();
+			startDate.setTimeInMillis(0);
+			endDate = Calendar.getInstance();
+			endDate.setTimeInMillis(0);
+			}
+		}
 		
 		//change event task start date
-		if (Pattern.compile("\\bstart\\b").matcher(inputLine).find()) {
+		else if (Pattern.compile("\\bstart\\b").matcher(inputLine).find()) {
 				inputLine = inputLine.replaceFirst(CONTAINING_START, "").trim();
 
 				List<DateGroup> groups = dateParser.parse(inputLine);
 
 				inputLine = extractStartTimeAndInputLine(inputLine, groups);
-			
-			
+				
+				if (Pattern.compile("\\bdelete\\b").matcher(inputLine).find()) {
+					inputLine = inputLine.replaceFirst("delete", "").trim();
+					startDate =Calendar.getInstance();
+					startDate.setTimeInMillis(0);
+				}
 		}
 		
 		//change event task end date
@@ -381,13 +395,16 @@ public class JListeeParser {
 
 			inputLine = extractEndTimeAndInputLine(inputLine, groups);
 			
-			
+			if (Pattern.compile("\\bdelete\\b").matcher(inputLine).find()) {
+				inputLine = inputLine.replaceFirst("delete", "").trim();
+				endDate = Calendar.getInstance();
+				endDate.setTimeInMillis(0);
+			}
+						
 		}
 		
 		//change event task start & end date
 		// or change deadline end date
-
-
 		else {	
 			if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
 					Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
@@ -396,7 +413,7 @@ public class JListeeParser {
 				inputLine = inputLine.replaceFirst("from", "").trim();
 				inputLine = inputLine.replaceFirst("to", "").trim();
 				inputLine = inputLine.replaceFirst("due", "").trim();
-
+				
 			}
 		}
 		
@@ -414,6 +431,7 @@ public class JListeeParser {
 		if (taskDescription.equals("")){
 			taskDescription = null;
 		}
+		
 		
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
