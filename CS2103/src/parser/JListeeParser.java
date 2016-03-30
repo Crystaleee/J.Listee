@@ -94,7 +94,7 @@ public class JListeeParser {
 		
 		JListeeParser testShow = new JListeeParser();
 		testShow.ParseCommand("show hiiiiii from 12/4/16 to today #hihi @location ");
-
+		
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
@@ -291,20 +291,9 @@ public class JListeeParser {
 		if (!inputLine.contains(CONTAINS_ALL)) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-		
-		System.out.println("taskNumber: "  + taskDescription);
-		System.out.println("location: " + location);
-		if (startDate!= null){
-		System.out.println("startDate: " + startDate.getTime());
-		}
-		
-		if (endDate!=null){
-		System.out.println("endDate: " + endDate.getTime());	
-		}
 	
 		
 		if (location == null && startDate == null && endDate == null && tagLists == null){
-			System.out.println("comes in");
 			return new CommandShow(taskDescription);
 		}
 			
