@@ -27,8 +27,10 @@ import bean.CommandRedo;
 import bean.CommandShow;
 import bean.CommandUndo;
 import bean.CommandUpdate;
+import bean.CommandUpdone;
 
 public class JListeeParser {
+	private static final String COMMAND_UNDONE = "undone";
 	private static final String COMMAND_DONE = "done";
 	private static final String CONTAINING_END = "end";
 	private static final String CONTAINING_START = "start";
@@ -180,6 +182,9 @@ public class JListeeParser {
 
 		case COMMAND_DONE:
 			return parseDone(inputLine);
+			
+		case COMMAND_UNDONE:
+			return parseUndone(inputLine);
 			
 		default:
 			return parseInvalid();
@@ -432,16 +437,6 @@ public class JListeeParser {
 			taskDescription = null;
 		}
 		
-		System.out.println("taskNumber: "  + taskDescription);
-		System.out.println("location: " + location);
-		if (startDate!= null){
-		System.out.println("startDate: " + startDate.getTime());
-		}
-		
-		if (endDate!=null){
-		System.out.println("endDate: " + endDate.getTime());	
-		}
-		
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
@@ -463,6 +458,26 @@ public class JListeeParser {
 		}
 	
 		return new CommandDone(taskNumbers);
+	}
+
+
+
+	private Command parseUndone(String inputLine) {
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		inputLine = inputLine.replace(COMMAND_UNDONE, "").trim();
+	
+		if (inputLine.contains(CONTAINS_ALL)) {
+			taskNumbers = null;
+		}
+	
+		else {
+			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
+			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
+				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+			}
+		}
+	
+		return new CommandUndone(taskNumbers);		
 	}
 
 
