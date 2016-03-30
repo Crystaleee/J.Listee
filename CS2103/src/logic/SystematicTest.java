@@ -110,7 +110,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateFloatingLocation() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -119,7 +119,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateFloatingTags() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -128,7 +128,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateDeadlineDescription() {
 		display = Logic.executeUserCommand("add Deadline Test @NUS #tag");
@@ -137,7 +137,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateDeadlineTime() {
 		display = Logic.executeUserCommand("add Deadline Test @NUS #tag");
@@ -146,7 +146,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateEventStartTime() {
 		display = Logic.executeUserCommand("add Event Test Thursday 3pm to 4pm @NUS #tag");
@@ -155,7 +155,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateEventEndTime() {
 		display = Logic.executeUserCommand("add Event Test Thursday 3pm to 4pm @NUS #tag");
@@ -164,7 +164,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testUpdateEventTimes() {
 		display = Logic.executeUserCommand("add Event Test Thursday 3pm to 4pm @NUS #tag");
@@ -173,11 +173,11 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	/************************
 	 * Deleting Tasks Tests *
 	 ************************/
-	
+
 	@Test
 	public void testDeleteFloating() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -186,16 +186,16 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testDeleteDeadline() {
 		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("delete 1");
-		String expected = "deleted: \"Deadline Test\"";
+		String expected = "deleted: \"Deadline Test tomorrow 3pm\"";
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testDeleteEvent() {
 		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
@@ -204,7 +204,7 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testDeleteAll() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -215,14 +215,14 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testDeleteMultiple() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("delete 1,2,3");
-		String expected = "deleted: \"Deadline Test\", \"Event Test\", \"Floating Test\"";
+		String expected = "deleted: \"Event Test\", \"Floating Test\", \"Deadline Test tomorrow 3pm\"";
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
@@ -235,5 +235,36 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
+
+	/*************************
+	 * Reserving Tasks Tests *
+	 *************************/
+
+	@Test
+	public void testReserveSingle() {
+		display = Logic.executeUserCommand("reserve Reservation Test Thursday 3pm to 4pm @NUS #tag");
+		String expected = "Reserved: Reservation Test";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
 	
+	@Test
+	public void testReserveDouble() {
+		display = Logic.executeUserCommand("reserve Reservation Test Thursday 3pm to 4pm and Friday 4pm to 6pm @NUS #tag");
+		String expected = "Reserved: Reservation Test";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testReserveTriple() {
+		display = Logic.executeUserCommand("reserve Reservation Test Thursday 3pm to 4pm and Saturday 10 am to 11 am @NUS #tag");
+		String expected = "Reserved: Reservation Test";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	/***********************
+	 * Undo and Redo Tests *
+	 ***********************/
 }
