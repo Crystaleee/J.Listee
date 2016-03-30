@@ -53,7 +53,7 @@ public class ShowList extends AppPage {
 						// construct JSON to pass to JS
 						//deadline tasks
 						if(this.display.getDeadlineTasks()!=null){
-							List<TaskDeadline> deadlines=this.display.getDeadlineTasks();
+							List<TaskDeadline> deadlines=this.display.getVisibleDeadlineTasks();
 							JSONArray jsonDeadline = new JSONArray();
 							for (TaskDeadline deadline: deadlines) {
 								JSONObject task = new JSONObject(deadline);
@@ -61,11 +61,10 @@ public class ShowList extends AppPage {
 								task.remove("endDate");
 								task.put("endDate",
 										new SimpleDateFormat(
-												"EEE MM.dd HH:mm",Locale.ENGLISH)
+												"EEE MM/dd HH:mm",Locale.ENGLISH)
 												.format(deadline.getEndDate()
 														.getTime()));
 								jsonDeadline.put(task);
-								System.out.println("week day: "+deadline.getEndDate().get(Calendar.DAY_OF_WEEK));
 							}
 							
 							win.call("addTasks", jsonDeadline,"deadline");
@@ -75,7 +74,7 @@ public class ShowList extends AppPage {
 						
 						//event tasks
 						if(this.display.getEventTasks()!=null){
-							List<TaskEvent> events=this.display.getEventTasks();
+							List<TaskEvent> events=this.display.getVisibleEvents();
 							JSONArray jsonEvent = new JSONArray();
 							for (TaskEvent event: events) {
 								JSONObject task = new JSONObject(event);
@@ -83,13 +82,13 @@ public class ShowList extends AppPage {
 								task.remove("endDate");
 								task.put("startDate",
 										new SimpleDateFormat(
-												"yy-MM-dd HH:mm")
+												"EEE MM/dd HH:mm",Locale.ENGLISH)
 												.format( event
 														.getStartDate()
 														.getTime()));
 								task.put("endDate",
 										new SimpleDateFormat(
-												"yy-MM-dd HH:mm")
+												"EEE MM/dd HH:mm",Locale.ENGLISH)
 												.format( event.getEndDate()
 														.getTime()));
 								jsonEvent.put(task);
@@ -100,7 +99,7 @@ public class ShowList extends AppPage {
 						
 						//floating tasks
 						if(this.display.getFloatTasks()!=null){
-							List<TaskFloat> floatings=this.display.getFloatTasks();
+							List<TaskFloat> floatings=this.display.getVisibleFloatTasks();
 							JSONArray jsonFloating = new JSONArray();
 							for (Task floating: floatings) {
 								JSONObject task = new JSONObject(floating);
@@ -114,7 +113,7 @@ public class ShowList extends AppPage {
 						
 						//reserved tasks
 						if(this.display.getReservedTasks()!=null){
-							List<TaskReserved> reservations=this.display.getReservedTasks();
+							List<TaskReserved> reservations=this.display.getVisibleReservedTasks();
 							JSONArray jsonReserved = new JSONArray();
 							for (TaskReserved reserved: reservations) {
 								JSONObject  task= new JSONObject(reserved);
@@ -124,13 +123,13 @@ public class ShowList extends AppPage {
 								for(int i=0;i<reserved.getStartDates().size();i++){
 									task.append("startDates",
 											new SimpleDateFormat(
-													"yy-MM-dd HH:mm")
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
 													.format( reserved
 															.getStartDates().get(i)
 															.getTime()));
 									task.append("endDates",
 											new SimpleDateFormat(
-													"yy-MM-dd HH:mm")
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
 													.format( reserved.getEndDates().get(i)
 															.getTime()));
 								}						
