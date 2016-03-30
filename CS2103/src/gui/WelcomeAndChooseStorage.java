@@ -10,8 +10,6 @@ import main.App;
 
 /**
  * @@author A0149527W
- * @date 2016年3月1日 下午10:08:56
- * @version 1.0
  */
 public class WelcomeAndChooseStorage extends AppPage {
 	

@@ -6,14 +6,11 @@ import javafx.scene.web.WebView;
 
 /**
  * @@author A0149527W
- * @date 2016年3月21日 上午10:54:00 
- * @version 1.0 
  */
 public abstract class AppPage extends Pane{
 	WebView browser;
 	WebEngine webEngine;
 	String html;
-//	JSObject win;
 	
 	public AppPage(String html){
 		this.browser = new WebView();
@@ -28,6 +25,5 @@ public abstract class AppPage extends Pane{
 		// add the web view to the scene
 		this.getChildren().add(browser);
 	}
-	
 	
 }

@@ -4,20 +4,15 @@ import static org.junit.Assert.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * @@author A0149527W
- * @date 2016年3月23日 下午7:10:13 
- * @version 1.0 
  */
 public class LogStorageTest {
 	File logFile=new File(LogStorage.logFile);
