@@ -21,6 +21,7 @@ import bean.CommandAddEvent;
 import bean.CommandAddFloatTask;
 import bean.CommandAddReserved;
 import bean.CommandDelete;
+import bean.CommandDone;
 import bean.CommandInvalid;
 import bean.CommandRedo;
 import bean.CommandShow;
@@ -28,6 +29,7 @@ import bean.CommandUndo;
 import bean.CommandUpdate;
 
 public class JListeeParser {
+	private static final String COMMAND_DONE = "done";
 	private static final String CONTAINING_END = "end";
 	private static final String CONTAINING_START = "start";
 	private static final int STARTING_INDEX = 0;
@@ -100,6 +102,9 @@ public class JListeeParser {
 
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 1 CS2103 lecture"); 
+		
+		JListeeParser testDone = new JListeeParser();
+		testDone.ParseCommand("done 1,2,3,4"); 
 	} 
 
 
@@ -176,6 +181,9 @@ public class JListeeParser {
 		case COMMAND_UPDATE:
 			return parseUpdate(inputLine);
 
+		case COMMAND_DONE:
+			return parseDone(inputLine);
+			
 		default:
 			return parseInvalid();
 		}
@@ -255,8 +263,7 @@ public class JListeeParser {
 	
 		return new CommandDelete(taskNumbers);
 	}
-
-
+	
 	public Command parseUndo() {
 		return new CommandUndo();
 	}
@@ -408,6 +415,25 @@ public class JListeeParser {
 
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
+	}
+
+
+	public Command parseDone(String inputLine){
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		inputLine = inputLine.replace(COMMAND_DONE, "").trim();
+	
+		if (inputLine.contains(CONTAINS_ALL)) {
+			taskNumbers = null;
+		}
+	
+		else {
+			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
+			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
+				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+			}
+		}
+	
+		return new CommandDone(taskNumbers);
 	}
 
 
