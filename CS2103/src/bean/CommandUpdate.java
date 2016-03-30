@@ -58,18 +58,18 @@ public class CommandUpdate extends TaskEvent implements Command {
 	}
 
 	private void editTask() {
-		if (taskNumber <= display.getDeadlineTasks().size()) {
+		if (taskNumber <= display.getVisibleDeadlineTasks().size()) {
 			editDeadline();
 		} else {
-			taskNumber -= display.getDeadlineTasks().size();
-			if (taskNumber <= display.getEventTasks().size()) {
+			taskNumber -= display.getVisibleDeadlineTasks().size();
+			if (taskNumber <= display.getVisibleEvents().size()) {
 				editEvent();
 			} else {
-				taskNumber -= display.getEventTasks().size();
-				if (taskNumber <= display.getFloatTasks().size()) {
+				taskNumber -= display.getVisibleEvents().size();
+				if (taskNumber <= display.getVisibleFloatTasks().size()) {
 					editFloat();
 				} else {
-					taskNumber -= display.getFloatTasks().size();
+					taskNumber -= display.getVisibleFloatTasks().size();
 					editReserved();
 				}
 			}
@@ -78,30 +78,27 @@ public class CommandUpdate extends TaskEvent implements Command {
 
 	private void editDeadline() {
 		TaskDeadline task = display.getVisibleDeadlineTasks().remove(taskNumber - 1);
+        display.getDeadlineTasks().remove(task);
 		message += task.getDescription() + "\"";
 		task = (TaskDeadline) editDescription(task);
 		task = (TaskDeadline) editLocation(task);
 		task = (TaskDeadline) editTags(task);
 		task = editEndDate(task);
-		if(changeDeadlineTaskType(task)){
-		    display.getVisibleDeadlineTasks().remove(task);
-            display.getDeadlineTasks().remove(task);
-		}
+		changeDeadlineTaskType(task);
 	}
 
 	private void editEvent() {
-        TaskEvent task = display.getEventTasks().remove(taskNumber - 1);
+        TaskEvent task = display.getVisibleEvents().remove(taskNumber - 1);
+        display.getEventTasks().remove(task);
         message += task.getDescription() + "\"";
         task = (TaskEvent) editDescription(task);
         task = (TaskEvent) editLocation(task);
         task = (TaskEvent) editTags(task);
         task = editStartDate(task);
         task = editEndDate(task);
-        if(changeEventTaskType(task)){
-            display.getVisibleEvents().remove(task);
-            display.getEventTasks().remove(task);
+        changeEventTaskType(task);
             
-        }
+        
 	}
 
 	private void editFloat() {
@@ -208,9 +205,8 @@ public class CommandUpdate extends TaskEvent implements Command {
 		return task;
 	}
 
-	private boolean changeEventTaskType(TaskEvent task) {
+	private void changeEventTaskType(TaskEvent task) {
         boolean hasTaskChanged = false;
-        System.out.println(getStartDate());
         if ((getStartDate() != null) && (getEndDate() != null)) {
             // if user wants to change to floating task
             if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() == 0)) {
@@ -233,8 +229,7 @@ public class CommandUpdate extends TaskEvent implements Command {
                     task.getEndDate(), task.getTags());
             display = addCommand.execute(display);
         }
-        System.out.println("htc " + hasTaskChanged);
-        return hasTaskChanged;
+        return ;
     }
 
 	private boolean hasChangeFloatTaskType(TaskFloat task) {

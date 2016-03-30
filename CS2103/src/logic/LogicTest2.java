@@ -13,10 +13,12 @@ import bean.CommandAddEvent;
 import bean.CommandAddFloatTask;
 import bean.CommandAddReserved;
 import bean.CommandDelete;
+import bean.CommandDone;
 import bean.CommandInvalid;
 import bean.CommandRedo;
 import bean.CommandShow;
 import bean.CommandUndo;
+import bean.CommandUndone;
 import bean.CommandUpdate;
 
 public class LogicTest2 {
@@ -2107,6 +2109,413 @@ public class LogicTest2 {
                 
                 + "completedTasks=[]]", 
                 Logic.executeCommand(new CommandUpdate(4, null, null, start, end, null, null)).toString());
+      
+        //mark a task as done
+        
+        delNum = new ArrayList<Integer>();
+        delNum.add(1);
+        assertEquals("Display [message=Completed: \"DL4\", "
+                + "events=["
+                + "Description: DL3\r\n"
+                + "Start Date: 19/02/16 11:45\r\n"
+                + "End Date: 19/02/16 14:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: Event1\r\n"
+                + "Start Date: 19/02/16 12:00\r\n"
+                + "End Date: 19/02/16 15:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "deadlineTasks=["
+                
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "floatTasks=["
+                + "Description: Float3\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n"
+
+                + ", Description: Float5\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2 #tag3 #tag4 #tag5\r\n\r\n"
+                
+                + ", Description: DeadlineTask\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag2 #tag5 #tag10 #tag11\r\n\r\n"
+                
+                + ", Description: Float1\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n]"
+                
+                + ", reservedTasks=["
+                + "Description: r1\r\n"
+                + "Start Dates: 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 16:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: r2\r\n"
+                + "Start Dates: 19/02/16 12:00, 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 15:00, 19/02/16 16:00\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2\r\n\r\n], "
+                
+                + "completedTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 15:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + "]]", 
+                Logic.executeCommand(new CommandDone(delNum)).toString());
+      
+        //mark a task as done
+        delNum = new ArrayList<Integer>();
+        delNum.add(1);
+        delNum.add(2);
+        assertEquals("Display [message=Completed: \"Event3\", \"DL1\", "
+                + "events=["
+                + "Description: DL3\r\n"
+                + "Start Date: 19/02/16 11:45\r\n"
+                + "End Date: 19/02/16 14:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: Event1\r\n"
+                + "Start Date: 19/02/16 12:00\r\n"
+                + "End Date: 19/02/16 15:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "deadlineTasks=[], "
+                
+                + "floatTasks=["
+                + "Description: Float3\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n"
+
+                + ", Description: Float5\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2 #tag3 #tag4 #tag5\r\n\r\n"
+                
+                + ", Description: DeadlineTask\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag2 #tag5 #tag10 #tag11\r\n\r\n"
+                
+                + ", Description: Float1\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n]"
+                
+                + ", reservedTasks=["
+                + "Description: r1\r\n"
+                + "Start Dates: 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 16:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: r2\r\n"
+                + "Start Dates: 19/02/16 12:00, 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 15:00, 19/02/16 16:00\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2\r\n\r\n], "
+                
+                + "completedTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 15:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n, "
+
+                
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n]"
+                + "]", 
+                Logic.executeCommand(new CommandDone(delNum)).toString());
+      
+        //undone task
+        delNum = new ArrayList<Integer>();
+        delNum.add(1);
+        assertEquals("Display [message=Undone task: \"DL4\", "
+                + "events=["
+                + "Description: DL3\r\n"
+                + "Start Date: 19/02/16 11:45\r\n"
+                + "End Date: 19/02/16 14:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: Event1\r\n"
+                + "Start Date: 19/02/16 12:00\r\n"
+                + "End Date: 19/02/16 15:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "deadlineTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 15:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + "],"
+                
+                + " floatTasks=["
+                + "Description: Float3\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n"
+
+                + ", Description: Float5\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2 #tag3 #tag4 #tag5\r\n\r\n"
+                
+                + ", Description: DeadlineTask\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag2 #tag5 #tag10 #tag11\r\n\r\n"
+                
+                + ", Description: Float1\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n]"
+                
+                + ", reservedTasks=["
+                + "Description: r1\r\n"
+                + "Start Dates: 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 16:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: r2\r\n"
+                + "Start Dates: 19/02/16 12:00, 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 15:00, 19/02/16 16:00\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2\r\n\r\n], "
+                
+                + "completedTasks=["
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n]"
+                + "]", 
+                Logic.executeCommand(new CommandUndone(delNum)).toString());
+        
+      //undone multiple task
+        delNum = new ArrayList<Integer>();
+        delNum.add(1);
+        delNum.add(2);
+        assertEquals("Display [message=Undone task: \"Event3\", \"DL1\", "
+                + "events=["
+                + "Description: DL3\r\n"
+                + "Start Date: 19/02/16 11:45\r\n"
+                + "End Date: 19/02/16 14:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: Event1\r\n"
+                + "Start Date: 19/02/16 12:00\r\n"
+                + "End Date: 19/02/16 15:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "deadlineTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 15:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + ", "
+
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "floatTasks=["
+                + "Description: Float3\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n"
+
+                + ", Description: Float5\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2 #tag3 #tag4 #tag5\r\n\r\n"
+                
+                + ", Description: DeadlineTask\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag2 #tag5 #tag10 #tag11\r\n\r\n"
+                
+                + ", Description: Float1\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n]"
+                
+                + ", reservedTasks=["
+                + "Description: r1\r\n"
+                + "Start Dates: 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 16:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: r2\r\n"
+                + "Start Dates: 19/02/16 12:00, 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 15:00, 19/02/16 16:00\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2\r\n\r\n], "
+                
+                + "completedTasks=["
+                + "]]", 
+                Logic.executeCommand(new CommandUndone(delNum)).toString());
+        
+      //done all
+        assertEquals("Display [message=All tasks completed, "
+                + "events=[], "
+                
+                + "deadlineTasks=[], "
+                
+                + "floatTasks=[]"
+                
+                + ", reservedTasks=["
+                + "Description: r1\r\n"
+                + "Start Dates: 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 16:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: r2\r\n"
+                + "Start Dates: 19/02/16 12:00, 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 15:00, 19/02/16 16:00\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2\r\n\r\n], "
+                
+                + "completedTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 15:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + ", "
+
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: DL3\r\n"
+                + "Start Date: 19/02/16 11:45\r\n"
+                + "End Date: 19/02/16 14:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: Event1\r\n"
+                + "Start Date: 19/02/16 12:00\r\n"
+                + "End Date: 19/02/16 15:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: Float3\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n"
+
+                + ", Description: Float5\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2 #tag3 #tag4 #tag5\r\n\r\n"
+                
+                + ", Description: DeadlineTask\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag2 #tag5 #tag10 #tag11\r\n\r\n"
+                
+                + ", Description: Float1\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n"
+                + "]]", 
+                Logic.executeCommand(new CommandDone(null)).toString());
+        
+      //undone all
+        assertEquals("Display [message=All tasks undone, "
+                + "events=["
+                + "Description: DL3\r\n"
+                + "Start Date: 19/02/16 11:45\r\n"
+                + "End Date: 19/02/16 14:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: Event1\r\n"
+                + "Start Date: 19/02/16 12:00\r\n"
+                + "End Date: 19/02/16 15:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "deadlineTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 15:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + ", "
+
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "floatTasks=["
+                + "Description: Float1\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n"
+                
+                + ", Description: DeadlineTask\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag2 #tag5 #tag10 #tag11\r\n\r\n"
+
+                + ", Description: Float5\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2 #tag3 #tag4 #tag5\r\n\r\n"
+                
+                + ", Description: Float3\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n]"
+                
+                + ", reservedTasks=["
+                + "Description: r1\r\n"
+                + "Start Dates: 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 16:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: r2\r\n"
+                + "Start Dates: 19/02/16 12:00, 19/02/16 11:30\r\n"
+                + "End Dates: 19/02/16 15:00, 19/02/16 16:00\r\n"
+                + "Location: location\r\n"
+                + "Tags: #tag1 #tag2\r\n\r\n], "
+                
+                + "completedTasks=["
+                + "]]", 
+                Logic.executeCommand(new CommandUndone(null)).toString());
     }
 
 }
