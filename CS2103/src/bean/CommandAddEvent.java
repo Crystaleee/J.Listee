@@ -31,6 +31,13 @@ public class CommandAddEvent implements Command {
 			return display;
 			// return (new Display(Logic.MESSAGE_NO_DESCRIPTION));
 		}
+		if(task.getStartDate().after(task.getEndDate())){
+            updateFile = false;
+            saveHistory = false;
+            display.setMessage("Please specify a valid date range");
+            return display;
+		    
+		}
 
 		task.setDescription(task.getDescription().trim());
 		if (task.getDescription().isEmpty()) {

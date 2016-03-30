@@ -30,6 +30,13 @@ public class CommandAddReserved implements Command {
 			display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
 			return display;
 		}
+		if(containsInvalidTimeSlots()){
+            updateFile = false;
+            saveHistory = false;
+            display.setMessage("you have entered invalid time range");
+            return display;
+		    
+		}
 		task.setDescription(task.getDescription().trim());
 		if (task.getDescription().isEmpty()) {
 			updateFile = false;
@@ -44,6 +51,15 @@ public class CommandAddReserved implements Command {
         }
 		display.setMessage("Reserved: " + task.getDescription());
 		return display;
+	}
+	
+	private boolean containsInvalidTimeSlots(){
+	    for(int i = 0; i < task.getStartDates().size(); i ++){
+	        if(task.getStartDates().get(i).after(task.getEndDates().get(i))){
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 
 	private ArrayList<TaskReserved> addReservedTask(ArrayList<TaskReserved> taskList) {

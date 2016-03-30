@@ -49,6 +49,13 @@ public class CommandShow implements Command {
 			setShowAll(oldDisplay);
 			return oldDisplay;
 		}
+        if(searchedTask.getStartDate().after(searchedTask.getEndDate())){
+            updateFile = false;
+            saveHistory = false;
+            oldDisplay.setMessage("Please specify a valid date range");
+            return oldDisplay;
+            
+        }
 		this.oldDisplay = oldDisplay;
 
 		oldDisplay = getTasksContainingKeyword();
