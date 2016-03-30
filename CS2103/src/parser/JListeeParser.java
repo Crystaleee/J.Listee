@@ -44,7 +44,7 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MINUTE = 59;
 	private static final int DEFAULT_END_SECOND = 0;
 	private static final int DEFAULT_END_MILLISECOND = 0;
-
+	
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
@@ -225,9 +225,8 @@ public class JListeeParser {
 		if (!inputLine.contains("all")) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-		
-		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 
+		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 	}
 
 	public Command parseInvalid() {
