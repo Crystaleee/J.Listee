@@ -17,45 +17,51 @@ public class CommandShow implements Command {
 	private TaskEvent searchedTask;
 	private int count;
 	private Display oldDisplay;
-	private Display newDisplay;
 
 	public CommandShow() {
 		searchedTask = null;
-		newDisplay = null;
 		count = 0;
 	}
 
 	public CommandShow(String keyword) {
 		searchedTask = new TaskEvent(keyword.trim().toLowerCase(), "", null, null, new ArrayList<String>());
-		newDisplay = new Display();
 		count = 0;
 	}
 
 	public CommandShow(String keyword, String location, Calendar start, Calendar end, ArrayList<String> tags) {
 		searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end, tags);
-		newDisplay = new Display();
 		count = 0;
 	}
 
 	public Display execute(Display oldDisplay) {
-		if (showAll()) {
-			oldDisplay.setMessage(message_show_all);
+        //System.out.println("fs " + oldDisplay.getFloatTasks().size());
+		if (isShowAll()) {
+			setShowAll(oldDisplay);
 			return oldDisplay;
 		}
 		this.oldDisplay = oldDisplay;
 
-		newDisplay = getTasksContainingKeyword();
+		oldDisplay = getTasksContainingKeyword();
 
 		if (count == 0) {
-			newDisplay = new Display(message_no_tasks);
+		    setShowAll(oldDisplay);
+		    oldDisplay = new Display(message_no_tasks);
 		} else {
-			newDisplay.setMessage(getFeedback());
+		    oldDisplay.setMessage(getFeedback());
 		}
 
-		return newDisplay;
+		return oldDisplay;
 	}
 
-	private boolean showAll() {
+    private void setShowAll(Display oldDisplay) {
+        oldDisplay.setMessage(message_show_all);
+        oldDisplay.setVisibleDeadlineTasks(oldDisplay.getDeadlineTasks());
+        oldDisplay.setVisibleEvents(oldDisplay.getEventTasks());
+        oldDisplay.setVisibleFloatTasks(oldDisplay.getFloatTasks());
+        oldDisplay.setVisibleReservedTasks(oldDisplay.getReservedTasks());
+    }
+
+	private boolean isShowAll() {
 		if (searchedTask.getDescription().isEmpty()) {
 			if (searchedTask.getLocation().isEmpty()) {
 				if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
@@ -100,73 +106,81 @@ public class CommandShow implements Command {
 		getEventTasks();
 		getDeadLineTasks();
 		getReservedTasks();
-		return newDisplay;
+		return oldDisplay;
 	}
 
 	private void getDeadLineTasks() {
 		TaskDeadline task;
+		oldDisplay.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
 		for (int i = 0; i < oldDisplay.getDeadlineTasks().size(); i++) {
 			task = oldDisplay.getDeadlineTasks().get(i);
 			if (containsKeyword(task)) {
 				if (atLocation(task)) {
 					if (containsTag(task)) {
 						if (withinTimeRange(task)) {
-							newDisplay.getDeadlineTasks().add(task);
+						    oldDisplay.getVisibleDeadlineTasks().add(task);
 							count++;
 						}
 					}
 				}
 			}
 		}
+        //System.out.println("D" + oldDisplay.getVisibleDeadlineTasks().size());
 	}
 
 	private void getEventTasks() {
 		TaskEvent task;
+		oldDisplay.setVisibleEvents(new ArrayList<TaskEvent>());
 		for (int i = 0; i < oldDisplay.getEventTasks().size(); i++) {
 			task = oldDisplay.getEventTasks().get(i);
 			if (containsKeyword(task)) {
 				if (atLocation(task)) {
 					if (containsTag(task)) {
 						if (withinTimeRange(task)) {
-							newDisplay.getEventTasks().add(task);
+						    oldDisplay.getVisibleEvents().add(task);
 							count++;
 						}
 					}
 				}
 			}
 		}
+        //System.out.println("E" + oldDisplay.getVisibleEvents().size());
 	}
 
 	private void getFloatTasks() {
 		TaskFloat task;
+		oldDisplay.setVisibleFloatTasks(new ArrayList<TaskFloat>());
 		for (int i = 0; i < oldDisplay.getFloatTasks().size(); i++) {
 			task = oldDisplay.getFloatTasks().get(i);
 			if (containsKeyword(task)) {
 				if (atLocation(task)) {
 					if (containsTag(task)) {
-						newDisplay.getFloatTasks().add(task);
+					    oldDisplay.getVisibleFloatTasks().add(task);
 						count++;
 					}
 				}
 			}
 		}
+        //System.out.println("F" + oldDisplay.getVisibleFloatTasks().size());
 	}
 
 	private void getReservedTasks() {
 		TaskReserved task;
+		oldDisplay.setVisibleReservedTasks(new ArrayList<TaskReserved>());
 		for (int i = 0; i < oldDisplay.getReservedTasks().size(); i++) {
 			task = oldDisplay.getReservedTasks().get(i);
 			if (containsKeyword(task)) {
 				if (atLocation(task)) {
 					if (containsTag(task)) {
 						if (withinTimeRange(task)) {
-							newDisplay.getReservedTasks().add(task);
+						    oldDisplay.getVisibleReservedTasks().add(task);
 							count++;
 						}
 					}
 				}
 			}
 		}
+        //System.out.println("R" + oldDisplay.getVisibleReservedTasks().size());
 	}
 
 	private boolean containsTag(Task task) {
