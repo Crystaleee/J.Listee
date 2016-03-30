@@ -101,7 +101,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 4 delete files delete all"); 
+		testUpdateTask.ParseCommand("update 4 start delete"); 
 		
 		JListeeParser testDone = new JListeeParser();
 		testDone.ParseCommand("done 1,2,3,4"); 
@@ -359,8 +359,7 @@ public class JListeeParser {
 		}
 		
 		//delete all
-		if (Pattern.compile("\\bdelete\\b").matcher(inputLine).find()) {
-			if (Pattern.compile("\\ball\\b").matcher(inputLine).find()) {
+		if ((Pattern.compile("\\bdelete\\b").matcher(inputLine).find()) &&  (Pattern.compile("\\ball\\b").matcher(inputLine).find())) {
 
 			inputLine = inputLine.replaceFirst("delete", "").trim();
 			inputLine = inputLine.replaceFirst("all", "").trim();
@@ -369,12 +368,13 @@ public class JListeeParser {
 			startDate.setTimeInMillis(0);
 			endDate = Calendar.getInstance();
 			endDate.setTimeInMillis(0);
-			}
+			
 		}
 		
 		//change event task start date
 		else if (Pattern.compile("\\bstart\\b").matcher(inputLine).find()) {
-				inputLine = inputLine.replaceFirst(CONTAINING_START, "").trim();
+
+			inputLine = inputLine.replaceFirst(CONTAINING_START, "").trim();
 
 				List<DateGroup> groups = dateParser.parse(inputLine);
 
@@ -432,6 +432,15 @@ public class JListeeParser {
 			taskDescription = null;
 		}
 		
+		System.out.println("taskNumber: "  + taskDescription);
+		System.out.println("location: " + location);
+		if (startDate!= null){
+		System.out.println("startDate: " + startDate.getTime());
+		}
+		
+		if (endDate!=null){
+		System.out.println("endDate: " + endDate.getTime());	
+		}
 		
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
