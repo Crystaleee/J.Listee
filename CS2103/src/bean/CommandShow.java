@@ -29,6 +29,12 @@ public class CommandShow implements Command {
 	}
 
 	public CommandShow(String keyword, String location, Calendar start, Calendar end, ArrayList<String> tags) {
+	    if(keyword == null){
+	        keyword = "";
+	    }
+        if(location == null){
+            location = "";
+        }
 		searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end, tags);
 		count = 0;
 	}
