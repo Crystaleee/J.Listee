@@ -247,24 +247,53 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testReserveDouble() {
-		display = Logic.executeUserCommand("reserve Reservation Test Thursday 3pm to 4pm and Friday 4pm to 6pm @NUS #tag");
+		display = Logic
+				.executeUserCommand("reserve Reservation Test Thursday 3pm to 4pm and Friday 4pm to 6pm @NUS #tag");
 		String expected = "Reserved: Reservation Test";
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	public void testReserveTriple() {
-		display = Logic.executeUserCommand("reserve Reservation Test Thursday 3pm to 4pm and Saturday 10 am to 11 am @NUS #tag");
+		display = Logic.executeUserCommand(
+				"reserve Reservation Test Thursday 3pm to 4pm and Saturday 10 am to 11 am @NUS #tag");
 		String expected = "Reserved: Reservation Test";
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
-	
+
 	/***********************
 	 * Undo and Redo Tests *
 	 ***********************/
+
+	@Test
+	public void testUndo() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("undo");
+		String expected = "Undid last command";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testRedo() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("undo");
+		display = Logic.executeUserCommand("redo");
+		String expected = "Redid last command";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testRedoError() {
+		display = Logic.executeUserCommand("redo");
+		String expected = "You have reached the latest point possible";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
 }
