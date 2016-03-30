@@ -78,28 +78,28 @@ public class JListeeParser {
 
 
 		JListeeParser testEvent = new JListeeParser();
-		testEvent.ParseCommand("add event  (03/17/2016 2pm to 03/27/2016 5pm) add event @LT27 #hihi #me");
+		testEvent.ParseCommand("add event from 03/17/2016 2pm to 03/27/2016 5pm add event @LT27 #hihi #me");
 
 		JListeeParser testFloat = new JListeeParser();
 		testFloat.ParseCommand("add floatingtask @zzz #arghhhhh #hi");
 
 		JListeeParser testDeadLine = new JListeeParser();
-		testDeadLine.ParseCommand("add deadLine date only @whatthe 12/2/14 #hey");
+		testDeadLine.ParseCommand("add deadLine date only @whatthe due 12/2/14 #hey");
 
 		JListeeParser testDeadLine2 = new JListeeParser();
-		testDeadLine2.ParseCommand("add deadLine date and time @location today 3:00 #hashtag");
+		testDeadLine2.ParseCommand("add deadLine date and time @location due today 3:00 #hashtag");
 
 		JListeeParser testDelete = new JListeeParser();
 		testDelete.ParseCommand("delete 1,2,3,4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show hiiiiii 12/4/16 and today #hihi @location ");
+		testShow.ParseCommand("show hiiiiii from 12/4/16 to today #hihi @location ");
 		
 		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve r1 tomorrow 3pm - 5pm and 7pm - 8pm"); 
+		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 2 today and april 29 #hashtag -#sigh @icube "); 
+		testUpdateTask.ParseCommand("update 1 CS2103 lecture"); 
 	} 
 
 
@@ -189,36 +189,43 @@ public class JListeeParser {
 	
 		inputLine = inputLine.replaceFirst(COMMAND_ADD, "").trim();
 	
-		// natty library to extract dates
-		List<DateGroup> groups = dateParser.parse(inputLine);
-	
-		for (DateGroup group : groups) {
-			List<Date> dates = group.getDates();
-	
-			/* has start date and end date, event task */
-	
-			if (dates.size() == 2) {
-				isEvent = true;
-				inputLine = extractDateAndInputLine(inputLine, groups);
-				
-			}
-	
-			/* only 1 set of date, deadlineTask */
-			else if (dates.size() == 1) {
-				isDeadline = true;
-				inputLine = extractDateAndInputLine(inputLine, groups);
+		if (inputLine.contains("from") || (inputLine.contains("to")) ||
+				inputLine.contains("due")){
+			
+			// natty library to extract dates
+			List<DateGroup> groups = dateParser.parse(inputLine);
+
+			for (DateGroup group : groups) {
+				List<Date> dates = group.getDates();
+
+				/* has start date and end date, event task */
+
+				if (dates.size() == 2) {
+					isEvent = true;
+					inputLine = extractDateAndInputLine(inputLine, groups);
+
+				}
+
+				/* only 1 set of date, deadlineTask */
+				else if (dates.size() == 1) {
+					isDeadline = true;
+					inputLine = extractDateAndInputLine(inputLine, groups);
+
+				}
 
 			}
-	
+			
+			inputLine = inputLine.replaceFirst("from", "").trim();
+			inputLine = inputLine.replaceFirst("to", "").trim();
+			inputLine = inputLine.replaceFirst("due", "").trim();
+		
 		}
-	
 		tagLists = findHashTags(inputLine);
 	
 		location = findLocation(inputLine);
 	
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 	
-			
 		if (isEvent) {
 			return new CommandAddEvent(taskDescription, location, startDate, endDate, tagLists);
 		}
@@ -258,18 +265,25 @@ public class JListeeParser {
 		return new CommandRedo();
 	}
 
-	private Command parseShow(String inputLine) {
+	public Command parseShow(String inputLine) {
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
 		String taskDescription = null;
 	
 		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
 		
-		// natty library to extract dates
-		List<DateGroup> groups = dateParser.parse(inputLine);
-	
-		inputLine = extractDateAndInputLine(inputLine, groups);
-	
+		if (inputLine.contains("from") || (inputLine.contains("to")) ||
+				inputLine.contains("due")){
+			
+			List<DateGroup> groups = dateParser.parse(inputLine);
+
+			inputLine = extractDateAndInputLine(inputLine, groups);
+			inputLine = inputLine.replaceFirst("from", "").trim();
+			inputLine = inputLine.replaceFirst("to", "").trim();
+			inputLine = inputLine.replaceFirst("due", "").trim();
+
+		}
+		
 		tagLists = findHashTags(inputLine);
 	
 		location = findLocation(inputLine);
@@ -277,11 +291,12 @@ public class JListeeParser {
 		if (!inputLine.contains(CONTAINS_ALL)) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
+	
 		
 		if (location == null && startDate == null && endDate == null && tagLists == null){
 			return new CommandShow(taskDescription);
 		}
-		
+			
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
 	}
 
@@ -295,18 +310,22 @@ public class JListeeParser {
 	
 		inputLine = inputLine.replaceFirst(COMMAND_RESERVE, "").trim();
 	
-		// natty library to extract dates
-		List<DateGroup> groups = dateParser.parse(inputLine);
-	
-		for (DateGroup group : groups) {
-			List<Date> dates = group.getDates();
-			/* has start date and end date, event task */
-	
-			if (dates.size() >= 2) {
-				extractDates(startDates, endDates, group, dates);
+		if (inputLine.contains("from") || (inputLine.contains("to")) ||
+				inputLine.contains("due")){
+			List<DateGroup> groups = dateParser.parse(inputLine);
+
+			for (DateGroup group : groups) {
+				List<Date> dates = group.getDates();
+
+				if (dates.size() >= 2) {
+					extractDates(startDates, endDates, group, dates);
+				}
+
+				inputLine = removeDateFromInputLine(inputLine, group);
+				inputLine = inputLine.replaceFirst("from", "").trim();
+				inputLine = inputLine.replaceFirst("to", "").trim();
+				inputLine = inputLine.replaceFirst("due", "").trim();
 			}
-	
-			inputLine = removeDateFromInputLine(inputLine, group);
 		}
 	
 		tagLists = findHashTags(inputLine);
@@ -314,6 +333,7 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 	
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+		
 		return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
 	
 	}
@@ -331,6 +351,7 @@ public class JListeeParser {
 		if (inputLine.contains(String.valueOf(taskNumber))) {
 			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
 		}
+		
 		
 		//change event task start date
 		if (inputLine.contains(CONTAINING_START)) {
@@ -354,10 +375,19 @@ public class JListeeParser {
 		
 		//change event task start & end date
 		// or change deadline end date
-		else {
+
+
+		else {	
+
+			if (inputLine.contains("from") || (inputLine.contains("to")) ||
+					inputLine.contains("due")){
 			List<DateGroup> groups = dateParser.parse(inputLine);
 			inputLine = extractDateAndInputLine(inputLine, groups);
+			inputLine = inputLine.replaceFirst("from", "").trim();
+			inputLine = inputLine.replaceFirst("to", "").trim();
+			inputLine = inputLine.replaceFirst("due", "").trim();
 			
+			}
 		}
 		
 		if (inputLine.contains("-")){
@@ -374,8 +404,7 @@ public class JListeeParser {
 		if (taskDescription.equals("")){
 			taskDescription = null;
 		}
-		
-		
+
 
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
@@ -387,7 +416,7 @@ public class JListeeParser {
 		return new CommandInvalid();
 	}
 
-	public String extractEndTimeAndInputLine(String inputLine, List<DateGroup> groups) {
+	private String extractEndTimeAndInputLine(String inputLine, List<DateGroup> groups) {
 		for (DateGroup group : groups) {
 			List<Date> dates = group.getDates();
 			endDateToCalendar(dates.get(0));	
@@ -402,8 +431,7 @@ public class JListeeParser {
 	}
 
 
-
-	public String extractStartTimeAndInputLine(String inputLine, List<DateGroup> groups) {
+	private String extractStartTimeAndInputLine(String inputLine, List<DateGroup> groups) {
 		for (DateGroup group : groups) {
 			List<Date> dates = group.getDates();
 			startDateToCalendar(dates.get(0));
@@ -419,7 +447,7 @@ public class JListeeParser {
 	}
 
 
-	public void extractDates(ArrayList<Calendar> startDates, ArrayList<Calendar> endDates, DateGroup group,
+	private void extractDates(ArrayList<Calendar> startDates, ArrayList<Calendar> endDates, DateGroup group,
 			List<Date> dates) {
 		for (int i = STARTING_INDEX; i < dates.size() - 1; i += 2) {
 			startDateToCalendar(dates.get(i));
@@ -439,7 +467,7 @@ public class JListeeParser {
 
 
 
-	public String extractDateAndInputLine(String inputLine, List<DateGroup> groups) {
+	private String extractDateAndInputLine(String inputLine, List<DateGroup> groups) {
 		for (DateGroup group : groups) {
 			List<Date> dates = group.getDates();
 	
@@ -458,16 +486,14 @@ public class JListeeParser {
 		return inputLine;
 	}
 
-
-
-	public Integer extractTaskNumber(String inputLine) {
+	private Integer extractTaskNumber(String inputLine) {
 		String[] splitInputLine = inputLine.split(" ");
 		return Integer.valueOf(splitInputLine[0]);
 	}
 
 
 
-	public void setEndTime(DateGroup group, List<Date> dates) {
+	private void setEndTime(DateGroup group, List<Date> dates) {
 		endDateToCalendar(dates.get(0));
 		
 		/* set default end time if no time specified */
@@ -477,7 +503,7 @@ public class JListeeParser {
 	}
 
 
-	public void setStartEndTime(DateGroup group, List<Date> dates) {
+	private void setStartEndTime(DateGroup group, List<Date> dates) {
 		startDateToCalendar(dates.get(0));
 		endDateToCalendar(dates.get(1));
 
@@ -497,7 +523,7 @@ public class JListeeParser {
 		return inputLine;
 	}
 
-	public String trimInputLineWithoutRemoveHashTags(String inputLine, ArrayList<String> removeTagLists) {
+	private String trimInputLineWithoutRemoveHashTags(String inputLine, ArrayList<String> removeTagLists) {
 
 		for (int i = 0; i < removeTagLists.size(); i++) {
 			inputLine = inputLine.replace("-#" + removeTagLists.get(i), "").trim();
@@ -506,14 +532,14 @@ public class JListeeParser {
 		return inputLine;
 	}
 
-	public String removeDateFromInputLine(String inputLine, DateGroup group) {
+	private String removeDateFromInputLine(String inputLine, DateGroup group) {
 		if (inputLine.contains(group.getText())) {
 			inputLine = inputLine.replace(group.getText(), "");
 		}
 		return inputLine;
 	}
 
-	public String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
+	private String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
 		if (tagLists != null) {
 			for (int i = 0; i < tagLists.size(); i++) {
 				inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
@@ -526,7 +552,7 @@ public class JListeeParser {
 		return inputLine;
 	}
 
-	public String findLocation(String inputLine) {
+	private String findLocation(String inputLine) {
 		String location = null;
 		Matcher retrieveLocation = Pattern.compile("@\\s*(\\w+)").matcher(inputLine);
 		while (retrieveLocation.find()) {
@@ -535,7 +561,7 @@ public class JListeeParser {
 		return location;
 	}
 
-	public ArrayList<String> findHashTags(String inputLine) {
+	private ArrayList<String> findHashTags(String inputLine) {
 		ArrayList<String> tags = new ArrayList<String>();
 		Matcher retrieveHashTags;
 
@@ -558,21 +584,21 @@ public class JListeeParser {
 		return tags;
 	}
 
-	public void setEndDateTimeDefault() {
+	private void setEndDateTimeDefault() {
 		endDate.set(Calendar.HOUR_OF_DAY, DEFAULT_END_HOUR);
 		endDate.set(Calendar.MINUTE, DEFAULT_END_MINUTE);
 		endDate.set(Calendar.SECOND, DEFAULT_END_SECOND);
 		endDate.set(Calendar.MILLISECOND, DEFAULT_END_MILLISECOND);
 	}
 
-	public void setStartDateTimeDefault() {
+	private void setStartDateTimeDefault() {
 		startDate.set(Calendar.HOUR_OF_DAY, DEFAULT_START_HOUR);
 		startDate.set(Calendar.MINUTE, DEFAULT_START_MINUTE);
 		startDate.set(Calendar.SECOND, DEFAULT_START_SECOND);
 		startDate.set(Calendar.MILLISECOND, DEFAULT_START_MILLISECOND);
 	}
 
-	public String determineCommandType(String[] separateInputLine) {
+	private String determineCommandType(String[] separateInputLine) {
 		return separateInputLine[0].trim();
 	}
 
@@ -586,7 +612,7 @@ public class JListeeParser {
 		endDate.setTime(date);
 	}
 
-	public void swapDates(){
+	private void swapDates(){
 		if (startDate.after(endDate)) {
 			Calendar temp = endDate;
 			endDate = startDate;
