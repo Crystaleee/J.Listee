@@ -25,6 +25,7 @@ public class Display implements java.io.Serializable{
     private ArrayList<TaskDeadline> visibleDeadlineTasks = deadlineTasks;
     private ArrayList<TaskFloat> visibleFloatTasks = floatTasks;
     private ArrayList<TaskReserved> visibleReservedTasks = reservedTasks;
+    private ArrayList<Task> visibleCompletedTasks = new ArrayList<Task>();
 
 	public Display() {
 		message = "";
@@ -148,6 +149,14 @@ public class Display implements java.io.Serializable{
 	public void setCompletedTasks(ArrayList<Task> completedTasks) {
 		this.completedTasks = completedTasks;
 	}
+
+    public ArrayList<Task> getVisibleCompletedTasks() {
+        return visibleCompletedTasks;
+    }
+
+    public void setVisibleCompletedTasks(ArrayList<Task> completedTasks) {
+        this.visibleCompletedTasks = completedTasks;
+    }
 	
 
 	// @@author Chloe Odquier Fortuna (A0149063E)
