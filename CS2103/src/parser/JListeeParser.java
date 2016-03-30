@@ -2,12 +2,14 @@
 
 package parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +49,7 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MINUTE = 59;
 	private static final int DEFAULT_END_SECOND = 0;
 	private static final int DEFAULT_END_MILLISECOND = 0;
-
+	
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
@@ -59,7 +61,6 @@ public class JListeeParser {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
 
-<<<<<<< HEAD
 
 
  public static void main(String[] separateInputLine){ // for testing
@@ -106,9 +107,6 @@ public class JListeeParser {
 
 	
 		/*
-=======
-	/*
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 	 * public static void main(String[] separateInputLine){ // for testing try {
 	 * fh = new FileHandler(
 	 * "/Users/kailin/Desktop/IVLE/CS2103/for proj/cs2103 proj/CS2103/src/MyLogFile.log"
@@ -149,6 +147,7 @@ public class JListeeParser {
 	 * "update 2 what -tomorrow  @location #hashtag -#deleteHashtag -#sigh #hi "
 	 * ); }
 	 */
+	
 
 	public Command ParseCommand(String inputLine) {
 
@@ -278,17 +277,12 @@ public class JListeeParser {
 		if (!inputLine.contains(CONTAINS_ALL)) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-<<<<<<< HEAD
 		
 		if (location == null && startDate == null && endDate == null && tagLists == null){
 			return new CommandShow(taskDescription);
 		}
 		
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
-=======
-		return new CommandShow(taskDescription);
-
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 	}
 
 
@@ -330,19 +324,13 @@ public class JListeeParser {
 		ArrayList<String> removeTagLists = new ArrayList<String>();
 		ArrayList<String> tagLists = new ArrayList<String>();
 		Integer taskNumber;
-<<<<<<< HEAD
 	
 		inputLine = inputLine.replaceFirst(COMMAND_UPDATE, "").trim();
-=======
-		System.out.println(inputLine);
-		inputLine = inputLine.replaceFirst("update", "").trim();
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 		taskNumber = extractTaskNumber(inputLine);
 	
 		if (inputLine.contains(String.valueOf(taskNumber))) {
-			inputLine = inputLine.replace(String.valueOf(taskNumber), "").trim();
+			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
 		}
-<<<<<<< HEAD
 		
 		//change event task start date
 		if (inputLine.contains(CONTAINING_START)) {
@@ -373,90 +361,15 @@ public class JListeeParser {
 		}
 		
 		if (inputLine.contains("-")){
-=======
-		// natty library to extract dates
-		if (inputLine.contains("-")) {
-
-			List<DateGroup> groups = dateParser.parse(inputLine);
-
-			for (DateGroup group : groups) {
-				List<Date> dates = group.getDates();
-
-				if (dates.size() == 2) {
-					for (int i = 0; i < dates.size() - 1; i += 2) {
-						startDate = dateToCalendar(dates.get(i));
-						startDate.setTimeInMillis(0);
-						endDate = dateToCalendar(dates.get(i + 1));
-						endDate.setTimeInMillis(0);
-
-						// swap dates if start after end date
-						if (startDate.after(endDate)) {
-							Calendar temp = endDate;
-							endDate = startDate;
-							startDate = temp;
-						}
-
-					}
-
-				}
-
-				else if (dates.size() == 1) {
-					endDate = dateToCalendar(dates.get(0));
-					endDate.setTimeInMillis(0);
-				}
-
-				inputLine = removeRemoveDateFromInputLine(inputLine, group);
-
-			}
-
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 			removeTagLists = findHashTags(inputLine);
 			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
-
 		}
-
-		List<DateGroup> groups = dateParser.parse(inputLine);
-
-		for (DateGroup group : groups) {
-			List<Date> dates = group.getDates();
-			/* has start date and end date, event task */
-
-			if (dates.size() == 2) {
-				for (int i = 0; i < dates.size() - 1; i += 2) {
-					startDate = dateToCalendar(dates.get(i));
-					endDate = dateToCalendar(dates.get(i + 1));
-
-					/* Swap date if necessary */
-					if (startDate.after(endDate)) {
-						Calendar temp = endDate;
-						endDate = startDate;
-						startDate = temp;
-					}
-				}
-
-				if (group.isTimeInferred()) {
-					setStartDateTimeDefault(startDate);
-					setEndDateTimeDefault(endDate);
-				}
-			}
-
-			else if (dates.size() == 1) {
-				endDate = dateToCalendar(dates.get(0));
-
-				/* set default end date if no time specified */
-				if (group.isTimeInferred()) {
-					setEndDateTimeDefault(endDate);
-				}
-			}
-
-			inputLine = removeDateFromInputLine(inputLine, group).trim();
-		}
-
+		
+		
 		tagLists = findHashTags(inputLine);
 		location = findLocation(inputLine);
 	
 		taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-<<<<<<< HEAD
 		
 		if (taskDescription.equals("")){
 			taskDescription = null;
@@ -464,22 +377,10 @@ public class JListeeParser {
 		
 		
 
-=======
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
+	
 	}
 
-<<<<<<< HEAD
-=======
-	private String removeRemoveDateFromInputLine(String inputLine, DateGroup group) {
-		if (inputLine.contains(group.getText())) {
-			inputLine = inputLine.replace("-" + group.getText(), "");
-		}
-		return inputLine;
-	}
-
-	public String trimInputLineWithoutRemoveHashTags(String inputLine, ArrayList<String> removeTagLists) {
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 
 
 	public Command parseInvalid() {
@@ -514,19 +415,7 @@ public class JListeeParser {
 			inputLine = removeRemoveDateFromInputLine(inputLine, group);
 				
 		}
-<<<<<<< HEAD
 		return inputLine;
-=======
-
-		tagLists = findHashTags(inputLine);
-
-		location = findLocation(inputLine);
-
-		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-
-		return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
-
->>>>>>> ab7b94527077da5bf3e8dca7bcefe94e51c4f08a
 	}
 
 
