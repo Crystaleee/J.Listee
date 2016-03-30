@@ -128,4 +128,49 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void testUpdateDeadlineDescription() {
+		display = Logic.executeUserCommand("add Deadline Test @NUS #tag");
+		display = Logic.executeUserCommand("update 1 New Description");
+		String expected = "Edited : \"Deadline Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testUpdateDeadlineTime() {
+		display = Logic.executeUserCommand("add Deadline Test @NUS #tag");
+		display = Logic.executeUserCommand("update 1 Friday 4pm");
+		String expected = "Edited : \"Deadline Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testUpdateEventStartTime() {
+		display = Logic.executeUserCommand("add Event Test Thursday 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("update 1 from Thursday 12pm");
+		String expected = "Edited : \"Event Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testUpdateEventEndTime() {
+		display = Logic.executeUserCommand("add Event Test Thursday 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("update 1 to Thursday 7pm");
+		String expected = "Edited : \"Event Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testUpdateEventTimes() {
+		display = Logic.executeUserCommand("add Event Test Thursday 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("update 1 Wednesday 9 pm to Thursday 10am");
+		String expected = "Edited : \"Event Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
 }
