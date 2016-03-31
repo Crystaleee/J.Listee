@@ -296,4 +296,49 @@ public class SystematicTest {
 		String actual = display.getMessage();
 		assertEquals(expected, actual);
 	}
+	
+	/******************************
+	 * Mark Done and Undone Tests *
+	 ******************************/
+	
+	@Test
+	public void testMarkDone() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("done 1");
+		String expected = "Completed: \"Floating Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testMarkDoneInvalidNumber() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("done 10");
+		String expected = "You have specified invalid task numbers: 10";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testMarkUnDone() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("done 1");
+		display = Logic.executeUserCommand("show Test");
+		display = Logic.executeUserCommand("undone 1");
+		String expected = "Undone task: \"Floating Test\"";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testMarkUnDoneInvalidNumber() {
+		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
+		display = Logic.executeUserCommand("done 1");
+		display = Logic.executeUserCommand("show Test");
+		display = Logic.executeUserCommand("undone 10");
+		String expected = "You have specified invalid task numbers: 10";
+		String actual = display.getMessage();
+		assertEquals(expected, actual);
+	}
+
 }

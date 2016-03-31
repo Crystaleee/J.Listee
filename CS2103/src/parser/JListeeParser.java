@@ -27,7 +27,7 @@ import bean.CommandRedo;
 import bean.CommandShow;
 import bean.CommandUndo;
 import bean.CommandUpdate;
-import bean.CommandUpdone;
+import bean.CommandUndone;
 
 public class JListeeParser {
 	private static final String COMMAND_UNDONE = "undone";
@@ -69,7 +69,7 @@ public class JListeeParser {
 
  public static void main(String[] separateInputLine){ // for testing
 		try {
-			fh = new FileHandler("log\\log.txt");
+			fh = new FileHandler("logs\\log.txt");
 			logger.addHandler(fh);
 			SimpleFormatter formatter = new SimpleFormatter();  
 			fh.setFormatter(formatter);  
