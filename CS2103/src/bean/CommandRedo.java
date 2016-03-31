@@ -15,7 +15,7 @@ public class CommandRedo implements Command {
     private int count;
     
     public CommandRedo() {
-        count = 0;
+        count = 1;
     }
 
     public CommandRedo(int count) {

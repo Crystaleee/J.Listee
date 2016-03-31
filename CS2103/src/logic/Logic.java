@@ -47,7 +47,7 @@ public class Logic {
         Timer timer = new Timer(IS_DAEMON_TASK);
         timer.schedule(new ReminderOverdue(), 0, 5000);
         synchronized(display){
-            saveDisplayToHistory();
+            History.saveDisplay(display.deepClone());
         }
         initialiseNatty();
         return display;
@@ -62,8 +62,10 @@ public class Logic {
         return display;
     }
 
-    private static void saveDisplayToHistory() {
+    private static void saveDisplayToHistory(Command userCommand) {
+        if (userCommand.getSaveHistory()) {
             History.saveDisplay(display.deepClone());
+        }
     }
 
     public static Display getDisplay() {
@@ -75,12 +77,12 @@ public class Logic {
 
         if (userCommand.getUpdateFile()) {
             if (successfullyUpdatesFile()) {
-                saveDisplayToHistory();
+                saveDisplayToHistory(userCommand);
             } else {
                 display.setMessage(MESSAGE_ERROR_UPDATE_FILE);
             }
         } else {
-            saveDisplayToHistory();
+            saveDisplayToHistory(userCommand);
         }
         return display;
     }

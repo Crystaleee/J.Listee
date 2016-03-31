@@ -16,7 +16,7 @@ public class CommandUndo implements Command {
 	private int count;
 	
 	public CommandUndo() {
-	    count = 0;
+	    count = -1;
 	}
 
     public CommandUndo(int count) {

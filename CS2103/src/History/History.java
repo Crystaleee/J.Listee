@@ -47,6 +47,7 @@ public class History {
                 oldDisplaysIndex = oldDisplays.size() - 1;
             }
         } else if (offset < 0) {
+            System.out.println(oldDisplaysIndex);
             if (atFirstState()) {
                 return null;
             }
