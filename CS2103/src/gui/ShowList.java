@@ -139,8 +139,9 @@ public class ShowList extends AppPage {
 						}
 						
 						//completed tasks
-						if(this.display.getCompletedTasks()!=null){
-							List<Task> completeds=this.display.getCompletedTasks();
+						if(this.display.getVisibleCompletedTasks()!=null 
+								){
+							List<Task> completeds=this.display.getVisibleCompletedTasks();
 							JSONArray jsonTask= new JSONArray();
 							
 							for (Task completed: completeds) {
