@@ -12,19 +12,23 @@ public class CommandRedo implements Command {
 	private final String MESSAGE_ERROR_REDO = "You have reached the latest point possible";
 	private boolean updateFile = true;
 	private boolean saveHistory = false;
+    private int count;
+    
+    public CommandRedo() {
+        count = 0;
+    }
 
-	public CommandRedo() {
-	}
+    public CommandRedo(int count) {
+        this.count = count;
+    }
 
 	public Display execute(Display display) {
-		if (History.atLastState()) {
-			updateFile = false;
-			display.setMessage(MESSAGE_ERROR_REDO);
-			return display;
-			// return (new Display(MESSAGE_ERROR_REDO));
-		}
-
-        Display nextDisplay = History.getDisplay(1);
+        Display nextDisplay = History.getDisplay(count);
+        if(nextDisplay == null){
+            updateFile = false;
+            display.setMessage(MESSAGE_ERROR_REDO);
+            return display;
+        }
         display = nextDisplay.deepClone();
 		display.setMessage(MESSAGE_REDO);
 		return display;
