@@ -264,8 +264,6 @@
 
         if(taskList[index].location==undefined && taskList[index].tags.length==0){
           task_details.style.display="none";
-         // var task_description=document.getElementById("task_description"+i);
-         // task_description.style.lineHeight="55px";
         }else{
          //add location if necessary
          if(taskList[index].location!=undefined){
@@ -391,7 +389,6 @@
       var task_end=document.getElementById("task_end"+i);
       var task_tags=document.getElementById("task_tags"+i);
       var task_details=document.getElementById("task_details"+i);
-      var task_description=document.getElementById("task_description"+i);
 
       if(taskList[index].location==undefined && taskList[index].tags.length==0){
         task_details.style.display="none";
@@ -454,7 +451,7 @@ function shortCutCommand(cmd){
 function showFeedBack(feedback){
   $("#feedback").text(feedback);
   $("#feedback").slideToggle("slow");
-  setTimeout("hideFeedBack()",1800);
+  setTimeout("hideFeedBack()",2200);
 }
 
 function hideFeedBack(){

@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import storage.LogStorage;
 import gui.GUIController;
 /**

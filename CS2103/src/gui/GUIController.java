@@ -23,6 +23,7 @@ public class GUIController {
 
 	private static AppPage welcome;
 	private static AppPage showList;
+	private static AppPage help;
 
 	public static void setStage(Stage stage2) {
 		stage=stage2;
@@ -67,19 +68,41 @@ public class GUIController {
 	public static void displayList(Stage stage, Display display) {
 			Scene scene = stage.getScene();
 			
-			((ShowList) showList).setList(display);
+			((ShowList) getShowList()).setList(display);
 			if (scene == null) {			
-				scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
+				scene = new Scene(getShowList(), WINDOW_WIDTH, WINDOW_HEIGHT);
 				//set Esc key for close
 				setCloseOnEsc(stage, scene);
 				stage.setScene(scene);
 			} else {
-				stage.getScene().setRoot(showList);
+				stage.getScene().setRoot(getShowList());
 			}
 			stage.sizeToScene();
 			stage.show();		
 	}
 
+	/**
+	 * display help page in the frame
+	 * 
+	 * @param display
+	 * @return
+	 */
+	public static void displayHelp() {
+		Scene scene = stage.getScene();
+		help = new Help();
+		
+		if (scene == null) {			
+			scene = new Scene(help, WINDOW_WIDTH, WINDOW_HEIGHT);
+			//set Esc key for close
+			setCloseOnEsc(stage, scene);
+			stage.setScene(scene);
+		} else {
+			stage.getScene().setRoot(help);
+		}
+		stage.sizeToScene();
+		stage.show();		
+	}
+	
 	/**
 	 * @param stage
 	 * @param scene
@@ -104,7 +127,7 @@ public class GUIController {
 			 //assert display!=null :"Display is null!";
 			if(display==null)
 				JOptionPane.showMessageDialog(null, "display is null!");
-			showList= new ShowList(display);
+			showList=new ShowList(display);
 			displayList(stage,display);				
 	}
 	
@@ -115,4 +138,9 @@ public class GUIController {
 			JOptionPane.showMessageDialog(null, "display is null!");
 		displayList(stage,display);		
 	}
+
+	public static AppPage getShowList() {
+		return showList;
+	}
+
 }

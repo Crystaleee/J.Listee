@@ -185,6 +185,10 @@ public class ShowList extends AppPage {
 		}		
 	}
 
+	public Display getDisplay(){
+		return this.display;
+	}
+	
 	// JavaScript interface object
 	public class ListBridge {
 		public void receiveCommand(String command){
@@ -192,7 +196,11 @@ public class ShowList extends AppPage {
 			userCmd.add(command);
 			cmdIndex=userCmd.size()-1;
 			
-			GUIController.handelUserInput(command);
+			if(command.equals("help")||command.equals("show help")){
+				GUIController.displayHelp();
+			}else{
+				GUIController.handelUserInput(command);
+			}			
 		}
 		
 		public String getPreviousCmd(){
