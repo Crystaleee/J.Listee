@@ -51,8 +51,10 @@ public class SystematicTest {
 	}
 
 	/**********************
-	 * Adding Tasks Tests 
-	 * @throws IOException *
+	 * Adding Tasks Tests
+	 * 
+	 * @throws IOException
+	 *             *
 	 **********************/
 
 	@Test
@@ -63,48 +65,35 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
-	public void testAddDeadlineFormatOne() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test Thursday 3pm @NUS #tag");
-		String expected = "added: \"Deadline Test Thursday 3pm\"";
+	public void testAddDeadline() throws IOException {
+		display = Logic.executeUserCommand("add Deadline Test due Thursday 3pm @NUS #tag");
+		String expected = "added: \"Deadline Test\"";
 		String actual = display.getMessage();
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
-		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
-	}
 
-	@Test
-	public void testAddDeadlineFormatTwo() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test 31/3/16 15:00 @NUS #tag");
-		String expected = "added: \"Deadline Test 31/3/16 15:00\"";
-		String actual = display.getMessage();
-
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-		
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
 	public void testAddDeadlineWithoutTime() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test Thursday @NUS #tag");
-		String expected = "added: \"Deadline Test Thursday\"";
+		display = Logic.executeUserCommand("add Deadline Test due Thursday @NUS #tag");
+		String expected = "added: \"Deadline Test\"";
 		String actual = display.getMessage();
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -115,9 +104,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -128,14 +117,16 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	/************************
-	 * Updating Tasks Tests 
-	 * @throws IOException *
+	 * Updating Tasks Tests
+	 * 
+	 * @throws IOException
+	 *             *
 	 ************************/
 
 	@Test
@@ -147,9 +138,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -161,9 +152,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -175,37 +166,37 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
 	public void testUpdateDeadlineDescription() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due tomorrow @NUS #tag");
 		display = Logic.executeUserCommand("update 1 New Description");
 		String expected = "Edited : \"Deadline Test\"";
 		String actual = display.getMessage();
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
 	public void testUpdateDeadlineTime() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due tomorrow @NUS #tag");
 		display = Logic.executeUserCommand("update 1 Friday 4pm");
 		String expected = "Edited : \"Deadline Test\"";
 		String actual = display.getMessage();
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -217,9 +208,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -231,9 +222,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -245,14 +236,16 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	/************************
-	 * Deleting Tasks Tests 
-	 * @throws IOException *
+	 * Deleting Tasks Tests
+	 * 
+	 * @throws IOException
+	 *             *
 	 ************************/
 
 	@Test
@@ -261,26 +254,26 @@ public class SystematicTest {
 		display = Logic.executeUserCommand("delete 1");
 		String expected = "deleted: \"Floating Test\"";
 		String actual = display.getMessage();
-		
+
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
 	public void testDeleteDeadline() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("delete 1");
-		String expected = "deleted: \"Deadline Test tomorrow 3pm\"";
+		String expected = "deleted: \"Deadline Test\"";
 		String actual = display.getMessage();
-		
+
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -292,15 +285,15 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
 	public void testDeleteAll() throws IOException {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
-		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("delete all");
 		String expected = "All tasks deleted";
@@ -308,25 +301,25 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
 	public void testDeleteMultiple() throws IOException {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
-		display = Logic.executeUserCommand("add Deadline Test tomorrow 3pm @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("delete 1,2,3");
-		String expected = "deleted: \"Event Test\", \"Floating Test\", \"Deadline Test tomorrow 3pm\"";
+		String expected = "deleted: \"Deadline Test\", \"Event Test\", \"Floating Test\"";
 		String actual = display.getMessage();
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -338,14 +331,16 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	/*************************
-	 * Reserving Tasks Tests 
-	 * @throws IOException *
+	 * Reserving Tasks Tests
+	 * 
+	 * @throws IOException
+	 *             *
 	 *************************/
 
 	@Test
@@ -356,9 +351,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -370,28 +365,16 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
-		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
-	}
 
-	@Test
-	public void testReserveTriple() throws IOException {
-		display = Logic.executeUserCommand(
-				"reserve Reservation Test Thursday 3pm to 4pm and Saturday 10 am to 11 am @NUS #tag");
-		String expected = "Reserved: Reservation Test";
-		String actual = display.getMessage();
-
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-		
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	/***********************
-	 * Undo and Redo Tests 
-	 * @throws IOException *
+	 * Undo and Redo Tests
+	 * 
+	 * @throws IOException
+	 *             *
 	 ***********************/
 
 	@Test
@@ -403,9 +386,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -418,9 +401,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 	@Test
@@ -431,16 +414,18 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
-	
+
 	/******************************
-	 * Mark Done and Undone Tests 
-	 * @throws IOException *
+	 * Mark Done and Undone Tests *
+	 * 
+	 * @throws IOException
+	 *             *
 	 ******************************/
-	
+
 	@Test
 	public void testMarkDone() throws IOException {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -450,11 +435,11 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
-	
+
 	@Test
 	public void testMarkDoneInvalidNumber() throws IOException {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -464,11 +449,11 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
-	
+
 	@Test
 	public void testMarkUnDone() throws IOException {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -480,11 +465,11 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
-	
+
 	@Test
 	public void testMarkUnDoneInvalidNumber() throws IOException {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
@@ -496,9 +481,9 @@ public class SystematicTest {
 
 		Display storageDisplay = storage.getDisplay(filepath);
 		storageDisplay.setMessage(expected);
-		
+
 		assertEquals(expected, actual);
-		assertEquals(display.toString(),storageDisplay.toString());
+		assertEquals(display.toString(), storageDisplay.toString());
 	}
 
 }
