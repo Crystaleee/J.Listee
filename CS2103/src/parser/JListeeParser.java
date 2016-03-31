@@ -103,7 +103,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 4 start delete"); 
+		testUpdateTask.ParseCommand("update 4 -@location"); 
 		
 		JListeeParser testDone = new JListeeParser();
 		testDone.ParseCommand("done 1,2,3,4"); 
@@ -436,7 +436,7 @@ public class JListeeParser {
 		if (taskDescription.equals("")){
 			taskDescription = null;
 		}
-		
+	
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
@@ -462,7 +462,7 @@ public class JListeeParser {
 
 
 
-	private Command parseUndone(String inputLine) {
+	public Command parseUndone(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_UNDONE, "").trim();
 	
@@ -615,8 +615,8 @@ public class JListeeParser {
 				inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
 			}
 		}
-
-		inputLine = inputLine.replace("@" + location, "").trim();
+		
+		inputLine = inputLine.replace("-", "").replace("@" + location, "").trim();
 		inputLine = inputLine.replace("(", "").replace(")", "").replace("@", "");
 
 		return inputLine;
