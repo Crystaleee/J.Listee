@@ -45,7 +45,7 @@ public class Logic {
         display = getDisplayFromStorage();
         display.setMessage(null);
         Timer timer = new Timer(IS_DAEMON_TASK);
-        timer.schedule(new ReminderOverdue(), 0, 5000);
+        timer.schedule(new ReminderOverdue(), 0, 1000);
         synchronized(display){
             History.saveDisplay(display.deepClone());
         }

@@ -5,6 +5,8 @@
  */
 package bean;
 
+import java.util.Calendar;
+
 import History.History;
 
 public class CommandRedo implements Command {
@@ -30,9 +32,12 @@ public class CommandRedo implements Command {
             return display;
         }
         display = nextDisplay.deepClone();
+        display.setOverdueTasks();
 		display.setMessage(MESSAGE_REDO);
 		return display;
 	}
+    
+    
 
 	public boolean getSaveHistory() {
 		return saveHistory;

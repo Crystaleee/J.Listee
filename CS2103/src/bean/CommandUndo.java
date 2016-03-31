@@ -6,6 +6,8 @@
 
 package bean;
 
+import java.util.Calendar;
+
 import History.History;
 
 public class CommandUndo implements Command {
@@ -31,7 +33,7 @@ public class CommandUndo implements Command {
             return display;
 		}
 		display = prevDisplay.deepClone();
-		
+		display.setOverdueTasks();
 		display.setMessage(MESSAGE_UNDO);
 		return display;
 	}

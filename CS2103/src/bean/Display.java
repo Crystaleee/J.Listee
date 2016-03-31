@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Display implements java.io.Serializable{
 
@@ -156,6 +157,31 @@ public class Display implements java.io.Serializable{
 
     public void setVisibleCompletedTasks(ArrayList<Task> completedTasks) {
         this.visibleCompletedTasks = completedTasks;
+    }
+    
+    public int setOverdueTasks( ) {
+        int numOverdue = 0;
+        if (this.getDeadlineTasks() != null) {
+            for (int i = 0; i < this.getDeadlineTasks().size(); i++) {
+                TaskDeadline task = this.getDeadlineTasks().get(i);
+                if (task.getEndDate().before(Calendar.getInstance())) {
+                    task.setIsOverdue(true);
+                    numOverdue++;
+                }
+
+            }
+        }
+        if (this.getEventTasks() != null) {
+            for (int i = 0; i < this.getEventTasks().size(); i++) {
+                TaskEvent task = this.getEventTasks().get(i);
+                if (task.getEndDate().before(Calendar.getInstance())) {
+                    task.setIsOverdue(true);
+                    numOverdue++;
+                }
+
+            }
+        }
+        return numOverdue;
     }
 	
 
