@@ -6,13 +6,10 @@
 package logic;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Timer;
 
 import History.History;
 import bean.Command;
-import bean.CommandAddDeadlineTask;
-import bean.CommandUndo;
 import bean.Display;
 import parser.JListeeParser;
 import storage.Storage;
@@ -45,6 +42,8 @@ public class Logic {
         file = filePath;
         display = getDisplayFromStorage();
         display.setMessage(null);
+        Timer timer = new Timer(true);
+        timer.schedule(new ReminderOverdue(), 0, 5000);
         History.saveDisplay(getDisplayFromStorage());
         return display;
     }
@@ -52,8 +51,9 @@ public class Logic {
     public static Display executeUserCommand(String userInput) {
         History.saveUserInput(userInput);
         Command userCommand = parseUserInput(userInput);
-        display = executeCommand(userCommand);
-
+        synchronized (display) {
+            display = executeCommand(userCommand);
+        }
         return display;
     }
 
@@ -63,9 +63,13 @@ public class Logic {
         }
     }
 
+    public static Display getDisplay() {
+        return display;
+    }
+
     public static Display executeCommand(Command userCommand) {
         display = userCommand.execute(display);
-        
+
         if (userCommand.getUpdateFile()) {
             if (successfullyUpdatesFile()) {
                 saveDisplayToHistory(userCommand);

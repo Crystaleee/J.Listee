@@ -11,6 +11,7 @@ public class Task implements java.io.Serializable{
 	private String description;
 	private String location;
 	private ArrayList<String> tags;
+	private boolean isOverdue;
 
 	public Task() {
 		description = null;
@@ -23,6 +24,14 @@ public class Task implements java.io.Serializable{
 		this.location = location;
 		this.tags = tags;
 	}
+
+    public void setIsOverdue(boolean isOverdue) {
+        this.isOverdue = isOverdue;
+    }
+
+    public boolean isOverdue() {
+        return isOverdue;
+    }
 
 	public void setDescription(String description) {
 		this.description = description;
