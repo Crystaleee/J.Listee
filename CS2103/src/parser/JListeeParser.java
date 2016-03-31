@@ -103,7 +103,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 4 start delete"); 
+		testUpdateTask.ParseCommand("update 4 nm2213 tutorial due tonight 10pm"); 
 		
 		JListeeParser testDone = new JListeeParser();
 		testDone.ParseCommand("done 1,2,3,4"); 
@@ -225,9 +225,9 @@ public class JListeeParser {
 
 			}
 			
-			inputLine = inputLine.replaceFirst("from", "").trim();
-			inputLine = inputLine.replaceFirst("to", "").trim();
-			inputLine = inputLine.replaceFirst("due", "").trim();
+			inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
+			inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
+			inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();	
 		
 		}
 		tagLists = findHashTags(inputLine);
@@ -287,9 +287,9 @@ public class JListeeParser {
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
 			inputLine = extractDateAndInputLine(inputLine, groups);
-			inputLine = inputLine.replaceFirst("from", "").trim();
-			inputLine = inputLine.replaceFirst("to", "").trim();
-			inputLine = inputLine.replaceFirst("due", "").trim();
+			inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
+			inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
+			inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();	
 
 		}
 		
@@ -332,9 +332,9 @@ public class JListeeParser {
 				}
 
 				inputLine = removeDateFromInputLine(inputLine, group);
-				inputLine = inputLine.replaceFirst("from", "").trim();
-				inputLine = inputLine.replaceFirst("to", "").trim();
-				inputLine = inputLine.replaceFirst("due", "").trim();
+				inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
+				inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
+				inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();	
 			}
 		}
 	
@@ -415,10 +415,9 @@ public class JListeeParser {
 					Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
 				List<DateGroup> groups = dateParser.parse(inputLine);
 				inputLine = extractDateAndInputLine(inputLine, groups);
-				inputLine = inputLine.replaceFirst("from", "").trim();
-				inputLine = inputLine.replaceFirst("to", "").trim();
-				inputLine = inputLine.replaceFirst("due", "").trim();
-				
+				inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
+				inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
+				inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();				
 			}
 		}
 		
@@ -437,6 +436,8 @@ public class JListeeParser {
 			taskDescription = null;
 		}
 		
+
+	
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
@@ -462,7 +463,7 @@ public class JListeeParser {
 
 
 
-	private Command parseUndone(String inputLine) {
+	public Command parseUndone(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_UNDONE, "").trim();
 	
@@ -615,8 +616,8 @@ public class JListeeParser {
 				inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
 			}
 		}
-
-		inputLine = inputLine.replace("@" + location, "").trim();
+		
+		inputLine = inputLine.replace("-", "").replace("@" + location, "").trim();
 		inputLine = inputLine.replace("(", "").replace(")", "").replace("@", "");
 
 		return inputLine;

@@ -89,15 +89,15 @@
   }
   .time{
     font-size: 14px;
-    line-height: 27px;
   }
   .time>div{
     vertical-align: middle;
     display: table-cell;
+    padding: 0 4px;
   }
   .time span{
-    line-height: 22px;
-    height:22px;
+    padding: 1px 8px;
+    display: block;
     border-radius: 3px;
   }
   .task_components,.task_location,.task_tags{
@@ -127,7 +127,6 @@
   }
   .task_right>div{
     display: table-row;
-    padding: 0 11px;
   }
   .task_lowertime span{
     background-color: rgba(240,108,125,0.4);
@@ -363,7 +362,9 @@
       + "</section>"
       + "</section>"
       + "<section class='task_right'>"
-      + "<div class='task_components time task_uppertime'>"
+      + "<div class='task_components time task_uppertime' id='task_start_div"
+      + i
+      + "'>"
       + "<div>"
       + "<span id='task_start"
       + i
@@ -371,7 +372,9 @@
       + "</span>"
       + "</div>"
       +"</div>"
-      + " <div class='task_components time task_lowertime'>"
+      + " <div class='task_components time task_lowertime' id='task_end_div"
+      + i
+      + "'>"
         + "<div>"
       + "<span id='task_end"
       + i
@@ -423,7 +426,7 @@
        task_start.innerHTML=taskList[index].startDate;
      }
      else{
-       task_start.style.display="none";
+       $("#task_start_div"+i).hide();
      }
 
      //add endDate if necessary
@@ -431,7 +434,7 @@
        task_end.innerHTML= taskList[index].endDate;
      }
      else{
-       task_end.style.display="none";
+       $("#task_end_div"+i).hide();
      }
 
      i=i+1;
