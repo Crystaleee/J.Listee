@@ -11,8 +11,6 @@ import storage.LogStorage;
 import gui.GUIController;
 /**
  * @@author A0149527W
- * @date 2016å¹´3æœˆ1æ—¥ ä¸‹å�ˆ5:03:02
- * @version 1.0
  */
 public class App extends Application{	
 	//This the scene stage of application
