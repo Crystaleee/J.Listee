@@ -11,35 +11,51 @@ import bean.Display;
 
 public class History {
 
-	private static ArrayList<String> userInputs = new ArrayList<String>();
-	private static ArrayList<Display> oldDisplays = new ArrayList<Display>();
-	private static int oldDisplaysIndex = -1;
+    private static ArrayList<String> userInputs = new ArrayList<String>();
+    private static ArrayList<Display> oldDisplays = new ArrayList<Display>();
+    private static int oldDisplaysIndex = -1;
 
-	public static void saveDisplay(Display display) {
-		if (oldDisplaysIndex < (oldDisplays.size() - 1)) {
-			for (int i = (oldDisplays.size() - 1); i > oldDisplaysIndex; i--) {
-				oldDisplays.remove(i);
-			}
-		}
-		oldDisplays.add(display);
-		oldDisplaysIndex++;
-	}
+    public static void saveDisplay(Display display) {
+        if (oldDisplaysIndex < (oldDisplays.size() - 1)) {
+            for (int i = (oldDisplays.size() - 1); i > oldDisplaysIndex; i--) {
+                oldDisplays.remove(i);
+            }
+        }
+        oldDisplays.add(display);
+        oldDisplaysIndex++;
+    }
 
-	public static void saveUserInput(String userInput) {
-		userInputs.add(userInput);
-	}
+    public static void saveUserInput(String userInput) {
+        userInputs.add(userInput);
+    }
 
-	public static boolean atLastState() {
-		return (oldDisplaysIndex == (oldDisplays.size() - 1));
-	}
+    public static boolean atLastState() {
+        return (oldDisplaysIndex == (oldDisplays.size() - 1));
+    }
 
-	public static boolean atFirstState() {
-		return (oldDisplaysIndex == 0);
-	}
+    public static boolean atFirstState() {
+        return (oldDisplaysIndex == 0);
+    }
 
-	public static Display getDisplay(int offset) {
-		oldDisplaysIndex += offset;
-		return oldDisplays.get(oldDisplaysIndex);
-	}
+    public static Display getDisplay(int offset) {
+        if (offset > 0) {
+            if (atLastState()) {
+                return null;
+            }
+            oldDisplaysIndex += offset;
+            if (oldDisplaysIndex > (oldDisplays.size() - 1)) {
+                oldDisplaysIndex = oldDisplays.size() - 1;
+            }
+        } else if (offset < 0) {
+            if (atFirstState()) {
+                return null;
+            }
+            oldDisplaysIndex += offset;
+            if (oldDisplaysIndex < 0) {
+                oldDisplaysIndex = 0;
+            }
+        }
+        return oldDisplays.get(oldDisplaysIndex);
+    }
 
 }

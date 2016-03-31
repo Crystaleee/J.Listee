@@ -16,6 +16,8 @@ import storage.Storage;
 
 public class Logic {
 
+    private static final boolean IS_DAEMON_TASK = true;
+
     public static String MESSAGE_ADD_SUCCESS = "added: \"%1$s\"";
 
     public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
@@ -42,9 +44,12 @@ public class Logic {
         file = filePath;
         display = getDisplayFromStorage();
         display.setMessage(null);
-        Timer timer = new Timer(true);
+        Timer timer = new Timer(IS_DAEMON_TASK);
         timer.schedule(new ReminderOverdue(), 0, 5000);
-        History.saveDisplay(getDisplayFromStorage());
+        synchronized(display){
+            saveDisplayToHistory();
+        }
+        initialiseNatty();
         return display;
     }
 
@@ -57,10 +62,8 @@ public class Logic {
         return display;
     }
 
-    private static void saveDisplayToHistory(Command userCommand) {
-        if (userCommand.getSaveHistory()) {
+    private static void saveDisplayToHistory() {
             History.saveDisplay(display.deepClone());
-        }
     }
 
     public static Display getDisplay() {
@@ -72,12 +75,12 @@ public class Logic {
 
         if (userCommand.getUpdateFile()) {
             if (successfullyUpdatesFile()) {
-                saveDisplayToHistory(userCommand);
+                saveDisplayToHistory();
             } else {
                 display.setMessage(MESSAGE_ERROR_UPDATE_FILE);
             }
         } else {
-            saveDisplayToHistory(userCommand);
+            saveDisplayToHistory();
         }
         return display;
     }
@@ -106,5 +109,10 @@ public class Logic {
         } catch (IOException error) {
             return false;
         }
+    }
+
+    private static void initialiseNatty() {
+        JListeeParser myParser = new JListeeParser();
+        myParser.ParseCommand("add this from tmr 3pm");
     }
 }

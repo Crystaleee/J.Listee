@@ -9,6 +9,7 @@ import bean.TaskEvent;
 
 public class ReminderOverdue extends TimerTask {
     private int counter;
+    private int numOverdue = 0;
     private String message_overdue = "You have overdue tasks!";
 
     public ReminderOverdue() {
@@ -19,11 +20,13 @@ public class ReminderOverdue extends TimerTask {
     public void run() {
         Display display = Logic.getDisplay();
         synchronized (display) {
-                setOverdueTasks(display);
-                if(++counter == 10){
+            setOverdueTasks(display);
+            if (++counter == 10) {
+                if (numOverdue > 0) {
                     display.setMessage(message_overdue);
-                    counter = 0;
                 }
+                counter = 0;
+            }
 
         }
     }
@@ -34,6 +37,7 @@ public class ReminderOverdue extends TimerTask {
                 TaskDeadline task = display.getDeadlineTasks().get(i);
                 if (task.getEndDate().before(Calendar.getInstance())) {
                     System.out.println(task.getDescription() + " is overdue");
+                    numOverdue++;
                     task.setIsOverdue(true);
                 }
 
@@ -44,6 +48,7 @@ public class ReminderOverdue extends TimerTask {
                 TaskEvent task = display.getEventTasks().get(i);
                 if (task.getEndDate().before(Calendar.getInstance())) {
                     System.out.println(task.getDescription() + " is overdue");
+                    numOverdue++;
                     task.setIsOverdue(true);
                 }
 
