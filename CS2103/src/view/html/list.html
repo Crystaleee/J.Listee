@@ -536,8 +536,13 @@ $(document).keydown(
         case 68://d
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
-            //shortCutCommand("done "+id);
+            if($(title).text()=="Completed Tasks"){
+              shortCutCommand("undone "+id);
+            }else{
+              shortCutCommand("done "+id);
+            }            
           }
+          break;
         case 80://p
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);

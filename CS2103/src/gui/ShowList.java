@@ -140,10 +140,10 @@ public class ShowList extends AppPage {
 						
 						//completed tasks
 						if(this.display.getVisibleCompletedTasks()!=null 
-								&&this.display.getVisibleDeadlineTasks()==null
-								&& this.display.getVisibleEvents()==null
-								&& this.display.getVisibleFloatTasks()==null
-								&& this.display.getVisibleReservedTasks()==null){
+								&&this.display.getVisibleDeadlineTasks().size()==0
+								&& this.display.getVisibleEvents().size()==0
+								&& this.display.getVisibleFloatTasks().size()==0
+								&& this.display.getVisibleReservedTasks().size()==0){
 							List<Task> completeds=this.display.getVisibleCompletedTasks();
 							JSONArray jsonTask= new JSONArray();
 							
@@ -188,6 +188,7 @@ public class ShowList extends AppPage {
 	// JavaScript interface object
 	public class ListBridge {
 		public void receiveCommand(String command){
+			System.out.println(command);
 			userCmd.add(command);
 			cmdIndex=userCmd.size()-1;
 			
@@ -195,7 +196,6 @@ public class ShowList extends AppPage {
 		}
 		
 		public String getPreviousCmd(){
-			System.out.println(cmdIndex);
 			if(cmdIndex>0){
 				return userCmd.get(cmdIndex--);
 			}else{
@@ -204,7 +204,6 @@ public class ShowList extends AppPage {
 		}
 		
 		public String getLaterCmd(){
-			System.out.println(cmdIndex);
 			if(cmdIndex<userCmd.size()-1){
 				return userCmd.get(++cmdIndex);
 			}else return "";

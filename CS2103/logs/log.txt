@@ -1,63 +1,63 @@
-三月 31, 2016 12:56:32 下午 storage.Storage saveFile
+三月 31, 2016 1:22:58 下午 storage.Storage saveFile
 信息: Writing all tasks to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeFloatingTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeFloatingTasks
 信息: Writing send intern email to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeFloatingTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeFloatingTasks
 信息: Writing check Taobao express delivery to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeFloatingTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeFloatingTasks
 信息: Writing borrow key and check mail box to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeFloatingTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeFloatingTasks
 信息: Writing confirm family tour schedule to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeFloatingTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeFloatingTasks
 信息: Writing photoshop photos to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeFloatingTasks
+信息: Writing fetch clothes  balcony to file.
+
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing SE project due to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing lab5 to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing peer evaluation to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing UI project to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing UI presentation to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing SE FINAL to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing UI FINAL to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing CN FINAL to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeDeadlineTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeDeadlineTasks
 信息: Writing CG FINAL to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeEventTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeEventTasks
 信息: Writing Lankawi travel to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeEventTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeEventTasks
 信息: Writing Bali travel to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeEventTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeEventTasks
 信息: Writing family Singapore tour to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeReservedTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeReservedTasks
 信息: Writing wash clothes to file.
 
-三月 31, 2016 12:56:32 下午 storage.Storage writeReservedTasks
+三月 31, 2016 1:22:58 下午 storage.Storage writeReservedTasks
 信息: Writing prepare for Malay to file.
-
-三月 31, 2016 12:56:32 下午 storage.Storage writeCompletedTasks
-信息: Writing fetch clothes  balcony to file.
 
