@@ -1,6 +1,5 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 21 Mar, 11:00pm
  */
 package bean;
 
@@ -8,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CommandDelete implements Command {
+    private static final String COMMAND_TYPE_DELETE = "Delete";
+    private static final String COMMAND_TYPE_INVALID = "Invalid";
+    private static final String MESSAGE_NO_NUMBER_SPECIFIED = "please specify a number(s)";
     private boolean updateFile;
     private ArrayList<Integer> taskNumbers;
     private Display display;
@@ -29,25 +31,57 @@ public class CommandDelete implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        if (taskNumbers == null) {
-            display = new Display(message_all_tasks_deleted);
-            return display;
-        }
         this.display = oldDisplay;
+        if (taskNumbers != null) {
+            if (taskNumbers.isEmpty()) {
+                setDisplay(MESSAGE_NO_NUMBER_SPECIFIED, COMMAND_TYPE_INVALID, new ArrayList<Integer>(),
+                        new ArrayList<Integer>());
+                return display;
+            }
+        }
         if (hasInvalidTaskNumbers()) {
-            updateFile = false;
-            saveHistory = false;
-            display.setMessage(message_invalid_task_numbers);
-            return oldDisplay;
+            setInvalidDisplay();
+            return display;
         } else {
-            Collections.sort(taskNumbers);
             deleteTasksFromList();
-            display.setMessage(deletedMessage);
         }
         return display;
     }
 
+    private void setInvalidDisplay() {
+        updateFile = false;
+        saveHistory = false;
+        display.setCommandType(COMMAND_TYPE_INVALID);
+        display.setMessage(message_invalid_task_numbers);
+    }
+
+    private void setDisplay(String msg, String commandType, ArrayList<Integer> deletedTasks,
+            ArrayList<Integer> conflictingTasks) {
+        display.setMessage(msg);
+        display.setCommandType(commandType);
+        incrementTaskNumbers();
+        display.setTaskIndices(deletedTasks);
+        display.setConflictingTasksIndices(conflictingTasks);
+    }
+
+    private void incrementTaskNumbers() {
+        if (taskNumbers != null) {
+            for (int i = 0; i < taskNumbers.size(); i++) {
+                taskNumbers.set(i, taskNumbers.get(i) + 1);
+            }
+        }
+    }
+
     private boolean hasInvalidTaskNumbers() {
+        if (isDeleteAll()) {
+            return false;
+        } else {
+            ArrayList<Integer> invalidTaskNumbers = getInvalidTaskNumbers();
+            return (invalidTaskNumbers.size() > 0);
+        }
+    }
+
+    private ArrayList<Integer> getInvalidTaskNumbers() {
         ArrayList<Integer> invalidTaskNumbers = new ArrayList<Integer>();
         int taskNum, numOfTasks = getNumOfTasks();
         for (int i = 0; i < taskNumbers.size(); i++) {
@@ -57,16 +91,15 @@ public class CommandDelete implements Command {
                 invalidTaskNumbers.add(taskNum);
             }
         }
-        return (invalidTaskNumbers.size() > 0);
+        return invalidTaskNumbers;
     }
 
-    private int getNumOfTasks(){
-	    int numOfTasks = 0;
-	    numOfTasks += display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
-	            + display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size();
-	    //System.out.println("num " + numOfTasks);
-	    return numOfTasks;
-	}
+    private int getNumOfTasks() {
+        int numOfTasks = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
+                + display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size()
+                + display.getVisibleCompletedTasks().size();
+        return numOfTasks;
+    }
 
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
@@ -81,12 +114,35 @@ public class CommandDelete implements Command {
     }
 
     private void deleteTasksFromList() {
+        if (isDeleteAll()) {
+            deleteAllShownTasks();
+            return;
+        } else {
+            deleteMultipleTasks();
+            return;
+        }
+    }
+
+    private void deleteMultipleTasks() {
         Task deletedTask;
+        Collections.sort(taskNumbers);
         for (int i = 0; i < taskNumbers.size(); i++) {
             deletedTask = removeTask(taskNumbers.get(i) - 1 - i);
             feedbackDeletedTasks(deletedTask, i);
         }
-        return;
+        setDisplay(deletedMessage, COMMAND_TYPE_DELETE, taskNumbers, new ArrayList<Integer>());
+    }
+
+    private void deleteAllShownTasks() {
+        int numTasks = getNumOfTasks();
+        for (int i = 0; i < numTasks; i++) {
+            removeTask(numTasks - i - 1);
+        }
+        setDisplay(message_all_tasks_deleted, COMMAND_TYPE_DELETE, new ArrayList<Integer>(), new ArrayList<Integer>());
+    }
+
+    private boolean isDeleteAll() {
+        return taskNumbers == null;
     }
 
     private void feedbackDeletedTasks(Task deletedTask, int i) {
@@ -99,30 +155,73 @@ public class CommandDelete implements Command {
 
     private Task removeTask(int taskNum) {
         Task deletedTask;
-        if (taskNum < display.getVisibleDeadlineTasks().size()) {
-            deletedTask = display.getVisibleDeadlineTasks().remove(taskNum);
-            //System.out.println(deletedTask.getDescription());
-            display.getDeadlineTasks().remove(deletedTask);
+        if (isDeleteTaskDeadline(taskNum)) {
+            deletedTask = deleteTaskDeadline(taskNum);
         } else {
             taskNum -= display.getVisibleDeadlineTasks().size();
-            if (taskNum < display.getVisibleEvents().size()) {
-                deletedTask = display.getVisibleEvents().remove(taskNum);
-                //System.out.println(deletedTask.getDescription());
-                display.getEventTasks().remove(deletedTask);
+            if (isDeleteTaskEvent(taskNum)) {
+                deletedTask = deleteEvent(taskNum);
             } else {
                 taskNum -= display.getVisibleEvents().size();
-                if (taskNum < display.getVisibleFloatTasks().size()) {
-                    deletedTask = display.getVisibleFloatTasks().remove(taskNum);
-                    //System.out.println(deletedTask.getDescription());
-                    display.getFloatTasks().remove(deletedTask);
+                if (isDeleteTaskFloat(taskNum)) {
+                    deletedTask = deleteTaskFloat(taskNum);
                 } else {
                     taskNum -= display.getVisibleFloatTasks().size();
-                    deletedTask = display.getVisibleReservedTasks().remove(taskNum);
-                    //System.out.println(deletedTask.getDescription());
-                    display.getReservedTasks().remove(deletedTask);
+                    if (isDeleteTaskReserved(taskNum)) {
+                        deletedTask = deleteTaskReserved(taskNum);
+                    } else {
+                        taskNum -= display.getVisibleReservedTasks().size();
+                        deletedTask = deleteTaskCompleted(taskNum);
+                    }
                 }
             }
         }
+        return deletedTask;
+    }
+
+    private boolean isDeleteTaskReserved(int taskNum) {
+        return taskNum < display.getVisibleReservedTasks().size();
+    }
+
+    private boolean isDeleteTaskFloat(int taskNum) {
+        return taskNum < display.getVisibleFloatTasks().size();
+    }
+
+    private boolean isDeleteTaskEvent(int taskNum) {
+        return taskNum < display.getVisibleEvents().size();
+    }
+
+    private boolean isDeleteTaskDeadline(int taskNum) {
+        return taskNum < display.getVisibleDeadlineTasks().size();
+    }
+
+    private Task deleteTaskCompleted(int taskNum) {
+        Task deletedTask = display.getVisibleCompletedTasks().remove(taskNum);
+        display.getCompletedTasks().remove(deletedTask);
+        return deletedTask;
+    }
+
+    private Task deleteTaskReserved(int taskNum) {
+        Task deletedTask = display.getVisibleReservedTasks().remove(taskNum);
+        display.getReservedTasks().remove(deletedTask);
+        return deletedTask;
+    }
+
+    private Task deleteTaskFloat(int taskNum) {
+        Task deletedTask = display.getVisibleFloatTasks().remove(taskNum);
+        display.getFloatTasks().remove(deletedTask);
+        return deletedTask;
+    }
+
+    private Task deleteEvent(int taskNum) {
+        Task deletedTask = display.getVisibleEvents().remove(taskNum);
+        display.getEventTasks().remove(deletedTask);
+        return deletedTask;
+    }
+
+    private Task deleteTaskDeadline(int taskNum) {
+        Task deletedTask = display.getVisibleDeadlineTasks().remove(taskNum);
+        display.getDeadlineTasks().remove(deletedTask);
         return deletedTask;
     }
 

@@ -1,9 +1,10 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 21 Mar, 11:00pm
  */
 
 package bean;
+
+import java.util.ArrayList;
 
 public class CommandInvalid implements Command {
 	private final String MESSAGE_INVALID_COMMAND = "You have specified an invalid command";
@@ -14,11 +15,17 @@ public class CommandInvalid implements Command {
 	}
 
 	public Display execute(Display display) {
-		display.setMessage(MESSAGE_INVALID_COMMAND);
+	    setDisplay(display);
 		return display;
-		// return (new Display(MESSAGE_INVALID_COMMAND));
 	}
 
+	private void setDisplay(Display display) {
+        display.setMessage(MESSAGE_INVALID_COMMAND);
+        display.setCommandType("Invalid");
+        display.setTaskIndices(new ArrayList<Integer>());
+        display.setConflictingTasksIndices(new ArrayList<Integer>());
+    }
+	
 	public boolean getSaveHistory() {
 		return saveHistory;
 	}

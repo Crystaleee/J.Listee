@@ -16,6 +16,10 @@ import storage.Storage;
 
 public class Logic {
 
+    private static final int TIMER_PERIOD = 1000;
+
+    private static final int TIMER_DELAY = 0;
+
     private static final boolean IS_DAEMON_TASK = true;
 
     public static String MESSAGE_ADD_SUCCESS = "added: \"%1$s\"";
@@ -23,7 +27,7 @@ public class Logic {
     public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
     public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
     public static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
-    public static final String MESSAGE_NO_DESCRIPTION = "Pls enter a description";
+    public static final String MESSAGE_NO_DESCRIPTION = "Please enter a description";
     public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
 
     private static Storage storage = Storage.getInstance();
@@ -42,15 +46,23 @@ public class Logic {
 
     public static Display initializeProgram(String filePath) {
         file = filePath;
-        display = getDisplayFromStorage();
-        display.setMessage(null);
-        Timer timer = new Timer(IS_DAEMON_TASK);
-        timer.schedule(new ReminderOverdue(), 0, 1000);
+        initializeDisplay();
+        initialiseOverdueTasksReminder();
         synchronized(display){
             History.saveDisplay(display.deepClone());
         }
         initialiseNatty();
         return display;
+    }
+
+    private static void initialiseOverdueTasksReminder() {
+        Timer timer = new Timer(IS_DAEMON_TASK);
+        timer.schedule(new ReminderOverdue(), TIMER_DELAY, TIMER_PERIOD);
+    }
+
+    private static void initializeDisplay() {
+        display = getDisplayFromStorage();
+        display.setMessage(null);
     }
 
     public static Display executeUserCommand(String userInput) {
@@ -75,7 +87,7 @@ public class Logic {
     public static Display executeCommand(Command userCommand) {
         display = userCommand.execute(display);
 
-        if (userCommand.getUpdateFile()) {
+        if (requiresFileUpdate(userCommand)) {
             if (successfullyUpdatesFile()) {
                 saveDisplayToHistory(userCommand);
             } else {
@@ -85,6 +97,10 @@ public class Logic {
             saveDisplayToHistory(userCommand);
         }
         return display;
+    }
+
+    private static boolean requiresFileUpdate(Command userCommand) {
+        return userCommand.getUpdateFile();
     }
 
     private static Command parseUserInput(String userInput) {
@@ -98,7 +114,6 @@ public class Logic {
         try {
             thisDisplay = storage.getDisplay(file);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return thisDisplay;

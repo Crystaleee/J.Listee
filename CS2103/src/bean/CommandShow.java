@@ -75,6 +75,7 @@ public class CommandShow implements Command {
     }
 
     private void showDone(Display oldDisplay) {
+        System.out.println("Show done");
         oldDisplay.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
         oldDisplay.setVisibleEvents(new ArrayList<TaskEvent>());
         oldDisplay.setVisibleFloatTasks(new ArrayList<TaskFloat>());

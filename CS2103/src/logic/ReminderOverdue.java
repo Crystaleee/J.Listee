@@ -20,9 +20,8 @@ public class ReminderOverdue extends TimerTask {
             if (notifyUserOfOverdueTasks()) {
                 if (numOverdue > 0) {
                     display.setMessage(message_overdue);
-                    System.out.println("overdue");
+                    System.out.println("overdue" + " " + numOverdue);
                 }
-                System.out.println("this");
                 counter = 0;
             }
 

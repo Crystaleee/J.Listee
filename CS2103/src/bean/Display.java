@@ -15,13 +15,16 @@ import java.util.Calendar;
 public class Display implements java.io.Serializable{
 
 	private String message;
+	private String commandType;
+	private ArrayList<Integer> taskIndices = new ArrayList<Integer>();
+    private ArrayList<Integer> conflictingTasksIndices = new ArrayList<Integer>();
+	
 	private ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
     private ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
     private ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
     private ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
     private ArrayList<Task> completedTasks = new ArrayList<Task>();
     
-
     private ArrayList<TaskEvent> visibleEvents = events;
     private ArrayList<TaskDeadline> visibleDeadlineTasks = deadlineTasks;
     private ArrayList<TaskFloat> visibleFloatTasks = floatTasks;
@@ -49,6 +52,30 @@ public class Display implements java.io.Serializable{
 		visibleFloatTasks = floatTasks;
 		visibleReservedTasks = reservedTasks;
 	}
+    
+    public void setCommandType(String commandType){
+        this.commandType = commandType;
+    }
+
+    public String getCommandType() {
+        return commandType;
+    }
+    
+    public void setConflictingTasksIndices(ArrayList<Integer> conflictingTasksIndices){
+        this.conflictingTasksIndices = conflictingTasksIndices;
+    }
+
+    public ArrayList<Integer> getConflictingTasksIndices() {
+        return conflictingTasksIndices;
+    }
+    
+    public void setTaskIndices(ArrayList<Integer> taskIndices){
+        this.taskIndices = taskIndices;
+    }
+
+    public ArrayList<Integer> getTaskIndices() {
+        return taskIndices;
+    }
     
     public void setVisibleReservedTasks(ArrayList<TaskReserved> reservedTasks){
         this.visibleReservedTasks = reservedTasks;
