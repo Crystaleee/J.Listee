@@ -217,6 +217,6 @@ public class Display implements java.io.Serializable{
 	public String toString() {
 		return "Display [message=" + message + ", events=" + visibleEvents + ", deadlineTasks=" + visibleDeadlineTasks
 				+ ", floatTasks=" + visibleFloatTasks + ", reservedTasks=" + visibleReservedTasks + ", completedTasks="
-				+ completedTasks + "]";
+				+ visibleCompletedTasks + "]";
 	}
 }

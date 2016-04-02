@@ -55,7 +55,7 @@ public class CommandUpdate extends TaskEvent implements Command {
          * { System.out.println("conflict " +
          * display.getConflictingTasksIndices().get(i)); }
          */
-        System.out.println("Index " + display.getTaskIndices().get(0));
+        //System.out.println("Index " + display.getTaskIndices().get(0));
         display.setMessage(message);
         return display;
     }

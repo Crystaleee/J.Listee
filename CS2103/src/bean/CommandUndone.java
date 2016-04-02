@@ -57,8 +57,10 @@ public class CommandUndone implements Command {
     }
 
     private void incrementTaskNumbers() {
-        for (int i = 0; i < taskNumbers.size(); i++) {
-            taskNumbers.set(i, taskNumbers.get(i) + 1);
+        if (taskNumbers != null) {
+            for (int i = 0; i < taskNumbers.size(); i++) {
+                taskNumbers.set(i, taskNumbers.get(i) + 1);
+            }
         }
     }
 
@@ -110,12 +112,21 @@ public class CommandUndone implements Command {
     }
 
     private void undoneMultipleDoneTasks() {
+        Collections.sort(taskNumbers);
         for (int i = 0; i < taskNumbers.size(); i++) {
-            Task completedTask = display.getCompletedTasks().remove(taskNumbers.get(i) - 1 - i);
+            Task completedTask = getTask(i);
             markUndoneTask(completedTask);
             feedbackUndoneTasks(completedTask, i);
         }
         display.setMessage(undoneMessage);
+    }
+
+    private Task getTask(int i) {
+        int index = taskNumbers.get(i) - display.getVisibleDeadlineTasks().size()
+                - display.getVisibleEvents().size() - display.getVisibleFloatTasks().size()
+                - display.getVisibleReservedTasks().size() - 1;
+        System.out.println("Index " + index);
+        return display.getCompletedTasks().remove(index);
     }
 
     private void undoneAllVisibleDoneTasks() {
@@ -140,7 +151,7 @@ public class CommandUndone implements Command {
     }
 
     private void markUndoneTask(Task completedTask) {
-        //System.out.println(completedTask.getDescription());
+        // System.out.println(completedTask.getDescription());
         if (completedTask instanceof TaskEvent) {
             undoneTaskEvent(completedTask);
             // System.out.println(task.getDescription());
@@ -153,7 +164,7 @@ public class CommandUndone implements Command {
         } else {
             System.out.println("Err");
         }
-        return ;
+        return;
     }
 
     private void undoneTaskEvent(Task completedTask) {
