@@ -45,7 +45,7 @@ public class CommandShow implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        //System.out.println(searchedTask.getDescription());
+        // System.out.println(searchedTask.getDescription());
         initialiseDisplay(oldDisplay);
         if (searchedTask.getDescription().equals(COMMAND_TYPE_DONE)) {
             showDone(oldDisplay);
@@ -84,8 +84,8 @@ public class CommandShow implements Command {
         saveHistory = false;
         oldDisplay.setMessage(MESSAGE_INVALID_DATE_RANGE);
     }
-    
-    //returns true if end date is before start date
+
+    // returns true if end date is before start date
     private boolean isInvalidDateRange() {
         if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
             if (searchedTask.getStartDate().after(searchedTask.getEndDate())) {
@@ -96,7 +96,7 @@ public class CommandShow implements Command {
     }
 
     private void showDone(Display oldDisplay) {
-        //System.out.println("Show done");
+        // System.out.println("Show done");
         oldDisplay.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
         oldDisplay.setVisibleEvents(new ArrayList<TaskEvent>());
         oldDisplay.setVisibleFloatTasks(new ArrayList<TaskFloat>());
@@ -316,10 +316,13 @@ public class CommandShow implements Command {
     }
 
     private boolean containsKeyword(Task task) {
-        if (task.getDescription().toLowerCase().contains(searchedTask.getDescription())) {
-            return true;
+        String[] keywords = searchedTask.getDescription().split(" ");
+        for (int i = 0; i < keywords.length; i++) {
+            if (!task.getDescription().toLowerCase().contains(keywords[i])) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     public boolean getSaveHistory() {
