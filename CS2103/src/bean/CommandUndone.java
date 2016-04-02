@@ -110,7 +110,6 @@ public class CommandUndone implements Command {
     }
 
     private void undoneMultipleDoneTasks() {
-        Task undoneTask;
         for (int i = 0; i < taskNumbers.size(); i++) {
             Task completedTask = display.getCompletedTasks().remove(taskNumbers.get(i) - 1 - i);
             markUndoneTask(completedTask);

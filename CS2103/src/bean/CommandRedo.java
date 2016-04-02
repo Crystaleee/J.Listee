@@ -5,7 +5,7 @@
  */
 package bean;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 
 import History.History;
 
@@ -31,11 +31,19 @@ public class CommandRedo implements Command {
             display.setMessage(MESSAGE_ERROR_REDO);
             return display;
         }
-        display = nextDisplay.deepClone();
-        display.setOverdueTasks();
-		display.setMessage(MESSAGE_REDO);
+        display = setDisplay(nextDisplay);
 		return display;
 	}
+
+    private Display setDisplay(Display nextDisplay) {
+        Display display;
+        display = nextDisplay.deepClone();
+        display.setOverdueTasks();
+        display.setTaskIndices(new ArrayList<Integer>());
+        display.setConflictingTasksIndices(new ArrayList<Integer>());
+		display.setMessage(MESSAGE_REDO);
+        return display;
+    }
     
     
 

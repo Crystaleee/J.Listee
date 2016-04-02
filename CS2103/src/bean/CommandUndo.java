@@ -6,7 +6,7 @@
 
 package bean;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 
 import History.History;
 
@@ -32,11 +32,19 @@ public class CommandUndo implements Command {
             display.setMessage(MESSAGE_ERROR_UNDO);
             return display;
 		}
-		display = prevDisplay.deepClone();
-		display.setOverdueTasks();
-		display.setMessage(MESSAGE_UNDO);
+		display = setDisplay(prevDisplay);
 		return display;
 	}
+
+    private Display setDisplay(Display prevDisplay) {
+        Display display;
+        display = prevDisplay.deepClone();
+		display.setOverdueTasks();
+        display.setTaskIndices(new ArrayList<Integer>());
+        display.setConflictingTasksIndices(new ArrayList<Integer>());
+		display.setMessage(MESSAGE_UNDO);
+        return display;
+    }
 
 	public boolean getSaveHistory() {
 		return saveHistory;

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandShow implements Command {
+    private static final String MESSAGE_SHOW_DONE = "Showing done tasks";
+    private static final String MESSAGE_INVALID_DATE_RANGE = "Please specify a valid date range";
+    private static final String COMMAND_TYPE_DONE = "done";
     private final String message_no_tasks = "No such tasks found";
     private final String message_show_all = "Displaying all tasks";
     private String message_show = "Displaying tasks";
@@ -42,8 +45,9 @@ public class CommandShow implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        System.out.println(searchedTask.getDescription());
-        if (searchedTask.getDescription().equals("done")) {
+        //System.out.println(searchedTask.getDescription());
+        initialiseDisplay(oldDisplay);
+        if (searchedTask.getDescription().equals(COMMAND_TYPE_DONE)) {
             showDone(oldDisplay);
             return oldDisplay;
         }
@@ -51,14 +55,10 @@ public class CommandShow implements Command {
             setShowAll(oldDisplay);
             return oldDisplay;
         }
-        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
-            if (searchedTask.getStartDate().after(searchedTask.getEndDate())) {
-                updateFile = false;
-                saveHistory = false;
-                oldDisplay.setMessage("Please specify a valid date range");
-                return oldDisplay;
+        if (isInvalidDateRange()) {
+            setInvalidDisplay(oldDisplay);
+            return oldDisplay;
 
-            }
         }
         this.oldDisplay = oldDisplay;
 
@@ -74,14 +74,35 @@ public class CommandShow implements Command {
         return oldDisplay;
     }
 
+    private void initialiseDisplay(Display oldDisplay) {
+        oldDisplay.setTaskIndices(new ArrayList<Integer>());
+        oldDisplay.setConflictingTasksIndices(new ArrayList<Integer>());
+    }
+
+    private void setInvalidDisplay(Display oldDisplay) {
+        updateFile = false;
+        saveHistory = false;
+        oldDisplay.setMessage(MESSAGE_INVALID_DATE_RANGE);
+    }
+    
+    //returns true if end date is before start date
+    private boolean isInvalidDateRange() {
+        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
+            if (searchedTask.getStartDate().after(searchedTask.getEndDate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void showDone(Display oldDisplay) {
-        System.out.println("Show done");
+        //System.out.println("Show done");
         oldDisplay.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
         oldDisplay.setVisibleEvents(new ArrayList<TaskEvent>());
         oldDisplay.setVisibleFloatTasks(new ArrayList<TaskFloat>());
         oldDisplay.setVisibleReservedTasks(new ArrayList<TaskReserved>());
         oldDisplay.setVisibleCompletedTasks(oldDisplay.getCompletedTasks());
-        oldDisplay.setMessage("Showing done tasks");
+        oldDisplay.setMessage(MESSAGE_SHOW_DONE);
     }
 
     private void setShowAll(Display oldDisplay) {
@@ -90,6 +111,7 @@ public class CommandShow implements Command {
         oldDisplay.setVisibleEvents(oldDisplay.getEventTasks());
         oldDisplay.setVisibleFloatTasks(oldDisplay.getFloatTasks());
         oldDisplay.setVisibleReservedTasks(oldDisplay.getReservedTasks());
+        initialiseDisplay(oldDisplay);
     }
 
     private boolean isShowAll() {
