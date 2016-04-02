@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandUpdate extends TaskEvent implements Command {
+    private static final String MESSAGE_INVALID_DATE_RANGE = "Please specify a valid date range";
     private Integer taskNumber;
     private ArrayList<String> removeTags;
     private Display display;
+    private boolean timeChanged = false;
     private boolean updateFile = true;;
     private boolean saveHistory = true;
     private String message = "Edited : \"";
@@ -39,24 +41,39 @@ public class CommandUpdate extends TaskEvent implements Command {
     public Display execute(Display oldDisplay) {
         display = oldDisplay;
         if (hasInvalidTaskNumber()) {
-            updateFile = false;
-            saveHistory = false;
-            display.setMessage(message_invalid_task_number);
+            setInvalidDisplay(message_invalid_task_number);
             return display;
-            // return (new Display(message_invalid_task_number));
         }
-        if ((getStartDate() != null) && (getEndDate() != null)) {
-            if (getStartDate().after(getEndDate())) {
-                updateFile = false;
-                saveHistory = false;
-                oldDisplay.setMessage("Please specify a valid date range");
-                return oldDisplay;
+        if (isInvalidDateRange()) {
+            setInvalidDisplay(MESSAGE_INVALID_DATE_RANGE);
+            return oldDisplay;
+        }
 
-            }
-        }
         editTask();
+        /*
+         * for (int i = 0; i < display.getConflictingTasksIndices().size(); i++)
+         * { System.out.println("conflict " +
+         * display.getConflictingTasksIndices().get(i)); }
+         */
+        System.out.println("Index " + display.getTaskIndices().get(0));
         display.setMessage(message);
         return display;
+    }
+
+    // returns true if end date is before start date
+    private boolean isInvalidDateRange() {
+        if ((getStartDate() != null) && (getEndDate() != null)) {
+            if (getStartDate().after(getEndDate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setInvalidDisplay(String msg) {
+        updateFile = false;
+        saveHistory = false;
+        display.setMessage(msg);
     }
 
     private boolean hasInvalidTaskNumber() {
@@ -115,6 +132,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         task = (TaskFloat) editDescription(task);
         task = (TaskFloat) editLocation(task);
         task = (TaskFloat) editTags(task);
+        int index = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size() + display.getVisibleFloatTasks().indexOf(task) + 1;
+        //System.out.println(index);
+        display.getTaskIndices().add(index);
         if (hasChangeFloatTaskType(task)) {
             display.getVisibleFloatTasks().remove(taskNumber - 1);
             display.getFloatTasks().remove(task);
@@ -127,7 +147,6 @@ public class CommandUpdate extends TaskEvent implements Command {
         task = (TaskReserved) editDescription(task);
         task = (TaskReserved) editLocation(task);
         task = (TaskReserved) editTags(task);
-
     }
 
     private boolean changeDeadlineTaskType(TaskDeadline task) {
@@ -178,19 +197,19 @@ public class CommandUpdate extends TaskEvent implements Command {
     private TaskEvent editStartDate(TaskEvent task) {
         if (getStartDate() != null) {
             task.setStartDate(getStartDate());
+            timeChanged = true;
         }
         return task;
     }
 
-    // for event tasks
     private TaskEvent editEndDate(TaskEvent task) {
         if (getEndDate() != null) {
             task.setEndDate(getEndDate());
+            timeChanged = true;
         }
         return task;
     }
 
-    // for deadline tasks
     private TaskDeadline editEndDate(TaskDeadline task) {
         if (getEndDate() != null) {
             task.setEndDate(getEndDate());
@@ -238,6 +257,9 @@ public class CommandUpdate extends TaskEvent implements Command {
             Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                     task.getStartDate(), task.getEndDate(), task.getTags());
             display = addCommand.execute(display);
+            if (!timeChanged) {
+                display.setConflictingTasksIndices(new ArrayList<Integer>());
+            }
         }
         return;
     }
