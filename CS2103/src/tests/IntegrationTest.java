@@ -1,4 +1,4 @@
-package logic;
+package tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,9 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import bean.Display;
+import logic.Logic;
 import storage.Storage;
 
-public class SystematicTest {
+public class IntegrationTest {
 
 	private static Display display;
 	private Storage storage = Storage.getInstance();
@@ -50,12 +51,10 @@ public class SystematicTest {
 		assertEquals(expected, actual);
 	}
 
-	/**********************
-	 * Adding Tasks Tests
-	 * 
-	 * @throws IOException
-	 *             *
-	 **********************/
+	/***********************
+	 * Adding Tasks Tests  * 
+	 * @throws IOException *
+	 ***********************/
 
 	@Test
 	public void testAddFloating() throws IOException {
@@ -123,10 +122,8 @@ public class SystematicTest {
 	}
 
 	/************************
-	 * Updating Tasks Tests
-	 * 
-	 * @throws IOException
-	 *             *
+	 * Updating Tasks Tests * 
+	 * @throws IOException  *
 	 ************************/
 
 	@Test
@@ -242,10 +239,8 @@ public class SystematicTest {
 	}
 
 	/************************
-	 * Deleting Tasks Tests
-	 * 
-	 * @throws IOException
-	 *             *
+	 * Deleting Tasks Tests * 
+	 * @throws IOException  *
 	 ************************/
 
 	@Test
@@ -337,10 +332,8 @@ public class SystematicTest {
 	}
 
 	/*************************
-	 * Reserving Tasks Tests
-	 * 
-	 * @throws IOException
-	 *             *
+	 * Reserving Tasks Tests * 
+	 * @throws IOException   *
 	 *************************/
 
 	@Test
@@ -371,10 +364,8 @@ public class SystematicTest {
 	}
 
 	/***********************
-	 * Undo and Redo Tests
-	 * 
-	 * @throws IOException
-	 *             *
+	 * Undo and Redo Tests * 
+	 * @throws IOException *
 	 ***********************/
 
 	@Test
@@ -421,9 +412,7 @@ public class SystematicTest {
 
 	/******************************
 	 * Mark Done and Undone Tests *
-	 * 
-	 * @throws IOException
-	 *             *
+	 * @throws IOException        *
 	 ******************************/
 
 	@Test

@@ -1,4 +1,4 @@
-package logic;
+package tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,6 +20,7 @@ import bean.CommandShow;
 import bean.CommandUndo;
 import bean.CommandUndone;
 import bean.CommandUpdate;
+import logic.Logic;
 
 public class LogicTest2 {
     @Before

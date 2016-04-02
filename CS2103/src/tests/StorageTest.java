@@ -1,6 +1,6 @@
 // @@author Chloe Odquier Fortuna (A0149063E)
 
-package storage;
+package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,6 +22,7 @@ import bean.TaskDeadline;
 import bean.TaskEvent;
 import bean.TaskFloat;
 import bean.TaskReserved;
+import storage.Storage;
 
 public class StorageTest {
 
@@ -82,7 +83,7 @@ public class StorageTest {
 	@Test
 	public void testSaveAndRead() throws IOException {
 		storage.saveFile(display);
-		assertEquals(display.toString(), storage.getDisplay(storage.filePath).toString());
+		assertEquals(display.toString(), storage.getDisplay(Storage.filePath).toString());
 	}
 
 	/*

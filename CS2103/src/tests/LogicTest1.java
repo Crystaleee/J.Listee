@@ -1,6 +1,6 @@
 // @@author Boh Tuang Hwee, Jehiel (A0139995E)
 
-package logic;
+package tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,6 +16,7 @@ import bean.CommandDelete;
 import bean.CommandInvalid;
 import bean.CommandRedo;
 import bean.CommandUndo;
+import logic.Logic;
 
 public class LogicTest1 {
 	/*
