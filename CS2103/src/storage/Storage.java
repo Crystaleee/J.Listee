@@ -81,27 +81,12 @@ public class Storage {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
 
-		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
-		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
-		ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
-		ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
-		ArrayList<Task> completedTasks = new ArrayList<Task>();
-
-		try {
-			br.readLine();
-			readTasksFloating(br, floatTasks);
-			readTasksDeadline(br, deadlineTasks);
-			readTasksEvents(br, events);
-			readTasksReserved(br, reservedTasks);
-			completedTasks = readTasksCompleted(br);
-
-		} catch (IOException ioe) {
-			throw ioe;
-
-		} catch (Exception e) {
-			System.out.println("There was an error in reading your file.");
-			e.printStackTrace();
-		}
+		br.readLine();
+		ArrayList<TaskFloat> floatTasks = readTasksFloating(br);
+		ArrayList<TaskDeadline> deadlineTasks = readTasksDeadline(br);
+		ArrayList<TaskEvent> events = readTasksEvents(br);
+		ArrayList<TaskReserved> reservedTasks = readTasksReserved(br);
+		ArrayList<Task> completedTasks = readTasksCompleted(br);
 
 		closeReaderClasses(handler, br);
 		setFilePath(filepath);
@@ -110,46 +95,30 @@ public class Storage {
 		return display;
 	}
 
-	private void readTasksFloating(BufferedReader br, ArrayList<TaskFloat> floatTasks) throws IOException {
+	private ArrayList<TaskFloat> readTasksFloating(BufferedReader br) throws IOException {
+		ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
 		String line = null;
-		String description = null;
-		String location = null;
-		ArrayList<String> tags = null;
+		readHeader(br);
 
-		try {
-			readHeader(br);
+		while ((line = br.readLine()) != null) {
+			line = br.readLine();
+			if (isInvalidLine(line)) {
+				break;
+			} else {
+				String location = br.readLine();
+				String tags = br.readLine();
 
-			while ((line = br.readLine()) != null) {
-				line = br.readLine();
-				if (isInvalidLine(line)) {
-					break;
-				} else {
-					logger.log(Level.INFO, "Reading new floating task.\r\n");
-					description = readDescription(line);
-					location = readLocation(br);
-					tags = readTags(br);
-
-					TaskFloat floatTask = new TaskFloat(description, location, tags);
-					floatTasks.add(floatTask);
-					logger.log(Level.INFO, "Successfully read: " + floatTask.getDescription() + "\r\n");
-				}
+				TaskFloat floatTask = processFloatingTask(line, location, tags);
+				floatTasks.add(floatTask);
+				logger.log(Level.INFO, "Successfully read floating task: " + floatTask.getDescription() + "\r\n");
 			}
-		} catch (IOException ioe) {
-			logger.log(Level.WARNING, "IOException: Could not read floating task.\r\n");
-			throw ioe;
-
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Could not read floating task.\r\n");
-			e.printStackTrace();
 		}
+		return floatTasks;
 	}
 
-	private void readTasksDeadline(BufferedReader br, ArrayList<TaskDeadline> deadlineTasks) throws IOException {
+	private ArrayList<TaskDeadline> readTasksDeadline(BufferedReader br) throws IOException {
+		ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
 		String line = null;
-		String description = null;
-		Calendar deadline = null;
-		String location = null;
-		ArrayList<String> tags = null;
 
 		readHeader(br);
 
@@ -158,74 +127,25 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
-				logger.log(Level.INFO, "Reading new deadline task.\r\n");
-				description = readDescription(line);
-				try {
-					deadline = readDate(br, ATTRIBUTE_DEADLINE);
-				} catch (ParseException e) {
-					logger.log(Level.WARNING, description + " doesn't have a deadline and can't be read.\r\n");
-					// br.readLine();
-					// br.readLine();
-					handleInvalidDate(ATTRIBUTE_DEADLINE, br);
-					continue;
-				}
-				location = readLocation(br);
-				tags = readTags(br);
+				String deadline = br.readLine();
+				String location = br.readLine();
+				String tags = br.readLine();
 
-				TaskDeadline deadlineTask = new TaskDeadline(description, location, deadline, tags);
-				deadlineTasks.add(deadlineTask);
-				logger.log(Level.INFO, "Successfully read: " + deadlineTask.getDescription() + "\r\n");
+				TaskDeadline deadlineTask = processDeadlineTask(line, deadline, location, tags);
+
+				if (deadlineTask != null) {
+					deadlineTasks.add(deadlineTask);
+					logger.log(Level.INFO,
+							"Successfully read deadline task: " + deadlineTask.getDescription() + "\r\n");
+				}
 			}
 		}
+		return deadlineTasks;
 	}
 
-	private void readTasksEvents(BufferedReader br, ArrayList<TaskEvent> events) throws IOException {
-		String line;
-		String description = null;
-		Calendar startDate = null;
-		Calendar endDate = null;
-		String location = null;
-		ArrayList<String> tags = null;
-
-		readHeader(br);
-		while ((line = br.readLine()) != null) {
-			line = br.readLine();
-			if (isInvalidLine(line)) {
-				break;
-			} else {
-				logger.log(Level.INFO, "Reading new event.\r\n");
-				description = readDescription(line);
-				try {
-					startDate = readDate(br, ATTRIBUTE_START_DATE);
-				} catch (ParseException e) {
-					logger.log(Level.WARNING, description + " doesn't have a start date and can't be read.\r\n");
-					handleInvalidDate(ATTRIBUTE_START_DATE, br);
-					continue;
-				}
-				try {
-					endDate = readDate(br, ATTRIBUTE_END_DATE);
-				} catch (ParseException e) {
-					logger.log(Level.WARNING, description + " doesn't have an end date and can't be read.\r\n");
-					handleInvalidDate(ATTRIBUTE_END_DATE, br);
-					continue;
-				}
-				location = readLocation(br);
-				tags = readTags(br);
-
-				TaskEvent eventTask = new TaskEvent(description, location, startDate, endDate, tags);
-				events.add(eventTask);
-				logger.log(Level.INFO, "Successfully read: " + eventTask.getDescription() + "\r\n");
-			}
-		}
-	}
-
-	private void readTasksReserved(BufferedReader br, ArrayList<TaskReserved> reservedTasks) throws IOException {
+	private ArrayList<TaskEvent> readTasksEvents(BufferedReader br) throws IOException {
+		ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
 		String line = null;
-		String description = null;
-		ArrayList<Calendar> startDates = null;
-		ArrayList<Calendar> endDates = null;
-		String location = null;
-		ArrayList<String> tags = null;
 
 		readHeader(br);
 
@@ -234,30 +154,48 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
-				logger.log(Level.INFO, "Reading new reserved task.\r\n");
-				description = readDescription(line);
+				String startDate = br.readLine();
+				String endDate = br.readLine();
+				String location = br.readLine();
+				String tags = br.readLine();
 
-				try {
-					startDates = readDates(br, ATTRIBUTE_START_DATES);
-				} catch (ParseException e) {
-					handleInvalidDate(ATTRIBUTE_START_DATE, br);
-					continue;
+				TaskEvent eventTask = processEventTask(line, startDate, endDate, location, tags);
+
+				if (eventTask != null) {
+					events.add(eventTask);
+					logger.log(Level.INFO, "Successfully read event task: " + eventTask.getDescription() + "\r\n");
 				}
-
-				try {
-					endDates = readDates(br, ATTRIBUTE_END_DATES);
-				} catch (ParseException e) {
-					handleInvalidDate(ATTRIBUTE_END_DATE, br);
-					continue;
-				}
-				location = readLocation(br);
-				tags = readTags(br);
-
-				TaskReserved reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
-				reservedTasks.add(reservedTask);
-				logger.log(Level.INFO, "Successfully read: " + reservedTask.getDescription() + "\r\n");
 			}
 		}
+		return events;
+	}
+
+	private ArrayList<TaskReserved> readTasksReserved(BufferedReader br) throws IOException {
+		ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
+		String line = null;
+
+		readHeader(br);
+
+		while ((line = br.readLine()) != null) {
+			line = br.readLine();
+			if (isInvalidLine(line)) {
+				break;
+			} else {
+				String startDates = br.readLine();
+				String endDates = br.readLine();
+				String location = br.readLine();
+				String tags = br.readLine();
+
+				TaskReserved reservedTask = processReservedTask(line, startDates, endDates, location, tags);
+
+				if (reservedTask != null) {
+					reservedTasks.add(reservedTask);
+					logger.log(Level.INFO,
+							"Successfully read reserved task: " + reservedTask.getDescription() + "\r\n");
+				}
+			}
+		}
+		return reservedTasks;
 	}
 
 	private ArrayList<Task> readTasksCompleted(BufferedReader br) throws IOException {
@@ -420,7 +358,6 @@ public class Storage {
 		return dates;
 	}
 
-
 	private FileHandler createLogHandler() throws IOException {
 		FileHandler handler = new FileHandler("logs\\log.txt");
 		handler.setFormatter(new SimpleFormatter());
@@ -433,79 +370,8 @@ public class Storage {
 		br.readLine();
 	}
 
-	private String readDescription(String line) {
-		String description = null;
-		if (line.startsWith(ATTRIBUTE_DESCRIPTION)) {
-			description = line.replaceFirst(ATTRIBUTE_DESCRIPTION, "").trim();
-			if (description.isEmpty()) {
-				description = "undefined";
-			}
-		}
-		return description;
-	}
-
-	private String readLocation(BufferedReader br) throws IOException {
-		String location = null;
-		String line = br.readLine();
-		if (line.startsWith(ATTRIBUTE_LOCATION)) {
-			location = line.replaceFirst(ATTRIBUTE_LOCATION, "").trim();
-			if (location.isEmpty()) {
-				location = null;
-			}
-		}
-		return location;
-	}
-
-	private ArrayList<String> readTags(BufferedReader br) throws IOException {
-		ArrayList<String> tags = null;
-		String line = br.readLine();
-		if (line.startsWith(ATTRIBUTE_TAGS)) {
-			tags = new ArrayList<String>(Arrays.asList(line.trim().split("\\s*#\\s*")));
-			tags.remove(0);
-		}
-		return tags;
-	}
-
-	private Calendar readDate(BufferedReader br, String dateType) throws IOException, ParseException {
-		Calendar date = null;
-		String line = br.readLine();
-		if (line.startsWith(dateType)) {
-			date = Calendar.getInstance();
-			date.setTime(sdf.parse(line.replaceFirst(dateType, "").trim()));
-		}
-		return date;
-	}
-
-	private ArrayList<Calendar> readDates(BufferedReader br, String dateType) throws IOException, ParseException {
-		ArrayList<Calendar> dates = new ArrayList<Calendar>();
-		String line = br.readLine();
-
-		if (line.startsWith(dateType)) {
-			ArrayList<String> datesString = new ArrayList<String>(
-					Arrays.asList(line.replaceFirst(dateType, "").trim().split("\\s*,\\s*")));
-
-			for (String dateString : datesString) {
-				Calendar date = Calendar.getInstance();
-				date.setTime(sdf.parse(dateString));
-				dates.add(date);
-			}
-		}
-		return dates;
-	}
-
 	private boolean isInvalidLine(String line) {
 		return line == null || line.equals(HEADER_DIVIDER);
-	}
-
-	private void handleInvalidDate(String dateType, BufferedReader br) throws IOException {
-		if (dateType.equals(ATTRIBUTE_START_DATE)) {
-			br.readLine();
-			br.readLine();
-			br.readLine();
-		} else if (dateType.equals(ATTRIBUTE_END_DATE) || dateType.equals(ATTRIBUTE_DEADLINE)) {
-			br.readLine();
-			br.readLine();
-		}
 	}
 
 	private void closeReaderClasses(FileHandler handler, BufferedReader br) throws IOException {
