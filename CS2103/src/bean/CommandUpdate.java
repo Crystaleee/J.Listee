@@ -74,6 +74,8 @@ public class CommandUpdate extends TaskEvent implements Command {
         updateFile = false;
         saveHistory = false;
         display.setMessage(msg);
+        display.setTaskIndices(new ArrayList<Integer>());
+        display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
 
     private boolean hasInvalidTaskNumber() {
