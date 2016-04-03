@@ -93,7 +93,7 @@ public class JListeeParser {
 		testEvent.ParseCommand("add today to hi whhat friday from 5th april to 9th april #hi @location  # ");
 
 		JListeeParser testFloat = new JListeeParser();
-		testFloat.ParseCommand("add from friday collect money @zzz #arghhhhh #hi");
+		testFloat.ParseCommand("add cs2105 @zzz #arghhhhh #hi");
 
 		JListeeParser testDeadLine = new JListeeParser();
 		testDeadLine.ParseCommand("add good friday this friday");
@@ -105,7 +105,7 @@ public class JListeeParser {
 		testDelete.ParseCommand("delete 1,2,3,4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show from #hmm # @ today due work /event /untimed /reserved from today to tomorrow #hihi @location ");
+		testShow.ParseCommand("show cs2105");
 			
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
@@ -238,12 +238,13 @@ public class JListeeParser {
 			}
 		}
 			
-		
+
 		tagLists = findHashTags(inputLine);
-	
+
 		location = findLocation(inputLine);
-	
+
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+
 
 		if (isEvent) {
 			return new CommandAddEvent(taskDescription, location, startDate, endDate, tagLists);
@@ -293,7 +294,6 @@ public class JListeeParser {
 		int prepositionIndex = -1;
 		int firstDateIndex = -1;
 
-		System.out.println(inputLine);
 		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
 		
 		for (int i = 0; i< SEARCH_TASKS.length; i++){
@@ -351,7 +351,6 @@ public class JListeeParser {
 
 		//find the index where the preposition starts
 		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
-		
 
 		//if contain the list of words means there is date to extract
 		if (prepositionIndex != -1){
@@ -553,7 +552,7 @@ public class JListeeParser {
 
 	private int getPrepositionIndex(String inputLine, int prepositionIndex) {
 		for (int i = 0; i< DATE_WORDS.length; i++){
-			int temp = 0;
+			int temp = -1;
 	
 			Matcher matcher = Pattern.compile("\\b"+ DATE_WORDS[i]+"\\b").matcher(inputLine);
 	
