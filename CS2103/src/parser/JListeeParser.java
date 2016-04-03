@@ -57,8 +57,11 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MILLISECOND = 0;
 	
     private static final String[] DATE_WORDS =
-            new String[]{"by", "on", "at", "due", "during", "@", "in", "for", "from", "at", "in", "this"};
+            new String[]{"by", "on", "at", "due", "during", "@", "in", "for", "from", "at", "in", "this", "before", "after"};
 	
+    private static final String[] SEARCH_TASKS =
+            new String[]{"today", "tomorrow", "overdue", "done", "reserved", "deadline", "event", "untimed"};
+    
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
@@ -102,8 +105,8 @@ public class JListeeParser {
 		testDelete.ParseCommand("delete 1,2,3,4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show hiiiiii from 12/4/16 to today #hihi @location ");
-		
+		testShow.ParseCommand("show from #hmm # @ today due work /event /untimed /reserved from today to tomorrow #hihi @location ");
+			
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
@@ -206,7 +209,6 @@ public class JListeeParser {
 
 		inputLine = inputLine.replaceFirst(COMMAND_ADD, "").trim();
 		
-		System.out.println("ORIGINAL: " + inputLine);
 		//find the index where the preposition starts
 		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
 		
@@ -242,7 +244,6 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 	
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-		taskDescription = taskDescription.trim().replaceAll(" +", " ");
 
 		if (isEvent) {
 			return new CommandAddEvent(taskDescription, location, startDate, endDate, tagLists);
@@ -288,32 +289,88 @@ public class JListeeParser {
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
 		String taskDescription = null;
+		ArrayList<String> task = new ArrayList<String>();
 		int prepositionIndex = -1;
-		
+		int firstDateIndex = -1;
+
+		System.out.println(inputLine);
 		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
+		
+		for (int i = 0; i< SEARCH_TASKS.length; i++){
+			if (inputLine.toLowerCase().contains("/" + SEARCH_TASKS[i])){
+
+				inputLine = inputLine.replace("/" + SEARCH_TASKS[i], "");
+
+				switch (SEARCH_TASKS[i]){
+					case ("today"):
+						startDate = Calendar.getInstance();
+						setStartDateTimeDefault();
+						endDate = Calendar.getInstance();
+						setEndDateTimeDefault();
+						break;
+
+					case ("tomorrow"):
+						startDate = Calendar.getInstance();
+						startDate.add(startDate.DATE,1);
+						setStartDateTimeDefault();
+						endDate = Calendar.getInstance();
+						endDate.add(endDate.DATE,1);
+						setEndDateTimeDefault();
+						break;
+						
+					case ("overdue"):
+						startDate = Calendar.getInstance();
+						startDate.setTimeInMillis(0);
+					
+						endDate = Calendar.getInstance();
+						
+						break;
+					
+					case ("done"):
+						task.add("done");
+						break;
+						
+					case ("deadline"):
+						task.add("deadline");
+						break;
+						
+					case ("reserved"):
+						task.add("reserved");
+						break;
+						
+					case ("event"):
+						task.add("event");
+						break;
+						
+					case ("untimed"):
+						task.add("untimed");
+						break;
+				}
+			}
+		}	
+
+		//find the index where the preposition starts
 		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
 		
-		
-		
-			List<DateGroup> groups = dateParser.parse(inputLine);
 
-			 setDates(inputLine, groups);	
+		//if contain the list of words means there is date to extract
+		if (prepositionIndex != -1){
+			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
+			for (DateGroup group : groups) {
+				setDates(inputLine, groups);
+				firstDateIndex = getFirstDateIndex(prepositionIndex, group);
+				inputLine = removeWordBeforeDateAndDate(inputLine, firstDateIndex, group).trim();
+			}
+		}
 		
-		
-		tagLists = findHashTags(inputLine);
-	
+		tagLists = findHashTags(inputLine);		
 		location = findLocation(inputLine);
 	
 		if (!inputLine.contains(CONTAINS_ALL)) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-	
-		
-		if (location == null && startDate == null && endDate == null && tagLists == null){
-			return new CommandShow(taskDescription);
-		}
-
-		return new CommandShow(taskDescription, location, startDate, endDate, tagLists);
+			
+		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
 
 
@@ -639,13 +696,14 @@ public class JListeeParser {
 		}
 	}
 
-	private String removeDatesFromInputLine(String inputLine, DateGroup group) {
-
+	private String removeDateFromInputLine(String inputLine, DateGroup group) {
 		if (inputLine.contains(group.getText())) {
 			inputLine = inputLine.replace(group.getText(), "");
 		}
 		return inputLine;
 	}
+
+
 
 	private String trimInputLineWithoutRemoveHashTags(String inputLine, ArrayList<String> removeTagLists) {
 
@@ -668,18 +726,12 @@ public class JListeeParser {
 		inputLine = inputLine.replace("@" + location, "").trim();
 
 		inputLine = inputLine.replace("-@" + location, "").trim();
-	
+		inputLine = inputLine.trim().replaceAll(" +", " ");
+
 		return inputLine;
 	}
 
 
-
-	private String removeDateFromInputLine(String inputLine, DateGroup group) {
-		if (inputLine.contains(group.getText())) {
-			inputLine = inputLine.replace(group.getText(), "");
-		}
-		return inputLine;
-	}
 
 	private String findLocation(String inputLine) {
 		String location = null;
