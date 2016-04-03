@@ -16,27 +16,23 @@ public class CommandShow implements Command {
     private static final String EMPTY_STRING = "";
     private static final String MESSAGE_SHOW_DONE = "Showing done tasks";
     private static final String MESSAGE_INVALID_DATE_RANGE = "Please specify a valid date range";
-    private static final String COMMAND_TYPE_DONE = TASK_TYPE_COMPLETED;
     private final String message_no_tasks = "No such tasks found";
     private final String message_show_all = "Displaying all tasks";
-    private String message_show = "Displaying tasks";
+    private String message_show = "Displaying ";
     private boolean updateFile = false;
     private boolean saveHistory = true;
     private TaskEvent searchedTask;
-    private int count;
     private Display display;
     private ArrayList<String> taskTypes;
 
     public CommandShow() {
         searchedTask = null;
-        count = 0;
     }
 
     public CommandShow(String keyword) {
         searchedTask = new TaskEvent(keyword.trim().toLowerCase(), EMPTY_STRING, null, null,
                 new ArrayList<String>());
         taskTypes = new ArrayList<String>();
-        count = 0;
     }
 
     public CommandShow(String keyword, String location, Calendar start, Calendar end,
@@ -52,8 +48,7 @@ public class CommandShow implements Command {
         }
         searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
                 tags);
-        taskTypes = null;
-        count = 0;
+        taskTypes = new ArrayList<String>();
     }
 
     public CommandShow(String keyword, String location, Calendar start, Calendar end, ArrayList<String> tags,
@@ -67,19 +62,17 @@ public class CommandShow implements Command {
         if (tags == null) {
             tags = new ArrayList<String>();
         }
+        if (taskTypes == null) {
+            taskTypes = new ArrayList<String>();
+        }
         searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
                 tags);
         this.taskTypes = taskTypes;
-        count = 0;
     }
 
     public Display execute(Display oldDisplay) {
         // System.out.println(searchedTask.getDescription());
         initialiseDisplay(oldDisplay);
-        if (searchedTask.getDescription().equals(COMMAND_TYPE_DONE)) {
-            showDone(oldDisplay);
-            return oldDisplay;
-        }
         if (isShowAll()) {
             setShowAll(oldDisplay);
             return oldDisplay;
@@ -89,18 +82,25 @@ public class CommandShow implements Command {
             return oldDisplay;
 
         }
-        this.display = oldDisplay;
+        this.display = oldDisplay.deepClone();
 
         showTasks();
 
-        if (count == 0) {
-            setShowAll(oldDisplay);
+        if (noTasksFound()) {
             oldDisplay.setMessage(message_no_tasks);
+            return oldDisplay;
         } else {
-            oldDisplay.setMessage(getFeedback());
+            display.setMessage(getFeedback());
         }
 
-        return oldDisplay;
+        return display;
+    }
+
+    private boolean noTasksFound() {
+        int numVisible = display.getVisibleCompletedTasks().size() + display.getVisibleDeadlineTasks().size()
+                + display.getVisibleEvents().size() + display.getVisibleFloatTasks().size()
+                + display.getVisibleReservedTasks().size();
+        return numVisible == 0;
     }
 
     private void initialiseDisplay(Display oldDisplay) {
@@ -149,7 +149,9 @@ public class CommandShow implements Command {
             if (searchedTask.getLocation().isEmpty()) {
                 if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
                     if (searchedTask.getTags().isEmpty()) {
-                        return true;
+                        if (taskTypes.isEmpty()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -158,6 +160,14 @@ public class CommandShow implements Command {
     }
 
     private String getFeedback() {
+        if (!taskTypes.isEmpty()) {
+            for (int i = 0; i < taskTypes.size(); i++) {
+                message_show += taskTypes.get(i) + " ";
+            }
+            message_show += "tasks";
+        } else {
+            message_show += "all tasks";
+        }
         if (!searchedTask.getDescription().isEmpty()) {
             message_show += " containing " + searchedTask.getDescription();
         }
@@ -215,11 +225,11 @@ public class CommandShow implements Command {
             }
         }
     }
-    
-    private boolean isTaskTypesEmpty(){
-        if(taskTypes == null){
+
+    private boolean isTaskTypesEmpty() {
+        if (taskTypes == null) {
             return true;
-        }else if(taskTypes.isEmpty()){
+        } else if (taskTypes.isEmpty()) {
             return true;
         }
         return false;
@@ -235,7 +245,6 @@ public class CommandShow implements Command {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
                             display.getVisibleDeadlineTasks().add(task);
-                            count++;
                         }
                     }
                 }
@@ -255,7 +264,6 @@ public class CommandShow implements Command {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
                             display.getVisibleEvents().add(task);
-                            count++;
                         }
                     }
                 }
@@ -273,7 +281,6 @@ public class CommandShow implements Command {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
                         display.getVisibleFloatTasks().add(task);
-                        count++;
                     }
                 }
             }
@@ -291,7 +298,6 @@ public class CommandShow implements Command {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
                             display.getVisibleReservedTasks().add(task);
-                            count++;
                         }
                     }
                 }
