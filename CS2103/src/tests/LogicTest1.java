@@ -1,5 +1,6 @@
-// @@author Boh Tuang Hwee, Jehiel (A0139995E)
-
+/*
+ * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ */
 package tests;
 
 import static org.junit.Assert.assertEquals;
