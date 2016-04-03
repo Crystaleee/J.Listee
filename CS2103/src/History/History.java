@@ -1,7 +1,5 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 3/5/2016, 8:00pm
- * CS2103
  */
 package History;
 

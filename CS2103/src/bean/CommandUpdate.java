@@ -1,6 +1,5 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 27 Mar, 2:22am
  */
 package bean;
 

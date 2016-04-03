@@ -1,7 +1,5 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 31 Mar
- * CS2103
  */
 package bean;
 

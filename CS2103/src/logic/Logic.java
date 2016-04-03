@@ -1,7 +1,5 @@
 /*
  * @@author Boh Tuang Hwee, Jehiel (A0139995E)
- * Last updated: 22 Mar, 12:10AM
- * CS2103
  */
 package logic;
 

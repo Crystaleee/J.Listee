@@ -1,3 +1,6 @@
+/*
+ * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ */
 package tests;
 
 import static org.junit.Assert.assertEquals;
@@ -39,6 +42,9 @@ public class LogicTest2 {
         assertEquals("Display [message=All tasks deleted, events=[], deadlineTasks=[], "
                 + "floatTasks=[], reservedTasks=[], completedTasks=[]]", 
                 Logic.executeCommand(new CommandDelete(null)).toString());
+        Logic.executeCommand(new CommandShow("done"));
+        Logic.executeCommand(new CommandDelete(null));
+        Logic.executeCommand(new CommandShow(null, null, null, null, null));
         
         ArrayList<String> tags = new ArrayList<String>();
 
