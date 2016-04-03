@@ -1,5 +1,7 @@
 // @@author Her Kai Lin (A0126070U)
 
+// @@author Her Kai Lin (A0126070U)
+
 package parser;
 
 import java.io.IOException;
@@ -54,6 +56,9 @@ public class JListeeParser {
 	private static final int DEFAULT_END_SECOND = 0;
 	private static final int DEFAULT_END_MILLISECOND = 0;
 	
+    private static final String[] DATE_WORDS =
+            new String[]{"by", "on", "at", "due", "during", "@", "in", "for", "from", "at", "in", "this"};
+	
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
@@ -82,16 +87,16 @@ public class JListeeParser {
 
 
 		JListeeParser testEvent = new JListeeParser();
-		testEvent.ParseCommand("add event from 03/17/2016 2pm to 03/27/2016 5pm add event @LT27 #hihi #me");
+		testEvent.ParseCommand("add today to hi whhat friday from 5th april to 9th april #hi @location  # ");
 
 		JListeeParser testFloat = new JListeeParser();
-		testFloat.ParseCommand("add floatingtask @zzz #arghhhhh #hi");
+		testFloat.ParseCommand("add from friday collect money @zzz #arghhhhh #hi");
 
 		JListeeParser testDeadLine = new JListeeParser();
-		testDeadLine.ParseCommand("add deadLine date only @whatthe due 12/2/14 #hey");
+		testDeadLine.ParseCommand("add good friday this friday");
 
 		JListeeParser testDeadLine2 = new JListeeParser();
-		testDeadLine2.ParseCommand("add deadLine date and time @location due today 3:00 #hashtag");
+		testDeadLine2.ParseCommand("add deadLine date and time on saturday 2359 #hashtag");
 
 		JListeeParser testDelete = new JListeeParser();
 		testDelete.ParseCommand("delete 1,2,3,4"); 
@@ -196,46 +201,49 @@ public class JListeeParser {
 		boolean isDeadline = false;
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
-	
+		int firstDateIndex = -1;
+		int prepositionIndex = -1;
+
 		inputLine = inputLine.replaceFirst(COMMAND_ADD, "").trim();
 		
-		if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
-				Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
-			
-			// natty library to extract dates
-			List<DateGroup> groups = dateParser.parse(inputLine);
+		System.out.println("ORIGINAL: " + inputLine);
+		//find the index where the preposition starts
+		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
+		
+
+		//if contain the list of words means there is date to extract
+		if (prepositionIndex != -1){
+			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
 
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
 
 				/* has start date and end date, event task */
-
 				if (dates.size() == 2) {
 					isEvent = true;
-					inputLine = extractDateAndInputLine(inputLine, groups);
-
+					setDates(inputLine, groups);
 				}
 
 				/* only 1 set of date, deadlineTask */
 				else if (dates.size() == 1) {
 					isDeadline = true;
-					inputLine = extractDateAndInputLine(inputLine, groups);
+					setDates(inputLine, groups);
 
 				}
-
+				
+				firstDateIndex = getFirstDateIndex(prepositionIndex, group);
+				inputLine = removeWordBeforeDateAndDate(inputLine, firstDateIndex, group).trim();
 			}
-			
-			inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
-			inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
-			inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();	
-		
 		}
+			
+		
 		tagLists = findHashTags(inputLine);
 	
 		location = findLocation(inputLine);
 	
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-	
+		taskDescription = taskDescription.trim().replaceAll(" +", " ");
+
 		if (isEvent) {
 			return new CommandAddEvent(taskDescription, location, startDate, endDate, tagLists);
 		}
@@ -244,9 +252,11 @@ public class JListeeParser {
 			return new CommandAddDeadlineTask(taskDescription, location, endDate, tagLists);
 		}
 	
-		
+
 		return new CommandAddFloatTask(taskDescription, location, tagLists);
 	}
+
+
 
 	public Command parseDelete(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
@@ -278,20 +288,17 @@ public class JListeeParser {
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
 		String taskDescription = null;
-	
-		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
+		int prepositionIndex = -1;
 		
-		if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
-				Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
+		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
+		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
+		
+		
 		
 			List<DateGroup> groups = dateParser.parse(inputLine);
 
-			inputLine = extractDateAndInputLine(inputLine, groups);
-			inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
-			inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
-			inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();	
-
-		}
+			 setDates(inputLine, groups);	
+		
 		
 		tagLists = findHashTags(inputLine);
 	
@@ -414,7 +421,7 @@ public class JListeeParser {
 			if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
 					Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
 				List<DateGroup> groups = dateParser.parse(inputLine);
-				inputLine = extractDateAndInputLine(inputLine, groups);
+				inputLine = setDates(inputLine, groups);
 				inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
 				inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
 				inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();				
@@ -487,6 +494,54 @@ public class JListeeParser {
 		return new CommandInvalid();
 	}
 
+	private int getPrepositionIndex(String inputLine, int prepositionIndex) {
+		for (int i = 0; i< DATE_WORDS.length; i++){
+			int temp = 0;
+	
+			Matcher matcher = Pattern.compile("\\b"+ DATE_WORDS[i]+"\\b").matcher(inputLine);
+	
+			while(matcher.find()){
+				temp = matcher.start();
+			}		
+			
+			if (prepositionIndex < temp){
+				prepositionIndex = temp;
+			}
+		}
+		return prepositionIndex;
+	}
+
+
+
+	private String removeWordBeforeDateAndDate(String input, int dateIndex, DateGroup group) {
+		String textBeforeDate = input.substring(0, dateIndex).trim();
+
+		String textAfter = input.substring(dateIndex, input.length());	
+		textAfter =  removeDateFromInputLine(textAfter,group);
+
+		String lastWord = textBeforeDate. substring(textBeforeDate.lastIndexOf(" ") + 1);
+
+		for (String preposition : DATE_WORDS) {
+			if (lastWord.equalsIgnoreCase(preposition)) {
+				textBeforeDate = textBeforeDate.
+						substring(0, textBeforeDate.length() - lastWord.length());
+				break;
+			}
+		}
+
+		return textBeforeDate + " " + textAfter;
+	}
+
+
+
+	private int getFirstDateIndex(int prepositionIndex, DateGroup group) {
+		int firstDateIndex;
+		firstDateIndex = group.getPosition()-1 + prepositionIndex;
+		return firstDateIndex;
+	}
+
+
+
 	private String extractEndTimeAndInputLine(String inputLine, List<DateGroup> groups) {
 		for (DateGroup group : groups) {
 			List<Date> dates = group.getDates();
@@ -495,7 +550,7 @@ public class JListeeParser {
 			if (group.isTimeInferred()) {
 				setEndDateTimeDefault();
 			}
-			inputLine = removeRemoveDateFromInputLine(inputLine, group);
+			inputLine = removeDatesFromInputLine(inputLine, group);
 	
 		}
 		return inputLine;
@@ -511,7 +566,7 @@ public class JListeeParser {
 				setStartDateTimeDefault();
 			}
 			
-			inputLine = removeRemoveDateFromInputLine(inputLine, group);
+			inputLine = removeDatesFromInputLine(inputLine, group);
 				
 		}
 		return inputLine;
@@ -538,7 +593,7 @@ public class JListeeParser {
 
 
 
-	private String extractDateAndInputLine(String inputLine, List<DateGroup> groups) {
+	private void setDates(String inputLine, List<DateGroup> groups) {
 		for (DateGroup group : groups) {
 			List<Date> dates = group.getDates();
 	
@@ -551,10 +606,7 @@ public class JListeeParser {
 			else if (dates.size() == 1) {
 				setEndTime(group, dates);
 			}
-	
-			inputLine = removeDateFromInputLine(inputLine, group);
 		}
-		return inputLine;
 	}
 
 	private Integer extractTaskNumber(String inputLine) {
@@ -587,9 +639,10 @@ public class JListeeParser {
 		}
 	}
 
-	private String removeRemoveDateFromInputLine(String inputLine, DateGroup group) {
+	private String removeDatesFromInputLine(String inputLine, DateGroup group) {
+
 		if (inputLine.contains(group.getText())) {
-			inputLine = inputLine.replaceFirst(group.getText(), "");
+			inputLine = inputLine.replace(group.getText(), "");
 		}
 		return inputLine;
 	}
@@ -603,6 +656,24 @@ public class JListeeParser {
 		return inputLine;
 	}
 
+	private String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
+		if (tagLists != null) {
+			for (int i = 0; i < tagLists.size(); i++) {
+				inputLine = inputLine.replace("-#" + tagLists.get(i), "").trim();
+				inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
+
+			}
+		}
+		
+		inputLine = inputLine.replace("@" + location, "").trim();
+
+		inputLine = inputLine.replace("-@" + location, "").trim();
+	
+		return inputLine;
+	}
+
+
+
 	private String removeDateFromInputLine(String inputLine, DateGroup group) {
 		if (inputLine.contains(group.getText())) {
 			inputLine = inputLine.replace(group.getText(), "");
@@ -610,45 +681,42 @@ public class JListeeParser {
 		return inputLine;
 	}
 
-	private String trimInputLineToDescriptionOnly(String inputLine, String location, ArrayList<String> tagLists) {
-		if (tagLists != null) {
-			for (int i = 0; i < tagLists.size(); i++) {
-				inputLine = inputLine.replace("#" + tagLists.get(i), "").trim();
-			}
-		}
-		
-		inputLine = inputLine.replace("-", "").replace("@" + location, "").trim();
-		inputLine = inputLine.replace("(", "").replace(")", "").replace("@", "");
-
-		return inputLine;
-	}
-
 	private String findLocation(String inputLine) {
 		String location = null;
-		Matcher retrieveLocation = Pattern.compile("@\\s*(\\w+)").matcher(inputLine);
+		
+
+		Matcher retrieveLocation = Pattern.compile("@\\w*\\w+").matcher(inputLine);
+		
 		while (retrieveLocation.find()) {
-			location = retrieveLocation.group(1);
+				location = retrieveLocation.group(0);
+				location = location.substring(1,location.length());
 		}
+		
 		return location;
 	}
 
 	private ArrayList<String> findHashTags(String inputLine) {
 		ArrayList<String> tags = new ArrayList<String>();
 		Matcher retrieveHashTags;
-
+		String hashtag = null;
+	
 		if (inputLine.contains("-")) {
-			retrieveHashTags = Pattern.compile("-#\\s*(\\w+)").matcher(inputLine);
+			retrieveHashTags = Pattern.compile("-#\\w*\\w+").matcher(inputLine);
 			while (retrieveHashTags.find()) {
-				tags.add(retrieveHashTags.group(1));
+				hashtag = retrieveHashTags.group(0);
+				hashtag = hashtag.substring(2, hashtag.length());
+				tags.add(hashtag);
 			}
 
 		}
 
-		else {
-			retrieveHashTags = Pattern.compile("#\\s*(\\w+)").matcher(inputLine);
+		else{
+			retrieveHashTags = Pattern.compile("#\\w*\\w+").matcher(inputLine);
 
 			while (retrieveHashTags.find()) {
-				tags.add(retrieveHashTags.group(1));
+				hashtag = retrieveHashTags.group(0);
+				hashtag = hashtag.substring(1, hashtag.length());
+				tags.add(hashtag);
 			}
 		}
 
@@ -692,3 +760,4 @@ public class JListeeParser {
 	}
 	
 }
+
