@@ -6,10 +6,13 @@
 package logic;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 
 import History.History;
 import bean.Command;
+import bean.CommandShow;
 import bean.Display;
 import parser.JListeeParser;
 import storage.Storage;
@@ -62,6 +65,12 @@ public class Logic {
 
     private static void initializeDisplay() {
         display = getDisplayFromStorage();
+        Calendar start = Calendar.getInstance();
+        start.setTimeInMillis(0);
+        Calendar end = Calendar.getInstance();
+        end.set(Calendar.HOUR_OF_DAY, 23);
+        end.set(Calendar.MINUTE, 59);
+        display = new CommandShow(null, null, start, end, new ArrayList<String>()).execute(display);
         display.setMessage(null);
     }
 
