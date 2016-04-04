@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandUpdate extends TaskEvent implements Command {
+    private static final String MESSAGE_ERROR_REMOVE_END_DATE = "Can't remove end date!";
     private Integer _taskNumber;
     private ArrayList<String> _removeTags;
     private Display _display;
@@ -46,12 +47,6 @@ public class CommandUpdate extends TaskEvent implements Command {
             return oldDisplay;
         }
         editTask();
-        /*
-         * for (int i = 0; i < display.getConflictingTasksIndices().size(); i++)
-         * { System.out.println("conflict " +
-         * display.getConflictingTasksIndices().get(i)); }
-         */
-        // System.out.println("Index " + display.getTaskIndices().get(0));
         _display.setMessage(msgEdit);
         return _display;
     }
@@ -103,7 +98,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editDeadline() {
         TaskDeadline task = _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
         _display.getDeadlineTasks().remove(task);
-        msgEdit += task.getDescription() + "\"";
+        msgEdit += task.getDescription() + GlobalConstants.INVERTED_COMMAS;
         task = (TaskDeadline) editDescription(task);
         task = (TaskDeadline) editLocation(task);
         task = (TaskDeadline) editTags(task);
@@ -114,7 +109,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editEvent() {
         TaskEvent task = _display.getVisibleEvents().remove(_taskNumber - 1);
         _display.getEventTasks().remove(task);
-        msgEdit += task.getDescription() + "\"";
+        msgEdit += task.getDescription() + GlobalConstants.INVERTED_COMMAS;
         task = (TaskEvent) editDescription(task);
         task = (TaskEvent) editLocation(task);
         task = (TaskEvent) editTags(task);
@@ -126,13 +121,12 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void editFloat() {
         TaskFloat task = _display.getVisibleFloatTasks().get(_taskNumber - 1);
-        msgEdit += task.getDescription() + "\"";
+        msgEdit += task.getDescription() + GlobalConstants.INVERTED_COMMAS;
         task = (TaskFloat) editDescription(task);
         task = (TaskFloat) editLocation(task);
         task = (TaskFloat) editTags(task);
         int index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
                 + _display.getVisibleFloatTasks().indexOf(task) + 1;
-        // System.out.println(index);
         _display.getTaskIndices().add(index);
         if (hasChangeFloatTaskType(task)) {
             _display.getVisibleFloatTasks().remove(_taskNumber - 1);
@@ -151,29 +145,54 @@ public class CommandUpdate extends TaskEvent implements Command {
     private boolean changeDeadlineTaskType(TaskDeadline task) {
         // assertFalse endDate==0 AND startDate != 0&null
         boolean hasTaskChanged = false;
-        if (getEndDate() != null) {
-            if (getEndDate().getTimeInMillis() == 0) {
-                Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
-                        task.getTags());
-                _display = addCommand.execute(_display);
-                hasTaskChanged = true;
-            }
+        if (isConvertDeadlineToFloat()) {
+            hasTaskChanged = convertDeadlineToFloat(task);
         }
-        if (getStartDate() != null) {
-            if ((getStartDate().getTimeInMillis() != 0) && (!hasTaskChanged)) {
-                Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
-                        getStartDate(), task.getEndDate(), task.getTags());
-                _display = addCommand.execute(_display);
-                hasTaskChanged = true;
-            }
+        if (isConvertDeadlineToEvent(hasTaskChanged)) {
+            convertDeadlineToEvent(task);
+            hasTaskChanged = true;
         }
 
         if (!hasTaskChanged) {
             Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                     task.getEndDate(), task.getTags());
             _display = addCommand.execute(_display);
+            _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
         }
         return hasTaskChanged;
+    }
+
+    private boolean convertDeadlineToFloat(TaskDeadline task) {
+        boolean hasTaskChanged;
+        Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
+                task.getTags());
+        _display = addCommand.execute(_display);
+        hasTaskChanged = true;
+        return hasTaskChanged;
+    }
+
+    private void convertDeadlineToEvent(TaskDeadline task) {
+        Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(), getStartDate(),
+                task.getEndDate(), task.getTags());
+        _display = addCommand.execute(_display);
+    }
+
+    private boolean isConvertDeadlineToEvent(boolean hasTaskChanged) {
+        if (getStartDate() != null) {
+            if ((getStartDate().getTimeInMillis() != 0) && (!hasTaskChanged)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isConvertDeadlineToFloat() {
+        if (getEndDate() != null) {
+            if (getEndDate().getTimeInMillis() == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Task editTags(Task task) {
@@ -195,23 +214,29 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private TaskEvent editStartDate(TaskEvent task) {
         if (getStartDate() != null) {
-            task.setStartDate(getStartDate());
-            _timeChanged = true;
+            if (getStartDate().getTimeInMillis() != 0) {
+                task.setStartDate(getStartDate());
+                _timeChanged = true;
+            }
         }
         return task;
     }
 
     private TaskEvent editEndDate(TaskEvent task) {
         if (getEndDate() != null) {
-            task.setEndDate(getEndDate());
-            _timeChanged = true;
+            if (getEndDate().getTimeInMillis() != 0) {
+                task.setEndDate(getEndDate());
+                _timeChanged = true;
+            }
         }
         return task;
     }
 
     private TaskDeadline editEndDate(TaskDeadline task) {
         if (getEndDate() != null) {
-            task.setEndDate(getEndDate());
+            if (getEndDate().getTimeInMillis() != 0) {
+                task.setEndDate(getEndDate());
+            }
         }
         return task;
     }
@@ -238,55 +263,116 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void changeEventTaskType(TaskEvent task) {
         boolean hasTaskChanged = false;
-        if ((getStartDate() != null) && (getEndDate() != null)) {
-            // if user wants to change to floating task
-            if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() == 0)) {
-                Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
-                        task.getTags());
-                _display = addCommand.execute(_display);
-                hasTaskChanged = true;
-            }
+        if (isConvertEventToFloat()) {
+            convertEventToFloat(task);
+            hasTaskChanged = true;
         }
-        if (getStartDate() != null) {
-            if ((getStartDate().getTimeInMillis() == 0) && (!hasTaskChanged)) {
-                Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
-                        task.getEndDate(), task.getTags());
-                _display = addCommand.execute(_display);
-                hasTaskChanged = true;
-            }
+        if (isConvertEventToDeadline(hasTaskChanged)) {
+            convertEventToDeadline(task);
+            hasTaskChanged = true;
         }
-
         if (!hasTaskChanged) {
-            Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
-                    task.getStartDate(), task.getEndDate(), task.getTags());
-            _display = addCommand.execute(_display);
-            if (!_timeChanged) {
-                _display.setConflictingTasksIndices(new ArrayList<Integer>());
-            }
+            addEventBack(task);
+        }
+        if (removeEndDate()) {
+            msgEdit = MESSAGE_ERROR_REMOVE_END_DATE;
         }
         return;
     }
 
-    private boolean hasChangeFloatTaskType(TaskFloat task) {
-        boolean hasTaskChanged = false;
+    private void convertEventToFloat(TaskEvent task) {
+        Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
+                task.getTags());
+        _display = addCommand.execute(_display);
+    }
+
+    private void convertEventToDeadline(TaskEvent task) {
+        Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                task.getEndDate(), task.getTags());
+        _display = addCommand.execute(_display);
+    }
+
+    private boolean isConvertEventToFloat() {
         if ((getStartDate() != null) && (getEndDate() != null)) {
-            if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
-                Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
-                        getStartDate(), getEndDate(), task.getTags());
-                _display = addCommand.execute(_display);
-                hasTaskChanged = true;
+            if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() == 0)) {
+                return true;
             }
-        } else {
+        }
+        return false;
+    }
+
+    private boolean isConvertEventToDeadline(boolean hasTaskChanged) {
+        if (getStartDate() != null) {
+            if ((getStartDate().getTimeInMillis() == 0) && (!hasTaskChanged)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void addEventBack(TaskEvent task) {
+        Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
+                task.getStartDate(), task.getEndDate(), task.getTags());
+        _display = addCommand.execute(_display);
+        if (!_timeChanged) {
+            _display.setConflictingTasksIndices(new ArrayList<Integer>());
+        }
+        _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
+    }
+
+    private boolean removeEndDate() {
+        if (getStartDate() == null) {
             if (getEndDate() != null) {
-                if (getEndDate().getTimeInMillis() != 0) {
-                    Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
-                            getEndDate(), task.getTags());
-                    _display = addCommand.execute(_display);
-                    hasTaskChanged = true;
+                if (getEndDate().getTimeInMillis() == 0) {
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    private boolean hasChangeFloatTaskType(TaskFloat task) {
+        boolean hasTaskChanged = false;
+        if (isChangeFloatToEvent()) {
+            convertFloatToEvent(task);
+            hasTaskChanged = true;
+        } else {
+            if (isChangeFloatToDeadline()) {
+                convertFloatToDeadline(task);
+                hasTaskChanged = true;
+            }
+        }
         return hasTaskChanged;
+    }
+
+    private void convertFloatToDeadline(TaskFloat task) {
+        Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+                getEndDate(), task.getTags());
+        _display = addCommand.execute(_display);
+    }
+
+    private boolean isChangeFloatToDeadline() {
+        if (getEndDate() != null) {
+            if (getEndDate().getTimeInMillis() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void convertFloatToEvent(TaskFloat task) {
+        Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(), getStartDate(),
+                getEndDate(), task.getTags());
+        _display = addCommand.execute(_display);
+    }
+
+    private boolean isChangeFloatToEvent() {
+        if ((getStartDate() != null) && (getEndDate() != null)) {
+            if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean requiresSaveHistory() {

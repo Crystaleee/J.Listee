@@ -9,6 +9,7 @@ import java.util.Collections;
 public class CommandUndone implements Command {
     private ArrayList<Integer> _taskNumbers;
     private ArrayList<Integer> _taskIndices;
+    private ArrayList<Task> _tasks = new ArrayList<Task>();
     private Display _display;
     private String _msgUndone = "Undone task: ";
     private String _msgInvalidNum = "You have specified invalid task numbers: ";
@@ -51,6 +52,26 @@ public class CommandUndone implements Command {
         _display.setCommandType(commandType);
         incrementTaskNumbers();
         _display.setTaskIndices(completedTasks);
+        getTaskIndices();
+    }
+
+    private void getTaskIndices() {
+        for (int i = 0; i < _tasks.size(); i++) {
+            Task task = _tasks.get(i);
+            int index = getIndex(task);
+            _taskIndices.add(index);
+        }
+    }
+
+    private int getIndex(Task task) {
+        if (task instanceof TaskDeadline) {
+            return _display.getVisibleDeadlineTasks().indexOf(task) + 1;
+        } else if (task instanceof TaskEvent) {
+            return _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().indexOf(task) + 1;
+        } else {
+            return _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                    + _display.getVisibleFloatTasks().indexOf(task) + 1;
+        }
     }
 
     private void incrementTaskNumbers() {
@@ -112,6 +133,7 @@ public class CommandUndone implements Command {
         Collections.sort(_taskNumbers);
         for (int i = 0; i < _taskNumbers.size(); i++) {
             Task completedTask = getTask(i);
+            _display.getVisibleCompletedTasks().remove(completedTask);
             markUndoneTask(completedTask);
             feedbackUndoneTasks(completedTask, i);
         }
@@ -148,6 +170,7 @@ public class CommandUndone implements Command {
     }
 
     private void markUndoneTask(Task completedTask) {
+        _tasks.add(completedTask);
         if (completedTask instanceof TaskEvent) {
             undoneTaskEvent(completedTask);
         } else if (completedTask instanceof TaskDeadline) {
