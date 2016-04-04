@@ -102,7 +102,10 @@ public class JListeeParser {
 		testDeadLine2.ParseCommand("add deadLine date and time on saturday 2359 #hashtag");
 
 		JListeeParser testDelete = new JListeeParser();
-		testDelete.ParseCommand("delete 1-2,2-5,4,5"); 
+		testDelete.ParseCommand("delete 1-2 ,  4,3"); 
+		
+		JListeeParser testDone = new JListeeParser();
+		testDone.ParseCommand("done 1, 2-4 ,3,4"); 
 		
 		JListeeParser testShow = new JListeeParser();
 		testShow.ParseCommand("show assignment due friday");
@@ -112,9 +115,7 @@ public class JListeeParser {
 
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 4 nm2213 tutorial due tonight 10pm"); 
-		
-		JListeeParser testDone = new JListeeParser();
-		testDone.ParseCommand("done 1,2,3,4"); 
+
 	} 
 
 	
@@ -263,7 +264,8 @@ public class JListeeParser {
 	public Command parseDelete(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_DELETE, "").trim();
-	
+		inputLine = inputLine.trim().replaceAll(" +", "");
+
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
 		}
@@ -295,7 +297,7 @@ public class JListeeParser {
 				}
 			}
 		}
-
+		
 		return new CommandDelete(taskNumbers);
 	}
 	
@@ -532,7 +534,8 @@ public class JListeeParser {
 	public Command parseDone(String inputLine){
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_DONE, "").trim();
-	
+		inputLine = inputLine.trim().replaceAll(" +", "");
+
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
 		}
@@ -540,10 +543,31 @@ public class JListeeParser {
 		else {
 			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
 			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
-				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				if (separateInputLine[startIndex].contains("-")){
+					String[] splitRange = separateInputLine[startIndex].split("-");
+					int startDeleteIndex = Integer.valueOf(splitRange[0]);
+					int endDeleteIndex = Integer.valueOf(splitRange[1]);
+
+					while (startDeleteIndex <= endDeleteIndex){
+						taskNumbers.add(startDeleteIndex);
+						startDeleteIndex++;
+					}
+				}
+
+				else{
+					taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				}
 			}
 		}
-	
+		
+		for (int i=0; i<taskNumbers.size();i++){
+			for (int j = i+1; j<taskNumbers.size(); j++){
+				if (taskNumbers.get(i) == taskNumbers.get(j)){
+					taskNumbers.remove(j);
+				}
+			}
+		}
+		
 		return new CommandDone(taskNumbers);
 	}
 
