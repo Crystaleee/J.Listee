@@ -23,10 +23,6 @@ public class History {
         oldDisplaysIndex++;
     }
 
-    public static void saveUserInput(String userInput) {
-        userInputs.add(userInput);
-    }
-
     public static boolean atLastState() {
         return (oldDisplaysIndex == (oldDisplays.size() - 1));
     }
@@ -41,11 +37,10 @@ public class History {
                 return null;
             }
             oldDisplaysIndex += offset;
-            if (oldDisplaysIndex > (oldDisplays.size() - 1)) {
+            if (indexOutOfRange()) {
                 oldDisplaysIndex = oldDisplays.size() - 1;
             }
         } else if (offset < 0) {
-            System.out.println(oldDisplaysIndex);
             if (atFirstState()) {
                 return null;
             }
@@ -55,6 +50,10 @@ public class History {
             }
         }
         return oldDisplays.get(oldDisplaysIndex);
+    }
+
+    private static boolean indexOutOfRange() {
+        return oldDisplaysIndex > (oldDisplays.size() - 1);
     }
 
 }

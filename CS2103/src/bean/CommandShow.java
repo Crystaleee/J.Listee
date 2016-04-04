@@ -8,55 +8,46 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandShow implements Command {
-    private static final String TASK_TYPE_COMPLETED = "done";
-    private static final String TASK_TYPE_RESERVED = "reserved";
-    private static final String TASK_TYPE_FLOAT = "untimed";
-    private static final String TASK_TYPE_DEADLINE = "deadline";
-    private static final String TASK_TYPE_EVENT = "event";
-    private static final String EMPTY_STRING = "";
-    private static final String MESSAGE_INVALID_DATE_RANGE = "Please specify a valid date range";
-    private final String message_no_tasks = "No such tasks found";
-    private final String message_show_all = "Displaying all tasks";
-    private String message_show = "Displaying ";
-    private boolean updateFile = false;
-    private boolean saveHistory = true;
-    private TaskEvent searchedTask;
-    private Display display;
-    private ArrayList<String> taskTypes;
+    private String msgShow = "Displaying ";
+    private boolean _updateFile = false;
+    private boolean _saveHistory = true;
+    private TaskEvent _searchedTask;
+    private Display _display;
+    private ArrayList<String> _taskTypes;
 
     public CommandShow() {
-        searchedTask = null;
+        _searchedTask = null;
     }
 
     public CommandShow(String keyword) {
-        searchedTask = new TaskEvent(keyword.trim().toLowerCase(), EMPTY_STRING, null, null,
+        _searchedTask = new TaskEvent(keyword.trim().toLowerCase(), GlobalConstants.EMPTY_STRING, null, null,
                 new ArrayList<String>());
-        taskTypes = new ArrayList<String>();
+        _taskTypes = new ArrayList<String>();
     }
 
     public CommandShow(String keyword, String location, Calendar start, Calendar end,
             ArrayList<String> tags) {
         if (keyword == null) {
-            keyword = EMPTY_STRING;
+            keyword = GlobalConstants.EMPTY_STRING;
         }
         if (location == null) {
-            location = EMPTY_STRING;
+            location = GlobalConstants.EMPTY_STRING;
         }
         if (tags == null) {
             tags = new ArrayList<String>();
         }
-        searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
+        _searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
                 tags);
-        taskTypes = new ArrayList<String>();
+        _taskTypes = new ArrayList<String>();
     }
 
     public CommandShow(String keyword, String location, Calendar start, Calendar end, ArrayList<String> tags,
             ArrayList<String> taskTypes) {
         if (keyword == null) {
-            keyword = EMPTY_STRING;
+            keyword = GlobalConstants.EMPTY_STRING;
         }
         if (location == null) {
-            location = EMPTY_STRING;
+            location = GlobalConstants.EMPTY_STRING;
         }
         if (tags == null) {
             tags = new ArrayList<String>();
@@ -64,9 +55,9 @@ public class CommandShow implements Command {
         if (taskTypes == null) {
             taskTypes = new ArrayList<String>();
         }
-        searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
+        _searchedTask = new TaskEvent(keyword.trim().toLowerCase(), location.trim().toLowerCase(), start, end,
                 tags);
-        this.taskTypes = taskTypes;
+        this._taskTypes = taskTypes;
     }
 
     public Display execute(Display oldDisplay) {
@@ -81,23 +72,23 @@ public class CommandShow implements Command {
             return oldDisplay;
 
         }
-        this.display = oldDisplay.deepClone();
+        this._display = oldDisplay.deepClone();
 
         showTasks();
         if (noTasksFound()) {
-            oldDisplay.setMessage(message_no_tasks);
+            oldDisplay.setMessage(GlobalConstants.MESSAGE_NO_TASKS);
             return oldDisplay;
         } else {
-            display.setMessage(getFeedback());
+            _display.setMessage(getFeedback());
         }
 
-        return display;
+        return _display;
     }
 
     private boolean noTasksFound() {
-        int numVisible = display.getVisibleCompletedTasks().size() + display.getVisibleDeadlineTasks().size()
-                + display.getVisibleEvents().size() + display.getVisibleFloatTasks().size()
-                + display.getVisibleReservedTasks().size();
+        int numVisible = _display.getVisibleCompletedTasks().size() + _display.getVisibleDeadlineTasks().size()
+                + _display.getVisibleEvents().size() + _display.getVisibleFloatTasks().size()
+                + _display.getVisibleReservedTasks().size();
         return numVisible == 0;
     }
 
@@ -107,15 +98,15 @@ public class CommandShow implements Command {
     }
 
     private void setInvalidDisplay(Display oldDisplay) {
-        updateFile = false;
-        saveHistory = false;
-        oldDisplay.setMessage(MESSAGE_INVALID_DATE_RANGE);
+        _updateFile = false;
+        _saveHistory = false;
+        oldDisplay.setMessage(GlobalConstants.MESSAGE_ERROR_DATE_RANGE);
     }
 
     // returns true if end date is before start date
     private boolean isInvalidDateRange() {
-        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
-            if (searchedTask.getStartDate().after(searchedTask.getEndDate())) {
+        if ((_searchedTask.getStartDate() != null) && (_searchedTask.getEndDate() != null)) {
+            if (_searchedTask.getStartDate().after(_searchedTask.getEndDate())) {
                 return true;
             }
         }
@@ -123,7 +114,7 @@ public class CommandShow implements Command {
     }
 
     private void setShowAll(Display oldDisplay) {
-        oldDisplay.setMessage(message_show_all);
+        oldDisplay.setMessage(GlobalConstants.MESSAGE_SHOW_ALL);
         oldDisplay.setVisibleDeadlineTasks(oldDisplay.getDeadlineTasks());
         oldDisplay.setVisibleEvents(oldDisplay.getEventTasks());
         oldDisplay.setVisibleFloatTasks(oldDisplay.getFloatTasks());
@@ -133,11 +124,11 @@ public class CommandShow implements Command {
     }
 
     private boolean isShowAll() {
-        if (searchedTask.getDescription().isEmpty()) {
-            if (searchedTask.getLocation().isEmpty()) {
-                if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
-                    if (searchedTask.getTags().isEmpty()) {
-                        if (taskTypes.isEmpty()) {
+        if (_searchedTask.getDescription().isEmpty()) {
+            if (_searchedTask.getLocation().isEmpty()) {
+                if ((_searchedTask.getStartDate() == null) && (_searchedTask.getEndDate() == null)) {
+                    if (_searchedTask.getTags().isEmpty()) {
+                        if (_taskTypes.isEmpty()) {
                             return true;
                         }
                     }
@@ -148,38 +139,38 @@ public class CommandShow implements Command {
     }
 
     private String getFeedback() {
-        if (!taskTypes.isEmpty()) {
-            for (int i = 0; i < taskTypes.size(); i++) {
-                message_show += taskTypes.get(i) + " ";
+        if (!_taskTypes.isEmpty()) {
+            for (int i = 0; i < _taskTypes.size(); i++) {
+                msgShow += _taskTypes.get(i) + " ";
             }
-            message_show += "tasks";
+            msgShow += "tasks";
         } else {
-            message_show += "all tasks";
+            msgShow += "all tasks";
         }
-        if (!searchedTask.getDescription().isEmpty()) {
-            message_show += " containing " + searchedTask.getDescription();
+        if (!_searchedTask.getDescription().isEmpty()) {
+            msgShow += " containing " + _searchedTask.getDescription();
         }
-        if (!searchedTask.getLocation().isEmpty()) {
-            message_show += " at " + searchedTask.getLocation();
+        if (!_searchedTask.getLocation().isEmpty()) {
+            msgShow += " at " + _searchedTask.getLocation();
         }
-        if ((searchedTask.getStartDate() != null) && (searchedTask.getEndDate() != null)) {
+        if ((_searchedTask.getStartDate() != null) && (_searchedTask.getEndDate() != null)) {
             SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy HH:mm");
-            String startDate = format1.format(searchedTask.getStartDate().getTime());
-            String endDate = format1.format(searchedTask.getEndDate().getTime());
+            String startDate = format1.format(_searchedTask.getStartDate().getTime());
+            String endDate = format1.format(_searchedTask.getEndDate().getTime());
 
-            message_show += " from " + startDate + " to " + endDate;
+            msgShow += " from " + startDate + " to " + endDate;
         }
-        if (!searchedTask.getTags().isEmpty()) {
-            message_show += " tagged";
-            for (int i = 0; i < searchedTask.getTags().size(); i++) {
+        if (!_searchedTask.getTags().isEmpty()) {
+            msgShow += " tagged";
+            for (int i = 0; i < _searchedTask.getTags().size(); i++) {
                 if (i == 0) {
-                    message_show += " " + searchedTask.getTags().get(i);
+                    msgShow += " " + _searchedTask.getTags().get(i);
                 } else {
-                    message_show += ", " + searchedTask.getTags().get(i);
+                    msgShow += ", " + _searchedTask.getTags().get(i);
                 }
             }
         }
-        return message_show;
+        return msgShow;
     }
 
     private void showTasks() {
@@ -193,31 +184,31 @@ public class CommandShow implements Command {
 
     private void getTaskType() {
         if (!isTaskTypesEmpty()) {
-            for (int i = 0; i < taskTypes.size(); i++) {
-                taskTypes.set(i, taskTypes.get(i).toLowerCase());
+            for (int i = 0; i < _taskTypes.size(); i++) {
+                _taskTypes.set(i, _taskTypes.get(i).toLowerCase());
             }
-            if (!taskTypes.contains(TASK_TYPE_EVENT)) {
-                display.setVisibleEvents(new ArrayList<TaskEvent>());
+            if (!_taskTypes.contains(GlobalConstants.TASK_TYPE_EVENT)) {
+                _display.setVisibleEvents(new ArrayList<TaskEvent>());
             }
-            if (!taskTypes.contains(TASK_TYPE_DEADLINE)) {
-                display.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
+            if (!_taskTypes.contains(GlobalConstants.TASK_TYPE_DEADLINE)) {
+                _display.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
             }
-            if (!taskTypes.contains(TASK_TYPE_FLOAT)) {
-                display.setVisibleFloatTasks(new ArrayList<TaskFloat>());
+            if (!_taskTypes.contains(GlobalConstants.TASK_TYPE_FLOAT)) {
+                _display.setVisibleFloatTasks(new ArrayList<TaskFloat>());
             }
-            if (!taskTypes.contains(TASK_TYPE_RESERVED)) {
-                display.setVisibleReservedTasks(new ArrayList<TaskReserved>());
+            if (!_taskTypes.contains(GlobalConstants.TASK_TYPE_RESERVED)) {
+                _display.setVisibleReservedTasks(new ArrayList<TaskReserved>());
             }
-            if (taskTypes.contains(TASK_TYPE_COMPLETED)) {
+            if (_taskTypes.contains(GlobalConstants.TASK_TYPE_COMPLETED)) {
                 getCompletedTasks();
             }
         }
     }
 
     private boolean isTaskTypesEmpty() {
-        if (taskTypes == null) {
+        if (_taskTypes == null) {
             return true;
-        } else if (taskTypes.isEmpty()) {
+        } else if (_taskTypes.isEmpty()) {
             return true;
         }
         return false;
@@ -225,14 +216,14 @@ public class CommandShow implements Command {
 
     private void getCompletedTasks() {
         Task task;
-        display.setVisibleCompletedTasks(new ArrayList<Task>());
-        for (int i = 0; i < display.getCompletedTasks().size(); i++) {
-            task = display.getCompletedTasks().get(i);
+        _display.setVisibleCompletedTasks(new ArrayList<Task>());
+        for (int i = 0; i < _display.getCompletedTasks().size(); i++) {
+            task = _display.getCompletedTasks().get(i);
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
-                            display.getVisibleCompletedTasks().add(task);
+                            _display.getVisibleCompletedTasks().add(task);
                         }
                     }
                 }
@@ -242,14 +233,14 @@ public class CommandShow implements Command {
 
     private void getDeadLineTasks() {
         TaskDeadline task;
-        display.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
-        for (int i = 0; i < display.getDeadlineTasks().size(); i++) {
-            task = display.getDeadlineTasks().get(i);
+        _display.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
+        for (int i = 0; i < _display.getDeadlineTasks().size(); i++) {
+            task = _display.getDeadlineTasks().get(i);
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
-                            display.getVisibleDeadlineTasks().add(task);
+                            _display.getVisibleDeadlineTasks().add(task);
                         }
                     }
                 }
@@ -261,14 +252,14 @@ public class CommandShow implements Command {
 
     private void getEventTasks() {
         TaskEvent task;
-        display.setVisibleEvents(new ArrayList<TaskEvent>());
-        for (int i = 0; i < display.getEventTasks().size(); i++) {
-            task = display.getEventTasks().get(i);
+        _display.setVisibleEvents(new ArrayList<TaskEvent>());
+        for (int i = 0; i < _display.getEventTasks().size(); i++) {
+            task = _display.getEventTasks().get(i);
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
-                            display.getVisibleEvents().add(task);
+                            _display.getVisibleEvents().add(task);
                         }
                     }
                 }
@@ -279,13 +270,13 @@ public class CommandShow implements Command {
 
     private void getFloatTasks() {
         TaskFloat task;
-        display.setVisibleFloatTasks(new ArrayList<TaskFloat>());
-        for (int i = 0; i < display.getFloatTasks().size(); i++) {
-            task = display.getFloatTasks().get(i);
+        _display.setVisibleFloatTasks(new ArrayList<TaskFloat>());
+        for (int i = 0; i < _display.getFloatTasks().size(); i++) {
+            task = _display.getFloatTasks().get(i);
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
-                        display.getVisibleFloatTasks().add(task);
+                        _display.getVisibleFloatTasks().add(task);
                     }
                 }
             }
@@ -295,14 +286,14 @@ public class CommandShow implements Command {
 
     private void getReservedTasks() {
         TaskReserved task;
-        display.setVisibleReservedTasks(new ArrayList<TaskReserved>());
-        for (int i = 0; i < display.getReservedTasks().size(); i++) {
-            task = display.getReservedTasks().get(i);
+        _display.setVisibleReservedTasks(new ArrayList<TaskReserved>());
+        for (int i = 0; i < _display.getReservedTasks().size(); i++) {
+            task = _display.getReservedTasks().get(i);
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
                         if (withinTimeRange(task)) {
-                            display.getVisibleReservedTasks().add(task);
+                            _display.getVisibleReservedTasks().add(task);
                         }
                     }
                 }
@@ -313,14 +304,14 @@ public class CommandShow implements Command {
     }
 
     private boolean containsTag(Task task) {
-        if (searchedTask.getTags().isEmpty()) {
+        if (_searchedTask.getTags().isEmpty()) {
             return true;
         }
         boolean containsTags = false;
-        for (int i = 0; i < searchedTask.getTags().size(); i++) {
+        for (int i = 0; i < _searchedTask.getTags().size(); i++) {
             for (int j = 0; j < task.getTags().size(); j++) {
                 containsTags = false;
-                if (searchedTask.getTags().get(i).toLowerCase()
+                if (_searchedTask.getTags().get(i).toLowerCase()
                         .equals(task.getTags().get(j).trim().toLowerCase())) {
                     containsTags = true;
                     break;
@@ -334,7 +325,7 @@ public class CommandShow implements Command {
     }
 
     private boolean withinTimeRange(Task task) {
-        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+        if ((_searchedTask.getStartDate() == null) && (_searchedTask.getEndDate() == null)) {
             return true;
         }
         if (task instanceof TaskEvent) {
@@ -352,15 +343,15 @@ public class CommandShow implements Command {
     }
 
     private boolean withinTimeRange(TaskReserved task) {
-        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+        if ((_searchedTask.getStartDate() == null) && (_searchedTask.getEndDate() == null)) {
             return true;
         }
         for (int i = 0; i < task.getStartDates().size(); i++) {
-            if (!task.getStartDates().get(i).before(searchedTask.getStartDate())) {
-                if (!task.getStartDates().get(i).after(searchedTask.getEndDate())) {
+            if (!task.getStartDates().get(i).before(_searchedTask.getStartDate())) {
+                if (!task.getStartDates().get(i).after(_searchedTask.getEndDate())) {
                     return true;
                 }
-            } else if (!task.getEndDates().get(i).before(searchedTask.getStartDate())) {
+            } else if (!task.getEndDates().get(i).before(_searchedTask.getStartDate())) {
                 return true;
             }
 
@@ -369,25 +360,25 @@ public class CommandShow implements Command {
     }
 
     private boolean isWithinTimeRange(TaskEvent task) {
-        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+        if ((_searchedTask.getStartDate() == null) && (_searchedTask.getEndDate() == null)) {
             return true;
         }
-        if (!task.getStartDate().before(searchedTask.getStartDate())) {
-            if (!task.getStartDate().after(searchedTask.getEndDate())) {
+        if (!task.getStartDate().before(_searchedTask.getStartDate())) {
+            if (!task.getStartDate().after(_searchedTask.getEndDate())) {
                 return true;
             }
-        } else if (!task.getEndDate().before(searchedTask.getStartDate())) {
+        } else if (!task.getEndDate().before(_searchedTask.getStartDate())) {
             return true;
         }
         return false;
     }
 
     private boolean isWithinTimeRange(TaskDeadline task) {
-        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+        if ((_searchedTask.getStartDate() == null) && (_searchedTask.getEndDate() == null)) {
             return true;
         }
-        if (!task.getEndDate().before(searchedTask.getStartDate())) {
-            if (!task.getEndDate().after(searchedTask.getEndDate())) {
+        if (!task.getEndDate().before(_searchedTask.getStartDate())) {
+            if (!task.getEndDate().after(_searchedTask.getEndDate())) {
                 return true;
             }
         }
@@ -395,20 +386,20 @@ public class CommandShow implements Command {
     }
 
     private boolean atLocation(Task task) {
-        if (searchedTask.getLocation().isEmpty()) {
+        if (_searchedTask.getLocation().isEmpty()) {
             return true;
         }
         if (task.getLocation() == null) {
             return false;
         }
-        if (task.getLocation().equalsIgnoreCase(searchedTask.getLocation())) {
+        if (task.getLocation().equalsIgnoreCase(_searchedTask.getLocation())) {
             return true;
         }
         return false;
     }
 
     private boolean containsKeyword(Task task) {
-        String[] keywords = searchedTask.getDescription().split(" ");
+        String[] keywords = _searchedTask.getDescription().split(" ");
         for (int i = 0; i < keywords.length; i++) {
             if (!task.getDescription().toLowerCase().contains(keywords[i])) {
                 return false;
@@ -417,11 +408,11 @@ public class CommandShow implements Command {
         return true;
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }

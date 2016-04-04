@@ -6,15 +6,10 @@ package bean;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import logic.Logic;
-
 public class CommandAddDeadlineTask implements Command {
-    private static final String COMMAND_TYPE_ADD = "Add";
-    private static final String COMMAND_TYPE_INVALID = "Invalid";
     private TaskDeadline task;
-    private ArrayList<Integer> taskIndices = new ArrayList<Integer>();
-    private boolean updateFile = true;
-    private boolean saveHistory = true;
+    private boolean _updateFile = true;
+    private boolean _saveHistory = true;
 
     public CommandAddDeadlineTask() {
         task = null;
@@ -32,7 +27,6 @@ public class CommandAddDeadlineTask implements Command {
     public Display execute(Display display) {
         if (hasNoDescription()) {
             setInvalidDisplay(display);
-            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
             return display;
         }
         addDeadlineTask(display.getDeadlineTasks());
@@ -57,16 +51,18 @@ public class CommandAddDeadlineTask implements Command {
     }
 
     private void setInvalidDisplay(Display display) {
-        updateFile = false;
-        saveHistory = false;
-        display.setCommandType(COMMAND_TYPE_INVALID);
+        _updateFile = false;
+        _saveHistory = false;
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
+        display.setMessage(GlobalConstants.MESSAGE_ERROR_DESCRIPTION);
     }
 
     private void setDisplay(Display display) {
-        display.setCommandType(COMMAND_TYPE_ADD);
+        ArrayList<Integer> taskIndices = new ArrayList<Integer>();
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_ADD);
         taskIndices.add(display.getVisibleDeadlineTasks().indexOf(task) + 1);
         display.setTaskIndices(taskIndices);
-        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
+        display.setMessage(String.format(GlobalConstants.MESSAGE_ADD_SUCCESS, task.getDescription()));
         display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
 
@@ -89,11 +85,11 @@ public class CommandAddDeadlineTask implements Command {
         return i;
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }

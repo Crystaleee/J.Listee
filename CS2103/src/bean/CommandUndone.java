@@ -7,59 +7,56 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CommandUndone implements Command {
-    private static final String COMMAND_TYPE_INVALID = "Invalid";
-    private static final String COMMAND_TYPE_UNDONE = "Undone";
-    private static final String MESSAGE_ALL_UNDONE = "All tasks undone";
-    private ArrayList<Integer> taskNumbers;
-    private ArrayList<Integer> taskIndices;
-    private Display display;
-    private String undoneMessage = "Undone task: ";
-    private String message_invalid_task_numbers = "You have specified invalid task numbers: ";
-    private boolean saveHistory = true;
-    private boolean updateFile = true;
+    private ArrayList<Integer> _taskNumbers;
+    private ArrayList<Integer> _taskIndices;
+    private Display _display;
+    private String _msgUndone = "Undone task: ";
+    private String _msgInvalidNum = "You have specified invalid task numbers: ";
+    private boolean _saveHistory = true;
+    private boolean _updateFile = true;
 
     public CommandUndone() {
-        this.taskNumbers = null;
-        this.display = null;
+        this._taskNumbers = null;
+        this._display = null;
     }
 
     public CommandUndone(ArrayList<Integer> taskNumbers) {
-        this.taskNumbers = taskNumbers;
-        this.display = null;
+        this._taskNumbers = taskNumbers;
+        this._display = null;
     }
 
     public Display execute(Display oldDisplay) {
-        this.display = oldDisplay;
-        if (taskNumbers != null) {
+        this._display = oldDisplay;
+        if (_taskNumbers != null) {
             if (hasInvalidTaskNumbers()) {
                 setInvalidDisplay();
                 return oldDisplay;
             }
-            Collections.sort(taskNumbers);
+            Collections.sort(_taskNumbers);
         }
 
         undoneTasksFromList();
-        setDisplay(COMMAND_TYPE_UNDONE, taskNumbers);
-        return display;
+        setDisplay(GlobalConstants.GUI_ANIMATION_ADD, _taskNumbers);
+        return _display;
     }
 
     private void setInvalidDisplay() {
-        updateFile = false;
-        saveHistory = false;
-        display.setCommandType(COMMAND_TYPE_INVALID);
-        display.setMessage(message_invalid_task_numbers);
+        _updateFile = false;
+        _saveHistory = false;
+        _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
+        _display.setMessage(_msgInvalidNum);
     }
 
     private void setDisplay(String commandType, ArrayList<Integer> completedTasks) {
-        display.setCommandType(commandType);
+        _display.setCommandType(commandType);
         incrementTaskNumbers();
-        display.setTaskIndices(completedTasks);
+        _display.setTaskIndices(completedTasks);
     }
 
     private void incrementTaskNumbers() {
-        if (taskNumbers != null) {
-            for (int i = 0; i < taskNumbers.size(); i++) {
-                taskNumbers.set(i, taskNumbers.get(i) + 1);
+        if (_taskNumbers != null) {
+            for (int i = 0; i < _taskNumbers.size(); i++) {
+                _taskNumbers.set(i, _taskNumbers.get(i) + 1);
             }
         }
     }
@@ -67,8 +64,8 @@ public class CommandUndone implements Command {
     private boolean hasInvalidTaskNumbers() {
         ArrayList<Integer> invalidTaskNumbers = new ArrayList<Integer>();
         int taskNum, maxNum = getNumOfVisibleTasks(), minNum = getMinimumTaskNum();
-        for (int i = 0; i < taskNumbers.size(); i++) {
-            taskNum = taskNumbers.get(i);
+        for (int i = 0; i < _taskNumbers.size(); i++) {
+            taskNum = _taskNumbers.get(i);
             if (isTaskNumberInvalid(taskNum, maxNum, minNum)) {
                 feedbackInvalidNumbers(invalidTaskNumbers, taskNum);
                 invalidTaskNumbers.add(taskNum);
@@ -78,23 +75,23 @@ public class CommandUndone implements Command {
     }
 
     private int getMinimumTaskNum() {
-        int minNum = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
-                + display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size() + 1;
+        int minNum = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().size() + _display.getVisibleReservedTasks().size() + 1;
         return minNum;
     }
 
     private int getNumOfVisibleTasks() {
-        int numOfTasks = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
-                + display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size()
-                + display.getVisibleCompletedTasks().size();
+        int numOfTasks = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().size() + _display.getVisibleReservedTasks().size()
+                + _display.getVisibleCompletedTasks().size();
         return numOfTasks;
     }
 
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
-            message_invalid_task_numbers += taskNum;
+            _msgInvalidNum += taskNum;
         } else {
-            message_invalid_task_numbers += ", " + taskNum;
+            _msgInvalidNum += ", " + taskNum;
         }
     }
 
@@ -112,57 +109,51 @@ public class CommandUndone implements Command {
     }
 
     private void undoneMultipleDoneTasks() {
-        Collections.sort(taskNumbers);
-        for (int i = 0; i < taskNumbers.size(); i++) {
+        Collections.sort(_taskNumbers);
+        for (int i = 0; i < _taskNumbers.size(); i++) {
             Task completedTask = getTask(i);
             markUndoneTask(completedTask);
             feedbackUndoneTasks(completedTask, i);
         }
-        display.setMessage(undoneMessage);
+        _display.setMessage(_msgUndone);
     }
 
     private Task getTask(int i) {
-        int index = taskNumbers.get(i) - display.getVisibleDeadlineTasks().size()
-                - display.getVisibleEvents().size() - display.getVisibleFloatTasks().size()
-                - display.getVisibleReservedTasks().size() - 1;
-        System.out.println("Index " + index);
-        return display.getCompletedTasks().remove(index);
+        int index = _taskNumbers.get(i) - _display.getVisibleDeadlineTasks().size()
+                - _display.getVisibleEvents().size() - _display.getVisibleFloatTasks().size()
+                - _display.getVisibleReservedTasks().size() - 1;
+        return _display.getCompletedTasks().remove(index);
     }
 
     private void undoneAllVisibleDoneTasks() {
-        int numOfVisibleCompletedTasks = display.getVisibleCompletedTasks().size();
+        int numOfVisibleCompletedTasks = _display.getVisibleCompletedTasks().size();
         for (int i = numOfVisibleCompletedTasks - 1; i >= 0; i--) {
-            Task completedTask = display.getCompletedTasks().remove(i);
+            Task completedTask = _display.getCompletedTasks().remove(i);
             markUndoneTask(completedTask);
         }
-        display.setMessage(MESSAGE_ALL_UNDONE);
+        _display.setMessage(GlobalConstants.MESSAGE_ALL_UNDONE);
     }
 
     private boolean isUndoneAll() {
-        return taskNumbers == null;
+        return _taskNumbers == null;
     }
 
     private void feedbackUndoneTasks(Task undoneTask, int i) {
         if (i == 0) {
-            undoneMessage += "\"" + undoneTask.getDescription() + "\"";
+            _msgUndone += GlobalConstants.INVERTED_COMMAS + undoneTask.getDescription()
+                    + GlobalConstants.INVERTED_COMMAS;
         } else {
-            undoneMessage += ", \"" + undoneTask.getDescription() + "\"";
+            _msgUndone += ", \"" + undoneTask.getDescription() + GlobalConstants.INVERTED_COMMAS;
         }
     }
 
     private void markUndoneTask(Task completedTask) {
-        // System.out.println(completedTask.getDescription());
         if (completedTask instanceof TaskEvent) {
             undoneTaskEvent(completedTask);
-            // System.out.println(task.getDescription());
         } else if (completedTask instanceof TaskDeadline) {
             undoneTaskDeadline(completedTask);
-            // System.out.println(task.getDescription());
         } else if (completedTask instanceof TaskFloat) {
             undoneTaskFloat(completedTask);
-            // System.out.println(task.getDescription());
-        } else {
-            System.out.println("Err");
         }
         return;
     }
@@ -170,26 +161,26 @@ public class CommandUndone implements Command {
     private void undoneTaskEvent(Task completedTask) {
         TaskEvent task = (TaskEvent) completedTask;
         Command addCommand = new CommandAddEvent(task);
-        display = addCommand.execute(display);
+        _display = addCommand.execute(_display);
     }
 
     private void undoneTaskDeadline(Task completedTask) {
         TaskDeadline task = (TaskDeadline) completedTask;
         Command addCommand = new CommandAddDeadlineTask(task);
-        display = addCommand.execute(display);
+        _display = addCommand.execute(_display);
     }
 
     private void undoneTaskFloat(Task completedTask) {
         TaskFloat task = (TaskFloat) completedTask;
         Command addCommand = new CommandAddFloatTask(task);
-        display = addCommand.execute(display);
+        _display = addCommand.execute(_display);
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }

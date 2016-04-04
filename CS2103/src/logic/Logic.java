@@ -12,25 +12,11 @@ import History.History;
 import bean.Command;
 import bean.CommandShow;
 import bean.Display;
+import bean.GlobalConstants;
 import parser.JListeeParser;
 import storage.Storage;
 
 public class Logic {
-
-    private static final int TIMER_PERIOD = 1000;
-
-    private static final int TIMER_DELAY = 0;
-
-    private static final boolean IS_DAEMON_TASK = true;
-
-    public static String MESSAGE_ADD_SUCCESS = "added: \"%1$s\"";
-
-    public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
-    public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
-    public static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
-    public static final String MESSAGE_NO_DESCRIPTION = "Please enter a description";
-    public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
-
     private static Storage storage = Storage.getInstance();
     private static Display display;
     private static String file;
@@ -57,10 +43,13 @@ public class Logic {
     }
 
     private static void initialiseOverdueTasksReminder() {
-        Timer timer = new Timer(IS_DAEMON_TASK);
-        timer.schedule(new ReminderOverdue(), TIMER_DELAY, TIMER_PERIOD);
+        Timer timer = new Timer(GlobalConstants.IS_DAEMON_TASK);
+        timer.schedule(new ReminderOverdue(), GlobalConstants.TIMER_DELAY, GlobalConstants.TIMER_PERIOD);
     }
-
+    
+    /*
+     * display is set to show only overdue and today's task on startup
+     */
     private static void initializeDisplay() {
         display = getDisplayFromStorage();
         Calendar start = Calendar.getInstance();
@@ -73,7 +62,6 @@ public class Logic {
     }
 
     public static Display executeUserCommand(String userInput) {
-        History.saveUserInput(userInput);
         Command userCommand = parseUserInput(userInput);
         synchronized (display) {
             display = executeCommand(userCommand);
@@ -82,7 +70,7 @@ public class Logic {
     }
 
     private static void saveDisplayToHistory(Command userCommand) {
-        if (userCommand.getSaveHistory()) {
+        if (userCommand.requiresSaveHistory()) {
             History.saveDisplay(display.deepClone());
         }
     }
@@ -98,7 +86,7 @@ public class Logic {
             if (successfullyUpdatesFile()) {
                 saveDisplayToHistory(userCommand);
             } else {
-                display.setMessage(MESSAGE_ERROR_UPDATE_FILE);
+                display.setMessage(GlobalConstants.MESSAGE_ERROR_UPDATE_FILE);
             }
         } else {
             saveDisplayToHistory(userCommand);
@@ -107,7 +95,7 @@ public class Logic {
     }
 
     private static boolean requiresFileUpdate(Command userCommand) {
-        return userCommand.getUpdateFile();
+        return userCommand.requiresUpdateFile();
     }
 
     private static Command parseUserInput(String userInput) {

@@ -7,44 +7,42 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandUpdate extends TaskEvent implements Command {
-    private static final String MESSAGE_INVALID_DATE_RANGE = "Please specify a valid date range";
-    private Integer taskNumber;
-    private ArrayList<String> removeTags;
-    private Display display;
-    private boolean timeChanged = false;
-    private boolean updateFile = true;;
-    private boolean saveHistory = true;
-    private String message = "Edited : \"";
-    private final String message_invalid_task_number = "Pls specify a valid task number";
+    private Integer _taskNumber;
+    private ArrayList<String> _removeTags;
+    private Display _display;
+    private boolean _timeChanged = false;
+    private boolean _updateFile = true;;
+    private boolean _saveHistory = true;
+    private String msgEdit = "Edited : \"";
 
     public CommandUpdate() {
         super();
-        removeTags = null;
-        this.taskNumber = null;
+        _removeTags = null;
+        this._taskNumber = null;
     }
 
     public CommandUpdate(Integer taskNumber, String description) {
         super(description, null, null, null, null);
-        removeTags = null;
-        this.taskNumber = taskNumber;
+        _removeTags = null;
+        this._taskNumber = taskNumber;
     }
 
     public CommandUpdate(Integer taskNumber, String description, String location, Calendar startDate,
             Calendar endDate, ArrayList<String> addTags, ArrayList<String> removeTags) {
         super(description, location, startDate, endDate, addTags);
-        this.removeTags = removeTags;
-        updateFile = true;
-        this.taskNumber = taskNumber;
+        this._removeTags = removeTags;
+        _updateFile = true;
+        this._taskNumber = taskNumber;
     }
 
     public Display execute(Display oldDisplay) {
-        display = oldDisplay;
+        _display = oldDisplay;
         if (hasInvalidTaskNumber()) {
-            setInvalidDisplay(message_invalid_task_number);
-            return display;
+            setInvalidDisplay(GlobalConstants.MESSAGE_ERROR_TASK_NUMBER);
+            return _display;
         }
         if (isInvalidDateRange()) {
-            setInvalidDisplay(MESSAGE_INVALID_DATE_RANGE);
+            setInvalidDisplay(GlobalConstants.MESSAGE_ERROR_DATE_RANGE);
             return oldDisplay;
         }
         editTask();
@@ -54,8 +52,8 @@ public class CommandUpdate extends TaskEvent implements Command {
          * display.getConflictingTasksIndices().get(i)); }
          */
         // System.out.println("Index " + display.getTaskIndices().get(0));
-        display.setMessage(message);
-        return display;
+        _display.setMessage(msgEdit);
+        return _display;
     }
 
     // returns true if end date is before start date
@@ -69,33 +67,33 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void setInvalidDisplay(String msg) {
-        updateFile = false;
-        saveHistory = false;
-        display.setMessage(msg);
-        display.setTaskIndices(new ArrayList<Integer>());
-        display.setConflictingTasksIndices(new ArrayList<Integer>());
+        _updateFile = false;
+        _saveHistory = false;
+        _display.setMessage(msg);
+        _display.setTaskIndices(new ArrayList<Integer>());
+        _display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
 
     private boolean hasInvalidTaskNumber() {
         int numOfTasks = 0;
-        numOfTasks += display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
-                + display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size();
-        return ((taskNumber > numOfTasks) || (taskNumber < 1));
+        numOfTasks += _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().size() + _display.getVisibleReservedTasks().size();
+        return ((_taskNumber > numOfTasks) || (_taskNumber < 1));
     }
 
     private void editTask() {
-        if (taskNumber <= display.getVisibleDeadlineTasks().size()) {
+        if (_taskNumber <= _display.getVisibleDeadlineTasks().size()) {
             editDeadline();
         } else {
-            taskNumber -= display.getVisibleDeadlineTasks().size();
-            if (taskNumber <= display.getVisibleEvents().size()) {
+            _taskNumber -= _display.getVisibleDeadlineTasks().size();
+            if (_taskNumber <= _display.getVisibleEvents().size()) {
                 editEvent();
             } else {
-                taskNumber -= display.getVisibleEvents().size();
-                if (taskNumber <= display.getVisibleFloatTasks().size()) {
+                _taskNumber -= _display.getVisibleEvents().size();
+                if (_taskNumber <= _display.getVisibleFloatTasks().size()) {
                     editFloat();
                 } else {
-                    taskNumber -= display.getVisibleFloatTasks().size();
+                    _taskNumber -= _display.getVisibleFloatTasks().size();
                     editReserved();
                 }
             }
@@ -103,9 +101,9 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editDeadline() {
-        TaskDeadline task = display.getVisibleDeadlineTasks().remove(taskNumber - 1);
-        display.getDeadlineTasks().remove(task);
-        message += task.getDescription() + "\"";
+        TaskDeadline task = _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
+        _display.getDeadlineTasks().remove(task);
+        msgEdit += task.getDescription() + "\"";
         task = (TaskDeadline) editDescription(task);
         task = (TaskDeadline) editLocation(task);
         task = (TaskDeadline) editTags(task);
@@ -114,9 +112,9 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editEvent() {
-        TaskEvent task = display.getVisibleEvents().remove(taskNumber - 1);
-        display.getEventTasks().remove(task);
-        message += task.getDescription() + "\"";
+        TaskEvent task = _display.getVisibleEvents().remove(_taskNumber - 1);
+        _display.getEventTasks().remove(task);
+        msgEdit += task.getDescription() + "\"";
         task = (TaskEvent) editDescription(task);
         task = (TaskEvent) editLocation(task);
         task = (TaskEvent) editTags(task);
@@ -127,24 +125,24 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editFloat() {
-        TaskFloat task = display.getVisibleFloatTasks().get(taskNumber - 1);
-        message += task.getDescription() + "\"";
+        TaskFloat task = _display.getVisibleFloatTasks().get(_taskNumber - 1);
+        msgEdit += task.getDescription() + "\"";
         task = (TaskFloat) editDescription(task);
         task = (TaskFloat) editLocation(task);
         task = (TaskFloat) editTags(task);
-        int index = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
-                + display.getVisibleFloatTasks().indexOf(task) + 1;
+        int index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().indexOf(task) + 1;
         // System.out.println(index);
-        display.getTaskIndices().add(index);
+        _display.getTaskIndices().add(index);
         if (hasChangeFloatTaskType(task)) {
-            display.getVisibleFloatTasks().remove(taskNumber - 1);
-            display.getFloatTasks().remove(task);
+            _display.getVisibleFloatTasks().remove(_taskNumber - 1);
+            _display.getFloatTasks().remove(task);
         }
     }
 
     private void editReserved() {
-        TaskReserved task = display.getReservedTasks().get(taskNumber - 1);
-        message += task.getDescription() + "\"";
+        TaskReserved task = _display.getReservedTasks().get(_taskNumber - 1);
+        msgEdit += task.getDescription() + "\"";
         task = (TaskReserved) editDescription(task);
         task = (TaskReserved) editLocation(task);
         task = (TaskReserved) editTags(task);
@@ -157,7 +155,7 @@ public class CommandUpdate extends TaskEvent implements Command {
             if (getEndDate().getTimeInMillis() == 0) {
                 Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
                         task.getTags());
-                display = addCommand.execute(display);
+                _display = addCommand.execute(_display);
                 hasTaskChanged = true;
             }
         }
@@ -165,7 +163,7 @@ public class CommandUpdate extends TaskEvent implements Command {
             if ((getStartDate().getTimeInMillis() != 0) && (!hasTaskChanged)) {
                 Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                         getStartDate(), task.getEndDate(), task.getTags());
-                display = addCommand.execute(display);
+                _display = addCommand.execute(_display);
                 hasTaskChanged = true;
             }
         }
@@ -173,15 +171,15 @@ public class CommandUpdate extends TaskEvent implements Command {
         if (!hasTaskChanged) {
             Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                     task.getEndDate(), task.getTags());
-            display = addCommand.execute(display);
+            _display = addCommand.execute(_display);
         }
         return hasTaskChanged;
     }
 
     private Task editTags(Task task) {
-        if (removeTags != null) {
-            for (int i = 0; i < removeTags.size(); i++) {
-                String tag = removeTags.get(i);
+        if (_removeTags != null) {
+            for (int i = 0; i < _removeTags.size(); i++) {
+                String tag = _removeTags.get(i);
                 task.getTags().remove(tag);
             }
         }
@@ -198,7 +196,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private TaskEvent editStartDate(TaskEvent task) {
         if (getStartDate() != null) {
             task.setStartDate(getStartDate());
-            timeChanged = true;
+            _timeChanged = true;
         }
         return task;
     }
@@ -206,7 +204,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private TaskEvent editEndDate(TaskEvent task) {
         if (getEndDate() != null) {
             task.setEndDate(getEndDate());
-            timeChanged = true;
+            _timeChanged = true;
         }
         return task;
     }
@@ -220,7 +218,11 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private Task editLocation(Task task) {
         if (getLocation() != null) {
-            task.setLocation(getLocation().trim());
+            if (getLocation().trim().isEmpty()) {
+                task.setLocation(null);
+            } else {
+                task.setLocation(getLocation().trim());
+            }
         }
         return task;
     }
@@ -241,7 +243,7 @@ public class CommandUpdate extends TaskEvent implements Command {
             if ((getStartDate().getTimeInMillis() == 0) && (getEndDate().getTimeInMillis() == 0)) {
                 Command addCommand = new CommandAddFloatTask(task.getDescription(), task.getLocation(),
                         task.getTags());
-                display = addCommand.execute(display);
+                _display = addCommand.execute(_display);
                 hasTaskChanged = true;
             }
         }
@@ -249,7 +251,7 @@ public class CommandUpdate extends TaskEvent implements Command {
             if ((getStartDate().getTimeInMillis() == 0) && (!hasTaskChanged)) {
                 Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                         task.getEndDate(), task.getTags());
-                display = addCommand.execute(display);
+                _display = addCommand.execute(_display);
                 hasTaskChanged = true;
             }
         }
@@ -257,9 +259,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         if (!hasTaskChanged) {
             Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                     task.getStartDate(), task.getEndDate(), task.getTags());
-            display = addCommand.execute(display);
-            if (!timeChanged) {
-                display.setConflictingTasksIndices(new ArrayList<Integer>());
+            _display = addCommand.execute(_display);
+            if (!_timeChanged) {
+                _display.setConflictingTasksIndices(new ArrayList<Integer>());
             }
         }
         return;
@@ -271,7 +273,7 @@ public class CommandUpdate extends TaskEvent implements Command {
             if ((getStartDate().getTimeInMillis() != 0) && (getEndDate().getTimeInMillis() != 0)) {
                 Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
                         getStartDate(), getEndDate(), task.getTags());
-                display = addCommand.execute(display);
+                _display = addCommand.execute(_display);
                 hasTaskChanged = true;
             }
         } else {
@@ -279,7 +281,7 @@ public class CommandUpdate extends TaskEvent implements Command {
                 if (getEndDate().getTimeInMillis() != 0) {
                     Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
                             getEndDate(), task.getTags());
-                    display = addCommand.execute(display);
+                    _display = addCommand.execute(_display);
                     hasTaskChanged = true;
                 }
             }
@@ -287,11 +289,11 @@ public class CommandUpdate extends TaskEvent implements Command {
         return hasTaskChanged;
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }

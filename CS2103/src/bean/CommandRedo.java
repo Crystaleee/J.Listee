@@ -8,30 +8,28 @@ import java.util.ArrayList;
 import History.History;
 
 public class CommandRedo implements Command {
-	private final String MESSAGE_REDO = "Redid last command";
-	private final String MESSAGE_ERROR_REDO = "You have reached the latest point possible";
-	private boolean updateFile = true;
-	private boolean saveHistory = false;
-    private int count;
-    
+    private boolean _updateFile = true;
+    private boolean _saveHistory = false;
+    private int _count;
+
     public CommandRedo() {
-        count = 1;
+        _count = 1;
     }
 
     public CommandRedo(int count) {
-        this.count = count;
+        this._count = count;
     }
 
-	public Display execute(Display display) {
-        Display nextDisplay = History.getDisplay(count);
-        if(nextDisplay == null){
-            updateFile = false;
-            display.setMessage(MESSAGE_ERROR_REDO);
+    public Display execute(Display display) {
+        Display nextDisplay = History.getDisplay(_count);
+        if (nextDisplay == null) {
+            _updateFile = false;
+            display.setMessage(GlobalConstants.MESSAGE_ERROR_REDO);
             return display;
         }
         display = setDisplay(nextDisplay);
-		return display;
-	}
+        return display;
+    }
 
     private Display setDisplay(Display nextDisplay) {
         Display display;
@@ -39,17 +37,15 @@ public class CommandRedo implements Command {
         display.setOverdueTasks();
         display.setTaskIndices(new ArrayList<Integer>());
         display.setConflictingTasksIndices(new ArrayList<Integer>());
-		display.setMessage(MESSAGE_REDO);
+        display.setMessage(GlobalConstants.MESSAGE_REDO);
         return display;
     }
-    
-    
 
-	public boolean getSaveHistory() {
-		return saveHistory;
-	}
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
+    }
 
-	public boolean getUpdateFile() {
-		return updateFile;
-	}
+    public boolean requiresUpdateFile() {
+        return _updateFile;
+    }
 }
