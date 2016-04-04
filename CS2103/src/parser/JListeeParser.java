@@ -121,7 +121,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 3 sdasd -alltime taskdescription @location -#huh"); 
+		testUpdateTask.ParseCommand("update 4 asdasda -start -@ "); 
 
 	} 
 
@@ -455,13 +455,12 @@ public class JListeeParser {
 		}
 		
 		List<DateGroup> groups = dateParser.parse(inputLine);
-		DateGroup groupIndex;
+		
+			for (int i=0; i<CONTAIN_TIME.length; i++){
+				if (inputLine.toLowerCase().contains("-" + CONTAIN_TIME[i])){ //deleting time
+					inputLine = inputLine.replace("-" + CONTAIN_TIME[i], "").trim();
 
-		for (int i=0; i<CONTAIN_TIME.length; i++){
-			if (inputLine.toLowerCase().contains("-" + CONTAIN_TIME[i])){ //deleting time
-				inputLine = inputLine.replace("-" + CONTAIN_TIME[i], "").trim();
-
-				switch (CONTAIN_TIME[i]){
+					switch (CONTAIN_TIME[i]){
 					case CONTAINING_END:
 						setEndTimeInMilliZero();
 						break;
@@ -472,30 +471,28 @@ public class JListeeParser {
 						setStartTimeInMilliZero();
 						setEndTimeInMilliZero();
 						break;	
+					}	
 				}
-				
-			}
 						
 			else if (inputLine.toLowerCase().contains("/" + CONTAIN_TIME[i])){ //adding date, time
-
 				inputLine = inputLine.replace("/" + CONTAIN_TIME[i], "").trim();
-				groupIndex = groups.get(0);
 				switch (CONTAIN_TIME[i]){
 				case CONTAINING_END:
 				case CONTAINING_BOTH:
+					
 					setAllDates(inputLine, groups);
+				
 					break;
 
 				case CONTAINING_START:
 					inputLine = setStartDateTimeAndTrimInputLine(inputLine, groups);
+					
 					break;
 
 				case CONTAINING_ENDTIME:
 					setAllDates(inputLine, groups);
-
 					endDate.set(Calendar.YEAR, 1);
 					
-
 					break;	
 
 				case CONTAINING_STARTTIME:
@@ -505,14 +502,16 @@ public class JListeeParser {
 					
 				}
 				
-				inputLine = removeDateFromInputLine(inputLine, groupIndex);		
+				for (DateGroup group : groups) {
+					inputLine = removeDateFromInputLine(inputLine, group);		
+				}
 			}
+
 		}
 		
-		
-		Matcher retrieveLocation = Pattern.compile("-@\\s").matcher(inputLine);
+		System.out.println(inputLine);
+		Matcher retrieveLocation = Pattern.compile("-@").matcher(inputLine);
 
-		if (inputLine.contains("-")){
 			if (retrieveLocation.find()){
 				inputLine = inputLine.replace("-@", "");
 				location  = "";
@@ -522,9 +521,14 @@ public class JListeeParser {
 				location = findLocation(inputLine);
 			}
 			
+			
+			
+			
+			
+			if (inputLine.contains("-")){
 			removeTagLists = findHashTags(inputLine);
 			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
-		}
+			}
 		
 		
 		tagLists = findHashTags(inputLine);
@@ -753,7 +757,7 @@ public class JListeeParser {
 	private void setAllDates(String inputLine, List<DateGroup> groups) {
 		for (DateGroup group : groups) {
 			List<Date> dates = group.getDates();
-	
+
 			/* has start date and end date, search inbetween 2 dates */
 			if (dates.size() == 2) {
 				setStartDateTimeandEndDateTime(group, dates);
@@ -787,7 +791,6 @@ public class JListeeParser {
 
 	private void setEndDateAndTime(DateGroup group, List<Date> dates) {
 		endDateToCalendar(dates.get(0));
-		
 		/* set default end time if no time specified */
 		if (group.isTimeInferred()) {
 			setEndDateTimeDefault();
