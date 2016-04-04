@@ -57,7 +57,7 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MILLISECOND = 0;
 	
     private static final String[] DATE_WORDS =
-            new String[]{"by", "on", "at", "due", "during", "@", "in", "for", "from", "at", "in", "this", "before", "after"};
+            new String[]{"by", "on", "at", "due", "during", "in", "for", "from", "at", "in", "this", "before", "after"};
 	
     private static final String[] SEARCH_TASKS =
             new String[]{"today", "tomorrow", "overdue", "done", "reserved", "deadline", "event", "untimed"};
@@ -102,7 +102,7 @@ public class JListeeParser {
 		testDeadLine2.ParseCommand("add deadLine date and time on saturday 2359 #hashtag");
 
 		JListeeParser testDelete = new JListeeParser();
-		testDelete.ParseCommand("delete 1,2,3,4"); 
+		testDelete.ParseCommand("delete 1-2,2-5,4,5"); 
 		
 		JListeeParser testShow = new JListeeParser();
 		testShow.ParseCommand("show assignment due friday");
@@ -271,10 +271,31 @@ public class JListeeParser {
 		else {
 			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
 			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
-				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				if (separateInputLine[startIndex].contains("-")){
+					String[] splitRange = separateInputLine[startIndex].split("-");
+					int startDeleteIndex = Integer.valueOf(splitRange[0]);
+					int endDeleteIndex = Integer.valueOf(splitRange[1]);
+
+					while (startDeleteIndex <= endDeleteIndex){
+						taskNumbers.add(startDeleteIndex);
+						startDeleteIndex++;
+					}
+				}
+
+				else{
+					taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				}
 			}
 		}
-	
+		
+		for (int i=0; i<taskNumbers.size();i++){
+			for (int j = i+1; j<taskNumbers.size(); j++){
+				if (taskNumbers.get(i) == taskNumbers.get(j)){
+					taskNumbers.remove(j);
+				}
+			}
+		}
+
 		return new CommandDelete(taskNumbers);
 	}
 	
