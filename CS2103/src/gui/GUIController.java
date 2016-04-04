@@ -9,8 +9,10 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import logic.Logic;
+import main.App;
 import storage.LogStorage;
 
 /**
@@ -50,6 +52,7 @@ public class GUIController {
 		welcome = new WelcomeAndChooseStorage();
 		if (scene == null) {
 			scene = new Scene(welcome, WINDOW_WIDTH, WINDOW_HEIGHT);
+			setMouseMovable(scene);
 			setCloseOnEsc(stage, scene);
 			stage.setScene(scene);
 		} else {
@@ -68,14 +71,18 @@ public class GUIController {
 	public static void displayList(Stage stage, Display display) {
 			Scene scene = stage.getScene();
 			
-			((ShowList) getShowList()).setList(display);
+			((ShowList) showList).setList(display);
+			
+			
+		        
 			if (scene == null) {			
-				scene = new Scene(getShowList(), WINDOW_WIDTH, WINDOW_HEIGHT);
+				scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
+				setMouseMovable(scene);
 				//set Esc key for close
 				setCloseOnEsc(stage, scene);
 				stage.setScene(scene);
 			} else {
-				stage.getScene().setRoot(getShowList());
+				stage.getScene().setRoot(showList);
 			}
 			stage.sizeToScene();
 			stage.show();		
@@ -93,6 +100,7 @@ public class GUIController {
 		
 		if (scene == null) {			
 			scene = new Scene(help, WINDOW_WIDTH, WINDOW_HEIGHT);
+			setMouseMovable(scene);
 			//set Esc key for close
 			setCloseOnEsc(stage, scene);
 			stage.setScene(scene);
@@ -118,6 +126,26 @@ public class GUIController {
 		    });
 	}
 
+	/**
+	 * add mouse listener to scene
+	 */
+	private static void setMouseMovable(Scene scene){
+		scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+            public void handle(MouseEvent event) {
+                App.xOffset = event.getSceneX();
+                App.yOffset = event.getSceneY();
+            }
+		});
+		scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+	            @Override
+	            public void handle(MouseEvent event) {
+	                stage.setX(event.getScreenX() - App.xOffset);
+	                stage.setY(event.getScreenY() - App.yOffset);
+	            }
+	        });
+	}
+	
 	/**
 	 * initialize the start page which display deadlines, events and floating tasks
 	 */
