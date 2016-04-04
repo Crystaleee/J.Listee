@@ -39,14 +39,24 @@ public class LogicTest2 {
          //       Logic.executeCommand(new CommandUndo()).toString());
         
         //clear display
-        Logic.executeCommand(new CommandShow("", "", null, null, null));
+        //show all
+        Logic.executeCommand(new CommandShow(null, null, null, null, null));
+        //delete all
         assertEquals("Display [message=All tasks deleted, events=[], deadlineTasks=[], "
                 + "floatTasks=[], reservedTasks=[], completedTasks=[]]", 
                 Logic.executeCommand(new CommandDelete(null)).toString());
-        Logic.executeCommand(new CommandShow("done"));
-        Logic.executeCommand(new CommandDelete(null));
-        Logic.executeCommand(new CommandShow(null, null, null, null, null));
-        
+        //show done
+        ArrayList<String> types = new ArrayList<String>();
+        types.add("done");
+        Logic.executeCommand(new CommandShow(null, null, null, null, null,types));
+        //delete all
+        assertEquals("Display [message=All tasks deleted, events=[], deadlineTasks=[], "
+                + "floatTasks=[], reservedTasks=[], completedTasks=[]]", 
+                Logic.executeCommand(new CommandDelete(null)).toString());
+        //show all
+        assertEquals("Display [message=Displaying all tasks, events=[], deadlineTasks=[], "
+                + "floatTasks=[], reservedTasks=[], completedTasks=[]]", 
+                Logic.executeCommand(new CommandShow(null, null, null, null, null)).toString());
         ArrayList<String> tags = new ArrayList<String>();
 
         //add float task without location and tags
@@ -61,7 +71,7 @@ public class LogicTest2 {
                 Logic.executeCommand(new CommandUndo()).toString());
 
         //redo after undo
-        assertEquals("Display [message=Redid last command, events=[], deadlineTasks=[], "
+        assertEquals("Display [message=Redid command(s), events=[], deadlineTasks=[], "
                 + "floatTasks=[Description: Float1\r\nLocation: \r\nTags:\r\n\r\n], reservedTasks=[], "
                 + "completedTasks=[]]", 
                 Logic.executeCommand(new CommandRedo()).toString());
@@ -687,7 +697,7 @@ public class LogicTest2 {
         delNum = new ArrayList<Integer>();
         delNum.add(0);
         
-        assertEquals("Display [message=You have specified invalid task numbers: 0, "
+        assertEquals("Display [message=You have specified invalid numbers: 0, "
                 + "events=["
                 
                 + "Description: Event3\r\n"
@@ -746,7 +756,7 @@ public class LogicTest2 {
         delNum.add(-1);
         delNum.add(3);
         
-        assertEquals("Display [message=You have specified invalid task numbers: 0, -1, "
+        assertEquals("Display [message=You have specified invalid numbers: 0, -1, "
                 + "events=["
                 
                 + "Description: Event3\r\n"
@@ -863,7 +873,7 @@ public class LogicTest2 {
         end.set(2016,2-1,19,16,00);
         startDates.add(start);
         endDates.add(end);
-        assertEquals("Display [message=Reserved: r1, "
+        assertEquals("Display [message=Reserved: \"r1\", "
                 + "events=["
                 
                 + "Description: Event3\r\n"
@@ -939,7 +949,7 @@ public class LogicTest2 {
         endDates.add(end1);
         tags.add("tag1");
         tags.add("tag2");
-        assertEquals("Display [message=Reserved: r2, "
+        assertEquals("Display [message=Reserved: \"r2\", "
                 + "events=["
                 
                 + "Description: Event3\r\n"
@@ -2235,7 +2245,7 @@ public class LogicTest2 {
                 Logic.executeCommand(new CommandDone(delNum)).toString());
       
         //show done
-        ArrayList<String> types = new ArrayList<String>();
+        types = new ArrayList<String>();
         types.add("done");
         assertEquals("Display [message=Displaying done tasks, "
                 + "events=[], "
@@ -2338,23 +2348,13 @@ public class LogicTest2 {
                 + ", reservedTasks=[], "
                 
                 + "completedTasks=["
-                + "Description: DL1\r\n"
-                + "Deadline: 19/02/16 19:00\r\n"
-                + "Location: \r\n"
-                + "Tags:\r\n\r\n, "
-
-                + "Description: Event3\r\n"
-                + "Deadline: 19/02/16 18:00\r\n"
-                + "Location: \r\n"
-                + "Tags: #tag1\r\n\r\n, "
-                
-                + "Description: DL4\r\n"
-                + "Deadline: 19/02/16 15:00\r\n"
-                + "Location: JEM\r\n"
-                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
                 + "]]", 
                 Logic.executeCommand(new CommandDone(null)).toString());
         
+      //show done
+       types = new ArrayList<String>();
+       types.add("done");
+       Logic.executeCommand(new CommandShow(null, null, null, null, null,types));
       //undone all
         assertEquals("Display [message=All tasks undone, "
                 + "events=[], "

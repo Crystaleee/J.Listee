@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class CommandUndone implements Command {
     private ArrayList<Integer> _taskNumbers;
-    private ArrayList<Integer> _taskIndices;
+    private ArrayList<Integer> _taskIndices = new ArrayList<Integer>();
     private ArrayList<Task> _tasks = new ArrayList<Task>();
     private Display _display;
     private String _msgUndone = "Undone task: ";
@@ -152,11 +152,14 @@ public class CommandUndone implements Command {
         for (int i = numOfVisibleCompletedTasks - 1; i >= 0; i--) {
             Task completedTask = _display.getCompletedTasks().remove(i);
             markUndoneTask(completedTask);
+            
         }
+        _display.setVisibleCompletedTasks(_display.getCompletedTasks());
         _display.setMessage(GlobalConstants.MESSAGE_ALL_UNDONE);
     }
 
     private boolean isUndoneAll() {
+        System.out.println(_taskNumbers == null);
         return _taskNumbers == null;
     }
 

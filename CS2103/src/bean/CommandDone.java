@@ -149,11 +149,11 @@ public class CommandDone implements Command {
 
     private Task markTaskAsDone(int taskNum) {
         Task doneTask;
-        if (isDoneTaskDeadline(taskNum)) {
+        if (isTaskDeadline(taskNum)) {
             doneTask = doneTaskDeadline(taskNum);
         } else {
             taskNum -= _display.getVisibleDeadlineTasks().size();
-            if (isDoneTaskEvent(taskNum)) {
+            if (isTaskEvent(taskNum)) {
                 doneTask = doneEvent(taskNum);
             } else {
                 taskNum -= _display.getVisibleEvents().size();
@@ -163,11 +163,11 @@ public class CommandDone implements Command {
         return doneTask;
     }
 
-    private boolean isDoneTaskEvent(int taskNum) {
+    private boolean isTaskEvent(int taskNum) {
         return taskNum < _display.getVisibleEvents().size();
     }
 
-    private boolean isDoneTaskDeadline(int taskNum) {
+    private boolean isTaskDeadline(int taskNum) {
         return taskNum < _display.getVisibleDeadlineTasks().size();
     }
 
