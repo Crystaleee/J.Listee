@@ -357,8 +357,9 @@ public class JListeeParser {
 			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
 			for (DateGroup group : groups) {
 				setDates(inputLine, groups);
+
 				if (startDate == null){
-					startDate = endDate;
+					startDateToCalendar(endDate.getTime());
 					setStartDateTimeDefault();
 				}
 				
@@ -369,11 +370,6 @@ public class JListeeParser {
 		
 		tagLists = findHashTags(inputLine);		
 		location = findLocation(inputLine);
-		
-	
-		if (!inputLine.contains(CONTAINS_ALL)) {
-			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-		}
 		
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
@@ -685,6 +681,7 @@ public class JListeeParser {
 		if (group.isTimeInferred()) {
 			setEndDateTimeDefault();
 		}
+
 	}
 
 
