@@ -44,10 +44,17 @@ public class ShowList extends AppPage {
 						this.win = (JSObject) webEngine
 								.executeScript("window");
 						win.setMember("app", new ListBridge());
+										
 						
 						
 						//reset task number				
 						webEngine.executeScript("reset()");
+						
+						//set message
+						if( this.display.getMessage()!=null)
+							win.call("showFeedBack", this.display.getMessage());
+						
+						
 						
 						// construct JSON to pass to JS
 						//deadline tasks
@@ -172,8 +179,24 @@ public class ShowList extends AppPage {
 							System.out.println(jsonTask);
 						}				
 						
-						if( this.display.getMessage()!=null)
-							win.call("showFeedBack", this.display.getMessage());
+						//focus tasks if necessary
+						System.out.println("type: "+this.display.getCommandType());
+					//	if(this.display.getCommandType()=="Add"||this.display.getCommandType()=="Update"||this.display.getCommandType()=="Undone"){
+							JSONArray jsonFocus= new JSONArray();
+							for(int i=0;i<this.display.getTaskIndices().size();i++){
+								jsonFocus.put(this.display.getTaskIndices().get(i));
+							}
+							
+							if(this.display.getCommandType()=="Add"){
+								win.call("addShowAnimation", jsonFocus);
+							}
+							
+							win.call("setFocus", jsonFocus);
+							System.out.println("focus: "+jsonFocus);							
+					//	}
+						
+
+											
 					}
 				});
 	}
@@ -181,7 +204,21 @@ public class ShowList extends AppPage {
 	public void setList(Display display){
 		if (this.display != null) {
 			this.display=display;		
-			webEngine.reload();		
+			
+			//add animation when deleting
+			if(this.display.getCommandType()=="Delete"){
+				JSONArray jsonFocus= new JSONArray();
+				for(int i=0;i<this.display.getTaskIndices().size();i++){
+					jsonFocus.put(this.display.getTaskIndices().get(i)-1);
+				}
+				System.out.println("focus: "+jsonFocus);	
+				
+				win.call("setFocus", jsonFocus);
+				win.call("addHideAnimation", jsonFocus);
+				win.call("clearCommandLine");												
+			}else{
+				webEngine.reload();			
+			}				
 		}		
 	}
 
