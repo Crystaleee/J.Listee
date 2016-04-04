@@ -14,7 +14,6 @@ public class CommandShow implements Command {
     private static final String TASK_TYPE_DEADLINE = "deadline";
     private static final String TASK_TYPE_EVENT = "event";
     private static final String EMPTY_STRING = "";
-    private static final String MESSAGE_SHOW_DONE = "Showing done tasks";
     private static final String MESSAGE_INVALID_DATE_RANGE = "Please specify a valid date range";
     private final String message_no_tasks = "No such tasks found";
     private final String message_show_all = "Displaying all tasks";
@@ -85,7 +84,6 @@ public class CommandShow implements Command {
         this.display = oldDisplay.deepClone();
 
         showTasks();
-
         if (noTasksFound()) {
             oldDisplay.setMessage(message_no_tasks);
             return oldDisplay;
@@ -122,16 +120,6 @@ public class CommandShow implements Command {
             }
         }
         return false;
-    }
-
-    private void showDone(Display oldDisplay) {
-        // System.out.println("Show done");
-        oldDisplay.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
-        oldDisplay.setVisibleEvents(new ArrayList<TaskEvent>());
-        oldDisplay.setVisibleFloatTasks(new ArrayList<TaskFloat>());
-        oldDisplay.setVisibleReservedTasks(new ArrayList<TaskReserved>());
-        oldDisplay.setVisibleCompletedTasks(oldDisplay.getCompletedTasks());
-        oldDisplay.setMessage(MESSAGE_SHOW_DONE);
     }
 
     private void setShowAll(Display oldDisplay) {
@@ -220,8 +208,8 @@ public class CommandShow implements Command {
             if (!taskTypes.contains(TASK_TYPE_RESERVED)) {
                 display.setVisibleReservedTasks(new ArrayList<TaskReserved>());
             }
-            if (!taskTypes.contains(TASK_TYPE_COMPLETED)) {
-                display.setVisibleCompletedTasks(new ArrayList<Task>());
+            if (taskTypes.contains(TASK_TYPE_COMPLETED)) {
+                getCompletedTasks();
             }
         }
     }
@@ -233,6 +221,23 @@ public class CommandShow implements Command {
             return true;
         }
         return false;
+    }
+
+    private void getCompletedTasks() {
+        Task task;
+        display.setVisibleCompletedTasks(new ArrayList<Task>());
+        for (int i = 0; i < display.getCompletedTasks().size(); i++) {
+            task = display.getCompletedTasks().get(i);
+            if (containsKeyword(task)) {
+                if (atLocation(task)) {
+                    if (containsTag(task)) {
+                        if (withinTimeRange(task)) {
+                            display.getVisibleCompletedTasks().add(task);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void getDeadLineTasks() {
@@ -328,12 +333,18 @@ public class CommandShow implements Command {
         return true;
     }
 
-    private boolean withinTimeRange(TaskDeadline task) {
+    private boolean withinTimeRange(Task task) {
         if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
             return true;
         }
-        if (!task.getEndDate().before(searchedTask.getStartDate())) {
-            if (!task.getEndDate().after(searchedTask.getEndDate())) {
+        if (task instanceof TaskEvent) {
+            TaskEvent myTask = (TaskEvent) task;
+            if (isWithinTimeRange(myTask)) {
+                return true;
+            }
+        } else if (task instanceof TaskDeadline) {
+            TaskDeadline myTask = (TaskDeadline) task;
+            if (isWithinTimeRange(myTask)) {
                 return true;
             }
         }
@@ -357,7 +368,7 @@ public class CommandShow implements Command {
         return false;
     }
 
-    private boolean withinTimeRange(TaskEvent task) {
+    private boolean isWithinTimeRange(TaskEvent task) {
         if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
             return true;
         }
@@ -367,6 +378,18 @@ public class CommandShow implements Command {
             }
         } else if (!task.getEndDate().before(searchedTask.getStartDate())) {
             return true;
+        }
+        return false;
+    }
+
+    private boolean isWithinTimeRange(TaskDeadline task) {
+        if ((searchedTask.getStartDate() == null) && (searchedTask.getEndDate() == null)) {
+            return true;
+        }
+        if (!task.getEndDate().before(searchedTask.getStartDate())) {
+            if (!task.getEndDate().after(searchedTask.getEndDate())) {
+                return true;
+            }
         }
         return false;
     }

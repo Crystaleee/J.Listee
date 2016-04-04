@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import storage.LogStorage;
 import gui.GUIController;
 /**
@@ -17,6 +18,8 @@ public class App extends Application{
 	public static Stage stage;
 	//this is the task file
 	public static String filePath;
+	public static double xOffset;
+	public static double yOffset;
 
 	public static void main(String[] args){
 		Application.launch(args);			
@@ -26,6 +29,7 @@ public class App extends Application{
 	@Override
 	public void start(Stage primaryStage) {	
 		stage = primaryStage;
+		stage.initStyle(StageStyle.UNDECORATED);
 	    stage.setTitle("J.Listee");
 	    stage.setResizable(false);
 	    GUIController.setStage(stage);    

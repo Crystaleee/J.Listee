@@ -47,14 +47,13 @@ public class CommandUpdate extends TaskEvent implements Command {
             setInvalidDisplay(MESSAGE_INVALID_DATE_RANGE);
             return oldDisplay;
         }
-
         editTask();
         /*
          * for (int i = 0; i < display.getConflictingTasksIndices().size(); i++)
          * { System.out.println("conflict " +
          * display.getConflictingTasksIndices().get(i)); }
          */
-        //System.out.println("Index " + display.getTaskIndices().get(0));
+        // System.out.println("Index " + display.getTaskIndices().get(0));
         display.setMessage(message);
         return display;
     }
@@ -133,8 +132,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         task = (TaskFloat) editDescription(task);
         task = (TaskFloat) editLocation(task);
         task = (TaskFloat) editTags(task);
-        int index = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size() + display.getVisibleFloatTasks().indexOf(task) + 1;
-        //System.out.println(index);
+        int index = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
+                + display.getVisibleFloatTasks().indexOf(task) + 1;
+        // System.out.println(index);
         display.getTaskIndices().add(index);
         if (hasChangeFloatTaskType(task)) {
             display.getVisibleFloatTasks().remove(taskNumber - 1);
