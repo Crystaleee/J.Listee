@@ -44,18 +44,14 @@ public class ShowList extends AppPage {
 						this.win = (JSObject) webEngine
 								.executeScript("window");
 						win.setMember("app", new ListBridge());
-										
-						
-						
+																			
 						//reset task number				
 						webEngine.executeScript("reset()");
 						
 						//set message
 						if( this.display.getMessage()!=null)
 							win.call("showFeedBack", this.display.getMessage());
-						
-						
-						
+
 						// construct JSON to pass to JS
 						//deadline tasks
 						if(this.display.getVisibleDeadlineTasks()!=null){
@@ -180,7 +176,6 @@ public class ShowList extends AppPage {
 						}				
 						
 						//focus tasks if necessary
-						System.out.println("type: "+this.display.getCommandType());
 					//	if(this.display.getCommandType()=="Add"||this.display.getCommandType()=="Update"||this.display.getCommandType()=="Undone"){
 							JSONArray jsonFocus= new JSONArray();
 							for(int i=0;i<this.display.getTaskIndices().size();i++){
@@ -194,9 +189,14 @@ public class ShowList extends AppPage {
 							win.call("setFocus", jsonFocus);
 							System.out.println("focus: "+jsonFocus);							
 					//	}
-						
-
-											
+							
+							//add border to conflicting tasks
+							JSONArray jsonConflict= new JSONArray();
+							for(int i=0;i<this.display.getConflictingTasksIndices().size();i++){
+								jsonConflict.put(this.display.getConflictingTasksIndices().get(i));
+							}
+							win.call("showConflict", jsonConflict);
+							System.out.println(jsonConflict);
 					}
 				});
 	}

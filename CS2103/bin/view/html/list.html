@@ -54,6 +54,11 @@
     border-radius: 8px;
     box-shadow: 0 0 0 1.5px #ccc;
   }
+  .conflict{
+    outline: 0;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1.5px #ccc;
+  }
   .task_number{
     width:8%;
     height: 100%;
@@ -330,7 +335,11 @@
     for  (index = 0; index < taskList.length; index++){
 
       var taskdiv = document.createElement("div");
-      taskdiv.setAttribute("class", "task");
+      if(taskList[index].overdue==true){
+        taskdiv.setAttribute("class", "task overdue");
+      }else{
+        taskdiv.setAttribute("class", "task");
+      }
       taskdiv.setAttribute("tabindex", "0");
       taskdiv.setAttribute("id", i+1);
 
@@ -464,6 +473,17 @@ function setFocus(indices){
   for(var i=0;i<indexList.length;i++){
     $("#"+indexList[i]).focus();
   }
+}
+
+function showConflict(conflics){
+  setTimeout(
+    function (){
+  var indexList = JSON.parse(conflics);
+
+  for(var i=0;i<indexList.length;i++){
+    $("#"+indexList[i]).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+  }
+},1000);
 }
 
 function addShowAnimation(indices){

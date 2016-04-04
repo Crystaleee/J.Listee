@@ -1,129 +1,78 @@
-三月 31, 2016 10:45:14 下午 storage.Storage getDisplay
-信息: Reading all tasks from file.
+四月 05, 2016 1:02:33 上午 storage.Storage saveFile
+信息: Writing all tasks to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeFloatingTasks
+信息: Writing send intern email to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: send intern email
+四月 05, 2016 1:02:33 上午 storage.Storage writeFloatingTasks
+信息: Writing check Taobao express delivery to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeFloatingTasks
+信息: Writing confirm family tour schedule to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: check Taobao express delivery
+四月 05, 2016 1:02:33 上午 storage.Storage writeFloatingTasks
+信息: Writing photoshop photos to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeFloatingTasks
+信息: Writing overdue and today to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: confirm family tour schedule
+四月 05, 2016 1:02:33 上午 storage.Storage writeFloatingTasks
+信息: Writing hello to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing SE project due to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: photoshop photos
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing lab5 to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing peer evaluation to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: add help screen
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing UI project to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing UI presentation to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: give immediate feeback scroll bar
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing SE FINAL to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Reading new floating task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing UI FINAL to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksFloating
-信息: Successfully read: overdue and today
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing CN FINAL to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeDeadlineTasks
+信息: Writing CG FINAL to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: SE project due
+四月 05, 2016 1:02:33 上午 storage.Storage writeEventTasks
+信息: Writing con to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeEventTasks
+信息: Writing Lankawi travel to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: lab5
+四月 05, 2016 1:02:33 上午 storage.Storage writeEventTasks
+信息: Writing Bali travel to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeEventTasks
+信息: Writing family Singapore tour to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: peer evaluation
+四月 05, 2016 1:02:33 上午 storage.Storage writeCompletedTasks
+信息: Writing fetch clothes  balcony to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeCompletedTasks
+信息: Writing borrow key and check mail box to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: UI project
+四月 05, 2016 1:02:33 上午 storage.Storage writeCompletedTasks
+信息: Writing longer feedback to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
+四月 05, 2016 1:02:33 上午 storage.Storage writeCompletedTasks
+信息: Writing feedback to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: UI presentation
+四月 05, 2016 1:02:33 上午 storage.Storage writeCompletedTasks
+信息: Writing hello to file.
 
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: SE FINAL
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: UI FINAL
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: CN FINAL
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Reading new deadline task.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksDeadline
-信息: Successfully read: CG FINAL
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksEvents
-信息: Reading new event.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksEvents
-信息: Successfully read: Lankawi travel
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksEvents
-信息: Reading new event.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksEvents
-信息: Successfully read: Bali travel
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksEvents
-信息: Reading new event.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksEvents
-信息: Successfully read: family Singapore tour
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksReserved
-信息: Reading new reserved task.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksReserved
-信息: Successfully read: wash clothes
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksReserved
-信息: Reading new reserved task.
-
-三月 31, 2016 10:45:14 下午 storage.Storage readTasksReserved
-信息: Successfully read: prepare for Malay
+四月 05, 2016 1:02:33 上午 storage.Storage writeCompletedTasks
+信息: Writing hello to file.
 
