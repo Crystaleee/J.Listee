@@ -359,6 +359,7 @@ public class JListeeParser {
 				setDates(inputLine, groups);
 				if (startDate == null){
 					startDate = endDate;
+					setStartDateTimeDefault();
 				}
 				
 				firstDateIndex = getFirstDateIndex(prepositionIndex, group);
