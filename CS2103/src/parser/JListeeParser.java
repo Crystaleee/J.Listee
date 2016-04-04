@@ -105,7 +105,7 @@ public class JListeeParser {
 		testDelete.ParseCommand("delete 1,2,3,4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show cs2105");
+		testShow.ParseCommand("show assignment due friday");
 			
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
@@ -357,6 +357,10 @@ public class JListeeParser {
 			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
 			for (DateGroup group : groups) {
 				setDates(inputLine, groups);
+				if (startDate == null){
+					startDate = endDate;
+				}
+				
 				firstDateIndex = getFirstDateIndex(prepositionIndex, group);
 				inputLine = removeWordBeforeDateAndDate(inputLine, firstDateIndex, group).trim();
 			}
@@ -364,11 +368,12 @@ public class JListeeParser {
 		
 		tagLists = findHashTags(inputLine);		
 		location = findLocation(inputLine);
+		
 	
 		if (!inputLine.contains(CONTAINS_ALL)) {
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 		}
-			
+		
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
 
@@ -541,7 +546,7 @@ public class JListeeParser {
 			}
 		}
 	
-		return new CommandUndone(taskNumbers);		
+		return new CommandUndo(taskNumbers);		
 	}
 
 
