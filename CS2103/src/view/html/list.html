@@ -458,6 +458,49 @@ function hideFeedBack(){
   $("#feedback").slideToggle();
 }
 
+function setFocus(indices){
+  var indexList = JSON.parse(indices);
+
+  for(var i=0;i<indexList.length;i++){
+    $("#"+indexList[i]).focus();
+  }
+}
+
+function addShowAnimation(indices){
+  var indexList = JSON.parse(indices);
+
+  for(var i=0;i<indexList.length;i++){
+    $("#"+indexList[i]).hide();
+  }
+
+  for(var i=0;i<indexList.length;i++){
+    $("#"+indexList[i]).toggle(900);
+  }
+}
+
+function addHideAnimation(indices){
+  var indexList = JSON.parse(indices);
+
+  for(var i=0;i<indexList.length;i++){
+    var j=parseInt(indexList[i])-i;
+    $("#"+j).toggle(900);
+
+    $("#"+j).attr("id",0);
+    var index=j+1;
+    //update indices of flollowing tasks
+    while($("#"+index).length){
+      $("#"+index).children("section.task_number").text(index-1);
+      $("#"+index).attr("id",index-1);
+
+      index=index+1;
+    }
+  }
+}
+
+function clearCommandLine(){
+  $(command).val("");
+}
+
 //Prevent the backspace key from navigating back.
 $(document).unbind('keydown').bind('keydown', function (event) {
     var doPrevent = false;
@@ -490,6 +533,13 @@ $(document).keydown(
     function(e)
     {   
       switch(e.keyCode){
+        case 32://space bar
+          var d = e.srcElement || e.target;
+           if (d.tagName.toUpperCase() != 'INPUT'){
+            $(command).focus();
+            $(command).val("");
+          }
+        break;
         case 40://key down
           var d = e.srcElement || e.target;
            if (d.tagName.toUpperCase() == 'INPUT')
@@ -530,7 +580,7 @@ $(document).keydown(
             shortCutCommand("delete "+id);
           }
         break;
-        case 68://d
+        case 88://x
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
             if($(title).text()=="Completed Tasks"){

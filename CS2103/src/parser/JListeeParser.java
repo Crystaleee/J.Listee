@@ -57,7 +57,7 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MILLISECOND = 0;
 	
     private static final String[] DATE_WORDS =
-            new String[]{"by", "on", "at", "due", "during", "@", "in", "for", "from", "at", "in", "this", "before", "after"};
+            new String[]{"by", "on", "at", "due", "during", "in", "for", "from", "at", "in", "this", "before", "after"};
 	
     private static final String[] SEARCH_TASKS =
             new String[]{"today", "tomorrow", "overdue", "done", "reserved", "deadline", "event", "untimed"};
@@ -102,19 +102,20 @@ public class JListeeParser {
 		testDeadLine2.ParseCommand("add deadLine date and time on saturday 2359 #hashtag");
 
 		JListeeParser testDelete = new JListeeParser();
-		testDelete.ParseCommand("delete 1,2,3,4"); 
+		testDelete.ParseCommand("delete 1-2 ,  4,3"); 
+		
+		JListeeParser testDone = new JListeeParser();
+		testDone.ParseCommand("done 1, 2-4 ,3,4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show cs2105");
+		testShow.ParseCommand("show assignment due friday");
 			
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 4 nm2213 tutorial due tonight 10pm"); 
-		
-		JListeeParser testDone = new JListeeParser();
-		testDone.ParseCommand("done 1,2,3,4"); 
+
 	} 
 
 	
@@ -263,7 +264,8 @@ public class JListeeParser {
 	public Command parseDelete(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_DELETE, "").trim();
-	
+		inputLine = inputLine.trim().replaceAll(" +", "");
+
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
 		}
@@ -271,10 +273,31 @@ public class JListeeParser {
 		else {
 			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
 			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
-				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				if (separateInputLine[startIndex].contains("-")){
+					String[] splitRange = separateInputLine[startIndex].split("-");
+					int startDeleteIndex = Integer.valueOf(splitRange[0]);
+					int endDeleteIndex = Integer.valueOf(splitRange[1]);
+
+					while (startDeleteIndex <= endDeleteIndex){
+						taskNumbers.add(startDeleteIndex);
+						startDeleteIndex++;
+					}
+				}
+
+				else{
+					taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				}
 			}
 		}
-	
+		
+		for (int i=0; i<taskNumbers.size();i++){
+			for (int j = i+1; j<taskNumbers.size(); j++){
+				if (taskNumbers.get(i) == taskNumbers.get(j)){
+					taskNumbers.remove(j);
+				}
+			}
+		}
+		
 		return new CommandDelete(taskNumbers);
 	}
 	
@@ -357,6 +380,12 @@ public class JListeeParser {
 			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
 			for (DateGroup group : groups) {
 				setDates(inputLine, groups);
+
+				if (startDate == null){
+					startDateToCalendar(endDate.getTime());
+					setStartDateTimeDefault();
+				}
+				
 				firstDateIndex = getFirstDateIndex(prepositionIndex, group);
 				inputLine = removeWordBeforeDateAndDate(inputLine, firstDateIndex, group).trim();
 			}
@@ -364,11 +393,7 @@ public class JListeeParser {
 		
 		tagLists = findHashTags(inputLine);		
 		location = findLocation(inputLine);
-	
-		if (!inputLine.contains(CONTAINS_ALL)) {
-			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-		}
-			
+		
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
 
@@ -509,7 +534,8 @@ public class JListeeParser {
 	public Command parseDone(String inputLine){
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_DONE, "").trim();
-	
+		inputLine = inputLine.trim().replaceAll(" +", "");
+
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
 		}
@@ -517,10 +543,31 @@ public class JListeeParser {
 		else {
 			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
 			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
-				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				if (separateInputLine[startIndex].contains("-")){
+					String[] splitRange = separateInputLine[startIndex].split("-");
+					int startDeleteIndex = Integer.valueOf(splitRange[0]);
+					int endDeleteIndex = Integer.valueOf(splitRange[1]);
+
+					while (startDeleteIndex <= endDeleteIndex){
+						taskNumbers.add(startDeleteIndex);
+						startDeleteIndex++;
+					}
+				}
+
+				else{
+					taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				}
 			}
 		}
-	
+		
+		for (int i=0; i<taskNumbers.size();i++){
+			for (int j = i+1; j<taskNumbers.size(); j++){
+				if (taskNumbers.get(i) == taskNumbers.get(j)){
+					taskNumbers.remove(j);
+				}
+			}
+		}
+		
 		return new CommandDone(taskNumbers);
 	}
 
@@ -541,7 +588,7 @@ public class JListeeParser {
 			}
 		}
 	
-		return new CommandUndone(taskNumbers);		
+		return new CommandUndo(taskNumbers);		
 	}
 
 
@@ -679,6 +726,7 @@ public class JListeeParser {
 		if (group.isTimeInferred()) {
 			setEndDateTimeDefault();
 		}
+
 	}
 
 
