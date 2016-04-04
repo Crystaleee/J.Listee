@@ -39,6 +39,7 @@ public class LogicTest2 {
          //       Logic.executeCommand(new CommandUndo()).toString());
         
         //clear display
+        Logic.executeCommand(new CommandShow("", "", null, null, null));
         assertEquals("Display [message=All tasks deleted, events=[], deadlineTasks=[], "
                 + "floatTasks=[], reservedTasks=[], completedTasks=[]]", 
                 Logic.executeCommand(new CommandDelete(null)).toString());
@@ -1004,7 +1005,7 @@ public class LogicTest2 {
                 Logic.executeCommand(new CommandAddReserved("r2", "location", startDates, endDates, tags)).toString());
         
         //show tasks containing 'l'
-        assertEquals("Display [message=Displaying tasks containing l, "
+        assertEquals("Display [message=Displaying all tasks containing l, "
                 + "events=[]"
                 
                 + ", deadlineTasks=["
@@ -1048,7 +1049,7 @@ public class LogicTest2 {
         
         //show tasks at specified location
         tags = new ArrayList<String>();
-        assertEquals("Display [message=Displaying tasks at location, "
+        assertEquals("Display [message=Displaying all tasks at location, "
                 + "events=[]"
                 
                 + ", deadlineTasks=[], "
@@ -1075,7 +1076,7 @@ public class LogicTest2 {
         end.set(2016,2-1,19,15,00);
         
         tags = new ArrayList<String>();
-        assertEquals("Display [message=Displaying tasks from 19/02/16 12:00 to 19/02/16 15:00, "
+        assertEquals("Display [message=Displaying all tasks from 19/02/16 12:00 to 19/02/16 15:00, "
                 + "events=["
                 + "Description: Event3\r\n"
                 + "Start Date: 19/02/16 11:30\r\n"
@@ -1141,7 +1142,7 @@ public class LogicTest2 {
         end.set(2016,2-1,19,12,00);
         
         tags = new ArrayList<String>();
-        assertEquals("Display [message=Displaying tasks from 19/02/16 11:30 to 19/02/16 12:00, "
+        assertEquals("Display [message=Displaying all tasks from 19/02/16 11:30 to 19/02/16 12:00, "
                 + "events=["
                 + "Description: Event3\r\n"
                 + "Start Date: 19/02/16 11:30\r\n"
@@ -1198,7 +1199,7 @@ public class LogicTest2 {
         end.set(2016,2-1,19,11,59);
         
         tags = new ArrayList<String>();
-        assertEquals("Display [message=Displaying tasks from 19/02/16 11:30 to 19/02/16 11:59, "
+        assertEquals("Display [message=Displaying all tasks from 19/02/16 11:30 to 19/02/16 11:59, "
                 + "events=["
                 + "Description: Event3\r\n"
                 + "Start Date: 19/02/16 11:30\r\n"
@@ -1247,7 +1248,7 @@ public class LogicTest2 {
         start = Calendar.getInstance();
         end = Calendar.getInstance();
         tags.add("tag1");
-        assertEquals("Display [message=Displaying tasks tagged tag1, "
+        assertEquals("Display [message=Displaying all tasks tagged tag1, "
                 + "events=["
                 + "Description: Event3\r\n"
                 + "Start Date: 19/02/16 11:30\r\n"
@@ -1293,7 +1294,7 @@ public class LogicTest2 {
         tags = new ArrayList<String>();
         tags.add("tag1");
         tags.add("tag2");
-        assertEquals("Display [message=Displaying tasks tagged tag1, tag2, "
+        assertEquals("Display [message=Displaying all tasks tagged tag1, tag2, "
                 + "events=[]"
                 
                 + ", deadlineTasks=["
@@ -1326,7 +1327,7 @@ public class LogicTest2 {
         end = Calendar.getInstance();
         start.set(2016,2-1,19,11,30);
         end.set(2016,2-1,19,12,00);
-        assertEquals("Display [message=Displaying tasks containing l at location from 19/02/16 11:30 to 19/02/16 12:00 tagged tag1, tag2, "
+        assertEquals("Display [message=Displaying all tasks containing l at location from 19/02/16 11:30 to 19/02/16 12:00 tagged tag1, tag2, "
                 + "events=[]"
                 
                 + ", deadlineTasks=[], "
@@ -2234,7 +2235,9 @@ public class LogicTest2 {
                 Logic.executeCommand(new CommandDone(delNum)).toString());
       
         //show done
-        assertEquals("Display [message=Showing done tasks, "
+        ArrayList<String> types = new ArrayList<String>();
+        types.add("done");
+        assertEquals("Display [message=Displaying done tasks, "
                 + "events=[], "
                 
                 + "deadlineTasks=[], "
@@ -2260,7 +2263,7 @@ public class LogicTest2 {
                 + "Location: \r\n"
                 + "Tags:\r\n\r\n]"
                 + "]", 
-                Logic.executeCommand(new CommandShow("done")).toString());
+                Logic.executeCommand(new CommandShow(null, null, null, null, null, types)).toString());
         
         //undone task
         delNum = new ArrayList<Integer>();
