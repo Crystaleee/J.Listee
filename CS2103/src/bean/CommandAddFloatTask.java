@@ -5,49 +5,42 @@ package bean;
 
 import java.util.ArrayList;
 
-import logic.Logic;
-
 public class CommandAddFloatTask implements Command {
-    private static final String COMMAND_TYPE_ADD = "Add";
-    private static final String COMMAND_TYPE_INVALID = "Invalid";
-    private TaskFloat task;
-    private boolean updateFile = true;
-    private boolean saveHistory = true;
-    private ArrayList<Integer> taskIndices = new ArrayList<Integer>();
+    private TaskFloat _task;
+    private boolean _updateFile = true;
+    private boolean _saveHistory = true;
 
     public CommandAddFloatTask() {
-        task = null;
+        _task = null;
     }
 
     public CommandAddFloatTask(TaskFloat task) {
-        this.task = task;
+        this._task = task;
     }
 
     public CommandAddFloatTask(String description, String location, ArrayList<String> tags) {
-        task = new TaskFloat(description, location, tags);
-        updateFile = true;
+        _task = new TaskFloat(description, location, tags);
     }
 
     public Display execute(Display display) {
         if (hasNoDescription()) {
             setInvalidDisplay(display);
-            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
             return display;
         }
-        display.getFloatTasks().add(task);
+        display.getFloatTasks().add(_task);
         if (!display.getVisibleFloatTasks().equals(display.getFloatTasks())) {
-            display.getVisibleFloatTasks().add(task);
+            display.getVisibleFloatTasks().add(_task);
         }
         setDisplay(display);
         return display;
     }
-    
+
     private boolean hasNoDescription() {
-        if(task.getDescription() == null){
+        if (_task.getDescription() == null) {
             return true;
-        }else{
-            task.setDescription(task.getDescription().trim());
-            if(task.getDescription().isEmpty()){
+        } else {
+            _task.setDescription(_task.getDescription().trim());
+            if (_task.getDescription().isEmpty()) {
                 return true;
             }
         }
@@ -55,26 +48,28 @@ public class CommandAddFloatTask implements Command {
     }
 
     private void setInvalidDisplay(Display display) {
-        updateFile = false;
-        saveHistory = false;
-        display.setCommandType(COMMAND_TYPE_INVALID);
+        _updateFile = false;
+        _saveHistory = false;
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
+        display.setMessage(GlobalConstants.MESSAGE_ERROR_DESCRIPTION);
     }
 
     private void setDisplay(Display display) {
-        display.setCommandType(COMMAND_TYPE_ADD);
-        int index = display.getVisibleFloatTasks().indexOf(task) + display.getVisibleEvents().size()
+        ArrayList<Integer> taskIndices = new ArrayList<Integer>();
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_ADD);
+        int index = display.getVisibleFloatTasks().indexOf(_task) + display.getVisibleEvents().size()
                 + display.getVisibleDeadlineTasks().size() + 1;
         taskIndices.add(index);
         display.setTaskIndices(taskIndices);
-        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
+        display.setMessage(String.format(GlobalConstants.MESSAGE_ADD_SUCCESS, _task.getDescription()));
         display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }

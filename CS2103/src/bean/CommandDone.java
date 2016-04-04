@@ -7,67 +7,61 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CommandDone implements Command {
-    private static final String COMMAND_TYPE_DONE = "Done";
-    private static final String COMMAND_TYPE_INVALID = "Invalid";
-    private static final String MESSAGE_NO_NUMBER_SPECIFIED = "please specify a number(s)";
-    private static final String MESSAGE_ALL_TASKS_COMPLETED = "All shown tasks completed";
-    private String message_invalid_task_numbers = "You have specified invalid task numbers: ";
-    private ArrayList<Integer> taskNumbers;
-    private Display display;
-    private String message_completed = "Completed: ";
-    private boolean saveHistory = true;
-    private boolean updateFile;
+    private String _msgInvalidNumbers = "You have specified invalid task numbers: ";
+    private String _msgComplete = "Completed: ";
+    private ArrayList<Integer> _taskNumbers;
+    private Display _display;
+    private boolean _saveHistory = true;
+    private boolean _updateFile = true;
 
     public CommandDone() {
-        updateFile = true;
-        this.taskNumbers = null;
-        this.display = null;
+        this._taskNumbers = null;
+        this._display = null;
     }
 
     public CommandDone(ArrayList<Integer> taskNumbers) {
-        updateFile = true;
-        this.taskNumbers = taskNumbers;
-        this.display = null;
+        this._taskNumbers = taskNumbers;
+        this._display = null;
     }
 
     public Display execute(Display oldDisplay) {
-        this.display = oldDisplay;
-        if (taskNumbers != null) {
-            if (taskNumbers.isEmpty()) {
-                setDisplay(MESSAGE_NO_NUMBER_SPECIFIED, COMMAND_TYPE_INVALID, new ArrayList<Integer>(),
-                        new ArrayList<Integer>());
-                return display;
+        this._display = oldDisplay;
+        if (_taskNumbers != null) {
+            if (_taskNumbers.isEmpty()) {
+                setDisplay(GlobalConstants.MESSAGE_ERROR_NO_NUMBER, GlobalConstants.GUI_ANIMATION_INVALID,
+                        new ArrayList<Integer>(), new ArrayList<Integer>());
+                return _display;
             }
         }
         if (hasInvalidTaskNumbers()) {
             setInvalidDisplay();
-            return display;
+            return _display;
         } else {
             doneTasksFromList();
         }
-        return display;
+        return _display;
     }
 
     private void setInvalidDisplay() {
-        updateFile = false;
-        saveHistory = false;
-        display.setCommandType(COMMAND_TYPE_INVALID);
-        display.setMessage(message_invalid_task_numbers);
+        _updateFile = false;
+        _saveHistory = false;
+        _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
+        _display.setMessage(_msgInvalidNumbers);
     }
 
     private void setDisplay(String msg, String commandType, ArrayList<Integer> completedTasks,
             ArrayList<Integer> conflictingTasks) {
-        display.setMessage(msg);
-        display.setCommandType(commandType);
+        _display.setMessage(msg);
+        _display.setCommandType(commandType);
         incrementTaskNumbers();
-        display.setTaskIndices(completedTasks);
-        display.setConflictingTasksIndices(conflictingTasks);
+        _display.setTaskIndices(completedTasks);
+        _display.setConflictingTasksIndices(conflictingTasks);
     }
 
     private void incrementTaskNumbers() {
-        if (taskNumbers != null) {
-            for (int i = 0; i < taskNumbers.size(); i++) {
-                taskNumbers.set(i, taskNumbers.get(i) + 1);
+        if (_taskNumbers != null) {
+            for (int i = 0; i < _taskNumbers.size(); i++) {
+                _taskNumbers.set(i, _taskNumbers.get(i) + 1);
             }
         }
     }
@@ -84,8 +78,8 @@ public class CommandDone implements Command {
     private ArrayList<Integer> getInvalidTaskNumbers() {
         ArrayList<Integer> invalidTaskNumbers = new ArrayList<Integer>();
         int taskNum, numOfTasks = getNumOfTasks();
-        for (int i = 0; i < taskNumbers.size(); i++) {
-            taskNum = taskNumbers.get(i);
+        for (int i = 0; i < _taskNumbers.size(); i++) {
+            taskNum = _taskNumbers.get(i);
             if (isTaskNumberInvalid(taskNum, numOfTasks)) {
                 feedbackInvalidNumbers(invalidTaskNumbers, taskNum);
                 invalidTaskNumbers.add(taskNum);
@@ -95,16 +89,16 @@ public class CommandDone implements Command {
     }
 
     private int getNumOfTasks() {
-        int numOfTasks = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
-                + display.getVisibleFloatTasks().size();
+        int numOfTasks = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().size();
         return numOfTasks;
     }
 
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
-            message_invalid_task_numbers += taskNum;
+            _msgInvalidNumbers += taskNum;
         } else {
-            message_invalid_task_numbers += ", " + taskNum;
+            _msgInvalidNumbers += ", " + taskNum;
         }
     }
 
@@ -124,12 +118,12 @@ public class CommandDone implements Command {
 
     private void doneMultipleTasks() {
         Task doneTask;
-        Collections.sort(taskNumbers);
-        for (int i = 0; i < taskNumbers.size(); i++) {
-            doneTask = markTaskAsDone(taskNumbers.get(i) - 1 - i);
+        Collections.sort(_taskNumbers);
+        for (int i = 0; i < _taskNumbers.size(); i++) {
+            doneTask = markTaskAsDone(_taskNumbers.get(i) - 1 - i);
             feedbackCompletedTasks(doneTask, i);
         }
-        setDisplay(message_completed, COMMAND_TYPE_DONE, taskNumbers, new ArrayList<Integer>());
+        setDisplay(_msgComplete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
     }
 
     private void doneAllVisibleTasks() {
@@ -137,19 +131,19 @@ public class CommandDone implements Command {
         for (int i = 0; i < numTasks; i++) {
             markTaskAsDone(numTasks - i - 1);
         }
-        setDisplay(MESSAGE_ALL_TASKS_COMPLETED, COMMAND_TYPE_DONE, new ArrayList<Integer>(),
+        setDisplay(GlobalConstants.MESSAGE_ALL_COMPLETED, GlobalConstants.GUI_ANIMATION_DELETE, new ArrayList<Integer>(),
                 new ArrayList<Integer>());
     }
 
     private boolean isDoneAll() {
-        return taskNumbers == null;
+        return _taskNumbers == null;
     }
 
     private void feedbackCompletedTasks(Task doneTask, int i) {
         if (i == 0) {
-            message_completed += "\"" + doneTask.getDescription() + "\"";
+            _msgComplete += "\"" + doneTask.getDescription() + "\"";
         } else {
-            message_completed += ", \"" + doneTask.getDescription() + "\"";
+            _msgComplete += ", \"" + doneTask.getDescription() + "\"";
         }
     }
 
@@ -158,11 +152,11 @@ public class CommandDone implements Command {
         if (isDoneTaskDeadline(taskNum)) {
             doneTask = doneTaskDeadline(taskNum);
         } else {
-            taskNum -= display.getVisibleDeadlineTasks().size();
+            taskNum -= _display.getVisibleDeadlineTasks().size();
             if (isDoneTaskEvent(taskNum)) {
                 doneTask = doneEvent(taskNum);
             } else {
-                taskNum -= display.getVisibleEvents().size();
+                taskNum -= _display.getVisibleEvents().size();
                 doneTask = doneTaskFloat(taskNum);
             }
         }
@@ -170,39 +164,39 @@ public class CommandDone implements Command {
     }
 
     private boolean isDoneTaskEvent(int taskNum) {
-        return taskNum < display.getVisibleEvents().size();
+        return taskNum < _display.getVisibleEvents().size();
     }
 
     private boolean isDoneTaskDeadline(int taskNum) {
-        return taskNum < display.getVisibleDeadlineTasks().size();
+        return taskNum < _display.getVisibleDeadlineTasks().size();
     }
 
     private Task doneTaskFloat(int taskNum) {
-        Task completedTask = display.getVisibleFloatTasks().remove(taskNum);
-        display.getFloatTasks().remove(completedTask);
-        display.getCompletedTasks().add(completedTask);
+        Task completedTask = _display.getVisibleFloatTasks().remove(taskNum);
+        _display.getFloatTasks().remove(completedTask);
+        _display.getCompletedTasks().add(completedTask);
         return completedTask;
     }
 
     private Task doneEvent(int taskNum) {
-        Task completedTask = display.getVisibleEvents().remove(taskNum);
-        display.getEventTasks().remove(completedTask);
-        display.getCompletedTasks().add(completedTask);
+        Task completedTask = _display.getVisibleEvents().remove(taskNum);
+        _display.getEventTasks().remove(completedTask);
+        _display.getCompletedTasks().add(completedTask);
         return completedTask;
     }
 
     private Task doneTaskDeadline(int taskNum) {
-        Task completedTask = display.getVisibleDeadlineTasks().remove(taskNum);
-        display.getDeadlineTasks().remove(completedTask);
-        display.getCompletedTasks().add(completedTask);
+        Task completedTask = _display.getVisibleDeadlineTasks().remove(taskNum);
+        _display.getDeadlineTasks().remove(completedTask);
+        _display.getCompletedTasks().add(completedTask);
         return completedTask;
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }

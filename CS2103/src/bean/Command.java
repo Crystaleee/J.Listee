@@ -7,7 +7,7 @@ public interface Command {
 
 	public Display execute(Display display);
 
-	public boolean getUpdateFile();
+	public boolean requiresUpdateFile();
 
-	public boolean getSaveHistory();
+	public boolean requiresSaveHistory();
 }

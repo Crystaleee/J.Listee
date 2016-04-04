@@ -7,7 +7,6 @@ package bean;
 import java.util.ArrayList;
 
 public class CommandInvalid implements Command {
-	private final String MESSAGE_INVALID_COMMAND = "You have specified an invalid command";
 	private boolean updateFile = false;
 	private boolean saveHistory = false;
 
@@ -20,17 +19,17 @@ public class CommandInvalid implements Command {
 	}
 
 	private void setDisplay(Display display) {
-        display.setMessage(MESSAGE_INVALID_COMMAND);
-        display.setCommandType("Invalid");
+        display.setMessage(GlobalConstants.MESSAGE_ERROR_INVALID_COMMAND);
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
         display.setTaskIndices(new ArrayList<Integer>());
         display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
 	
-	public boolean getSaveHistory() {
+	public boolean requiresSaveHistory() {
 		return saveHistory;
 	}
 
-	public boolean getUpdateFile() {
+	public boolean requiresUpdateFile() {
 		return updateFile;
 	}
 }

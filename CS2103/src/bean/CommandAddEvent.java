@@ -6,98 +6,92 @@ package bean;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import logic.Logic;
-
 public class CommandAddEvent implements Command {
-    private static final String COMMAND_TYPE_ADD = "Add";
-    private static final String COMMAND_TYPE_INVALID = "Invalid";
-    private static final String MESSAGE_INVALID_TIME_RANGE = "Please specify a valid date range";
-    private TaskEvent task;
-    private boolean updateFile = true;
-    private boolean saveHistory = true;
-    private ArrayList<Integer> taskIndices = new ArrayList<Integer>();
-    private ArrayList<Integer> conflictingTasksIndices = new ArrayList<Integer>();
+    private TaskEvent _task;
+    private boolean _updateFile = true;
+    private boolean _saveHistory = true;
+    private ArrayList<Integer> _conflictingTasksIndices = new ArrayList<Integer>();
 
     public CommandAddEvent() {
-        task = null;
+        _task = null;
     }
 
     public CommandAddEvent(TaskEvent task) {
-        this.task = task;
+        this._task = task;
     }
 
     public CommandAddEvent(String description, String location, Calendar startDate, Calendar endDate,
             ArrayList<String> tags) {
-        task = new TaskEvent(description, location, startDate, endDate, tags);
+        _task = new TaskEvent(description, location, startDate, endDate, tags);
     }
 
     public Display execute(Display display) {
         if (hasNoDescription()) {
-            setInvalidDisplay(display);
-            display.setMessage(Logic.MESSAGE_NO_DESCRIPTION);
+            setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DESCRIPTION);
             return display;
         }
         if (isInvalidTimeRange()) {
-            setInvalidDisplay(display);
-            display.setMessage(MESSAGE_INVALID_TIME_RANGE);
+            setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DATE_RANGE);
             return display;
         }
         addEvent(display.getEventTasks());
         if (!display.getVisibleEvents().equals(display.getEventTasks())) {
             addEvent(display.getVisibleEvents());
         }
-        getConflictingTasks(display);
         setDisplay(display);
         return display;
     }
 
     private boolean isInvalidTimeRange() {
-        return task.getStartDate().after(task.getEndDate());
+        return _task.getStartDate().after(_task.getEndDate());
     }
 
     private boolean hasNoDescription() {
-        if (task.getDescription() == null) {
+        if (_task.getDescription() == null) {
             return true;
         } else {
-            task.setDescription(task.getDescription().trim());
-            if (task.getDescription().isEmpty()) {
+            _task.setDescription(_task.getDescription().trim());
+            if (_task.getDescription().isEmpty()) {
                 return true;
             }
         }
         return false;
     }
 
-    private void setInvalidDisplay(Display display) {
-        updateFile = false;
-        saveHistory = false;
-        display.setCommandType(COMMAND_TYPE_INVALID);
+    private void setInvalidDisplay(Display display, String msg) {
+        _updateFile = false;
+        _saveHistory = false;
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
+        display.setMessage(msg);
     }
 
     private void setDisplay(Display display) {
-        display.setCommandType(COMMAND_TYPE_ADD);
+        ArrayList<Integer> taskIndices = new ArrayList<Integer>();
+        display.setCommandType(GlobalConstants.GUI_ANIMATION_ADD);
         int index = getAddedTaskIndex(display);
         taskIndices.add(index);
         display.setTaskIndices(taskIndices);
-        display.setMessage(String.format(Logic.MESSAGE_ADD_SUCCESS, task.getDescription()));
+        display.setMessage(String.format(GlobalConstants.MESSAGE_ADD_SUCCESS, _task.getDescription()));
+        getConflictingTasks(display);
     }
 
     private void getConflictingTasks(Display display) {
         getConflictingEvents(display);
         getConflictingReservedTasks(display);
-        display.setConflictingTasksIndices(conflictingTasksIndices);
+        display.setConflictingTasksIndices(_conflictingTasksIndices);
     }
 
     private void getConflictingReservedTasks(Display display) {
         ArrayList<TaskReserved> listReserved = display.getReservedTasks();
         for (TaskReserved myTask : listReserved) {
             for (int i = 0; i < myTask.getStartDates().size(); i++) {
-                if (isWithinTimeRange(task.getStartDate(), task.getEndDate(), myTask.getStartDates().get(i),
+                if (isWithinTimeRange(_task.getStartDate(), _task.getEndDate(), myTask.getStartDates().get(i),
                         myTask.getEndDates().get(i))) {
                     int index = display.getVisibleReservedTasks().indexOf(myTask);
                     if (isValidIndex(index)) {
                         index = getConflictingTaskReservedIndex(display, index);
-                        conflictingTasksIndices.add(index);
-                        //System.out.println(index);
+                        _conflictingTasksIndices.add(index);
+                        // System.out.println(index);
                     }
                     break;
                 }
@@ -106,9 +100,8 @@ public class CommandAddEvent implements Command {
     }
 
     private int getConflictingTaskReservedIndex(Display display, int index) {
-        return index + display.getVisibleDeadlineTasks().size()
-                + display.getVisibleEvents().size() + display.getVisibleFloatTasks().size()
-                + 1;
+        return index + display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
+                + display.getVisibleFloatTasks().size() + 1;
     }
 
     private boolean isValidIndex(int index) {
@@ -118,14 +111,13 @@ public class CommandAddEvent implements Command {
     private void getConflictingEvents(Display display) {
         ArrayList<TaskEvent> listEvents = display.getEventTasks();
         for (TaskEvent myTask : listEvents) {
-            if (!myTask.equals(task)) {
-                if (isWithinTimeRange(task.getStartDate(), task.getEndDate(), myTask.getStartDate(),
+            if (!myTask.equals(_task)) {
+                if (isWithinTimeRange(_task.getStartDate(), _task.getEndDate(), myTask.getStartDate(),
                         myTask.getEndDate())) {
                     int index = display.getVisibleEvents().indexOf(myTask);
                     if (isValidIndex(index)) {
                         index = getConflictingTaskEventIndex(display, index);
-                        conflictingTasksIndices.add(index);
-                        //System.out.println(index);
+                        _conflictingTasksIndices.add(index);
                     }
                 }
             }
@@ -148,12 +140,12 @@ public class CommandAddEvent implements Command {
     }
 
     private int getAddedTaskIndex(Display display) {
-        return display.getVisibleEvents().indexOf(task) + display.getVisibleDeadlineTasks().size() + 1;
+        return display.getVisibleEvents().indexOf(_task) + display.getVisibleDeadlineTasks().size() + 1;
     }
 
     private void addEvent(ArrayList<TaskEvent> taskList) {
         int index = getAddIndex(taskList);
-        taskList.add(index, task);
+        taskList.add(index, _task);
     }
 
     /*
@@ -163,18 +155,18 @@ public class CommandAddEvent implements Command {
     private int getAddIndex(ArrayList<TaskEvent> taskList) {
         int i = 0;
         for (i = 0; i < taskList.size(); i++) {
-            if (task.getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {
+            if (_task.getStartDate().compareTo(taskList.get(i).getStartDate()) < 0) {
                 break;
             }
         }
         return i;
     }
 
-    public boolean getSaveHistory() {
-        return saveHistory;
+    public boolean requiresSaveHistory() {
+        return _saveHistory;
     }
 
-    public boolean getUpdateFile() {
-        return updateFile;
+    public boolean requiresUpdateFile() {
+        return _updateFile;
     }
 }
