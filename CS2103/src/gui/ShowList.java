@@ -229,14 +229,15 @@ public class ShowList extends AppPage {
 	// JavaScript interface object
 	public class ListBridge {
 		public void receiveCommand(String command){
-			System.out.println(command);
-			userCmd.add(command);
+			String cmd=command.trim();
+			System.out.println(cmd);
+			userCmd.add(cmd);
 			cmdIndex=userCmd.size()-1;
 			
-			if(command.equals("help")||command.equals("show help")){
+			if(cmd.equals("help")||cmd.equals("show help")){
 				GUIController.displayHelp();
 			}else{
-				GUIController.handelUserInput(command);
+				GUIController.handelUserInput(cmd);
 			}			
 		}
 		
