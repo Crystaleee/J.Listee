@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.JFileChooser;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import parser.InputSuggestion;
 import bean.Display;
 import bean.Task;
 import bean.TaskDeadline;
@@ -17,6 +20,7 @@ import bean.TaskFloat;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
+import main.App;
 import netscape.javascript.JSObject;
 
 /**
@@ -27,6 +31,7 @@ public class ShowList extends AppPage {
 	private int cmdIndex;//the presenting cmd's index
 	private Display display=new Display();
 	private JSObject win;
+	private InputSuggestion suggestion=InputSuggestion.getInstance();
 	
 	public ShowList(Display display) {
 		super("/view/html/list.html");
@@ -207,6 +212,10 @@ public class ShowList extends AppPage {
 			
 			//add animation when deleting
 			if(this.display.getCommandType()=="Delete"){
+				//set message
+				if( this.display.getMessage()!=null)
+					win.call("showFeedBack", this.display.getMessage());
+				
 				JSONArray jsonFocus= new JSONArray();
 				for(int i=0;i<this.display.getTaskIndices().size();i++){
 					jsonFocus.put(this.display.getTaskIndices().get(i)-1);
@@ -215,7 +224,8 @@ public class ShowList extends AppPage {
 				
 				win.call("setFocus", jsonFocus);
 				win.call("addHideAnimation", jsonFocus);
-				win.call("clearCommandLine");												
+				win.call("clearCommandLine");	
+				win.call("hideSuggestion");
 			}else{
 				webEngine.reload();			
 			}				
@@ -229,16 +239,35 @@ public class ShowList extends AppPage {
 	// JavaScript interface object
 	public class ListBridge {
 		public void receiveCommand(String command){
-			String cmd=command.trim();
+			String cmd=command.toLowerCase().trim();
 			System.out.println(cmd);
 			userCmd.add(cmd);
 			cmdIndex=userCmd.size()-1;
 			
 			if(cmd.equals("help")||cmd.equals("show help")){
 				GUIController.displayHelp();
+			}else if(cmd.equals("change filepath")){
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = fileChooser.showOpenDialog(fileChooser);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {				
+					App.filePath=fileChooser.getSelectedFile().getAbsolutePath()+"\\J.Listee.txt";
+					System.out.println(App.filePath);
+					// create file under the file folder chosen by user
+					GUIController.changeFilePath(App.filePath);
+				}
 			}else{
 				GUIController.handelUserInput(cmd);
 			}			
+		}
+		
+		public String getCommandsuggestion(String cmd){
+			String cmdSuggestion=suggestion.getSuggestedInput(cmd.trim());
+			if(cmdSuggestion.equals(new String("null"))==false){
+				return cmdSuggestion;
+			}else{
+				return "";
+			}
 		}
 		
 		public String getPreviousCmd(){

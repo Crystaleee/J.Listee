@@ -8,22 +8,24 @@
  <script src="../js/jquery-1.11.1.min.js"></script>
  <script src="../js/bootstrap.min.js"></script>
  <style>
+  body{
+    background: rgba(0,0,0,0);
+  }
    .center {
-     width: 600px;
-     min-height: 400px;
+     width: 800px;
      text-align: center;
    }
    .list{ 
-    height:530px;
+    height:503px;
     padding: 15px;
     padding-right: 5px;
-    background-color:rgba(238,238,238,0.8);
+    background-color:rgba(238,238,238,0.9);
     overflow-y:scroll;
   }
 
   .commandline{
     background-color: #726e6e;
-    height: 60px;
+    height: 55px;
   }
 
   .grouptitle{
@@ -44,7 +46,7 @@
     width: 100%;
     height:65px;
     border-radius: 8px;
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255,255,255,0.7);
     margin: 8px 0;
     vertical-align: middle;
   }
@@ -60,7 +62,7 @@
     box-shadow: 0 0 0 1.5px #ccc;
   }
   .task_number{
-    width:8%;
+    width:7%;
     height: 100%;
     border-radius: 8px 0 0 8px;
     background-color: rgba(131,207,203,0.8);
@@ -75,7 +77,7 @@
   .task_middle{
     display:table;
     float: left;
-    width:66%;
+    width:72.5%;
     height: 100%;
     text-align: left;
     padding:5px 0px 5px 10px;
@@ -84,7 +86,7 @@
     float: right;
     height: 100%;
     display: table;
-    width: 26%;
+    width: 19.5%;
     padding: 5px 8px 5px 5px;
     text-align: right;
   }
@@ -145,7 +147,7 @@
   }
   form{
     width: 100%;
-    height: 60px;
+    height: 100%;
   }
   input{
     width: 100%;
@@ -161,9 +163,9 @@
   .alert{
     position:absolute;
     display:none;
-    bottom: 70px;
+    bottom: 97px;
     margin-bottom: 0;
-    width: 600px;
+    width: 800px;
     height: 40px;
     padding: 10px;
   }
@@ -182,15 +184,38 @@
     margin-left: 1px;
   }
   .reserved .task_middle{
-    width:25%;
+    width:43%;
   }
   .reserved .task_right{
     padding: 0;
-    width: 67.05%;
+    width: 50%;
   }
   #timeslot1{
     border-radius: 0 8px 8px 0;
   }
+  #suggestion-bar{
+    width: 800px;
+    display: none;
+  }
+  .arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #333;
+    position: relative;
+    left: 30px;
+  }
+  .command_suggestion{
+    height: 35px;
+    background-color: #333;
+    width: 100%;
+    border-radius: 10px;
+    color: #ddd;
+    font-size: 18px;
+    padding: 5px 15px;
+  }
+
 </style>
 </head>
 <body>
@@ -226,6 +251,14 @@
         taskdiv.setAttribute("tabindex", "0");
         taskdiv.setAttribute("id", i+1);
 
+        //restric displaying discription length
+        var description="";
+        if(taskList[index].description.length<24){
+          description=taskList[index].description;
+        }else{
+          description=taskList[index].description.substring(0,23)+"...";
+        }
+
         taskdiv.innerHTML= "<section class='task_number'>"
         + (i+1)
         + "</section>"
@@ -234,7 +267,7 @@
         + i
         + "'>"
         + "<div id='description'>"
-        + taskList[index].description
+        + description
         +"</div>"
         + "</div>"
         + "<div class='task_components' id='task_details"
@@ -280,10 +313,14 @@
            task_location.style.display="none";
          }
 
-         //add tags if necessary
+         //add tags if necessary at most 4
          if(taskList[index].tags.length>0){
 
-          for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+          if(taskList[index].tags.length>4){
+            taskList[index].tags[3]="...";
+          }
+          
+          for  (index2 = 0; index2 < taskList[index].tags.length && index2 < 4; index2++){
            var tagspan = document.createElement("span");
            tagspan.innerHTML="#"+taskList[index].tags[index2];
            task_tags.appendChild(tagspan);
@@ -294,7 +331,7 @@
          }
         }
         var len=taskList[index].startDates.length;
-        //add timeslots
+        //add timeslots at most 3
         for( index3 =len-1; index3>=0 && len-index3<4; index3--){
            var timeslot = document.createElement("div");
            timeslot.setAttribute("class", "timeslot");
@@ -334,6 +371,14 @@
 
     for  (index = 0; index < taskList.length; index++){
 
+      //restric displaying discription length
+      var description="";
+      if(taskList[index].description.length<60){
+        description=taskList[index].description;
+      }else{
+        description=taskList[index].description.substring(0,59)+"...";
+      }
+
       var taskdiv = document.createElement("div");
       if(taskList[index].overdue==true){
         taskdiv.setAttribute("class", "task overdue");
@@ -351,7 +396,7 @@
       + i
       + "'>"
     + "<div id=description>"
-      + taskList[index].description
+      + description
     + "</div>"
       +"</div>"
       + "<div class='task_components' id='task_details"
@@ -414,8 +459,10 @@
 
          //add tags if necessary
          if(taskList[index].tags.length!=0){
-
-          for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+          if(taskList[index].tags.length>4){
+            taskList[index].tags[3]="...";
+          }
+          for  (index2 = 0; index2 < taskList[index].tags.length && index2 < 4; index2++){
            var tagspan = document.createElement("span");
            tagspan.innerHTML="#"+taskList[index].tags[index2];
            task_tags.appendChild(tagspan);
@@ -549,6 +596,26 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 });
 
 
+function getCommandsuggestion()
+{
+  if(cmd.elements['command'].value==''){
+    $("#suggestion-bar").hide();
+  }
+
+  //send command when typing
+  if(app.getCommandsuggestion(cmd.elements['command'].value)!=''){
+    $("#suggestion-bar").show();
+    $("#suggstion").text(app.getCommandsuggestion(cmd.elements['command'].value));
+  }else{
+    $("#suggestion-bar").hide();
+  }
+  
+};
+
+function hideSuggestion(){
+  $("#suggestion-bar").hide();
+}
+
 $(document).keydown(
     function(e)
     {   
@@ -671,11 +738,16 @@ $(document).keydown(
    </div>
    <div class="commandline">
     <form name="cmd">
-      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type your command here" autofocus/>
+      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" onkeyup="getCommandsuggestion();" placeholder="Type your command here" autofocus/>
     </form>
   </div>
 </div>
 </div>
+<div id="suggestion-bar">
+  <div class="arrow-up"></div>
+  <div class="command_suggestion" id="suggstion"></div>
+</div>
+
 </div>
 </body>
 </html>

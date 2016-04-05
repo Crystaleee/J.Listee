@@ -73,6 +73,13 @@ public class CommandAddEvent implements Command {
         display.setTaskIndices(taskIndices);
         display.setMessage(String.format(GlobalConstants.MESSAGE_ADD_SUCCESS, _task.getDescription()));
         getConflictingTasks(display);
+        setIfOverdue();
+    }
+
+    private void setIfOverdue() {
+        if(_task.getEndDate().before(Calendar.getInstance())){
+            _task.setIsOverdue(true);
+        }
     }
 
     private void getConflictingTasks(Display display) {

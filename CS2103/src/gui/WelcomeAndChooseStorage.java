@@ -24,7 +24,7 @@ public class WelcomeAndChooseStorage extends AppPage {
 	public class WelcomeBridge {
 
 		public void chooseFolder()  {
-			JFileChooser fileChooser = new JFileChooser("");
+			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = fileChooser.showOpenDialog(fileChooser);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {				
@@ -33,7 +33,7 @@ public class WelcomeAndChooseStorage extends AppPage {
 				try {
 					GUIController.createFile(App.filePath);
 					//display starting page
-					GUIController.initializeList(App.stage, App.filePath);
+					GUIController.initializeList(App.filePath);
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(fileChooser, e.getMessage());
 				}

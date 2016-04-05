@@ -7,21 +7,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CommandAddDeadlineTask implements Command {
-    private TaskDeadline task;
+    private TaskDeadline _task;
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
 
     public CommandAddDeadlineTask() {
-        task = null;
+        _task = null;
     }
 
     public CommandAddDeadlineTask(TaskDeadline task) {
-        this.task = task;
+        this._task = task;
     }
 
     public CommandAddDeadlineTask(String description, String location, Calendar endDate,
             ArrayList<String> tags) {
-        task = new TaskDeadline(description, location, endDate, tags);
+        _task = new TaskDeadline(description, location, endDate, tags);
     }
 
     public Display execute(Display display) {
@@ -39,11 +39,11 @@ public class CommandAddDeadlineTask implements Command {
     }
 
     private boolean hasNoDescription() {
-        if (task.getDescription() == null) {
+        if (_task.getDescription() == null) {
             return true;
         } else {
-            task.setDescription(task.getDescription().trim());
-            if (task.getDescription().isEmpty()) {
+            _task.setDescription(_task.getDescription().trim());
+            if (_task.getDescription().isEmpty()) {
                 return true;
             }
         }
@@ -60,15 +60,22 @@ public class CommandAddDeadlineTask implements Command {
     private void setDisplay(Display display) {
         ArrayList<Integer> taskIndices = new ArrayList<Integer>();
         display.setCommandType(GlobalConstants.GUI_ANIMATION_ADD);
-        taskIndices.add(display.getVisibleDeadlineTasks().indexOf(task) + 1);
+        taskIndices.add(display.getVisibleDeadlineTasks().indexOf(_task) + 1);
         display.setTaskIndices(taskIndices);
-        display.setMessage(String.format(GlobalConstants.MESSAGE_ADD_SUCCESS, task.getDescription()));
+        display.setMessage(String.format(GlobalConstants.MESSAGE_ADD_SUCCESS, _task.getDescription()));
         display.setConflictingTasksIndices(new ArrayList<Integer>());
+        setIfOverdue();
+    }
+
+    private void setIfOverdue() {
+        if(_task.getEndDate().before(Calendar.getInstance())){
+            _task.setIsOverdue(true);
+        }
     }
 
     private void addDeadlineTask(ArrayList<TaskDeadline> taskList) {
         int index = getIndex(taskList);
-        taskList.add(index, task);
+        taskList.add(index, _task);
     }
 
     /*
@@ -78,7 +85,7 @@ public class CommandAddDeadlineTask implements Command {
     private int getIndex(ArrayList<TaskDeadline> taskList) {
         int i = 0;
         for (i = 0; i < taskList.size(); i++) {
-            if (task.getEndDate().compareTo(taskList.get(i).getEndDate()) < 0) {
+            if (_task.getEndDate().compareTo(taskList.get(i).getEndDate()) < 0) {
                 break;
             }
         }
