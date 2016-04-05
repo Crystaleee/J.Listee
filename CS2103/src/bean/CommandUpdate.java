@@ -132,7 +132,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         editEndDate(task);
         editStartDate(task);
         changeEventTaskType(task);
-        if(_timeChanged){
+        if (_timeChanged) {
             _display.getEventTasks().remove(task);
             _display.getVisibleEvents().remove(task);
             Command add = new CommandAddEvent(task);
@@ -179,31 +179,34 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void removeTimeSlot(TaskReserved task) {
-        Collections.sort(_removeReservedSlotIndex);
-        for(int i = 0; i < _removeReservedSlotIndex.size(); i++){
-            int index = _removeReservedSlotIndex.get(i);
-            task.getStartDates().remove(index - i);
-            task.getEndDates().remove(index - i);     
+        System.out.println("Enter");
+        if (_removeReservedSlotIndex != null) {
+            Collections.sort(_removeReservedSlotIndex);
+            for (int i = 0; i < _removeReservedSlotIndex.size(); i++) {
+                int index = _removeReservedSlotIndex.get(i);
+                task.getStartDates().remove(index - 1 - i);
+                task.getEndDates().remove(index - 1 - i);
+            }
         }
     }
 
     private void editTimeSlot(TaskReserved task) {
         if (getStartDate() != null) {
             if (getStartDate().get(Calendar.YEAR) == 1) {
-                Calendar start = task.getStartDates().get(_reservedSlotIndex);
+                Calendar start = task.getStartDates().get(_reservedSlotIndex - 1);
                 start.set(Calendar.HOUR_OF_DAY, getStartDate().get(Calendar.HOUR_OF_DAY));
                 start.set(Calendar.MINUTE, getStartDate().get(Calendar.MINUTE));
             } else {
-                task.getStartDates().set(_reservedSlotIndex, getStartDate());
+                task.getStartDates().set(_reservedSlotIndex - 1, getStartDate());
             }
         }
         if (getEndDate() != null) {
             if (getEndDate().get(Calendar.YEAR) == 1) {
-                Calendar end = task.getEndDates().get(_reservedSlotIndex);
+                Calendar end = task.getEndDates().get(_reservedSlotIndex - 1);
                 end.set(Calendar.HOUR_OF_DAY, getEndDate().get(Calendar.HOUR_OF_DAY));
                 end.set(Calendar.MINUTE, getEndDate().get(Calendar.MINUTE));
             } else {
-                task.getEndDates().set(_reservedSlotIndex, getEndDate());
+                task.getEndDates().set(_reservedSlotIndex - 1, getEndDate());
             }
         }
     }
@@ -217,26 +220,27 @@ public class CommandUpdate extends TaskEvent implements Command {
             msgEdit = "No tags to remove!";
             return true;
         }
-        if (hasAddStartDate()) {
-            msgEdit = "Can't add just the start date!";
-            return true;
-        }
-        if ((getEndDate() == null) && (getStartDate() == null)) {
+        if ((getEndDate() != null) && (getStartDate() != null)) {
             if (_reservedSlotIndex == null) {
                 msgEdit = "Please specify a timeslot";
                 return true;
-            } else if (getEndDate().getTimeInMillis() == 0) {
+            }
+        }
+        if ((getEndDate() != null) && (getStartDate() != null)) {
+            if (getEndDate().getTimeInMillis() == 0) {
                 msgEdit = "Can't remove end date!";
+                return true;
             } else if (getStartDate().getTimeInMillis() == 0) {
                 msgEdit = "Can't remove start date!";
+                return true;
             }
         }
         if (_removeReservedSlotIndex != null) {
             if (!_removeReservedSlotIndex.isEmpty()) {
                 if (hasInvalidIndices(task)) {
                     msgEdit = "You have specified an invalid time slot(s) to be removed";
+                    return true;
                 }
-                return true;
             }
         }
         return false;
