@@ -28,8 +28,8 @@ import bean.CommandInvalid;
 import bean.CommandRedo;
 import bean.CommandShow;
 import bean.CommandUndo;
+import bean.CommandUndone;
 import bean.CommandUpdate;
-import bean.CommandUndo;
 
 public class JListeeParser {
 	private static final String CONTAINING_BOTH = "both";
@@ -114,6 +114,9 @@ public class JListeeParser {
 		JListeeParser testDone = new JListeeParser();
 		testDone.ParseCommand("done 1, 2-4 ,3,4"); 
 		
+		JListeeParser testUndone = new JListeeParser();
+		testUndone.ParseCommand("undone 1-2,5,  2-4"); 
+		
 		JListeeParser testShow = new JListeeParser();
 		testShow.ParseCommand("show assignment due friday");
 			
@@ -121,7 +124,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 4 asdasda -start -@ "); 
+		testUpdateTask.ParseCommand("update 4 asdasda -start -@ #omg #wtf "); 
 
 	} 
 
@@ -312,6 +315,7 @@ public class JListeeParser {
 		return new CommandRedo();
 	}
 
+	@SuppressWarnings("static-access")
 	public Command parseShow(String inputLine) {
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
@@ -345,10 +349,8 @@ public class JListeeParser {
 						break;
 						
 					case ("overdue"):
-					setStartTimeInMilliZero();
-					
+						setStartTimeInMilliZero();
 						endDate = Calendar.getInstance();
-						
 						break;
 					
 					case ("done"):
@@ -399,8 +401,6 @@ public class JListeeParser {
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
 
-
-
 	public Command parseReserve(String inputLine) {
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
@@ -444,8 +444,6 @@ public class JListeeParser {
 		ArrayList<String> removeTagLists = new ArrayList<String>();
 		ArrayList<String> tagLists = new ArrayList<String>();
 		Integer taskNumber;
-
-		System.out.println("ORIGINAL:" + inputLine);
 	
 		inputLine = inputLine.replaceFirst(COMMAND_UPDATE, "").trim();
 		taskNumber = extractTaskNumber(inputLine);
@@ -509,7 +507,6 @@ public class JListeeParser {
 
 		}
 		
-		System.out.println(inputLine);
 		Matcher retrieveLocation = Pattern.compile("-@").matcher(inputLine);
 
 			if (retrieveLocation.find()){
@@ -521,10 +518,7 @@ public class JListeeParser {
 				location = findLocation(inputLine);
 			}
 			
-			
-			
-			
-			
+		
 			if (inputLine.contains("-")){
 			removeTagLists = findHashTags(inputLine);
 			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
@@ -538,37 +532,10 @@ public class JListeeParser {
 		if (taskDescription.equals("")){
 			taskDescription = null;
 		}
-		
-
-		System.out.println("taskdescription: "  + taskDescription);
-		System.out.println("location: " + location);
-		if (startDate!= null){
-			System.out.println("startDate: " + startDate.getTime());
-		}
-
-		if (endDate!=null){
-			System.out.println("endDate: " + endDate.getTime());	
-		}
-
-		for (int i=0; i<tagLists.size(); i++){
-			System.out.println("TAGS: " + tagLists.get(i));
-		}
-
-		for (int i=0; i<tagLists.size(); i++){
-			System.out.println("REMOVETAGS: " + removeTagLists.get(i));
-		}
-
-		System.out.println();
-
-
-	
+			
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
-
-
-
-
 
 	public Command parseDone(String inputLine){
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
@@ -604,12 +571,11 @@ public class JListeeParser {
 		return new CommandDone(taskNumbers);
 	}
 
-
-
 	public Command parseUndone(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		inputLine = inputLine.replace(COMMAND_UNDONE, "").trim();
-	
+		inputLine = inputLine.trim().replaceAll(" +", "");
+
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
 		}
@@ -617,14 +583,27 @@ public class JListeeParser {
 		else {
 			String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
 			for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
-				taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				if (separateInputLine[startIndex].contains("-")){
+					String[] splitRange = separateInputLine[startIndex].split("-");
+					int startDeleteIndex = Integer.valueOf(splitRange[0]);
+					int endDeleteIndex = Integer.valueOf(splitRange[1]);
+
+					while (startDeleteIndex <= endDeleteIndex){
+						taskNumbers.add(startDeleteIndex);
+						startDeleteIndex++;
+					}
+				}
+
+				else{
+					taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+				}
 			}
 		}
-	
-		return new CommandUndo(taskNumbers);		
+		
+		detectDuplicates(taskNumbers);
+				
+		return new CommandUndone(taskNumbers);		
 	}
-
-
 
 	public Command parseInvalid() {
 		return new CommandInvalid();
@@ -646,8 +625,6 @@ public class JListeeParser {
 		}
 		return prepositionIndex;
 	}
-
-
 
 	public void detectDuplicates(ArrayList<Integer> taskNumbers) {
 		if (taskNumbers!= null){
@@ -681,8 +658,6 @@ public class JListeeParser {
 
 		return textBeforeDate + " " + textAfter;
 	}
-
-
 
 	private int getFirstDateIndex(int prepositionIndex, DateGroup group) {
 		int firstDateIndex;
