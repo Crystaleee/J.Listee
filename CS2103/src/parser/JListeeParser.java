@@ -313,7 +313,6 @@ public class JListeeParser {
 		return new CommandRedo();
 	}
 
-	@SuppressWarnings("static-access")
 	public Command parseShow(String inputLine) {
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
@@ -376,7 +375,6 @@ public class JListeeParser {
 
 		//find the index where the preposition starts
 		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
-
 		//if contain the list of words means there is date to extract
 		if (prepositionIndex != -1){
 			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
@@ -395,6 +393,8 @@ public class JListeeParser {
 		
 		tagLists = findHashTags(inputLine);		
 		location = findLocation(inputLine);
+		taskDescription = trimInputLineToDescriptionOnly(inputLine, location , tagLists);
+
 		
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
@@ -532,7 +532,6 @@ public class JListeeParser {
 				inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
 			}
 		
-		
 			tagLists = findHashTags(inputLine);
 
 			taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
@@ -541,7 +540,7 @@ public class JListeeParser {
 				taskDescription = null;
 			}
 
-			return new CommandUpdate(taskNumber,reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
+			return new CommandUpdate(taskNumber, reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	}
 
 	public Command parseDone(String inputLine){
