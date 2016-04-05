@@ -32,6 +32,7 @@ import bean.CommandUndone;
 import bean.CommandUpdate;
 
 public class JListeeParser {
+	private static final String CONTAINING_DELETE = "del";
 	private static final String CONTAINING_BOTH = "both";
 	private static final String CONTAINING_ALLTIME = "alltime";
 	private static final String COMMAND_UNDONE = "undone";
@@ -65,9 +66,9 @@ public class JListeeParser {
             new String[]{"by", "on", "at", "due", "during", "in", "for", "from", "at", "in", "this", "before", "after"};
 	
     private static final String[] SEARCH_TASKS =
-            new String[]{"today", "tomorrow", "overdue", "done", "reserved", "deadline", "event", "untimed"};
+            new String[]{"today", "tomorrow", "overdue", "done", "reserved", "deadlines", "events", "untimed"};
     
-    private static final String[] CONTAIN_TIME = new String[]{"end", "start", CONTAINING_ALLTIME, "etime", "stime", "both"};
+    private static final String[] CONTAIN_TIME = new String[]{"end", "start", CONTAINING_ALLTIME, "etime", "stime", "both", CONTAINING_DELETE};
     
 	private static Logger logger = Logger.getGlobal();
 	private static FileHandler fh;
@@ -122,7 +123,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve from huh @hi #asda #ahskdjashd r1 from 12/4/16 3pm to 5pm and today 7pm to 8pm and sunday 2 to 3pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 3 100 /both today 3pm and tomorrow 4pm -@ #omg #wtf -#wtf "); 
+		testUpdateTask.ParseCommand("update 3 /del 1,2,3"); 
 
 	} 
 
@@ -354,7 +355,7 @@ public class JListeeParser {
 						task.add("done");
 						break;
 						
-					case ("deadline"):
+					case ("deadlines"):
 						task.add("deadline");
 						break;
 						
@@ -362,7 +363,7 @@ public class JListeeParser {
 						task.add("reserved");
 						break;
 						
-					case ("event"):
+					case ("events"):
 						task.add("event");
 						break;
 						
@@ -436,10 +437,12 @@ public class JListeeParser {
 	}
 
 	public Command parseUpdate(String inputLine) {
+
 		String location = null;
 		String taskDescription = null;
 		ArrayList<String> removeTagLists = new ArrayList<String>();
 		ArrayList<String> tagLists = new ArrayList<String>();
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 		Integer taskNumber;
 		Integer reservedTaskIndex = null; 
 	
@@ -515,7 +518,41 @@ public class JListeeParser {
 						inputLine = setStartDateTimeAndTrimInputLine(inputLine, groups);
 						startDate.set(Calendar.YEAR, 1);
 						break;
+						
+					case CONTAINING_DELETE:
+						if (inputLine.contains(CONTAINS_ALL)) {
+							taskNumbers = null;
+						}
+					
+						else {
+							String[] separateInputLine = inputLine.split(CONTAINS_COMMA);
+							for (int startIndex = STARTING_INDEX; startIndex < separateInputLine.length; startIndex++) {
+								if (separateInputLine[startIndex].contains("-")){
+									String[] splitRange = separateInputLine[startIndex].split("-");
+									Integer startDeleteIndex = Integer.valueOf(splitRange[0]);
+									Integer endDeleteIndex = Integer.valueOf(splitRange[1]);
 
+									while (startDeleteIndex <= endDeleteIndex){
+										taskNumbers.add(startDeleteIndex);
+										inputLine = inputLine.replaceFirst(startDeleteIndex.toString(), "");
+
+										startDeleteIndex++;
+									}
+								}
+
+								else{
+									taskNumbers.add(Integer.valueOf(separateInputLine[startIndex]));
+									inputLine = inputLine.replaceFirst(separateInputLine[startIndex], "");
+									inputLine = inputLine.replace(",", "");
+
+
+								}
+							}
+						}
+						
+						detectDuplicates(taskNumbers);
+						
+					
 					}
 
 					for (DateGroup group : groups) {
@@ -524,8 +561,6 @@ public class JListeeParser {
 				}
 
 		}
-
-
 
 			if (inputLine.contains("-")){
 				removeTagLists = findHashTags(inputLine);
@@ -539,8 +574,8 @@ public class JListeeParser {
 			if (taskDescription.equals("")){
 				taskDescription = null;
 			}
-
-			return new CommandUpdate(taskNumber, reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
+			
+			return new CommandUpdate(taskNumber, reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists, taskNumbers);
 	}
 
 	public Command parseDone(String inputLine){
