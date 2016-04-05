@@ -1,9 +1,5 @@
 /History/
 /bean/
-/gui/
-/logic/
-/main/
-/parser/
-/storage/
-/tests/
 /view/
+/main/
+/gui/
