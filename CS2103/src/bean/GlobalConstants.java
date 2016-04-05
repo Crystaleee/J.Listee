@@ -34,6 +34,7 @@ public class GlobalConstants {
     public static final String TASK_TYPE_EVENT = "event";
     public static final String TASK_TYPE_RESERVED = "reserved";
 
+    public static final int TIMER_REMINDER_PERIOD = 60;
     public static final int TIMER_PERIOD = 1000;
     public static final int TIMER_DELAY = 0;
     public static final boolean IS_DAEMON_TASK = true;
