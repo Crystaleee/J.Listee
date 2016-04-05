@@ -29,6 +29,7 @@ public class App extends Application{
 	public void start(Stage primaryStage) {	
 		stage = primaryStage;
 		stage.initStyle(StageStyle.UNDECORATED);
+		stage.initStyle(StageStyle.TRANSPARENT);
 	    stage.setTitle("J.Listee");
 	    stage.setResizable(false);
 	    GUIController.setStage(stage);    

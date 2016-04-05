@@ -60,7 +60,6 @@ public class GUIController {
 		} else {
 			stage.getScene().setRoot(welcome);
 		}
-		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.sizeToScene();
 		stage.show();
 	}
@@ -86,7 +85,6 @@ public class GUIController {
 			} else {
 				stage.getScene().setRoot(showList);
 			}
-			stage.initStyle(StageStyle.TRANSPARENT);
 			stage.sizeToScene();
 			stage.show();		
 	}
@@ -111,7 +109,6 @@ public class GUIController {
 		} else {
 			stage.getScene().setRoot(help);
 		}
-		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.sizeToScene();
 		stage.show();		
 	}
@@ -174,6 +171,10 @@ public class GUIController {
 
 	public static AppPage getShowList() {
 		return showList;
+	}
+
+	public static void changeFilePath(String filePath) {
+		
 	}
 
 }
