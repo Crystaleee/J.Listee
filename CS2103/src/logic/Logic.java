@@ -15,6 +15,7 @@ import bean.Display;
 import bean.GlobalConstants;
 import parser.JListeeParser;
 import storage.Storage;
+import storage.StorageFilePath;
 
 public class Logic {
     private static Storage storage = Storage.getInstance();
@@ -31,11 +32,20 @@ public class Logic {
         }
     }
 
+    public static Display changeFilePath(String filePath) {
+        try{
+            StorageFilePath.changeFilePath(filePath);
+        }catch(IOException e){
+            display.setMessage("Can't change filePath");
+        }
+        return display;
+    }
+
     public static Display initializeProgram(String filePath) {
         file = filePath;
         initializeDisplay();
-        initialiseOverdueTasksReminder();
-        synchronized(display){
+        //initialiseOverdueTasksReminder();
+        synchronized (display) {
             History.saveDisplay(display.deepClone());
         }
         initialiseNatty();
@@ -46,7 +56,7 @@ public class Logic {
         Timer timer = new Timer(GlobalConstants.IS_DAEMON_TASK);
         timer.schedule(new ReminderOverdue(), GlobalConstants.TIMER_DELAY, GlobalConstants.TIMER_PERIOD);
     }
-    
+
     /*
      * display is set to show only overdue and today's task on startup
      */
