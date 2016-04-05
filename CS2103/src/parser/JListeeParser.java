@@ -575,8 +575,7 @@ public class JListeeParser {
 				taskDescription = null;
 			}
 			
-			return null;
-			//return new CommandUpdate(taskNumber, reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists, taskNumbers);
+			return new CommandUpdate(taskNumber, reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists, taskNumbers);
 	}
 
 	public Command parseDone(String inputLine){
