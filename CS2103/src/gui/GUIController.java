@@ -174,7 +174,11 @@ public class GUIController {
 	}
 
 	public static void changeFilePath(String filePath) {
-		
+		Display display=Logic.changeFilePath(filePath);
+		 //assert display!=null :"Display is null!";
+		if(display==null)
+			JOptionPane.showMessageDialog(null, "display is null!");
+		displayList(display);		
 	}
 
 }

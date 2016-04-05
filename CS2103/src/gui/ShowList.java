@@ -252,6 +252,7 @@ public class ShowList extends AppPage {
 				int returnVal = fileChooser.showOpenDialog(fileChooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {				
 					App.filePath=fileChooser.getSelectedFile().getAbsolutePath()+"\\J.Listee.txt";
+					System.out.println(App.filePath);
 					// create file under the file folder chosen by user
 					GUIController.changeFilePath(App.filePath);
 				}
