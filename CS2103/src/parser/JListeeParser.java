@@ -80,8 +80,6 @@ public class JListeeParser {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
 
-
-
  public static void main(String[] separateInputLine){ // for testing
 		try {
 			fh = new FileHandler("logs\\log.txt");
@@ -118,10 +116,10 @@ public class JListeeParser {
 		testUndone.ParseCommand("undone 1-2,5,  2-4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show assignment due friday");
+		testShow.ParseCommand("show assignment due friday ");
 			
 		JListeeParser testReserve = new JListeeParser();
-		testReserve.ParseCommand("reserve r1 from 12/4/16 3pm to 5pm and Thursday 7pm to 8pm"); 
+		testReserve.ParseCommand("reserve from huh @hi #asda #ahskdjashd r1 from 12/4/16 3pm to 5pm and today 7pm to 8pm and sunday 2 to 3pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 4 asdasda -start -@ #omg #wtf "); 
@@ -402,30 +400,28 @@ public class JListeeParser {
 	}
 
 	public Command parseReserve(String inputLine) {
+		
 		String location = null;
 		ArrayList<String> tagLists = new ArrayList<String>();
 		ArrayList<Calendar> startDates = new ArrayList<Calendar>();
 		ArrayList<Calendar> endDates = new ArrayList<Calendar>();
-	
-		inputLine = inputLine.replaceFirst(COMMAND_RESERVE, "").trim();
-	
-		if (Pattern.compile("\\bfrom\\b").matcher(inputLine).find() || (Pattern.compile("\\bto\\b").matcher(inputLine).find()) ||
-				Pattern.compile("\\bdue\\b").matcher(inputLine).find()){
-			
-			List<DateGroup> groups = dateParser.parse(inputLine);
+		int prepositionIndex = -1;
+		int firstDateIndex = -1;
 
+		inputLine = inputLine.replaceFirst(COMMAND_RESERVE, "").trim();
+		
+		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
+		
+		//if contain the list of words means there is date to extract
+		if (prepositionIndex != -1){
+			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
 
-				if (dates.size() >= 2) {
-					extractDates(startDates, endDates, group, dates);
-				}
-
-				inputLine = removeDateFromInputLine(inputLine, group);
-				inputLine = Pattern.compile("\\bfrom\\b").matcher(inputLine).replaceFirst("").trim();
-				inputLine = Pattern.compile("\\bto\\b").matcher(inputLine).replaceFirst("").trim();
-				inputLine = Pattern.compile("\\bdue\\b").matcher(inputLine).replaceFirst("").trim();	
-			}
+				extractMultiplePairDates(startDates, endDates, group, dates);
+				
+				firstDateIndex = getFirstDateIndex(prepositionIndex, group);
+				inputLine = removeWordBeforeDateAndDate(inputLine, firstDateIndex, group).trim();			}
 		}
 	
 		tagLists = findHashTags(inputLine);
@@ -433,6 +429,7 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 	
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+	
 		
 		return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
 	
@@ -533,6 +530,7 @@ public class JListeeParser {
 			taskDescription = null;
 		}
 			
+
 		return new CommandUpdate(taskNumber, taskDescription, location, startDate, endDate, tagLists, removeTagLists);
 	
 	}
@@ -567,6 +565,7 @@ public class JListeeParser {
 		}
 		
 		detectDuplicates(taskNumbers);
+		
 		
 		return new CommandDone(taskNumbers);
 	}
@@ -680,9 +679,10 @@ public class JListeeParser {
 		return inputLine;
 	}
 
-
-	private void extractDates(ArrayList<Calendar> startDates, ArrayList<Calendar> endDates, DateGroup group,
+	
+	private void extractMultiplePairDates(ArrayList<Calendar> startDates, ArrayList<Calendar> endDates, DateGroup group,
 			List<Date> dates) {
+		
 		for (int i = STARTING_INDEX; i < dates.size() - 1; i += 2) {
 			startDateToCalendar(dates.get(i));
 			endDateToCalendar(dates.get(i + 1));
