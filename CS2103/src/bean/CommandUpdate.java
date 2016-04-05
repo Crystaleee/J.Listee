@@ -5,9 +5,10 @@ package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 public class CommandUpdate extends TaskEvent implements Command {
-    private static final String MESSAGE_ERROR_REMOVE_END_DATE = "Can't remove end date!";
+    private Integer _reservedSlotIndex;
     private Integer _taskNumber;
     private ArrayList<String> _removeTags;
     private Display _display;
@@ -15,17 +16,12 @@ public class CommandUpdate extends TaskEvent implements Command {
     private boolean _updateFile = true;;
     private boolean _saveHistory = true;
     private String msgEdit = "Edited : \"";
+    private ArrayList<Integer> _removeReservedSlotIndex;
 
     public CommandUpdate() {
         super();
         _removeTags = null;
         this._taskNumber = null;
-    }
-
-    public CommandUpdate(Integer taskNumber, String description) {
-        super(description, null, null, null, null);
-        _removeTags = null;
-        this._taskNumber = taskNumber;
     }
 
     public CommandUpdate(Integer taskNumber, String description, String location, Calendar startDate,
@@ -34,16 +30,30 @@ public class CommandUpdate extends TaskEvent implements Command {
         this._removeTags = removeTags;
         _updateFile = true;
         this._taskNumber = taskNumber;
+        this._reservedSlotIndex = null;
+    }
+
+    public CommandUpdate(Integer taskNumber, Integer reservedSlotIndex, String description, String location,
+            Calendar startDate, Calendar endDate, ArrayList<String> addTags, ArrayList<String> removeTags,
+            ArrayList<Integer> removeReservedSlotIndex) {
+        super(description, location, startDate, endDate, addTags);
+        this._removeTags = removeTags;
+        _updateFile = true;
+        this._taskNumber = taskNumber;
+        this._reservedSlotIndex = reservedSlotIndex;
+        this._removeReservedSlotIndex = removeReservedSlotIndex;
     }
 
     public Display execute(Display oldDisplay) {
         _display = oldDisplay;
         if (hasInvalidTaskNumber()) {
-            setInvalidDisplay(GlobalConstants.MESSAGE_ERROR_TASK_NUMBER);
+            msgEdit = GlobalConstants.MESSAGE_ERROR_TASK_NUMBER;
+            setInvalidDisplay();
             return _display;
         }
         if (isInvalidDateRange()) {
-            setInvalidDisplay(GlobalConstants.MESSAGE_ERROR_DATE_RANGE);
+            msgEdit = GlobalConstants.MESSAGE_ERROR_DATE_RANGE;
+            setInvalidDisplay();
             return oldDisplay;
         }
         editTask();
@@ -61,10 +71,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
-    private void setInvalidDisplay(String msg) {
+    private void setInvalidDisplay() {
         _updateFile = false;
         _saveHistory = false;
-        _display.setMessage(msg);
+        _display.setMessage(msgEdit);
         _display.setTaskIndices(new ArrayList<Integer>());
         _display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
@@ -96,37 +106,51 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editDeadline() {
-        TaskDeadline task = _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
-        _display.getDeadlineTasks().remove(task);
+        TaskDeadline task = _display.getVisibleDeadlineTasks().get(_taskNumber - 1);
+        if (invalidEditDeadline(task)) {
+            setInvalidDisplay();
+            return;
+        }
         msgEdit += task.getDescription() + GlobalConstants.INVERTED_COMMAS;
-        task = (TaskDeadline) editDescription(task);
-        task = (TaskDeadline) editLocation(task);
-        task = (TaskDeadline) editTags(task);
-        task = editEndDate(task);
+        editDescription(task);
+        editLocation(task);
+        editTags(task);
+        editEndDate(task);
         changeDeadlineTaskType(task);
     }
 
     private void editEvent() {
-        TaskEvent task = _display.getVisibleEvents().remove(_taskNumber - 1);
-        _display.getEventTasks().remove(task);
+        TaskEvent task = _display.getVisibleEvents().get(_taskNumber - 1);
+        if (invalidEditEvent(task)) {
+            setInvalidDisplay();
+            return;
+        }
         msgEdit += task.getDescription() + GlobalConstants.INVERTED_COMMAS;
-        task = (TaskEvent) editDescription(task);
-        task = (TaskEvent) editLocation(task);
-        task = (TaskEvent) editTags(task);
-        task = editStartDate(task);
-        task = editEndDate(task);
+        editDescription(task);
+        editLocation(task);
+        editTags(task);
+        editEndDate(task);
+        editStartDate(task);
         changeEventTaskType(task);
-
+        if(_timeChanged){
+            _display.getEventTasks().remove(task);
+            _display.getVisibleEvents().remove(task);
+            Command add = new CommandAddEvent(task);
+            add.execute(_display);
+        }
     }
 
     private void editFloat() {
         TaskFloat task = _display.getVisibleFloatTasks().get(_taskNumber - 1);
+        if (invalidEditFloat(task)) {
+            setInvalidDisplay();
+            return;
+        }
         msgEdit += task.getDescription() + GlobalConstants.INVERTED_COMMAS;
-        task = (TaskFloat) editDescription(task);
-        task = (TaskFloat) editLocation(task);
-        task = (TaskFloat) editTags(task);
-        int index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
-                + _display.getVisibleFloatTasks().indexOf(task) + 1;
+        editDescription(task);
+        editLocation(task);
+        editTags(task);
+        int index = getIndexOfFloat(task);
         _display.getTaskIndices().add(index);
         if (hasChangeFloatTaskType(task)) {
             _display.getVisibleFloatTasks().remove(_taskNumber - 1);
@@ -134,31 +158,257 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
+    private int getIndexOfFloat(TaskFloat task) {
+        int index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().indexOf(task) + 1;
+        return index;
+    }
+
     private void editReserved() {
         TaskReserved task = _display.getReservedTasks().get(_taskNumber - 1);
+        if (invalidEditReserved(task)) {
+            setInvalidDisplay();
+            return;
+        }
         msgEdit += task.getDescription() + "\"";
-        task = (TaskReserved) editDescription(task);
-        task = (TaskReserved) editLocation(task);
-        task = (TaskReserved) editTags(task);
+        editDescription(task);
+        editLocation(task);
+        editTags(task);
+        editTimeSlot(task);
+        removeTimeSlot(task);
+    }
+
+    private void removeTimeSlot(TaskReserved task) {
+        Collections.sort(_removeReservedSlotIndex);
+        for(int i = 0; i < _removeReservedSlotIndex.size(); i++){
+            int index = _removeReservedSlotIndex.get(i);
+            task.getStartDates().remove(index - i);
+            task.getEndDates().remove(index - i);     
+        }
+    }
+
+    private void editTimeSlot(TaskReserved task) {
+        if (getStartDate() != null) {
+            if (getStartDate().get(Calendar.YEAR) == 1) {
+                Calendar start = task.getStartDates().get(_reservedSlotIndex);
+                start.set(Calendar.HOUR_OF_DAY, getStartDate().get(Calendar.HOUR_OF_DAY));
+                start.set(Calendar.MINUTE, getStartDate().get(Calendar.MINUTE));
+            } else {
+                task.getStartDates().set(_reservedSlotIndex, getStartDate());
+            }
+        }
+        if (getEndDate() != null) {
+            if (getEndDate().get(Calendar.YEAR) == 1) {
+                Calendar end = task.getEndDates().get(_reservedSlotIndex);
+                end.set(Calendar.HOUR_OF_DAY, getEndDate().get(Calendar.HOUR_OF_DAY));
+                end.set(Calendar.MINUTE, getEndDate().get(Calendar.MINUTE));
+            } else {
+                task.getEndDates().set(_reservedSlotIndex, getEndDate());
+            }
+        }
+    }
+
+    private boolean invalidEditReserved(TaskReserved task) {
+        if (hasNoLocationToRemove(task)) {
+            msgEdit = "No location to remove!";
+            return true;
+        }
+        if (hasNoTagsToRemove(task)) {
+            msgEdit = "No tags to remove!";
+            return true;
+        }
+        if (hasAddStartDate()) {
+            msgEdit = "Can't add just the start date!";
+            return true;
+        }
+        if ((getEndDate() == null) && (getStartDate() == null)) {
+            if (_reservedSlotIndex == null) {
+                msgEdit = "Please specify a timeslot";
+                return true;
+            } else if (getEndDate().getTimeInMillis() == 0) {
+                msgEdit = "Can't remove end date!";
+            } else if (getStartDate().getTimeInMillis() == 0) {
+                msgEdit = "Can't remove start date!";
+            }
+        }
+        if (_removeReservedSlotIndex != null) {
+            if (!_removeReservedSlotIndex.isEmpty()) {
+                if (hasInvalidIndices(task)) {
+                    msgEdit = "You have specified an invalid time slot(s) to be removed";
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasInvalidIndices(TaskReserved task) {
+        for (int i = 0; i < _removeReservedSlotIndex.size(); i++) {
+            int index = _removeReservedSlotIndex.get(i);
+            if ((index < 1) || (index > task.getStartDates().size())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean invalidEditFloat(TaskFloat task) {
+        if (hasNoLocationToRemove(task)) {
+            msgEdit = "No location to remove!";
+            return true;
+        }
+        if (hasNoTagsToRemove(task)) {
+            msgEdit = "No tags to remove!";
+            return true;
+        }
+        if ((hasAddStartDate()) && (!hasAddEndDate())) {
+            msgEdit = "Can't add just the start date!!";
+            return true;
+        }
+        /*
+         * if (_reservedSlotIndex != null) { msgEdit =
+         * "Can't specify timeslot for non-reserved tasks!"; }
+         */
+
+        return false;
+    }
+
+    private boolean invalidEditEvent(TaskEvent task) {
+        if (hasNoLocationToRemove(task)) {
+            msgEdit = "No location to remove!";
+            return true;
+        }
+        if (hasNoTagsToRemove(task)) {
+            msgEdit = "No tags to remove!";
+            return true;
+        }
+        if ((hasRemoveEndDate()) && (!hasRemoveStartDate())) {
+            msgEdit = "Cant remove end date only!";
+            return true;
+
+        }
+        /*
+         * if (_reservedSlotIndex != null) { msgEdit =
+         * "Can't specify timeslot for non-reserved tasks!"; }
+         */
+
+        return false;
+    }
+
+    private boolean invalidEditDeadline(TaskDeadline task) {
+        if (hasNoLocationToRemove(task)) {
+            msgEdit = "No location to remove!";
+            return true;
+        }
+        if (hasNoTagsToRemove(task)) {
+            msgEdit = "No tags to remove!";
+            return true;
+        }
+        if ((hasRemoveStartDate())) {
+            msgEdit = "No start date to remove!";
+            return true;
+        }
+        if ((hasRemoveEndDate()) && (hasAddStartDate())) {
+            msgEdit = "Cant add start date and remove end date!";
+            return true;
+
+        } /*
+           * if (_reservedSlotIndex != null) { msgEdit =
+           * "Can't specify timeslot for non-reserved tasks!"; }
+           */
+
+        return false;
+    }
+
+    private boolean hasRemoveTimeSlots() {
+        if (_removeReservedSlotIndex != null) {
+            if (!_removeReservedSlotIndex.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasRemoveEndDate() {
+        if ((getEndDate() != null)) {
+            if (getEndDate().getTimeInMillis() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasAddEndDate() {
+        if ((getEndDate() != null)) {
+            if (getEndDate().getTimeInMillis() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasAddStartDate() {
+        if ((getStartDate() != null)) {
+            if (getStartDate().getTimeInMillis() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasRemoveStartDate() {
+        if ((getStartDate() != null)) {
+            if (getStartDate().getTimeInMillis() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasNoTagsToRemove(Task task) {
+        if (_removeTags == null) {
+            return false;
+        }
+        if (_removeTags != null) {
+            if ((!_removeTags.isEmpty()) && (task.getTags() == null)) {
+                return true;
+            } else if ((!_removeTags.isEmpty()) && (task.getTags().isEmpty())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasNoLocationToRemove(Task task) {
+        if (getLocation() != null) {
+            if ((getLocation().equals(GlobalConstants.EMPTY_STRING)) && (task.getLocation() == null)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean changeDeadlineTaskType(TaskDeadline task) {
         // assertFalse endDate==0 AND startDate != 0&null
         boolean hasTaskChanged = false;
         if (isConvertDeadlineToFloat()) {
+            _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
+            _display.getDeadlineTasks().remove(task);
             hasTaskChanged = convertDeadlineToFloat(task);
         }
         if (isConvertDeadlineToEvent(hasTaskChanged)) {
+            _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
+            _display.getDeadlineTasks().remove(task);
             convertDeadlineToEvent(task);
             hasTaskChanged = true;
         }
-
-        if (!hasTaskChanged) {
-            Command addCommand = new CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
-                    task.getEndDate(), task.getTags());
-            _display = addCommand.execute(_display);
-            _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
-        }
+        /*
+         * if (!hasTaskChanged) { Command addCommand = new
+         * CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
+         * task.getEndDate(), task.getTags()); _display =
+         * addCommand.execute(_display);
+         * _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID); }
+         */
         return hasTaskChanged;
     }
 
@@ -195,7 +445,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
-    private Task editTags(Task task) {
+    private void editTags(Task task) {
         if (_removeTags != null) {
             for (int i = 0; i < _removeTags.size(); i++) {
                 String tag = _removeTags.get(i);
@@ -209,39 +459,66 @@ public class CommandUpdate extends TaskEvent implements Command {
                 task.getTags().add(tag);
             }
         }
-        return task;
+        return;
     }
 
-    private TaskEvent editStartDate(TaskEvent task) {
+    private void editStartDate(TaskEvent task) {
         if (getStartDate() != null) {
             if (getStartDate().getTimeInMillis() != 0) {
-                task.setStartDate(getStartDate());
-                _timeChanged = true;
+                if (getStartDate().get(Calendar.YEAR) == 1) {
+                    task.getStartDate().set(Calendar.HOUR_OF_DAY, getStartDate().get(Calendar.HOUR_OF_DAY));
+                    task.getStartDate().set(Calendar.MINUTE, getStartDate().get(Calendar.MINUTE));
+                    _timeChanged = true;
+                } else {
+                    task.setStartDate(getStartDate());
+                    _timeChanged = true;
+                }
             }
         }
-        return task;
+        return;
     }
 
-    private TaskEvent editEndDate(TaskEvent task) {
+    private void editEndDate(TaskEvent task) {
         if (getEndDate() != null) {
             if (getEndDate().getTimeInMillis() != 0) {
-                task.setEndDate(getEndDate());
-                _timeChanged = true;
+                if (getEndDate().get(Calendar.YEAR) == 1) {
+                    task.getEndDate().set(Calendar.HOUR_OF_DAY, getEndDate().get(Calendar.HOUR_OF_DAY));
+                    task.getEndDate().set(Calendar.MINUTE, getEndDate().get(Calendar.MINUTE));
+                    _timeChanged = true;
+                } else {
+                    task.setEndDate(getEndDate());
+                    _timeChanged = true;
+                }
             }
         }
-        return task;
+        if (task.getEndDate().before(Calendar.getInstance())) {
+            task.setIsOverdue(true);
+        } else {
+            task.setIsOverdue(false);
+        }
+        return;
     }
 
-    private TaskDeadline editEndDate(TaskDeadline task) {
+    private void editEndDate(TaskDeadline task) {
         if (getEndDate() != null) {
             if (getEndDate().getTimeInMillis() != 0) {
-                task.setEndDate(getEndDate());
+                if (getEndDate().get(Calendar.YEAR) == 1) {
+                    task.getEndDate().set(Calendar.HOUR_OF_DAY, getEndDate().get(Calendar.HOUR_OF_DAY));
+                    task.getEndDate().set(Calendar.MINUTE, getEndDate().get(Calendar.MINUTE));
+                } else {
+                    task.setEndDate(getEndDate());
+                }
             }
         }
-        return task;
+        if (task.getEndDate().before(Calendar.getInstance())) {
+            task.setIsOverdue(true);
+        } else {
+            task.setIsOverdue(false);
+        }
+        return;
     }
 
-    private Task editLocation(Task task) {
+    private void editLocation(Task task) {
         if (getLocation() != null) {
             if (getLocation().trim().isEmpty()) {
                 task.setLocation(null);
@@ -249,33 +526,31 @@ public class CommandUpdate extends TaskEvent implements Command {
                 task.setLocation(getLocation().trim());
             }
         }
-        return task;
+        return;
     }
 
-    private Task editDescription(Task task) {
+    private void editDescription(Task task) {
         if (getDescription() != null) {
             if (!getDescription().trim().isEmpty()) {
                 task.setDescription(getDescription().trim());
             }
         }
-        return task;
+        return;
     }
 
     private void changeEventTaskType(TaskEvent task) {
         boolean hasTaskChanged = false;
         if (isConvertEventToFloat()) {
+            _display.getVisibleEvents().remove(task);
+            _display.getEventTasks().remove(task);
             convertEventToFloat(task);
             hasTaskChanged = true;
         }
         if (isConvertEventToDeadline(hasTaskChanged)) {
+            _display.getVisibleEvents().remove(task);
+            _display.getEventTasks().remove(task);
             convertEventToDeadline(task);
             hasTaskChanged = true;
-        }
-        if (!hasTaskChanged) {
-            addEventBack(task);
-        }
-        if (removeEndDate()) {
-            msgEdit = MESSAGE_ERROR_REMOVE_END_DATE;
         }
         return;
     }
@@ -318,17 +593,6 @@ public class CommandUpdate extends TaskEvent implements Command {
             _display.setConflictingTasksIndices(new ArrayList<Integer>());
         }
         _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
-    }
-
-    private boolean removeEndDate() {
-        if (getStartDate() == null) {
-            if (getEndDate() != null) {
-                if (getEndDate().getTimeInMillis() == 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private boolean hasChangeFloatTaskType(TaskFloat task) {
