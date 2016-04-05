@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import logic.Logic;
 import main.App;
 import storage.LogStorage;
@@ -20,8 +21,8 @@ import storage.LogStorage;
  */
 public class GUIController {
 	private static Stage stage;
-	private static final int WINDOW_WIDTH = 600;
-	private static final int WINDOW_HEIGHT = 590;
+	private static final int WINDOW_WIDTH = 800;
+	private static final int WINDOW_HEIGHT = 600;
 
 	private static AppPage welcome;
 	private static AppPage showList;
@@ -47,17 +48,19 @@ public class GUIController {
 	/**
 	 * display welcome page in the frame
 	 */
-	public static void displayWelcome(Stage stage) {
+	public static void displayWelcome() {
 		Scene scene = stage.getScene();
 		welcome = new WelcomeAndChooseStorage();
 		if (scene == null) {
 			scene = new Scene(welcome, WINDOW_WIDTH, WINDOW_HEIGHT);
+			scene.setFill(null);
 			setMouseMovable(scene);
 			setCloseOnEsc(stage, scene);
 			stage.setScene(scene);
 		} else {
 			stage.getScene().setRoot(welcome);
 		}
+		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.sizeToScene();
 		stage.show();
 	}
@@ -68,15 +71,14 @@ public class GUIController {
 	 * @param display
 	 * @return
 	 */
-	public static void displayList(Stage stage, Display display) {
+	public static void displayList(Display display) {
 			Scene scene = stage.getScene();
 			
 			((ShowList) showList).setList(display);
-			
-			
-		        
+				        
 			if (scene == null) {			
-				scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
+				scene = new Scene(showList,WINDOW_WIDTH,WINDOW_HEIGHT);
+				scene.setFill(null);
 				setMouseMovable(scene);
 				//set Esc key for close
 				setCloseOnEsc(stage, scene);
@@ -84,6 +86,7 @@ public class GUIController {
 			} else {
 				stage.getScene().setRoot(showList);
 			}
+			stage.initStyle(StageStyle.TRANSPARENT);
 			stage.sizeToScene();
 			stage.show();		
 	}
@@ -100,6 +103,7 @@ public class GUIController {
 		
 		if (scene == null) {			
 			scene = new Scene(help, WINDOW_WIDTH, WINDOW_HEIGHT);
+			scene.setFill(null);
 			setMouseMovable(scene);
 			//set Esc key for close
 			setCloseOnEsc(stage, scene);
@@ -107,6 +111,7 @@ public class GUIController {
 		} else {
 			stage.getScene().setRoot(help);
 		}
+		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.sizeToScene();
 		stage.show();		
 	}
@@ -149,14 +154,14 @@ public class GUIController {
 	/**
 	 * initialize the start page which display deadlines, events and floating tasks
 	 */
-	public static void initializeList(Stage stage, String filePath){
+	public static void initializeList(String filePath){
 			//call to logic to get all the tasks
 			Display display=Logic.initializeProgram(filePath);
 			 //assert display!=null :"Display is null!";
 			if(display==null)
 				JOptionPane.showMessageDialog(null, "display is null!");
 			showList=new ShowList(display);
-			displayList(stage,display);				
+			displayList(display);				
 	}
 	
 	public static void handelUserInput(String command) {
@@ -164,7 +169,7 @@ public class GUIController {
 		 //assert display!=null :"Display is null!";
 		if(display==null)
 			JOptionPane.showMessageDialog(null, "display is null!");
-		displayList(stage,display);		
+		displayList(display);		
 	}
 
 	public static AppPage getShowList() {

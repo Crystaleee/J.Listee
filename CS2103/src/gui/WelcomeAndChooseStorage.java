@@ -33,7 +33,7 @@ public class WelcomeAndChooseStorage extends AppPage {
 				try {
 					GUIController.createFile(App.filePath);
 					//display starting page
-					GUIController.initializeList(App.stage, App.filePath);
+					GUIController.initializeList(App.filePath);
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(fileChooser, e.getMessage());
 				}

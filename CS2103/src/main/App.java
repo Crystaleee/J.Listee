@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import storage.LogStorage;
@@ -50,9 +49,9 @@ public class App extends Application{
 		
 		//check if it's the first time that user use the application
 		if (filePath==null){
-			GUIController.displayWelcome(stage);
+			GUIController.displayWelcome();
 		}else{		
-			GUIController.initializeList(stage, filePath);
+			GUIController.initializeList(filePath);
 		}
 	}
 

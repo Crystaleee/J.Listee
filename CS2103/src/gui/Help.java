@@ -1,6 +1,5 @@
 package gui;
 
-import main.App;
 import netscape.javascript.JSObject;
 
 /**
@@ -19,7 +18,7 @@ public class Help extends AppPage{
 	public class HelpBridge {
 
 		public void receiveCommand(String command){
-			GUIController.displayList(App.stage, ((ShowList)(GUIController.getShowList())).getDisplay());
+			GUIController.displayList(((ShowList)(GUIController.getShowList())).getDisplay());
 		}
 	}
 

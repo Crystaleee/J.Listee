@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import parser.InputSuggestion;
 import bean.Display;
 import bean.Task;
 import bean.TaskDeadline;
@@ -27,6 +28,7 @@ public class ShowList extends AppPage {
 	private int cmdIndex;//the presenting cmd's index
 	private Display display=new Display();
 	private JSObject win;
+	private InputSuggestion suggestion=InputSuggestion.getInstance();
 	
 	public ShowList(Display display) {
 		super("/view/html/list.html");
@@ -207,6 +209,10 @@ public class ShowList extends AppPage {
 			
 			//add animation when deleting
 			if(this.display.getCommandType()=="Delete"){
+				//set message
+				if( this.display.getMessage()!=null)
+					win.call("showFeedBack", this.display.getMessage());
+				
 				JSONArray jsonFocus= new JSONArray();
 				for(int i=0;i<this.display.getTaskIndices().size();i++){
 					jsonFocus.put(this.display.getTaskIndices().get(i)-1);
@@ -215,7 +221,8 @@ public class ShowList extends AppPage {
 				
 				win.call("setFocus", jsonFocus);
 				win.call("addHideAnimation", jsonFocus);
-				win.call("clearCommandLine");												
+				win.call("clearCommandLine");	
+				win.call("hideSuggestion");
 			}else{
 				webEngine.reload();			
 			}				
@@ -239,6 +246,15 @@ public class ShowList extends AppPage {
 			}else{
 				GUIController.handelUserInput(cmd);
 			}			
+		}
+		
+		public String getCommandsuggestion(String cmd){
+			String cmdSuggestion=suggestion.getSuggestedInput(cmd.trim());
+			if(cmdSuggestion.equals(new String("null"))==false){
+				return cmdSuggestion;
+			}else{
+				return "";
+			}
 		}
 		
 		public String getPreviousCmd(){
