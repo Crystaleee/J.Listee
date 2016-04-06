@@ -36,15 +36,26 @@ public class ShowList extends AppPage {
 	public ShowList(Display display) {
 		super("/view/html/list.html");
 		this.display=display;
-				
-		//add load listener
+		addLoadListener();
+	}
+
+	/**
+	 * add load listener to webengine
+	 */
+	private void addLoadListener() {
+
 		webEngine
 		.getLoadWorker()
 		.stateProperty()
 		.addListener(
 				(ObservableValue<? extends State> ov,
 						State oldState, State newState) -> {
+							if(newState==Worker.State.FAILED) {
+								webEngine.load(WelcomeAndChooseStorage.class.getResource(
+										this.html).toExternalForm());
+							}
 					if (newState == Worker.State.SUCCEEDED) {
+						System.out.println("load listener");
 						
 						this.win = (JSObject) webEngine
 								.executeScript("window");
@@ -249,6 +260,7 @@ public class ShowList extends AppPage {
 				win.call("clearCommandLine");	
 				win.call("hideSuggestion");
 			}else{
+				System.out.println("reloading");
 				webEngine.reload();			
 			}				
 		}		

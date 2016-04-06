@@ -562,7 +562,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
  function sendCommand() {
   var command = cmd.elements['command'].value;
   // Invoke the 'receive' Java callback
-  app.receiveCommand(command);
+  shortCutCommand(command);
   }
 
 function shortCutCommand(cmd){
@@ -747,6 +747,7 @@ $(document).keydown(
             var id=parseInt($(".task:focus")[0].id);
             shortCutCommand("postpone "+id);
           }
+        break;
         case 90://ctrl+z
         	if(e.ctrlKey)
         		shortCutCommand("undo");
