@@ -9,11 +9,11 @@ import java.nio.file.StandardCopyOption;
 
 public class StorageFilePath {
 	
-	private String readOldFilePath() throws IOException {
+	private static String readOldFilePath() throws IOException {
 		return LogStorage.readLog();
 	}
 	
-	public void changeFilePath(String newFilePathString) throws IOException {
+	public static void changeFilePath(String newFilePathString) throws IOException {
 		String oldFilePathString = readOldFilePath();
 		
 		Path oldFilePath = Paths.get(oldFilePathString);

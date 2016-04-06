@@ -15,10 +15,12 @@ public class InputSuggestion {
 	private static final String SUGGESTION_SHOW = "show [/task-group] [keyword]";
 	private static final String SUGGESTION_UNDO = "undo";
 	private static final String SUGGESTION_REDO = "redo";
+	private static final String SUGGESTION_FILEPATH = "change filepath";
 	private static final String SUGGESTION_HELP = "help";
 	private static final String SUGGESTION_EXIT = "exit";
 	private static final String SUGGESTION_INVALID = "INVALID COMMAND!";
 
+	private static final String SUGGESTION_CONFIRM_FILEPATH = "confirm <task number(s)> / change filepath";
 	private static final String SUGGESTION_DELETE_DONE = "delete <task number(s)> // done <task number(s)>";
 	private static final String SUGGESTION_UNDO_UNDONE = "undo / undone <task number(s)>";
 	private static final String SUGGESTION_UNDO_UNDONE_UPDATE = "undo / undone <task number(s)> / update <task number>";
@@ -34,6 +36,7 @@ public class InputSuggestion {
 	private static final String COMMAND_SHOW = "show ";
 	private static final String COMMAND_UNDO = "undo";
 	private static final String COMMAND_REDO = "redo";
+	private static final String COMMAND_FILEPATH = "change filepath";
 	private static final String COMMAND_HELP = "help";
 	private static final String COMMAND_EXIT = "exit";
 
@@ -54,6 +57,8 @@ public class InputSuggestion {
 	private String getSuggestionBeforeTypingCommand(String currentInput) {
 		if (currentInput.isEmpty()) {
 			return null;
+		} else if ("c".startsWith(currentInput)) {
+			return SUGGESTION_CONFIRM_FILEPATH;
 		} else if ("d".startsWith(currentInput)) {
 			return SUGGESTION_DELETE_DONE;
 		} else if ("re".startsWith(currentInput)) {
@@ -98,6 +103,8 @@ public class InputSuggestion {
 			return SUGGESTION_UNDO;
 		} else if (currentInput.equals(COMMAND_REDO)) {
 			return SUGGESTION_REDO;
+		} else if (currentInput.equals(COMMAND_FILEPATH)) {
+			return SUGGESTION_FILEPATH;
 		} else if (currentInput.equals(COMMAND_HELP)) {
 			return SUGGESTION_HELP;
 		} else if (currentInput.equals(COMMAND_EXIT)) {
@@ -120,6 +127,7 @@ public class InputSuggestion {
 		suggestions.add(SUGGESTION_UNDONE);
 		suggestions.add(SUGGESTION_UNDO);
 		suggestions.add(SUGGESTION_REDO);
+		suggestions.add(SUGGESTION_FILEPATH);
 		suggestions.add(SUGGESTION_HELP);
 		suggestions.add(SUGGESTION_EXIT);
 

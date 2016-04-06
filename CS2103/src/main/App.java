@@ -27,17 +27,27 @@ import com.tulskiy.keymaster.common.Provider;
  * @@author A0149527W
  */
 public class App extends Application{
-	private static final String SHORTCUT_LAUNCH="control ALT";
-	private HotKeyListener listener=null;
-	//the tray icon of this app
-	private static TrayIcon trayIcon;
+	//shortcut to quick launch
+	private static final String SHORTCUT_LAUNCH="control alt SPACE";
+	
 	// This the scene stage of application
 	public static Stage stage;
+	
 	// this is the task file
 	public static String filePath;
+	
+	// this is the coordinates of the window
 	public static double xOffset;
 	public static double yOffset;
+	
+	//shortcut provider
 	private static Provider shortcut=Provider.getCurrentProvider(false);
+	
+	//global hotey listener
+	private HotKeyListener listener=null;
+	
+	//the tray icon of this app
+	private static TrayIcon trayIcon;
 	
 	public static void main(String[] args) {
 		Application.launch(args);
@@ -47,6 +57,7 @@ public class App extends Application{
 	public void start(Stage primaryStage) {
 		Platform.setImplicitExit( false );
 		
+		//set listener for hotkey
 		listener=new HotKeyListener() {			
 			@Override
 			public void onHotKey(HotKey hotkey) {
@@ -67,7 +78,9 @@ public class App extends Application{
 				}
 			}
 		};
-        shortcut.register(KeyStroke.getKeyStroke("control alt SPACE"), listener);
+		//register global hotkey
+        shortcut.register(KeyStroke.getKeyStroke(SHORTCUT_LAUNCH), listener);
+        
 		stage = primaryStage;
 
 		enableTray();
@@ -116,7 +129,7 @@ public class App extends Application{
 			}
 		};
 
-		// double click
+		// set listener for double click
 		MouseListener mouseListener = new MouseListener() {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
