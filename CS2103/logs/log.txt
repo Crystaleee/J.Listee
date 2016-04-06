@@ -1,60 +1,60 @@
-四月 06, 2016 9:55:54 下午 storage.Storage getDisplay
+四月 06, 2016 9:59:40 下午 storage.Storage getDisplay
 信息: Reading all tasks from file.
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksFloating
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksFloating
 信息: Successfully read floating task: send intern email
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksFloating
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksFloating
 信息: Successfully read floating task: confirm family tour schedule
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksFloating
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksFloating
 信息: Successfully read floating task: photoshop photos
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksFloating
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksFloating
 信息: Successfully read floating task: overdue and today
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: overdue
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: overdue
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: hellllldfkdj
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: SE project due
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: lab5
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: peer evaluation
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: UI project
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: UI presentation
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: SE FINAL
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: UI FINAL
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: CN FINAL
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksDeadline
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksDeadline
 信息: Successfully read deadline task: CG FINAL
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksEvents
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksEvents
 信息: Successfully read event task: Bali travel
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksEvents
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksEvents
 信息: Successfully read event task: family Singapore tour
 
-四月 06, 2016 9:55:54 下午 storage.Storage readTasksReserved
+四月 06, 2016 9:59:40 下午 storage.Storage readTasksReserved
 信息: Successfully read reserved task: qwertyuiopasdfghjklzxcvbnm
 

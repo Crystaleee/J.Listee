@@ -19,7 +19,7 @@
     height:503px;
     padding: 15px;
     padding-right: 5px;
-    background-color:rgba(238,238,238,1.0);
+    background-color:rgba(238,238,238,0.9);
     overflow-y:scroll;
   }
 
@@ -319,7 +319,7 @@
            locationspan.innerHTML="@"+taskList[index].location;
            task_location.appendChild(locationspan);
 
-           detail=detail+"<br>Location: "+taskList[index].location;
+           detail=detail+"\nLocation: "+taskList[index].location;
          }
          else{
            task_location.style.display="none";
@@ -328,7 +328,7 @@
          //add tags if necessary at most 4
          if(taskList[index].tags.length>0){
 
-          detail=detail+"<br>"+"Tags: ";
+          detail=detail+"\n"+"Tags: ";
           for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
             detail=detail+"#"+taskList[index].tags[index2]+",";
           }
@@ -348,26 +348,26 @@
          }
         }
         var len=taskList[index].startDates.length;
-        detail=detail+"<br>Time slots: ";
+        detail=detail+"\nTime slots: ";
 
         for( index3 =0; index3 < len; index3++){
-          detail+="<br>("+taskList[index].startDates[index3]+", "+taskList[index].endDates[index3]+")";
+          detail+="\n("+taskList[index].startDates[index3]+", "+taskList[index].endDates[index3]+")";
         }
 
-        taskdiv.setAttribute("title","<h5 style='text-align:left'>"+detail+"</h5>");
+        taskdiv.setAttribute("title",detail);
 
         //add timeslots at most 3
         for( index3 =len-1; index3>=0 && len-index3<4; index3--){
            var timeslot = document.createElement("div");
            timeslot.setAttribute("class", "timeslot");
            timeslot.setAttribute("id", "timeslot"+(len-index3));
-           timeslot.innerHTML=taskList[index].startDates[index3]+"<br>"+taskList[index].endDates[index3];
+           timeslot.innerHTML=taskList[index].startDates[index3]+"\n"+taskList[index].endDates[index3];
            timeslot_list.appendChild(timeslot);
         }
 
         i=i+1;
       }
-     $("[data-toggle='tooltip']").tooltip({html : true }); 
+    // $("[data-toggle='tooltip']").tooltip({html : true }); 
     }
 
     function addTasks(jsonTasks, type){
@@ -483,7 +483,7 @@
            locationspan.innerHTML="@"+taskList[index].location;
            task_location.appendChild(locationspan);
 
-           detail=detail+"<br>Location: "+taskList[index].location;
+           detail=detail+"\nLocation: "+taskList[index].location;
          }
          else{
            task_location.style.display="none";
@@ -492,7 +492,7 @@
          //add tags if necessary
          if(taskList[index].tags.length!=0){
 
-          detail=detail+"<br>"+"Tags: ";
+          detail=detail+"\n"+"Tags: ";
           for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
             detail=detail+"#"+taskList[index].tags[index2]+", ";
           }
@@ -516,7 +516,7 @@
      if(taskList[index].startDate!=undefined){        
        task_start.innerHTML=taskList[index].startDate;
 
-       detail=detail+"<br>Start Date: "+taskList[index].startDate;
+       detail=detail+"\nStart Date: "+taskList[index].startDate;
      }
      else{
        $("#task_start_div"+i).hide();
@@ -525,17 +525,17 @@
      //add endDate if necessary
      if(taskList[index].endDate!=undefined){
        task_end.innerHTML= taskList[index].endDate;
-       detail=detail+"<br>End Date: "+taskList[index].endDate;
+       detail=detail+"\nEnd Date: "+taskList[index].endDate;
      }
      else{
        $("#task_end_div"+i).hide();
      }
 
-     taskdiv.setAttribute("title","<h5 style='text-align:left'>"+detail+"</h5>");
+     taskdiv.setAttribute("title",detail);
 
      i=i+1;
    }    
-   $("[data-toggle='tooltip']").tooltip({html : true }); 
+   //$("[data-toggle='tooltip']").tooltip({html : true }); 
  }
 
  function sendCommand() {
@@ -737,9 +737,9 @@ $(document).keydown(
     }
 );
 
-    $(function () { 
-      $("[data-toggle='tooltip']").tooltip({html : true }); 
-    });
+  //  $(function () { 
+ //     $("[data-toggle='tooltip']").tooltip({html : true }); 
+  //  });
 </script>
 
 <div id="wrapper">
