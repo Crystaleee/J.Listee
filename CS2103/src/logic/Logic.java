@@ -35,6 +35,7 @@ public class Logic {
     public static Display changeFilePath(String filePath) {
         try{
             StorageFilePath.changeFilePath(filePath);
+            display.setMessage("File path changed to: " + filePath);
         }catch(IOException e){
             display.setMessage("Can't change filePath");
         }
@@ -68,7 +69,7 @@ public class Logic {
         end.set(Calendar.HOUR_OF_DAY, 23);
         end.set(Calendar.MINUTE, 59);
         display = new CommandShow(null, null, start, end, new ArrayList<String>()).execute(display);
-        display.setMessage(null);
+        display.setMessage("Welcome Back! These are today's agenda and overdue tasks.");
     }
 
     public static Display executeUserCommand(String userInput) {

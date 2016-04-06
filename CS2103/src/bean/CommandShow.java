@@ -86,9 +86,9 @@ public class CommandShow implements Command {
     }
 
     private boolean noTasksFound() {
-        int numVisible = _display.getVisibleCompletedTasks().size() + _display.getVisibleDeadlineTasks().size()
-                + _display.getVisibleEvents().size() + _display.getVisibleFloatTasks().size()
-                + _display.getVisibleReservedTasks().size();
+        int numVisible = _display.getVisibleCompletedTasks().size()
+                + _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                + _display.getVisibleFloatTasks().size() + _display.getVisibleReservedTasks().size();
         return numVisible == 0;
     }
 
@@ -276,7 +276,9 @@ public class CommandShow implements Command {
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
-                        _display.getVisibleFloatTasks().add(task);
+                        if (withinTimeRange(task)) {
+                            _display.getVisibleFloatTasks().add(task);
+                        }
                     }
                 }
             }
