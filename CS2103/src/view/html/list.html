@@ -19,7 +19,7 @@
     height:503px;
     padding: 15px;
     padding-right: 5px;
-    background-color:rgba(238,238,238,0.9);
+    background-color:rgba(238,238,238,1.0);
     overflow-y:scroll;
   }
 
@@ -55,6 +55,9 @@
     outline: 0;
     border-radius: 8px;
     box-shadow: 0 0 0 1.5px #ccc;
+  }
+  .overdue:focus{
+    background-color: rgba(235,131,99,0.3);
   }
   .conflict{
     outline: 0;
@@ -257,6 +260,10 @@
         taskdiv.setAttribute("tabindex", "0");
         taskdiv.setAttribute("id", i+1);
 
+        var detail="Description: "+taskList[index].description;
+        taskdiv.setAttribute("data-toggle","tooltip");
+        taskdiv.setAttribute("data-placement","auto");
+
         //restric displaying discription length
         var description="";
         if(taskList[index].description.length<24){
@@ -314,6 +321,8 @@
            var locationspan = document.createElement("span");
            locationspan.innerHTML="@"+taskList[index].location;
            task_location.appendChild(locationspan);
+
+           detail=detail+"<br>Location: "+taskList[index].location;
          }
          else{
            task_location.style.display="none";
@@ -321,6 +330,11 @@
 
          //add tags if necessary at most 4
          if(taskList[index].tags.length>0){
+
+          detail=detail+"<br>"+"Tags: ";
+          for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+            detail=detail+"#"+taskList[index].tags[index2]+",";
+          }
 
           if(taskList[index].tags.length>4){
             taskList[index].tags[3]="...";
@@ -337,6 +351,14 @@
          }
         }
         var len=taskList[index].startDates.length;
+        detail=detail+"<br>Time slots: ";
+
+        for( index3 =0; index3 < len; index3++){
+          detail+="<br>("+taskList[index].startDates[index3]+", "+taskList[index].endDates[index3]+")";
+        }
+
+        taskdiv.setAttribute("title","<h5 style='text-align:left'>"+detail+"</h5>");
+
         //add timeslots at most 3
         for( index3 =len-1; index3>=0 && len-index3<4; index3--){
            var timeslot = document.createElement("div");
@@ -348,11 +370,12 @@
 
         i=i+1;
       }
+     //$("[data-toggle='tooltip']").tooltip({html : true }); 
     }
 
     function addTasks(jsonTasks, type){
       var taskList = JSON.parse(jsonTasks);
-
+     
       if(taskList.length==0)
         return;
 
@@ -394,6 +417,10 @@
       taskdiv.setAttribute("tabindex", "0");
       taskdiv.setAttribute("id", i+1);
 
+      var detail="Description: "+taskList[index].description;
+      taskdiv.setAttribute("data-toggle","tooltip");
+      taskdiv.setAttribute("data-placement","auto");
+
       taskdiv.innerHTML= "<section class='task_number'>"
       + (i+1)
       +"</section>"
@@ -401,9 +428,9 @@
       + "<div class='task_components task_description' id='task_description"
       + i
       + "'>"
-    + "<div id=description>"
+      + "<div id=description>"
       + description
-    + "</div>"
+      + "</div>"
       +"</div>"
       + "<div class='task_components' id='task_details"
       + i
@@ -458,6 +485,8 @@
            var locationspan = document.createElement("span");
            locationspan.innerHTML="@"+taskList[index].location;
            task_location.appendChild(locationspan);
+
+           detail=detail+"<br>Location: "+taskList[index].location;
          }
          else{
            task_location.style.display="none";
@@ -465,13 +494,19 @@
 
          //add tags if necessary
          if(taskList[index].tags.length!=0){
+
+          detail=detail+"<br>"+"Tags: ";
+          for  (index2 = 0; index2 < taskList[index].tags.length; index2++){
+            detail=detail+"#"+taskList[index].tags[index2]+", ";
+          }
+
           if(taskList[index].tags.length>4){
             taskList[index].tags[3]="...";
-          }
+          }          
           for  (index2 = 0; index2 < taskList[index].tags.length && index2 < 4; index2++){
            var tagspan = document.createElement("span");
            tagspan.innerHTML="#"+taskList[index].tags[index2];
-           task_tags.appendChild(tagspan);
+           task_tags.appendChild(tagspan);        
          }
        }
        else{
@@ -483,6 +518,8 @@
      //add startDate if necessary
      if(taskList[index].startDate!=undefined){        
        task_start.innerHTML=taskList[index].startDate;
+
+       detail=detail+"<br>Start Date: "+taskList[index].startDate;
      }
      else{
        $("#task_start_div"+i).hide();
@@ -491,13 +528,17 @@
      //add endDate if necessary
      if(taskList[index].endDate!=undefined){
        task_end.innerHTML= taskList[index].endDate;
+       detail=detail+"<br>End Date: "+taskList[index].endDate;
      }
      else{
        $("#task_end_div"+i).hide();
      }
 
+     taskdiv.setAttribute("title","<h5 style='text-align:left'>"+detail+"</h5>");
+
      i=i+1;
    }    
+   //$("[data-toggle='tooltip']").tooltip({html : true }); 
  }
 
  function sendCommand() {
@@ -699,7 +740,9 @@ $(document).keydown(
     }
 );
 
-
+    $(function () { 
+      $("[data-toggle='tooltip']").tooltip({html : true }); 
+    });
 </script>
 
 <div id="wrapper">
@@ -740,7 +783,6 @@ $(document).keydown(
 
         </div>
       </div>
-
    </div>
    <div class="commandline">
     <form name="cmd">
