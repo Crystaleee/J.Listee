@@ -184,8 +184,12 @@ public class JListeeParser {
 
 		String[] separateInputLine = inputLine.split(" ");
 		String commandType = determineCommandType(separateInputLine);
+		inputLine = deleteKeyword(COMMAND_REDO, inputLine);
+		inputLine = inputLine.trim().replaceAll(" +", "");
+
 
 		switch (commandType) {
+
 		case COMMAND_ADD:
 			return parseAdd(inputLine);
 
@@ -194,6 +198,7 @@ public class JListeeParser {
 			return parseDelete(inputLine);
 
 		case COMMAND_UNDO:
+			
 			return parseUndo();
 
 		case COMMAND_REDO:
@@ -229,12 +234,11 @@ public class JListeeParser {
 		Integer taskNumber;
 		Integer timeSlotIndex;
 		
-		inputLine = inputLine.replaceFirst(COMMAND_CONFIRM, "").trim();
 
 		taskNumber = extractTaskNumber(inputLine);
 		
 		if (inputLine.contains(String.valueOf(taskNumber))) {
-			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
+			inputLine = deleteKeyword(String.valueOf(taskNumber), inputLine);
 		}
 		
 		timeSlotIndex = extractTaskNumber(inputLine);		
@@ -250,7 +254,6 @@ public class JListeeParser {
 		int firstDateIndex = -1;
 		int prepositionIndex = -1;
 
-		inputLine = inputLine.replaceFirst(COMMAND_ADD, "").trim();
 		
 		//find the index where the preposition starts
 		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
@@ -305,8 +308,6 @@ public class JListeeParser {
 
 	public Command parseDelete(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
-		inputLine = inputLine.replace(COMMAND_DELETE, "").trim();
-		inputLine = inputLine.trim().replaceAll(" +", "");
 
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
@@ -337,6 +338,10 @@ public class JListeeParser {
 		return new CommandDelete(taskNumbers);
 	}
 
+	public String deleteKeyword(String keyword, String inputLine) {
+		return inputLine;
+	}
+
 
 
 	public Command parseUndo() {
@@ -354,13 +359,11 @@ public class JListeeParser {
 		ArrayList<String> task = new ArrayList<String>();
 		int prepositionIndex = -1;
 		int firstDateIndex = -1;
-
-		inputLine = inputLine.replaceFirst(COMMAND_SHOW, "").trim();
 		
 		for (int i = 0; i< SEARCH_TASKS.length; i++){
 			if (inputLine.toLowerCase().contains("/" + SEARCH_TASKS[i])){
 
-				inputLine = inputLine.replace("/" + SEARCH_TASKS[i], "");
+				inputLine = deleteKeyword("/" + SEARCH_TASKS[i], inputLine);
 
 				switch (SEARCH_TASKS[i]){
 					case ("today"):
@@ -441,8 +444,6 @@ public class JListeeParser {
 		ArrayList<Calendar> endDates = new ArrayList<Calendar>();
 		int prepositionIndex = -1;
 		int firstDateIndex = -1;
-
-		inputLine = inputLine.replaceFirst(COMMAND_RESERVE, "").trim();
 		
 		prepositionIndex = getPrepositionIndex(inputLine, prepositionIndex);
 		
@@ -479,7 +480,6 @@ public class JListeeParser {
 		Integer taskNumber;
 		Integer reservedTaskIndex = null; 
 	
-		inputLine = inputLine.replaceFirst(COMMAND_UPDATE, "").trim();
 		taskNumber = extractTaskNumber(inputLine);
 	
 		if (inputLine.contains(String.valueOf(taskNumber))) {
@@ -613,8 +613,6 @@ public class JListeeParser {
 
 	public Command parseDone(String inputLine){
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
-		inputLine = inputLine.replace(COMMAND_DONE, "").trim();
-		inputLine = inputLine.trim().replaceAll(" +", "");
 
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
@@ -648,8 +646,7 @@ public class JListeeParser {
 
 	public Command parseUndone(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
-		inputLine = inputLine.replace(COMMAND_UNDONE, "").trim();
-		inputLine = inputLine.trim().replaceAll(" +", "");
+	
 
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
