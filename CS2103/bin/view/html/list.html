@@ -56,9 +56,6 @@
     border-radius: 8px;
     box-shadow: 0 0 0 1.5px #ccc;
   }
-  .overdue:focus{
-    background-color: rgba(235,131,99,0.3);
-  }
   .conflict{
     outline: 0;
     border-radius: 8px;
@@ -370,7 +367,7 @@
 
         i=i+1;
       }
-     //$("[data-toggle='tooltip']").tooltip({html : true }); 
+     $("[data-toggle='tooltip']").tooltip({html : true }); 
     }
 
     function addTasks(jsonTasks, type){
@@ -538,7 +535,7 @@
 
      i=i+1;
    }    
-   //$("[data-toggle='tooltip']").tooltip({html : true }); 
+   $("[data-toggle='tooltip']").tooltip({html : true }); 
  }
 
  function sendCommand() {

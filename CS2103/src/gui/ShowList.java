@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.JFileChooser;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
