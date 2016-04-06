@@ -168,7 +168,7 @@ public class App extends Application{
 		try {
 			SystemTray tray = SystemTray.getSystemTray();
 			BufferedImage image = ImageIO.read(this.getClass()
-					.getResourceAsStream("image.jpg"));
+					.getResourceAsStream("/view/images/tray-icon.png"));
 			trayIcon = new TrayIcon(image, "J.Listee", popupMenu);
 			trayIcon.setToolTip("J.Listee");
 			tray.add(trayIcon);

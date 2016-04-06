@@ -11,7 +11,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import logic.Logic;
 import main.App;
 import storage.LogStorage;
