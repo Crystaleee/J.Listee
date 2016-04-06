@@ -17,6 +17,7 @@ import bean.TaskDeadline;
 import bean.TaskReserved;
 import bean.TaskEvent;
 import bean.TaskFloat;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
@@ -256,6 +257,8 @@ public class ShowList extends AppPage {
 					// create file under the file folder chosen by user
 					GUIController.changeFilePath(App.filePath);
 				}
+			}else if(cmd.equals("exit")||cmd.equals("quit")){
+				App.terminate();
 			}else{
 				GUIController.handelUserInput(cmd);
 			}			

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class InputSuggestion {
 
-	private static final String SUGGESTION_ADD = "add <description> at/by/etc [time] [@location] [#tag]";
+	private static final String SUGGESTION_ADD = "add <description> at/from/due/etc [time] [@location] [#tag]";
 	private static final String SUGGESTION_DELETE = "delete <task number(s)>";
-	private static final String SUGGESTION_UPDATE = "update <task number> [new description] [-delete time(s)] [new time(s)] [-@delete location] [@new location] [-#delete tag] [#new tag]";
+	private static final String SUGGESTION_UPDATE = "update <task number> [reservation index] [new description] [(-)start/(-)end] [(-)@location] [(-)#tag]";
 	private static final String SUGGESTION_RESERVE = "reserve <description> <start dates to end dates> [@location] [#tag]";
 	private static final String SUGGESTION_CONFIRM = "confirm <task number(s)>";
 	private static final String SUGGESTION_DONE = "done <task number(s)>";
@@ -15,10 +15,11 @@ public class InputSuggestion {
 	private static final String SUGGESTION_SHOW = "show [/task-group] [keyword]";
 	private static final String SUGGESTION_UNDO = "undo";
 	private static final String SUGGESTION_REDO = "redo";
+	private static final String SUGGESTION_HELP = "help";
 	private static final String SUGGESTION_EXIT = "exit";
 	private static final String SUGGESTION_INVALID = "INVALID COMMAND!";
 
-	private static final String SUGGESTION_DELETE_DONE = "delete <task number(s)> / done <task number(s)>";
+	private static final String SUGGESTION_DELETE_DONE = "delete <task number(s)> // done <task number(s)>";
 	private static final String SUGGESTION_UNDO_UNDONE = "undo / undone <task number(s)>";
 	private static final String SUGGESTION_UNDO_UNDONE_UPDATE = "undo / undone <task number(s)> / update <task number>";
 	private static final String SUGGESTION_REDO_RESERVE = "redo / reserve <description> <start dates to end dates>";
@@ -33,6 +34,7 @@ public class InputSuggestion {
 	private static final String COMMAND_SHOW = "show ";
 	private static final String COMMAND_UNDO = "undo";
 	private static final String COMMAND_REDO = "redo";
+	private static final String COMMAND_HELP = "help";
 	private static final String COMMAND_EXIT = "exit";
 
 	private static InputSuggestion inputSuggester;
@@ -96,6 +98,8 @@ public class InputSuggestion {
 			return SUGGESTION_UNDO;
 		} else if (currentInput.equals(COMMAND_REDO)) {
 			return SUGGESTION_REDO;
+		} else if (currentInput.equals(COMMAND_HELP)) {
+			return SUGGESTION_HELP;
 		} else if (currentInput.equals(COMMAND_EXIT)) {
 			return SUGGESTION_EXIT;
 		} else {
@@ -116,9 +120,11 @@ public class InputSuggestion {
 		suggestions.add(SUGGESTION_UNDONE);
 		suggestions.add(SUGGESTION_UNDO);
 		suggestions.add(SUGGESTION_REDO);
+		suggestions.add(SUGGESTION_HELP);
 		suggestions.add(SUGGESTION_EXIT);
 
 		return suggestions;
 	}
 
 }
+

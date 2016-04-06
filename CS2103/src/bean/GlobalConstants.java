@@ -15,7 +15,12 @@ public class GlobalConstants {
     public static final String MESSAGE_ERROR_DESCRIPTION = "Please enter a description";
     public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
     public static final String MESSAGE_ERROR_INVALID_COMMAND = "You have specified an invalid command";
-    public static final String MESSAGE_ERROR_NO_NUMBER = "please specify a number(s)";
+    public static final String MESSAGE_ERROR_INVALID_INDEX = "Please specify a valid index";
+    public static final String MESSAGE_ERROR_INVALID_TIMESLOT = "Please specify a valid time slot";
+    public static final String MESSAGE_ERROR_NO_NUMBER = "please specify a task index";
+    public static final String MESSAGE_ERROR_NO_RESERVED_TASKS = "There are no reserved tasks";
+    public static final String MESSAGE_ERROR_NO_TIMESLOT = "Please specify a time slot";
+    public static final String MESSAGE_ERROR_NO_VISIBLE_RESERVED_TASKS = "There are no shown reserved tasks";
     public static final String MESSAGE_ERROR_READING_FILE = "Error occured while reading file";
     public static final String MESSAGE_ERROR_REDO = "You have reached the latest point possible";
     public static final String MESSAGE_ERROR_TASK_NUMBER = "Please specify a valid task number";

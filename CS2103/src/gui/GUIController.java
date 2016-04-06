@@ -55,7 +55,7 @@ public class GUIController {
 			scene = new Scene(welcome, WINDOW_WIDTH, WINDOW_HEIGHT);
 			scene.setFill(null);
 			setMouseMovable(scene);
-			setCloseOnEsc(stage, scene);
+			setShortcut(scene);
 			stage.setScene(scene);
 		} else {
 			stage.getScene().setRoot(welcome);
@@ -80,7 +80,7 @@ public class GUIController {
 				scene.setFill(null);
 				setMouseMovable(scene);
 				//set Esc key for close
-				setCloseOnEsc(stage, scene);
+				setShortcut(scene);
 				stage.setScene(scene);
 			} else {
 				stage.getScene().setRoot(showList);
@@ -104,7 +104,7 @@ public class GUIController {
 			scene.setFill(null);
 			setMouseMovable(scene);
 			//set Esc key for close
-			setCloseOnEsc(stage, scene);
+			setShortcut(scene);
 			stage.setScene(scene);
 		} else {
 			stage.getScene().setRoot(help);
@@ -117,12 +117,12 @@ public class GUIController {
 	 * @param stage
 	 * @param scene
 	 */
-	private static void setCloseOnEsc(Stage stage, Scene scene) {
+	private static void setShortcut(Scene scene) {
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>
 		  () {@Override
-		        public void handle(KeyEvent t) {
-		          if(t.getCode()==KeyCode.ESCAPE){
-		              stage.close();
+		        public void handle(KeyEvent e) {		  
+		          if(e.getCode()==KeyCode.ESCAPE){
+		              App.terminate();
 		          }
 		        }
 		    });
