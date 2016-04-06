@@ -13,6 +13,7 @@ public class InputSuggestion {
 	private static final String SUGGESTION_DONE = "done <task number(s)>";
 	private static final String SUGGESTION_UNDONE = "undone <task number(s)>";
 	private static final String SUGGESTION_SHOW = "show [/task-group] [keyword]";
+	private static final String SUGGESTION_POSTPONE = "postpone <task number(s)> <time to postpone by>";
 	private static final String SUGGESTION_UNDO = "undo";
 	private static final String SUGGESTION_REDO = "redo";
 	private static final String SUGGESTION_FILEPATH = "change filepath";
@@ -34,6 +35,7 @@ public class InputSuggestion {
 	private static final String COMMAND_DONE = "done ";
 	private static final String COMMAND_UNDONE = "undone ";
 	private static final String COMMAND_SHOW = "show ";
+	private static final String COMMAND_POSTPONE = "postpone ";
 	private static final String COMMAND_UNDO = "undo";
 	private static final String COMMAND_REDO = "redo";
 	private static final String COMMAND_FILEPATH = "change filepath";
@@ -99,6 +101,8 @@ public class InputSuggestion {
 			return SUGGESTION_UNDONE;
 		} else if (currentInput.startsWith(COMMAND_SHOW)) {
 			return SUGGESTION_SHOW;
+		} else if (currentInput.startsWith(COMMAND_POSTPONE)) {
+			return SUGGESTION_POSTPONE;
 		} else if (currentInput.equals(COMMAND_UNDO)) {
 			return SUGGESTION_UNDO;
 		} else if (currentInput.equals(COMMAND_REDO)) {
@@ -128,6 +132,7 @@ public class InputSuggestion {
 		suggestions.add(SUGGESTION_UNDO);
 		suggestions.add(SUGGESTION_REDO);
 		suggestions.add(SUGGESTION_FILEPATH);
+		suggestions.add(SUGGESTION_POSTPONE);
 		suggestions.add(SUGGESTION_HELP);
 		suggestions.add(SUGGESTION_EXIT);
 
@@ -135,4 +140,3 @@ public class InputSuggestion {
 	}
 
 }
-
