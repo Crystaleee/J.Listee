@@ -1,8 +1,10 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
+import javafx.stage.DirectoryChooser;
+
 import javax.swing.JOptionPane;
 
 import netscape.javascript.JSObject;
@@ -24,18 +26,19 @@ public class WelcomeAndChooseStorage extends AppPage {
 	public class WelcomeBridge {
 
 		public void chooseFolder()  {
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int returnVal = fileChooser.showOpenDialog(fileChooser);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {				
-				App.filePath=fileChooser.getSelectedFile().getAbsolutePath()+"\\J.Listee.txt";
+			DirectoryChooser fileChooser = new DirectoryChooser();
+			File selectedFile = fileChooser.showDialog(App.stage);
+			fileChooser.setTitle("Please select a folder for storage location");
+			
+			if(selectedFile!=null){			
+				App.filePath=selectedFile.getAbsolutePath()+"\\J.Listee.txt";
 				// create file under the file folder chosen by user
 				try {
 					GUIController.createFile(App.filePath);
 					//display starting page
 					GUIController.initializeList(App.filePath);
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(fileChooser, e.getMessage());
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				}
 			}
 		}
