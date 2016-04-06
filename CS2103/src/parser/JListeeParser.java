@@ -22,6 +22,7 @@ import bean.CommandAddDeadlineTask;
 import bean.CommandAddEvent;
 import bean.CommandAddFloatTask;
 import bean.CommandAddReserved;
+import bean.CommandConfirm;
 import bean.CommandDelete;
 import bean.CommandDone;
 import bean.CommandInvalid;
@@ -32,6 +33,7 @@ import bean.CommandUndone;
 import bean.CommandUpdate;
 
 public class JListeeParser {
+	private static final String COMMAND_CONFIRM = "confirm";
 	private static final String CONTAINING_DELETE = "del";
 	private static final String CONTAINING_BOTH = "both";
 	private static final String CONTAINING_ALLTIME = "alltime";
@@ -124,6 +126,10 @@ public class JListeeParser {
 
 		JListeeParser testUpdateTask = new JListeeParser();
 		testUpdateTask.ParseCommand("update 3 /del 1,2,3"); 
+		
+
+		JListeeParser testConfirm = new JListeeParser();
+		testConfirm.ParseCommand("confirm 3 1"); 
 
 	} 
 
@@ -194,6 +200,9 @@ public class JListeeParser {
 
 		case COMMAND_RESERVE:
 			return parseReserve(inputLine);
+			
+		case COMMAND_CONFIRM:
+			return parseConfirm(inputLine);
 
 		case COMMAND_UPDATE:
 			return parseUpdate(inputLine);
@@ -207,6 +216,23 @@ public class JListeeParser {
 		default:
 			return parseInvalid();
 		}
+	}
+
+	public Command parseConfirm(String inputLine) {
+		Integer taskNumber;
+		Integer timeSlotIndex;
+		
+		inputLine = inputLine.replaceFirst(COMMAND_CONFIRM, "").trim();
+
+		taskNumber = extractTaskNumber(inputLine);
+		
+		if (inputLine.contains(String.valueOf(taskNumber))) {
+			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
+		}
+		
+		timeSlotIndex = extractTaskNumber(inputLine);		
+		
+		return new CommandConfirm(taskNumber, timeSlotIndex) ;
 	}
 
 	public Command parseAdd(String inputLine) {
@@ -752,7 +778,9 @@ public class JListeeParser {
 
 
 	private Integer extractTaskNumber(String inputLine) {
+		
 		String[] splitInputLine = inputLine.split(" ");
+
 		for (int i = 0; i < splitInputLine[0].length(); i++) {
 		      if (!Character.isDigit(splitInputLine[0].charAt(i))){
 		    	  return null;
