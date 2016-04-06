@@ -105,7 +105,7 @@ public class JListeeParser {
 		testEvent.ParseCommand("add today to hi whhat friday from 5th april to 9th april #hi @location  # ");
 
 		JListeeParser testFloat = new JListeeParser();
-		testFloat.ParseCommand("add cs2105 @zzz #arghhhhh #hi");
+		testFloat.ParseCommand("add collect from april @zzz #arghhhhh #hi");
 
 		JListeeParser testDeadLine = new JListeeParser();
 		testDeadLine.ParseCommand("add good friday this friday");
@@ -129,7 +129,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve from huh @hi #asda #ahskdjashd r1 from 12/4/16 3pm to 5pm and today 7pm to 8pm and sunday 2 to 3pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 3 /del 1,2,3"); 	
+		testUpdateTask.ParseCommand("update 3 collect from april on 3rd april "); 	
 
 		JListeeParser testConfirm = new JListeeParser();
 		testConfirm.ParseCommand("confirm 3 1"); 
@@ -288,6 +288,20 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+
+			System.out.println("taskdescription: "  + taskDescription);
+			System.out.println("location: " + location);
+			if (startDate!= null){
+				System.out.println("startDate: " + startDate.getTime());
+			}
+
+			if (endDate!=null){
+				System.out.println("endDate: " + endDate.getTime());	
+			}
+
+			for (int i=0; i<tagLists.size(); i++){
+				System.out.println("TAGS: " + tagLists.get(i));
+			}
 
 
 		if (isEvent) {
@@ -685,6 +699,9 @@ public class JListeeParser {
 	}
 
 	private int getPrepositionIndex(String inputLine, int prepositionIndex) {
+		
+		System.out.println(inputLine);
+		
 		for (int i = 0; i< DATE_WORDS.length; i++){
 			int temp = -1;
 	
@@ -698,6 +715,16 @@ public class JListeeParser {
 				prepositionIndex = temp;
 			}
 		}
+		
+		if (prepositionIndex != -1){
+			if (inputLine.substring(prepositionIndex).contains("from")){
+				if (!inputLine.substring(prepositionIndex).contains("to")){
+					prepositionIndex = -1;
+				}
+
+			}
+		}
+
 		return prepositionIndex;
 	}
 
