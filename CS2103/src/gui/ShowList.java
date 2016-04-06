@@ -69,11 +69,16 @@ public class ShowList extends AppPage {
 								JSONObject task = new JSONObject(deadline);
 								task.remove("startDate");
 								task.remove("endDate");
-								task.put("endDate",
-										new SimpleDateFormat(
-												"EEE MM/dd HH:mm",Locale.ENGLISH)
-												.format(deadline.getEndDate()
-														.getTime()));
+								try {
+									task.put("endDate",
+											new SimpleDateFormat(
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
+													.format(deadline.getEndDate()
+															.getTime()));
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								jsonDeadline.put(task);
 							}
 							
@@ -90,17 +95,27 @@ public class ShowList extends AppPage {
 								JSONObject task = new JSONObject(event);
 								task.remove("startDate");
 								task.remove("endDate");
-								task.put("startDate",
-										new SimpleDateFormat(
-												"EEE MM/dd HH:mm",Locale.ENGLISH)
-												.format( event
-														.getStartDate()
-														.getTime()));
-								task.put("endDate",
-										new SimpleDateFormat(
-												"EEE MM/dd HH:mm",Locale.ENGLISH)
-												.format( event.getEndDate()
-														.getTime()));
+								try {
+									task.put("startDate",
+											new SimpleDateFormat(
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
+													.format( event
+															.getStartDate()
+															.getTime()));
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								try {
+									task.put("endDate",
+											new SimpleDateFormat(
+													"EEE MM/dd HH:mm",Locale.ENGLISH)
+													.format( event.getEndDate()
+															.getTime()));
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								jsonEvent.put(task);
 							}
 							win.call("addTasks", jsonEvent,"event");
@@ -131,17 +146,27 @@ public class ShowList extends AppPage {
 								task.remove("startDates");
 								task.remove("endDates");
 								for(int i=0;i<reserved.getStartDates().size();i++){
-									task.append("startDates",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format( reserved
-															.getStartDates().get(i)
-															.getTime()));
-									task.append("endDates",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format( reserved.getEndDates().get(i)
-															.getTime()));
+									try {
+										task.append("startDates",
+												new SimpleDateFormat(
+														"EEE MM/dd HH:mm",Locale.ENGLISH)
+														.format( reserved
+																.getStartDates().get(i)
+																.getTime()));
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									try {
+										task.append("endDates",
+												new SimpleDateFormat(
+														"EEE MM/dd HH:mm",Locale.ENGLISH)
+														.format( reserved.getEndDates().get(i)
+																.getTime()));
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 								}						
 								jsonReserved.put(task);
 							}
@@ -163,19 +188,29 @@ public class ShowList extends AppPage {
 								task.remove("startDate");
 								task.remove("endDate");
 								if(completed instanceof TaskEvent){
-									task.put("startDate",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format( ((TaskEvent) completed)
-															.getStartDate()
-															.getTime()));
+									try {
+										task.put("startDate",
+												new SimpleDateFormat(
+														"EEE MM/dd HH:mm",Locale.ENGLISH)
+														.format( ((TaskEvent) completed)
+																.getStartDate()
+																.getTime()));
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 								}
 								if(completed instanceof TaskDeadline || completed instanceof TaskEvent){
-									task.put("endDate",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format( ((TaskDeadline)completed).getEndDate()
-															.getTime()));								
+									try {
+										task.put("endDate",
+												new SimpleDateFormat(
+														"EEE MM/dd HH:mm",Locale.ENGLISH)
+														.format( ((TaskDeadline)completed).getEndDate()
+																.getTime()));
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}								
 								}
 								jsonTask.put(task);
 							}

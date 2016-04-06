@@ -184,9 +184,7 @@ public class JListeeParser {
 
 		String[] separateInputLine = inputLine.split(" ");
 		String commandType = determineCommandType(separateInputLine);
-		inputLine = deleteKeyword(COMMAND_REDO, inputLine);
-		inputLine = inputLine.trim().replaceAll(" +", "");
-
+		inputLine = deleteKeyword(commandType, inputLine);
 
 		switch (commandType) {
 
@@ -308,6 +306,7 @@ public class JListeeParser {
 
 	public Command parseDelete(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		inputLine = inputLine.trim().replaceAll(" +", "");
 
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
@@ -339,6 +338,7 @@ public class JListeeParser {
 	}
 
 	public String deleteKeyword(String keyword, String inputLine) {
+		inputLine = inputLine.replaceFirst(keyword, "").trim();
 		return inputLine;
 	}
 
@@ -481,7 +481,7 @@ public class JListeeParser {
 		Integer reservedTaskIndex = null; 
 	
 		taskNumber = extractTaskNumber(inputLine);
-	
+			
 		if (inputLine.contains(String.valueOf(taskNumber))) {
 			inputLine = inputLine.replaceFirst(String.valueOf(taskNumber), "").trim();
 		}
@@ -613,6 +613,7 @@ public class JListeeParser {
 
 	public Command parseDone(String inputLine){
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		inputLine = inputLine.trim().replaceAll(" +", "");
 
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
@@ -647,6 +648,7 @@ public class JListeeParser {
 	public Command parseUndone(String inputLine) {
 		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 	
+		inputLine = inputLine.trim().replaceAll(" +", "");
 
 		if (inputLine.contains(CONTAINS_ALL)) {
 			taskNumbers = null;
@@ -673,6 +675,7 @@ public class JListeeParser {
 		}
 		
 		detectDuplicates(taskNumbers);
+		
 				
 		return new CommandUndone(taskNumbers);		
 	}
