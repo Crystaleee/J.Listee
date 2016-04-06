@@ -31,6 +31,8 @@ import bean.CommandShow;
 import bean.CommandUndo;
 import bean.CommandUndone;
 import bean.CommandUpdate;
+import bean.CommandPostpone;
+
 
 public class JListeeParser {
 	private static final String COMMAND_PP = "pp";
@@ -238,87 +240,6 @@ public class JListeeParser {
 		default:
 			return parseInvalid();
 		}
-	}
-
-	private Command parsePostpone(String inputLine) {
-				Integer taskNumber;
-		ArrayList<String> parameters = new ArrayList<String>();
-		Calendar time = Calendar.getInstance();
-		Integer timeToPostpone;
-		
-		taskNumber = extractTaskNumber(inputLine);
-		
-		if (inputLine.contains(String.valueOf(taskNumber))) {
-			inputLine = deleteKeyword(String.valueOf(taskNumber), inputLine);
-		}
-		
-		for (int i = 0; i< CONTAIN_YEAR_MONTH_DAY_HOUR_MIN.length; i++){
-			int temp = -1;
-	
-			Matcher matcher = Pattern.compile("\\d"+ CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i]+"\\b").matcher(inputLine);
-	
-			while(matcher.find()){
-				switch(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i]){
-				case ("year"):
-				case ("yrs"):
-				case ("yr"):
-				case ("years"):
-					parameters.add("year");
-					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
-					timeToPostpone = extractTaskNumber(inputLine);
-					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
-					time.set(Calendar.YEAR, timeToPostpone);
-					break;
-					
-				case ("month"):
-				case ("months"):
-				case ("mth"):
-				case ("mths"):
-					parameters.add("month");
-					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
-					timeToPostpone = extractTaskNumber(inputLine);
-					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
-					time.set(Calendar.MONTH, timeToPostpone);
-					break;
-					
-
-				case ("days"):
-				case ("day"):
-					parameters.add("day");
-					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
-					timeToPostpone = extractTaskNumber(inputLine);
-					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
-					time.set(Calendar.DATE, timeToPostpone);
-					break;
-				
-				case ("hr"):
-				case ("hrs"):
-				case ("hours"):
-				case ("hour"):
-					parameters.add("hour");
-					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
-					timeToPostpone = extractTaskNumber(inputLine);
-					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);					
-					time.set(Calendar.HOUR, timeToPostpone);
-					break;
-					
-
-				case ("minute"):
-				case ("minutes"):
-				case ("min"):
-				case ("mins"):
-					parameters.add("minute");
-					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
-					timeToPostpone = extractTaskNumber(inputLine);
-					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
-					time.set(Calendar.MINUTE, timeToPostpone);
-					break;
-					}
-				
-				}	
-			}
-		
-		return new CommandPostpone(taskNumber, time,  parameters);
 	}
 
 	public Command parseConfirm(String inputLine) {
@@ -770,6 +691,87 @@ public class JListeeParser {
 		
 				
 		return new CommandUndone(taskNumbers);		
+	}
+
+	public Command parsePostpone(String inputLine) {
+		Integer taskNumber;
+		ArrayList<String> parameters = new ArrayList<String>();
+		Calendar time = Calendar.getInstance();
+		Integer timeToPostpone;
+		
+		taskNumber = extractTaskNumber(inputLine);
+		
+		if (inputLine.contains(String.valueOf(taskNumber))) {
+			inputLine = deleteKeyword(String.valueOf(taskNumber), inputLine);
+		}
+		
+		for (int i = 0; i< CONTAIN_YEAR_MONTH_DAY_HOUR_MIN.length; i++){
+			int temp = -1;
+	
+			Matcher matcher = Pattern.compile("\\d"+ CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i]+"\\b").matcher(inputLine);
+	
+			while(matcher.find()){
+				switch(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i]){
+				case ("year"):
+				case ("yrs"):
+				case ("yr"):
+				case ("years"):
+					parameters.add("year");
+					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
+					timeToPostpone = extractTaskNumber(inputLine);
+					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
+					time.set(Calendar.YEAR, timeToPostpone);
+					break;
+					
+				case ("month"):
+				case ("months"):
+				case ("mth"):
+				case ("mths"):
+					parameters.add("month");
+					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
+					timeToPostpone = extractTaskNumber(inputLine);
+					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
+					time.set(Calendar.MONTH, timeToPostpone);
+					break;
+					
+	
+				case ("days"):
+				case ("day"):
+					parameters.add("day");
+					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
+					timeToPostpone = extractTaskNumber(inputLine);
+					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
+					time.set(Calendar.DATE, timeToPostpone);
+					break;
+				
+				case ("hr"):
+				case ("hrs"):
+				case ("hours"):
+				case ("hour"):
+					parameters.add("hour");
+					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
+					timeToPostpone = extractTaskNumber(inputLine);
+					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);					
+					time.set(Calendar.HOUR, timeToPostpone);
+					break;
+					
+	
+				case ("minute"):
+				case ("minutes"):
+				case ("min"):
+				case ("mins"):
+					parameters.add("minute");
+					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
+					timeToPostpone = extractTaskNumber(inputLine);
+					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);
+					time.set(Calendar.MINUTE, timeToPostpone);
+					break;
+					}
+				
+				}	
+			}
+		
+		return new CommandPostpone(taskNumber, time,  parameters);
 	}
 
 	public Command parseInvalid() {
