@@ -20,7 +20,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import main.App;
 import netscape.javascript.JSObject;
 
