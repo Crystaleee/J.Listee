@@ -15,6 +15,7 @@ import javax.swing.KeyStroke;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import storage.LogStorage;
@@ -29,6 +30,10 @@ import com.tulskiy.keymaster.common.Provider;
 public class App extends Application{
 	//shortcut to quick launch
 	private static final String SHORTCUT_LAUNCH="control alt SPACE";
+	
+	//the tray icon path
+	private static final String ICON_TRAY="/view/images/tray-icon.png";
+	private static final String ICON_DESKTOP="/view/images/desktop-icon.png";
 	
 	// This the scene stage of application
 	public static Stage stage;
@@ -84,7 +89,8 @@ public class App extends Application{
 		stage = primaryStage;
 
 		enableTray();
-
+		
+		stage.getIcons().add(new Image(this.getClass().getResourceAsStream(ICON_DESKTOP)));
 		stage.initStyle(StageStyle.UNDECORATED);
 		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setTitle("J.Listee");
@@ -168,7 +174,7 @@ public class App extends Application{
 		try {
 			SystemTray tray = SystemTray.getSystemTray();
 			BufferedImage image = ImageIO.read(this.getClass()
-					.getResourceAsStream("/view/images/tray-icon.png"));
+					.getResourceAsStream(ICON_TRAY));
 			trayIcon = new TrayIcon(image, "J.Listee", popupMenu);
 			trayIcon.setToolTip("J.Listee");
 			tray.add(trayIcon);
