@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,11 @@ import bean.TaskDeadline;
 import bean.TaskReserved;
 import bean.TaskEvent;
 import bean.TaskFloat;
-import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import main.App;
 import netscape.javascript.JSObject;
 
@@ -248,11 +250,13 @@ public class ShowList extends AppPage {
 			if(cmd.equals("help")||cmd.equals("show help")){
 				GUIController.displayHelp();
 			}else if(cmd.equals("change filepath")){
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int returnVal = fileChooser.showOpenDialog(fileChooser);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {				
-					App.filePath=fileChooser.getSelectedFile().getAbsolutePath()+"\\J.Listee.txt";
+				
+				DirectoryChooser fileChooser = new DirectoryChooser();
+				File selectedFile = fileChooser.showDialog(App.stage);
+				fileChooser.setTitle("Please select a folder for storage location");
+				
+				if(selectedFile!=null){			
+					App.filePath=selectedFile.getAbsolutePath()+"\\J.Listee.txt";
 					System.out.println(App.filePath);
 					// create file under the file folder chosen by user
 					GUIController.changeFilePath(App.filePath);
