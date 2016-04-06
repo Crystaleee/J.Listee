@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
+@SuppressWarnings("serial")
 public class CommandUpdate extends TaskEvent implements Command {
     private Integer _reservedSlotIndex;
     private Integer _taskNumber;
@@ -117,6 +118,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         editTags(task);
         editEndDate(task);
         changeDeadlineTaskType(task);
+
     }
 
     private void editEvent() {
@@ -150,17 +152,27 @@ public class CommandUpdate extends TaskEvent implements Command {
         editDescription(task);
         editLocation(task);
         editTags(task);
-        int index = getIndexOfFloat(task);
-        _display.getTaskIndices().add(index);
+        setTaskIndices(task);
         if (hasChangeFloatTaskType(task)) {
             _display.getVisibleFloatTasks().remove(_taskNumber - 1);
             _display.getFloatTasks().remove(task);
         }
     }
 
-    private int getIndexOfFloat(TaskFloat task) {
-        int index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
-                + _display.getVisibleFloatTasks().indexOf(task) + 1;
+    private int getIndex(Task task) {
+        int index = 0;
+        if (task instanceof TaskEvent) {
+            index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().indexOf(task) + 1;
+        } else if (task instanceof TaskDeadline) {
+            index = _display.getVisibleDeadlineTasks().indexOf(task) + 1;
+        } else if (task instanceof TaskFloat) {
+            index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                    + _display.getVisibleFloatTasks().indexOf(task) + 1;
+        } else if (task instanceof TaskReserved) {
+            index = _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
+                    + _display.getVisibleFloatTasks().size()
+                    + _display.getVisibleReservedTasks().indexOf(task) + 1;
+        }
         return index;
     }
 
@@ -176,6 +188,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         editTags(task);
         editTimeSlot(task);
         removeTimeSlot(task);
+        setTaskIndices(task);
     }
 
     private void removeTimeSlot(TaskReserved task) {
@@ -324,6 +337,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    @SuppressWarnings("unused")
     private boolean hasRemoveTimeSlots() {
         if (_removeReservedSlotIndex != null) {
             if (!_removeReservedSlotIndex.isEmpty()) {
@@ -406,6 +420,9 @@ public class CommandUpdate extends TaskEvent implements Command {
             convertDeadlineToEvent(task);
             hasTaskChanged = true;
         }
+        if (!hasTaskChanged) {
+            setTaskIndices(task);
+        }
         /*
          * if (!hasTaskChanged) { Command addCommand = new
          * CommandAddDeadlineTask(task.getDescription(), task.getLocation(),
@@ -414,6 +431,13 @@ public class CommandUpdate extends TaskEvent implements Command {
          * _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID); }
          */
         return hasTaskChanged;
+    }
+
+    private void setTaskIndices(Task task) {
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        indices.add(getIndex(task));
+        _display.setTaskIndices(indices);
+        return;
     }
 
     private boolean convertDeadlineToFloat(TaskDeadline task) {
@@ -556,6 +580,9 @@ public class CommandUpdate extends TaskEvent implements Command {
             convertEventToDeadline(task);
             hasTaskChanged = true;
         }
+        if (!hasTaskChanged) {
+            setTaskIndices(task);
+        }
         return;
     }
 
@@ -587,16 +614,6 @@ public class CommandUpdate extends TaskEvent implements Command {
             }
         }
         return false;
-    }
-
-    private void addEventBack(TaskEvent task) {
-        Command addCommand = new CommandAddEvent(task.getDescription(), task.getLocation(),
-                task.getStartDate(), task.getEndDate(), task.getTags());
-        _display = addCommand.execute(_display);
-        if (!_timeChanged) {
-            _display.setConflictingTasksIndices(new ArrayList<Integer>());
-        }
-        _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
     }
 
     private boolean hasChangeFloatTaskType(TaskFloat task) {

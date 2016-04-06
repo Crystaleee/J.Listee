@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+@SuppressWarnings("serial")
 public class Display implements java.io.Serializable{
 
 	private String message;

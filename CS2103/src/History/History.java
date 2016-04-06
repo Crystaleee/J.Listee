@@ -9,7 +9,7 @@ import bean.Display;
 
 public class History {
 
-    private static ArrayList<String> userInputs = new ArrayList<String>();
+    //private static ArrayList<String> userInputs = new ArrayList<String>();
     private static ArrayList<Display> oldDisplays = new ArrayList<Display>();
     private static int oldDisplaysIndex = -1;
 

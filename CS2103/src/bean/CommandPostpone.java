@@ -6,7 +6,7 @@ package bean;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CommandPostpone extends TaskEvent implements Command {
+public class CommandPostpone implements Command {
     private int _taskNumber;
     private ArrayList<String> _parameters;
     private Calendar _time;

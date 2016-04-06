@@ -5,6 +5,7 @@ package bean;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class Task implements java.io.Serializable{
 	private String description;
 	private String location;
