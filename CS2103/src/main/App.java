@@ -30,7 +30,7 @@ public class App extends Application{
 	private static final String SHORTCUT_LAUNCH="control ALT";
 	private HotKeyListener listener=null;
 	//the tray icon of this app
-	private TrayIcon trayIcon;
+	private static TrayIcon trayIcon;
 	// This the scene stage of application
 	public static Stage stage;
 	// this is the task file
@@ -45,8 +45,9 @@ public class App extends Application{
 
 	@Override
 	public void start(Stage primaryStage) {
-		listener=new HotKeyListener() {
-			
+		Platform.setImplicitExit( false );
+		
+		listener=new HotKeyListener() {			
 			@Override
 			public void onHotKey(HotKey hotkey) {
 				if (stage.isShowing()) {
@@ -89,15 +90,13 @@ public class App extends Application{
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				java.awt.MenuItem item = (java.awt.MenuItem) e.getSource();
 				//override default the application will shutdown when it's last window is hidden.
-				Platform.setImplicitExit(false); 
 
-				if (item.getLabel().equals("Exit")) {
-					SystemTray.getSystemTray().remove(trayIcon);
+				if (item.getLabel().equals("Exit")) {				
 					terminate();
 					return;
 				}
 				if (item.getLabel().equals("Show")) {
-					Platform.runLater(new Runnable() {
+					Platform.runLater(new Runnable() {						
 						@Override
 						public void run() {
 							stage.show();
@@ -125,7 +124,6 @@ public class App extends Application{
 			public void mouseEntered(MouseEvent e) {}
 
 			public void mouseClicked(MouseEvent e) {
-				Platform.setImplicitExit(false); 
 				if (e.getClickCount() == 2) {
 					if (stage.isShowing()) {
 						Platform.runLater(new Runnable() {
@@ -187,6 +185,7 @@ public class App extends Application{
 	}
 
 	public static void terminate(){
+		SystemTray.getSystemTray().remove(trayIcon);
 		shortcut.reset();
 		shortcut.stop();
 		Platform.exit();
