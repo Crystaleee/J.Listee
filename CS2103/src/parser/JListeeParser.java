@@ -33,6 +33,10 @@ import bean.CommandUndone;
 import bean.CommandUpdate;
 
 public class JListeeParser {
+	private static final String COMMAND_EDIT = "edit";
+	private static final String COMMAND_CFM = "cfm";
+	private static final String COMMAND_RES = "res";
+	private static final String COMMAND_DEL = "del";
 	private static final String COMMAND_CONFIRM = "confirm";
 	private static final String CONTAINING_DELETE = "del";
 	private static final String CONTAINING_BOTH = "both";
@@ -125,8 +129,7 @@ public class JListeeParser {
 		testReserve.ParseCommand("reserve from huh @hi #asda #ahskdjashd r1 from 12/4/16 3pm to 5pm and today 7pm to 8pm and sunday 2 to 3pm"); 
 
 		JListeeParser testUpdateTask = new JListeeParser();
-		testUpdateTask.ParseCommand("update 3 /del 1,2,3"); 
-		
+		testUpdateTask.ParseCommand("update 3 /del 1,2,3"); 	
 
 		JListeeParser testConfirm = new JListeeParser();
 		testConfirm.ParseCommand("confirm 3 1"); 
@@ -186,6 +189,7 @@ public class JListeeParser {
 		case COMMAND_ADD:
 			return parseAdd(inputLine);
 
+		case COMMAND_DEL:
 		case COMMAND_DELETE:
 			return parseDelete(inputLine);
 
@@ -197,13 +201,16 @@ public class JListeeParser {
 
 		case COMMAND_SHOW:
 			return parseShow(inputLine);
-
+		
+		case COMMAND_RES:
 		case COMMAND_RESERVE:
 			return parseReserve(inputLine);
-			
+		
+		case COMMAND_CFM:
 		case COMMAND_CONFIRM:
 			return parseConfirm(inputLine);
-
+		
+		case COMMAND_EDIT:
 		case COMMAND_UPDATE:
 			return parseUpdate(inputLine);
 
@@ -953,7 +960,7 @@ public class JListeeParser {
 	}
 
 	private String determineCommandType(String[] separateInputLine) {
-		return separateInputLine[0].trim();
+		return separateInputLine[0].toLowerCase().trim();
 	}
 
 	private void startDateToCalendar(Date date) {

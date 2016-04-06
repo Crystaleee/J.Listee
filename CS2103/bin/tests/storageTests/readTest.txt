@@ -1,0 +1,35 @@
+===============
+     TASKS
+===============
+
+Description: Floating Test
+Location: NUS
+Tags: #tag1 #tag2
+
+===============
+   DEADLINES
+===============
+
+Description: Deadline Test
+Deadline: 22/03/16 12:00
+Location: NUS
+Tags: #tag1 #tag2
+
+===============
+    EVENTS
+===============
+
+Description: Event Test
+Start Date: 22/03/16 12:00
+End Date: 22/03/16 02:00
+Location: NUS
+Tags: #tag1 #tag2
+
+===============
+   RESERVED
+===============
+
+===============
+   COMPLETED
+===============
+
