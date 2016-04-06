@@ -44,7 +44,7 @@ public class Logic {
     public static Display initializeProgram(String filePath) {
         file = filePath;
         initializeDisplay();
-        //initialiseOverdueTasksReminder();
+        initialiseOverdueTasksReminder();
         synchronized (display) {
             History.saveDisplay(display.deepClone());
         }
