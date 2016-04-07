@@ -3,33 +3,51 @@ package parser;
 
 import java.util.ArrayList;
 
+import bean.Display;
+import logic.Logic;
+
 public class InputSuggestion {
 
-	private static final String SUGGESTION_ADD = "add <description> at/from/due/etc [time] [@location] [#tag]";
-	private static final String SUGGESTION_DELETE = "delete <task number(s)>";
-	private static final String SUGGESTION_UPDATE = "update <task number> [reservation index] [new description] [(-)start/(-)end] [(-)@location] [(-)#tag]";
-	private static final String SUGGESTION_RESERVE = "reserve <description> <start dates to end dates> [@location] [#tag]";
-	private static final String SUGGESTION_CONFIRM = "confirm <task number(s)>";
-	private static final String SUGGESTION_DONE = "done <task number(s)>";
-	private static final String SUGGESTION_UNDONE = "undone <task number(s)>";
-	private static final String SUGGESTION_SHOW = "show [/task-group] [keyword]";
-	private static final String SUGGESTION_POSTPONE = "postpone <task number(s)> <time to postpone by>";
+	private static final String SUGGESTION_ADD = "add  <description>  at/from/due/etc  [time(s)]  [@location]  [#tag]";
+	private static final String SUGGESTION_DELETE = "delete  <task number(s)>";
+
+	private static final String SUGGESTION_UPDATE = "update  <task number>  [new description]  [/time-group time]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_UPDATE_FLOAT = "update  <task number>  [new description]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_UPDATE_DEADLINE = "update  <task number>  [new description]  [/end (-)[time]]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_UPDATE_EVENT = "update  <task number>  [new description]  [/time-group (-)time(s)]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_UPDATE_RESERVED = "update  <task #>  [reservation index]  [new description]  [/time-group time(s)]  [(-)@location]  [(-)#tag]";
+
+	private static final String SUGGESTION_EDIT = "edit  <task number>  [new description]  [/time-group time]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_EDIT_FLOAT = "edit  <task number>  [new description]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_EDIT_DEADLINE = "edit  <task number>  [new description]  [/end (-)[time]]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_EDIT_EVENT = "edit  <task number>  [new description]  [/time-group (-)time(s)]  [(-)@location]  [(-)#tag]";
+	private static final String SUGGESTION_EDIT_RESERVED = "edit  <task #>  [reservation index]  [new description]  [/time-group time(s)]  [(-)@location]  [(-)#tag]";
+	
+	private static final String SUGGESTION_RESERVE = "reserve  <description>  <start date(s) to end date(s)>  [@location]  [#tag]";
+	private static final String SUGGESTION_CONFIRM = "confirm  <task number(s)>  <reservation index>";
+	private static final String SUGGESTION_DONE = "done  <task number(s)>";
+	private static final String SUGGESTION_UNDONE = "undone  <task number(s)>";
+	private static final String SUGGESTION_SHOW = "show  [/task-group]  [keyword]  [location]  [tag]";
+	private static final String SUGGESTION_POSTPONE = "postpone  <task number(s)>  <time to postpone by>";
 	private static final String SUGGESTION_UNDO = "undo";
 	private static final String SUGGESTION_REDO = "redo";
 	private static final String SUGGESTION_FILEPATH = "change filepath";
 	private static final String SUGGESTION_HELP = "help";
 	private static final String SUGGESTION_EXIT = "exit";
-	private static final String SUGGESTION_INVALID = "INVALID COMMAND!";
+	private static final String SUGGESTION_INVALID_COMMAND = "Invalid command!";
+	private static final String SUGGESTION_INVALID_TASK = "Invalid task number!";
 
-	private static final String SUGGESTION_CONFIRM_FILEPATH = "confirm <task number(s)> / change filepath";
+	private static final String SUGGESTION_EDIT_EXIT = "edit <task number> // exit";
+	private static final String SUGGESTION_CONFIRM_FILEPATH = "confirm <task number(s)> // change filepath";
 	private static final String SUGGESTION_DELETE_DONE = "delete <task number(s)> // done <task number(s)>";
-	private static final String SUGGESTION_UNDO_UNDONE = "undo / undone <task number(s)>";
-	private static final String SUGGESTION_UNDO_UNDONE_UPDATE = "undo / undone <task number(s)> / update <task number>";
-	private static final String SUGGESTION_REDO_RESERVE = "redo / reserve <description> <start dates to end dates>";
+	private static final String SUGGESTION_UNDO_UNDONE = "undo // undone <task number(s)>";
+	private static final String SUGGESTION_UNDO_UNDONE_UPDATE = "undo // undone <task number(s)> // update <task number>";
+	private static final String SUGGESTION_REDO_RESERVE = "redo // reserve <description> <start dates to end dates>";
 
 	private static final String COMMAND_ADD = "add ";
 	private static final String COMMAND_DELETE = "delete ";
 	private static final String COMMAND_UPDATE = "update ";
+	private static final String COMMAND_EDIT = "edit ";
 	private static final String COMMAND_RESERVE = "reserve ";
 	private static final String COMMAND_CONFIRM = "confirm ";
 	private static final String COMMAND_DONE = "done ";
@@ -43,6 +61,51 @@ public class InputSuggestion {
 	private static final String COMMAND_EXIT = "exit";
 
 	private static InputSuggestion inputSuggester;
+	private static Display display = Logic.getDisplay();
+	private static boolean isFloatTask;
+	private static boolean isDeadlineTask;
+	private static boolean isEvent;
+	private static boolean isReservationTask;
+	private static boolean isInvalidTask;
+
+	private boolean hasInvalidTaskNumber(int taskNumber) {
+		int numberOfTasks = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
+				+ display.getVisibleFloatTasks().size() + display.getVisibleReservedTasks().size();
+		return ((taskNumber > numberOfTasks) || (taskNumber < 1));
+	}
+
+	private void determineTaskType(String userInput) {
+		String[] splitInput = userInput.split("\\s+");
+		if (splitInput.length >= 2) {
+			Integer taskNumber = Integer.parseInt(splitInput[1]);
+			isFloatTask = false;
+			isDeadlineTask = false;
+			isEvent = false;
+			isReservationTask = false;
+			isInvalidTask = false;
+
+			if (!hasInvalidTaskNumber(taskNumber)) {
+				if (taskNumber <= display.getVisibleDeadlineTasks().size()) {
+					isDeadlineTask = true;
+				} else {
+					taskNumber -= display.getVisibleDeadlineTasks().size();
+					if (taskNumber <= display.getVisibleEvents().size()) {
+						isEvent = true;
+					} else {
+						taskNumber -= display.getVisibleEvents().size();
+						if (taskNumber <= display.getVisibleFloatTasks().size()) {
+							isFloatTask = true;
+						} else {
+							taskNumber -= display.getVisibleFloatTasks().size();
+							isReservationTask = true;
+						}
+					}
+				}
+			} else {
+				isInvalidTask = true;
+			}
+		}
+	}
 
 	public static InputSuggestion getInstance() {
 		if (inputSuggester == null) {
@@ -63,6 +126,8 @@ public class InputSuggestion {
 			return SUGGESTION_CONFIRM_FILEPATH;
 		} else if ("d".startsWith(currentInput)) {
 			return SUGGESTION_DELETE_DONE;
+		} else if ("e".startsWith(currentInput)) {
+			return SUGGESTION_EDIT_EXIT;
 		} else if ("re".startsWith(currentInput)) {
 			return SUGGESTION_REDO_RESERVE;
 		} else if ("u".startsWith(currentInput)) {
@@ -90,7 +155,35 @@ public class InputSuggestion {
 		} else if (currentInput.startsWith(COMMAND_DELETE)) {
 			return SUGGESTION_DELETE;
 		} else if (currentInput.startsWith(COMMAND_UPDATE)) {
-			return SUGGESTION_UPDATE;
+			determineTaskType(currentInput);
+			if (isFloatTask) {
+				return SUGGESTION_UPDATE_FLOAT;
+			} else if (isDeadlineTask) {
+				return SUGGESTION_UPDATE_DEADLINE;
+			} else if (isEvent) {
+				return SUGGESTION_UPDATE_EVENT;
+			} else if (isReservationTask) {
+				return SUGGESTION_UPDATE_RESERVED;
+			} else if (isInvalidTask) {
+				return SUGGESTION_INVALID_TASK;
+			} else {
+				return SUGGESTION_UPDATE;
+			}
+		} else if (currentInput.startsWith(COMMAND_EDIT)) {
+			determineTaskType(currentInput);
+			if (isFloatTask) {
+				return SUGGESTION_EDIT_FLOAT;
+			} else if (isDeadlineTask) {
+				return SUGGESTION_EDIT_DEADLINE;
+			} else if (isEvent) {
+				return SUGGESTION_EDIT_EVENT;
+			} else if (isReservationTask) {
+				return SUGGESTION_EDIT_RESERVED;
+			} else if (isInvalidTask) {
+				return SUGGESTION_INVALID_TASK;
+			} else {
+				return SUGGESTION_UPDATE;
+			}
 		} else if (currentInput.startsWith(COMMAND_RESERVE)) {
 			return SUGGESTION_RESERVE;
 		} else if (currentInput.startsWith(COMMAND_CONFIRM)) {
@@ -114,7 +207,7 @@ public class InputSuggestion {
 		} else if (currentInput.equals(COMMAND_EXIT)) {
 			return SUGGESTION_EXIT;
 		} else {
-			return SUGGESTION_INVALID;
+			return SUGGESTION_INVALID_COMMAND;
 		}
 	}
 
@@ -125,6 +218,7 @@ public class InputSuggestion {
 		suggestions.add(SUGGESTION_RESERVE);
 		suggestions.add(SUGGESTION_DELETE);
 		suggestions.add(SUGGESTION_UPDATE);
+		suggestions.add(SUGGESTION_EDIT);
 		suggestions.add(SUGGESTION_SHOW);
 		suggestions.add(SUGGESTION_CONFIRM);
 		suggestions.add(SUGGESTION_DONE);
