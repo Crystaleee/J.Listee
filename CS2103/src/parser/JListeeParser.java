@@ -94,7 +94,7 @@ public class JListeeParser {
 	public JListeeParser() {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
-
+/*
  public static void main(String[] separateInputLine){ // for testing
 		try {
 		//	fh = new FileHandler("logs\\log.txt");
@@ -445,22 +445,6 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 		taskDescription = trimInputLineToDescriptionOnly(inputLine, location , tagLists);
 
-
-			System.out.println("taskdescription: "  + taskDescription);
-			System.out.println("location: " + location);
-			if (startDate!= null){
-				System.out.println("startDate: " + startDate.getTime());
-			}
-
-			if (endDate!=null){
-				System.out.println("endDate: " + endDate.getTime());	
-			}
-
-			for (int i=0; i<tagLists.size(); i++){
-				System.out.println("TAGS: " + tagLists.get(i));
-			}
-
-			
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
 
