@@ -53,8 +53,17 @@ public class CommandDelete implements Command {
             ArrayList<Integer> conflictingTasks) {
         _display.setMessage(msg);
         _display.setCommandType(commandType);
+        incrementTaskNumbers();
         _display.setTaskIndices(deletedTasks);
         _display.setConflictingTasksIndices(conflictingTasks);
+    }
+
+    private void incrementTaskNumbers() {
+        if (_taskNumbers != null) {
+            for (int i = 0; i < _taskNumbers.size(); i++) {
+                _taskNumbers.set(i, _taskNumbers.get(i) + 1);
+            }
+        }
     }
 
     private boolean hasInvalidTaskNumbers() {
@@ -124,7 +133,7 @@ public class CommandDelete implements Command {
         _taskNumbers = new ArrayList<Integer>();
         for (int i = 0; i < numTasks; i++) {
             removeTask(numTasks - i - 1);
-            _taskNumbers.add(i+1);
+            _taskNumbers.add(i + 1);
         }
         setDisplay(GlobalConstants.MESSAGE_ALL_DELETED, GlobalConstants.GUI_ANIMATION_DELETE,
                 _taskNumbers, new ArrayList<Integer>());
