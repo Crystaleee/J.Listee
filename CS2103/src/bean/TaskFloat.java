@@ -5,6 +5,7 @@ package bean;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class TaskFloat extends Task {
 	public TaskFloat() {
 		super();

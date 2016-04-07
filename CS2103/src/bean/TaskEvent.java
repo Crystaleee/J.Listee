@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+@SuppressWarnings("serial")
 public class TaskEvent extends TaskDeadline {
 	private Calendar startDate;
 

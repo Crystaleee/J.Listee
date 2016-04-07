@@ -71,7 +71,7 @@ public class GUIController {
 	 */
 	public static void displayList(Display display) {
 			Scene scene = stage.getScene();
-			
+			System.out.println("after getscene");
 			((ShowList) showList).setList(display);
 				        
 			if (scene == null) {			
@@ -82,7 +82,10 @@ public class GUIController {
 				setShortcut(scene);
 				stage.setScene(scene);
 			} else {
-				stage.getScene().setRoot(showList);
+				System.out.println("set root");
+				if(stage.getScene().getRoot()!=showList){
+					stage.getScene().setRoot(showList);
+				}		
 			}
 			stage.sizeToScene();
 			stage.show();		
@@ -161,7 +164,9 @@ public class GUIController {
 	}
 	
 	public static void handelUserInput(String command) {
+		System.out.println("entered handle uiserinput");
 		Display display=Logic.executeUserCommand(command);
+		System.out.println("return from logic");
 		 //assert display!=null :"Display is null!";
 		if(display==null)
 			JOptionPane.showMessageDialog(null, "display is null!");

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+@SuppressWarnings("serial")
 public class TaskReserved extends Task {
 	private ArrayList<Calendar> startDates;
 	private ArrayList<Calendar> endDates;

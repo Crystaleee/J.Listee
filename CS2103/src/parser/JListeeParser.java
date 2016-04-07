@@ -84,8 +84,8 @@ public class JListeeParser {
     private static final String[] CONTAIN_YEAR_MONTH_DAY_HOUR_MIN =
             new String[]{"years", "year", "yr", "yrs", "months", "month", "mth", "mths", "day", "days", "hours", "hour", "hr", "hrs", "minute", "minutes", "min", "mins"};
     
-	private static Logger logger = Logger.getGlobal();
-	private static FileHandler fh;
+	//private static Logger logger = Logger.getGlobal();
+	//private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
 
 	private Calendar startDate = null;
@@ -97,14 +97,12 @@ public class JListeeParser {
 
  public static void main(String[] separateInputLine){ // for testing
 		try {
-			fh = new FileHandler("logs\\log.txt");
-			logger.addHandler(fh);
-			SimpleFormatter formatter = new SimpleFormatter();  
-			fh.setFormatter(formatter);  
+		//	fh = new FileHandler("logs\\log.txt");
+			//logger.addHandler(fh);
+		//	SimpleFormatter formatter = new SimpleFormatter();  
+		//	fh.setFormatter(formatter);  
 
 		} catch (SecurityException e) {  
-			e.printStackTrace();  
-		} catch (IOException e) {  
 			e.printStackTrace();  
 		} 
 
