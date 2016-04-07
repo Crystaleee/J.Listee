@@ -35,6 +35,7 @@ import bean.CommandPostpone;
 
 
 public class JListeeParser {
+	private static final String COMMAND_SEARCH = "search";
 	private static final String COMMAND_PP = "pp";
 	private static final String COMMAND_POSTPONE = "postpone";
 	private static final String COMMAND_EDIT = "edit";
@@ -130,7 +131,7 @@ public class JListeeParser {
 		testUndone.ParseCommand("undone 1-2,5,  2-4"); 
 		
 		JListeeParser testShow = new JListeeParser();
-		testShow.ParseCommand("show assignment due friday ");
+		testShow.ParseCommand("show /events due friday ");
 			
 		JListeeParser testReserve = new JListeeParser();
 		testReserve.ParseCommand("reserve from huh @hi #asda #ahskdjashd r1 from 12/4/16 3pm to 5pm and today 7pm to 8pm and sunday 2 to 3pm"); 
@@ -223,6 +224,7 @@ public class JListeeParser {
 		case COMMAND_CONFIRM:
 			return parseConfirm(inputLine);
 		
+		case COMMAND_SEARCH:
 		case COMMAND_EDIT:
 		case COMMAND_UPDATE:
 			return parseUpdate(inputLine);
@@ -445,7 +447,22 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 		taskDescription = trimInputLineToDescriptionOnly(inputLine, location , tagLists);
 
-		
+
+			System.out.println("taskdescription: "  + taskDescription);
+			System.out.println("location: " + location);
+			if (startDate!= null){
+				System.out.println("startDate: " + startDate.getTime());
+			}
+
+			if (endDate!=null){
+				System.out.println("endDate: " + endDate.getTime());	
+			}
+
+			for (int i=0; i<tagLists.size(); i++){
+				System.out.println("TAGS: " + tagLists.get(i));
+			}
+
+			
 		return new CommandShow(taskDescription, location, startDate, endDate, tagLists, task);
 	}
 
