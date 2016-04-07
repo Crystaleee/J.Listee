@@ -61,7 +61,6 @@ public class CommandShow implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        // System.out.println(searchedTask.getDescription());
         initialiseDisplay(oldDisplay);
         if (isShowAll()) {
             setShowAll(oldDisplay);
@@ -246,8 +245,6 @@ public class CommandShow implements Command {
                 }
             }
         }
-        // System.out.println("D" +
-        // oldDisplay.getVisibleDeadlineTasks().size());
     }
 
     private void getEventTasks() {
@@ -265,7 +262,6 @@ public class CommandShow implements Command {
                 }
             }
         }
-        // System.out.println("E" + oldDisplay.getVisibleEvents().size());
     }
 
     private void getFloatTasks() {
@@ -276,14 +272,12 @@ public class CommandShow implements Command {
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
-                        if (withinTimeRange(task)) {
-                            _display.getVisibleFloatTasks().add(task);
-                        }
+                        _display.getVisibleFloatTasks().add(task);
+
                     }
                 }
             }
         }
-        // System.out.println("F" + oldDisplay.getVisibleFloatTasks().size());
     }
 
     private void getReservedTasks() {
@@ -301,8 +295,6 @@ public class CommandShow implements Command {
                 }
             }
         }
-        // System.out.println("R" +
-        // oldDisplay.getVisibleReservedTasks().size());
     }
 
     private boolean containsTag(Task task) {
