@@ -20,10 +20,13 @@ public class GlobalConstants {
     public static final String MESSAGE_ALL_UNDONE = "All tasks undone";
     public static final String MESSAGE_CHANGE_FILEPATH = "File path changed to: ";
     public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
+    public static final String MESSAGE_FILE_PATH_CHANGE = "File path changed to: ";
+    public static final String MESSAGE_NATTY = "add this from tmr 3pm";
     public static final String MESSAGE_REDO = "Redid command(s)";
     public static final String MESSAGE_RESERVED = "Reserved: \"%1$s\"";
     public static final String MESSAGE_NO_TASKS = "No such tasks found";
     public static final String MESSAGE_POSTPONED = "Postponed: ";
+    public static final String MESSAGE_START_UP = "Welcome! These are today's agenda and overdue tasks.";
     public static final String MESSAGE_SHOW_ALL = "Displaying all tasks";
     public static final String MESSAGE_UNDO = "Undid previous commands";
     
@@ -33,6 +36,7 @@ public class GlobalConstants {
     public static final String MESSAGE_ERROR_DATE_RANGE = "Please specify a valid date range";
     public static final String MESSAGE_ERROR_DESCRIPTION = "Please enter a description";
     public static final String MESSAGE_ERROR_FILE_EXISTS = "File already exists";
+    public static final String MESSAGE_ERROR_CHANGE_FILE_PATH = "Can't change filePath";
     public static final String MESSAGE_ERROR_INVALID_COMMAND = "You have specified an invalid command";
     public static final String MESSAGE_ERROR_INVALID_INDEX = "Please specify a valid index";
     public static final String MESSAGE_ERROR_INVALID_TIMESLOT = "Please specify a valid time slot";
@@ -50,7 +54,7 @@ public class GlobalConstants {
     public static final String MESSAGE_ERROR_REMOVE_START = "Can't remove start date!";
     public static final String MESSAGE_ERROR_START_AFTER_END = "Start date must be before end date!";
     public static final String MESSAGE_ERROR_TASK_NUMBER = "Please specify a valid task number";
-    public static final String MESSAGE_ERROR_TIME_RANGE = "you have entered invalid time range(s)";
+    public static final String MESSAGE_ERROR_TIME_RANGE = "You have entered invalid time range(s)";
     public static final String MESSAGE_ERROR_UNDO = "You have reached the earliest point possible";
     public static final String MESSAGE_ERROR_UPDATE_FILE = "Error occured while updating to file";
     public static final String TASK_TYPE_COMPLETED = "done";

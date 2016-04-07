@@ -91,7 +91,6 @@ public class CommandAddReserved implements Command {
                             if (isValidIndex(index)) {
                                 index = getConflictingTaskReservedIndex(display, index);
                                 _conflictingTasksIndices.add(index);
-                                // System.out.println(index);
                             }
                             break checkReservedTask;
                         }
@@ -120,7 +119,6 @@ public class CommandAddReserved implements Command {
                     if (isValidIndex(index)) {
                         index = getConflictingTaskEventIndex(display, index);
                         _conflictingTasksIndices.add(index);
-                        // System.out.println(index);
                     }
                     break;
                 }
@@ -142,8 +140,19 @@ public class CommandAddReserved implements Command {
         }
         return false;
     }
-
+    
     private boolean containsInvalidTimeSlots() {
+        if (_task.getStartDates() == null) {
+            return true;
+        } else if (_task.getEndDates() == null) {
+            return true;
+        }
+        if(_task.getStartDates().size() != _task.getEndDates().size()){
+            return true;
+        }
+        if((_task.getStartDates().isEmpty()) || (_task.getEndDates().isEmpty())){
+            return true;
+        }
         for (int i = 0; i < _task.getStartDates().size(); i++) {
             if (_task.getStartDates().get(i).after(_task.getEndDates().get(i))) {
                 return true;

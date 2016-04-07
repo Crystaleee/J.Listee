@@ -35,9 +35,9 @@ public class Logic {
     public static Display changeFilePath(String filePath) {
         try{
             StorageFilePath.changeFilePath(filePath);
-            display.setMessage("File path changed to: " + filePath);
+            display.setMessage(GlobalConstants.MESSAGE_FILE_PATH_CHANGE + filePath);
         }catch(IOException e){
-            display.setMessage("Can't change filePath");
+            display.setMessage(GlobalConstants.MESSAGE_ERROR_CHANGE_FILE_PATH);
         }
         return display;
     }
@@ -69,7 +69,7 @@ public class Logic {
         end.set(Calendar.HOUR_OF_DAY, 23);
         end.set(Calendar.MINUTE, 59);
         display = new CommandShow(null, null, start, end, new ArrayList<String>()).execute(display);
-        display.setMessage("Welcome Back! These are today's agenda and overdue tasks.");
+        display.setMessage(GlobalConstants.MESSAGE_START_UP);
     }
 
     public static Display executeUserCommand(String userInput) {
@@ -136,6 +136,6 @@ public class Logic {
 
     private static void initialiseNatty() {
         JListeeParser myParser = new JListeeParser();
-        myParser.ParseCommand("add this from tmr 3pm");
+        myParser.ParseCommand(GlobalConstants.MESSAGE_NATTY);
     }
 }
