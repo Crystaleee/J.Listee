@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue; 
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
@@ -32,7 +33,6 @@ public abstract class AppPage extends Pane{
 		//load web page
 		webEngine.load(WelcomeAndChooseStorage.class.getResource(
 				this.html).toExternalForm());
-		
 		
 		// add the web view to the scene
 		this.getChildren().add(browser);
