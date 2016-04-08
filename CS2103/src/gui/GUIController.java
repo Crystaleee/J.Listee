@@ -21,27 +21,27 @@ import storage.LogStorage;
 public class GUIController {
 	private static Stage stage;
 	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 600;
+	private static final int WINDOW_HEIGHT = 750;
 
 	private static AppPage welcome;
 	private static AppPage showList;
 	private static AppPage help;
 
 	public static void setStage(Stage stage2) {
-		stage=stage2;
+		stage = stage2;
 	}
 
 	/**
 	 * create J.Listee file under the given file path
 	 * 
-	 * @throws IOException if file can not be created
+	 * @throws IOException
+	 *             if file can not be created
 	 */
 	public static void createFile(String userChosenfile) throws IOException {
-		LogStorage.writeLogFile(userChosenfile);	
-		//TODO EXCEPTION
-		if(!Logic.createFile(userChosenfile)){
+		LogStorage.writeLogFile(userChosenfile);
+		if (!Logic.createFile(userChosenfile)) {
 			throw new IOException("Error: Cannot create file!");
-		}		
+		}
 	}
 
 	/**
@@ -70,22 +70,25 @@ public class GUIController {
 	 * @return
 	 */
 	public static void displayList(Display display) {
-			Scene scene = stage.getScene();
-			((ShowList) showList).setList(display);
-				        
-			if (scene == null) {			
-				scene = new Scene(showList,WINDOW_WIDTH,WINDOW_HEIGHT);
-				scene.setFill(null);
-				setMouseMovable(scene);
-				setShortcut(scene);
-				stage.setScene(scene);
-			} else {
-				if(stage.getScene().getRoot()!=showList){
-					stage.getScene().setRoot(showList);
-				}		
-			}
-			stage.sizeToScene();
-			stage.show();		
+		Scene scene = stage.getScene();
+
+		((ShowList) showList).setList(display);
+
+		if (scene != null && scene.getRoot() != showList) {
+			stage.getScene().setRoot(showList);
+			stage.show();
+			return;
+		}
+
+		if (scene == null) {
+			scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
+			scene.setFill(null);
+			setMouseMovable(scene);
+			setShortcut(scene);
+			stage.setScene(scene);
+		}
+		stage.sizeToScene();
+		stage.show();
 	}
 
 	/**
@@ -96,9 +99,9 @@ public class GUIController {
 	 */
 	public static void displayHelp() {
 		Scene scene = stage.getScene();
-		help = new Help();
+		help= new Help();
 		
-		if (scene == null) {			
+		if (scene == null) {
 			scene = new Scene(help, WINDOW_WIDTH, WINDOW_HEIGHT);
 			scene.setFill(null);
 			setMouseMovable(scene);
@@ -108,64 +111,69 @@ public class GUIController {
 			stage.getScene().setRoot(help);
 		}
 		stage.sizeToScene();
-		stage.show();		
+		stage.show();
 	}
-	
+
 	/**
 	 * set esc on close
+	 * 
 	 * @param stage
 	 * @param scene
 	 */
 	private static void setShortcut(Scene scene) {
-		scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>
-		  () {@Override
-		        public void handle(KeyEvent e) {		  
-		          if(e.getCode()==KeyCode.ESCAPE){
-		              App.terminate();
-		          }
-		        }
-		    });
+		scene.addEventHandler(KeyEvent.KEY_PRESSED,
+				new EventHandler<KeyEvent>() {
+					@Override
+					public void handle(KeyEvent e) {
+						if (e.getCode() == KeyCode.ESCAPE) {
+							App.terminate();
+						}
+					}
+				});
 	}
 
 	/**
 	 * add mouse listener to scene
 	 */
-	private static void setMouseMovable(Scene scene){
-		scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-            public void handle(MouseEvent event) {
-                App.xOffset = event.getSceneX();
-                App.yOffset = event.getSceneY();
-            }
-		});
-		scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
-	            @Override
-	            public void handle(MouseEvent event) {
-	                stage.setX(event.getScreenX() - App.xOffset);
-	                stage.setY(event.getScreenY() - App.yOffset);
-	            }
-	        });
+	private static void setMouseMovable(Scene scene) {
+		scene.addEventFilter(MouseEvent.MOUSE_PRESSED,
+				new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						App.xOffset = event.getSceneX();
+						App.yOffset = event.getSceneY();
+					}
+				});
+		scene.addEventFilter(MouseEvent.MOUSE_DRAGGED,
+				new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						stage.setX(event.getScreenX() - App.xOffset);
+						stage.setY(event.getScreenY() - App.yOffset);
+					}
+				});
 	}
-	
+
 	/**
-	 * initialize the start page which display deadlines, events and floating tasks
+	 * initialize the start page which display deadlines, events and floating
+	 * tasks
 	 */
-	public static void initializeList(String filePath){
-			//call to logic to get all the tasks
-			Display display=Logic.initializeProgram(filePath);
-			 //assert display!=null :"Display is null!";
-			if(display==null)
-				JOptionPane.showMessageDialog(null, "display is null!");
-			showList=new ShowList(display);
-			displayList(display);				
-	}
-	
-	public static void handelUserInput(String command) {
-		Display display=Logic.executeUserCommand(command);
-		 //assert display!=null :"Display is null!";
-		if(display==null)
+	public static void initializeList(String filePath) {
+		// call to logic to get all the tasks
+		Display display = Logic.initializeProgram(filePath);
+		// assert display!=null :"Display is null!";
+		if (display == null)
 			JOptionPane.showMessageDialog(null, "display is null!");
-		displayList(display);		
+		showList = new ShowList(display);
+		displayList(display);
+	}
+
+	public static void handelUserInput(String command) {
+		Display display = Logic.executeUserCommand(command);
+		// assert display!=null :"Display is null!";
+		if (display == null)
+			JOptionPane.showMessageDialog(null, "display is null!");
+		displayList(display);
 	}
 
 	public static AppPage getShowList() {
@@ -173,11 +181,11 @@ public class GUIController {
 	}
 
 	public static void changeFilePath(String filePath) {
-		Display display=Logic.changeFilePath(filePath);
-		 //assert display!=null :"Display is null!";
-		if(display==null)
+		Display display = Logic.changeFilePath(filePath);
+		// assert display!=null :"Display is null!";
+		if (display == null)
 			JOptionPane.showMessageDialog(null, "display is null!");
-		displayList(display);		
+		displayList(display);
 	}
 
 }
