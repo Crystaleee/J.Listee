@@ -1,4 +1,4 @@
-// @@author Chloe Odquier Fortuna (A0149063E)
+// @@author A0149063E
 
 package tests;
 

@@ -1,5 +1,5 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package logic;
 

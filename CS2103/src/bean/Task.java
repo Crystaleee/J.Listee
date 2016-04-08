@@ -1,5 +1,5 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
@@ -56,7 +56,7 @@ public class Task implements java.io.Serializable{
 		this.location = location;
 	}
 
-	// @@author Chloe Odquier Fortuna (A0149063E)
+	// @@author A0149063E
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Description: " + this.getDescription() + "\r\n");

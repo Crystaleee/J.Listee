@@ -1,3 +1,4 @@
+// @@author A0139995E
 package bean;
 
 public class GlobalConstants {

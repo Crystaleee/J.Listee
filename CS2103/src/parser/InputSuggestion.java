@@ -1,4 +1,4 @@
-//@@author Chloe Odquier Fortuna (A0149063E)
+//@@author A0149063E
 package parser;
 
 import java.util.ArrayList;
@@ -139,8 +139,6 @@ public class InputSuggestion {
 			}
 		}
 	}
-	
-	
 
 	public static InputSuggestion getInstance() {
 		if (inputSuggester == null) {
@@ -294,4 +292,3 @@ public class InputSuggestion {
 	}
 
 }
-
