@@ -53,17 +53,8 @@ public class CommandDone implements Command {
             ArrayList<Integer> conflictingTasks) {
         _display.setMessage(msg);
         _display.setCommandType(commandType);
-        incrementTaskNumbers();
         _display.setTaskIndices(completedTasks);
         _display.setConflictingTasksIndices(conflictingTasks);
-    }
-
-    private void incrementTaskNumbers() {
-        if (_taskNumbers != null) {
-            for (int i = 0; i < _taskNumbers.size(); i++) {
-                _taskNumbers.set(i, _taskNumbers.get(i) + 1);
-            }
-        }
     }
 
     private boolean hasInvalidTaskNumbers() {
@@ -128,10 +119,12 @@ public class CommandDone implements Command {
 
     private void doneAllVisibleTasks() {
         int numTasks = getNumOfTasks();
+        _taskNumbers = new ArrayList<Integer>();
         for (int i = 0; i < numTasks; i++) {
             markTaskAsDone(numTasks - i - 1);
+            _taskNumbers.add(i + 1);
         }
-        setDisplay(GlobalConstants.MESSAGE_ALL_COMPLETED, GlobalConstants.GUI_ANIMATION_DELETE, new ArrayList<Integer>(),
+        setDisplay(GlobalConstants.MESSAGE_ALL_COMPLETED, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers,
                 new ArrayList<Integer>());
     }
 

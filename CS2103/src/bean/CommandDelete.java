@@ -39,6 +39,7 @@ public class CommandDelete implements Command {
         } else {
             deleteTasksFromList();
         }
+        System.out.println(_display.getTaskIndices().get(0));
         return _display;
     }
 
@@ -53,17 +54,8 @@ public class CommandDelete implements Command {
             ArrayList<Integer> conflictingTasks) {
         _display.setMessage(msg);
         _display.setCommandType(commandType);
-        incrementTaskNumbers();
         _display.setTaskIndices(deletedTasks);
         _display.setConflictingTasksIndices(conflictingTasks);
-    }
-
-    private void incrementTaskNumbers() {
-        if (_taskNumbers != null) {
-            for (int i = 0; i < _taskNumbers.size(); i++) {
-                _taskNumbers.set(i, _taskNumbers.get(i) + 1);
-            }
-        }
     }
 
     private boolean hasInvalidTaskNumbers() {
@@ -119,6 +111,7 @@ public class CommandDelete implements Command {
 
     private void deleteMultipleTasks() {
         Task deletedTask;
+        System.out.println(_taskNumbers.get(0));
         Collections.sort(_taskNumbers);
         for (int i = 0; i < _taskNumbers.size(); i++) {
             deletedTask = removeTask(_taskNumbers.get(i) - 1 - i);
