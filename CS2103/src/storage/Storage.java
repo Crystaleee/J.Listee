@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import bean.Display;
+import bean.GlobalLogger;
 import bean.Task;
 import bean.TaskDeadline;
 import bean.TaskEvent;
@@ -50,7 +51,7 @@ public class Storage {
 	private static final String MESSAGE_EMPTY = "";
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
-//	private Logger logger = Logger.getLogger(Storage.class.getName());
+	private Logger logger = GlobalLogger.getLogger();
 
 	public static Storage getInstance() {
 		if (storageInstance == null) {
@@ -77,7 +78,6 @@ public class Storage {
 
 	public Display getDisplay(String filepath) throws IOException {
 		//FileHandler handler = createLogHandler();
-		//logger.log(Level.INFO, "Reading all tasks from file.\r\n");
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
 
@@ -89,6 +89,7 @@ public class Storage {
 		ArrayList<Task> completedTasks = readTasksCompleted(br);
 
 		br.close();
+		GlobalLogger.closeHandler();
 		//closeReaderClasses(handler, br);
 		setFilePath(filepath);
 
@@ -111,7 +112,7 @@ public class Storage {
 
 				TaskFloat floatTask = processFloatingTask(line, location, tags);
 				floatTasks.add(floatTask);
-			//	logger.log(Level.INFO, "Successfully read floating task: " + floatTask.getDescription() + "\r\n");
+				logger.log(Level.INFO, "Successfully read floating task: " + floatTask.getDescription());
 			}
 		}
 		return floatTasks;
@@ -136,8 +137,8 @@ public class Storage {
 
 				if (deadlineTask != null) {
 					deadlineTasks.add(deadlineTask);
-			//		logger.log(Level.INFO,
-			//				"Successfully read deadline task: " + deadlineTask.getDescription() + "\r\n");
+					logger.log(Level.INFO,
+							"Successfully read deadline task: " + deadlineTask.getDescription());
 				}
 			}
 		}
@@ -164,7 +165,7 @@ public class Storage {
 
 				if (eventTask != null) {
 					events.add(eventTask);
-			//		logger.log(Level.INFO, "Successfully read event task: " + eventTask.getDescription() + "\r\n");
+					logger.log(Level.INFO, "Successfully read event task: " + eventTask.getDescription());
 				}
 			}
 		}
@@ -191,8 +192,8 @@ public class Storage {
 
 				if (reservedTask != null) {
 					reservedTasks.add(reservedTask);
-			//		logger.log(Level.INFO,
-			//				"Successfully read reserved task: " + reservedTask.getDescription() + "\r\n");
+					logger.log(Level.INFO,
+							"Successfully read reserved task: " + reservedTask.getDescription());
 				}
 			}
 		}
@@ -232,7 +233,7 @@ public class Storage {
 					String tags = br.readLine();
 					task = processReservedTask(description, line, endDates, location, tags);
 				} else {
-			//		logger.log(Level.WARNING, "Could not read completed task: " + description + "\r\n");
+					logger.log(Level.WARNING, "Could not read completed task: " + description);
 				}
 
 				if (task != null) {
@@ -264,7 +265,7 @@ public class Storage {
 			deadlineTask = new TaskDeadline(description, location, deadline, tags);
 
 		} catch (ParseException e) {
-		//	logger.log(Level.WARNING, "Deadline task has invalid deadline and can't be read.\r\n");
+			logger.log(Level.WARNING, "Deadline task has invalid deadline and can't be read.");
 		}
 		return deadlineTask;
 	}
@@ -282,7 +283,7 @@ public class Storage {
 			eventTask = new TaskEvent(description, location, startDate, endDate, tags);
 
 		} catch (ParseException e) {
-		//	logger.log(Level.WARNING, "Event task has invalid dates and can't be read.\r\n");
+			logger.log(Level.WARNING, "Event task has invalid dates and can't be read.");
 		}
 		return eventTask;
 	}
@@ -300,7 +301,7 @@ public class Storage {
 			reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
 
 		} catch (ParseException e) {
-		//	logger.log(Level.WARNING, "Reserved task has invalid dates and can't be read.\r\n");
+			logger.log(Level.WARNING, "Reserved task has invalid dates and can't be read.");
 		}
 		return reservedTask;
 	}
@@ -359,12 +360,12 @@ public class Storage {
 		return dates;
 	}
 
-//	private FileHandler createLogHandler() throws IOException {
-//		FileHandler handler = new FileHandler("logs\\log.txt");
-//		handler.setFormatter(new SimpleFormatter());
-//		logger.addHandler(handler);
-//		return handler;
-//	}
+	private FileHandler createLogHandler() throws IOException {
+		FileHandler handler = new FileHandler("log.txt", true);
+		handler.setFormatter(new SimpleFormatter());
+		logger.addHandler(handler);
+		return handler;
+	}
 
 	private void readHeader(BufferedReader br) throws IOException {
 		br.readLine();
@@ -375,15 +376,13 @@ public class Storage {
 		return line == null || line.equals(HEADER_DIVIDER);
 	}
 
-//	private void closeReaderClasses(FileHandler handler, BufferedReader br) throws IOException {
-//		br.close();
-//		handler.close();
-//	}
+	private void closeReaderClasses(FileHandler handler, BufferedReader br) throws IOException {
+		br.close();
+		handler.close();
+	}
 
 	public void saveFile(Display thisDisplay) throws IOException {
 		//FileHandler handler = createLogHandler();
-
-		//logger.log(Level.INFO, "Writing all tasks to file.\r\n");
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
 
 		ArrayList<TaskFloat> floatTasks = thisDisplay.getFloatTasks();
@@ -400,6 +399,7 @@ public class Storage {
 
 		bw.flush();
 		bw.close();
+		GlobalLogger.closeHandler();
 		//closeWriterClasses(handler, bw);
 	}
 
@@ -416,7 +416,7 @@ public class Storage {
 	private void writeFloatingTasks(BufferedWriter bw, ArrayList<TaskFloat> floatTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_FLOATING);
 		for (TaskFloat task : floatTasks) {
-			//logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
+			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.");
 			bw.write(task.toString());
 		}
 	}
@@ -424,7 +424,7 @@ public class Storage {
 	private void writeDeadlineTasks(BufferedWriter bw, ArrayList<TaskDeadline> deadlineTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_DEADLINE);
 		for (TaskDeadline task : deadlineTasks) {
-			//logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
+			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.");
 			bw.write(task.toString());
 		}
 	}
@@ -432,7 +432,7 @@ public class Storage {
 	private void writeEventTasks(BufferedWriter bw, ArrayList<TaskEvent> events) throws IOException {
 		writeHeaderToFile(bw, HEADER_EVENT);
 		for (TaskEvent event : events) {
-			//logger.log(Level.INFO, "Writing " + event.getDescription() + " to file.\r\n");
+			logger.log(Level.INFO, "Writing " + event.getDescription() + " to file.");
 			bw.write(event.toString());
 		}
 	}
@@ -440,7 +440,7 @@ public class Storage {
 	private void writeReservedTasks(BufferedWriter bw, ArrayList<TaskReserved> reservedTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_RESERVED);
 		for (TaskReserved task : reservedTasks) {
-			//logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
+			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.");
 			bw.write(task.toString());
 		}
 	}
@@ -448,15 +448,15 @@ public class Storage {
 	private void writeCompletedTasks(BufferedWriter bw, ArrayList<Task> completedTasks) throws IOException {
 		writeHeaderToFile(bw, HEADER_COMPLETED);
 		for (Task task : completedTasks) {
-			//logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.\r\n");
+			logger.log(Level.INFO, "Writing " + task.getDescription() + " to file.");
 			bw.write(task.toString());
 		}
 	}
 
-//	private void closeWriterClasses(FileHandler handler, BufferedWriter bw) throws IOException {
-//		bw.flush();
-//		bw.close();
-//		handler.close();
-//	}
+	private void closeWriterClasses(FileHandler handler, BufferedWriter bw) throws IOException {
+		bw.flush();
+		bw.close();
+		handler.close();
+	}
 
 }

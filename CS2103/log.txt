@@ -1,0 +1,17 @@
+Apr 09, 2016 1:46:03 AM storage.Storage readTasksDeadline
+INFO: Successfully read deadline task: lab
+Apr 09, 2016 1:46:03 AM storage.Storage readTasksDeadline
+INFO: Successfully read deadline task: meeting for presentation
+Apr 09, 2016 1:46:03 AM storage.Storage readTasksEvents
+INFO: Successfully read event task: party
+Apr 09, 2016 1:46:03 AM storage.Storage readTasksEvents
+INFO: Successfully read event task: get1028 lecture
+Apr 09, 2016 1:46:03 AM storage.Storage readTasksReserved
+INFO: Successfully read reserved task: test reservation
+Apr 09, 2016 1:46:46 AM storage.Storage readTasksDeadline
+INFO: Successfully read deadline task: lab
+Apr 09, 2016 1:46:46 AM storage.Storage readTasksDeadline
+INFO: Successfully read deadline task: meeting for presentation
+Apr 09, 2016 1:46:46 AM storage.Storage readTasksEvents
+INFO: Successfully read event task: party
+

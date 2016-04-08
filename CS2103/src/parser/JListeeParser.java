@@ -29,6 +29,7 @@ import bean.CommandShow;
 import bean.CommandUndo;
 import bean.CommandUndone;
 import bean.CommandUpdate;
+import bean.GlobalLogger;
 import bean.CommandPostpone;
 
 
@@ -82,7 +83,7 @@ public class JListeeParser {
     private static final String[] CONTAIN_YEAR_MONTH_DAY_HOUR_MIN =
             new String[]{"years", "year", "yr", "yrs", "months", "month", "mth", "mths", "day", "days", "hours", "hour", "hr", "hrs", "minute", "minutes", "min", "mins"};
     
-	//private static Logger logger = Logger.getGlobal();
+	private static Logger logger = GlobalLogger.getLogger();
 	//private static FileHandler fh;
 	private com.joestelmach.natty.Parser dateParser;
 
