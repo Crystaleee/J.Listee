@@ -1,6 +1,7 @@
 //@@author Chloe Odquier Fortuna (A0149063E)
 package storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,11 +17,12 @@ public class StorageFilePath {
 	public static void changeFilePath(String newFilePathString) throws IOException {
 		String oldFilePathString = readOldFilePath();
 		
-		Path oldFilePath = Paths.get(oldFilePathString);
-		Path newFilePath = Paths.get(newFilePathString);
-		
-		Files.move(oldFilePath, newFilePath, StandardCopyOption.ATOMIC_MOVE);
-		
+		File newFile = new File(newFilePathString);
+		if(!newFile.exists()) {
+			Path oldFilePath = Paths.get(oldFilePathString);
+			Path newFilePath = Paths.get(newFilePathString);
+			Files.move(oldFilePath, newFilePath, StandardCopyOption.ATOMIC_MOVE);
+		}
 		LogStorage.writeLogFile(newFilePathString);
 	}
 }

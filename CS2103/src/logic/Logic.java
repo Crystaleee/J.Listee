@@ -34,7 +34,9 @@ public class Logic {
 
     public static Display changeFilePath(String filePath) {
         try{
+        	file = filePath;
             StorageFilePath.changeFilePath(filePath);
+            initializeDisplay();
             display.setMessage(GlobalConstants.MESSAGE_FILE_PATH_CHANGE + filePath);
         }catch(IOException e){
             display.setMessage(GlobalConstants.MESSAGE_ERROR_CHANGE_FILE_PATH);
