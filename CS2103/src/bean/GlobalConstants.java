@@ -22,7 +22,7 @@ public class GlobalConstants {
     public static final String MESSAGE_CHANGE_FILEPATH = "File path changed to: ";
     public static final String MESSAGE_FILE_CREATED = "File created and ready for use";
     public static final String MESSAGE_FILE_PATH_CHANGE = "File path changed to: ";
-    public static final String MESSAGE_NATTY = "add this from tmr 3pm";
+    public static final String MESSAGE_NATTY = "add this due tmr 3pm";
     public static final String MESSAGE_REDO = "Redid command(s)";
     public static final String MESSAGE_RESERVED = "Reserved: \"%1$s\"";
     public static final String MESSAGE_NO_TASKS = "No such tasks found";

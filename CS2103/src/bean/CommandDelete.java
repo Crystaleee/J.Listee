@@ -5,6 +5,8 @@ package bean;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandDelete implements Command {
     private Display _display;
@@ -13,6 +15,7 @@ public class CommandDelete implements Command {
     private boolean _updateFile = true;
     private String _invalidNumbers = "You have specified invalid numbers: ";
     private String msgDelete = "deleted: ";
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandDelete() {
         this._taskNumbers = null;
@@ -25,22 +28,26 @@ public class CommandDelete implements Command {
     }
 
     public Display execute(Display display) {
+        assert display != null : "Delete: null display";
         this._display = display;
-        if (_taskNumbers != null) {
-            if (_taskNumbers.isEmpty()) {
-                setDisplay(GlobalConstants.MESSAGE_ERROR_NO_NUMBER, GlobalConstants.GUI_ANIMATION_INVALID,
-                        new ArrayList<Integer>(), new ArrayList<Integer>());
-                return _display;
-            }
-        }
         if (hasInvalidTaskNumbers()) {
             setInvalidDisplay();
+            logger.log(Level.INFO, "Delete: Index Invalid");
             return _display;
         } else {
+            logger.log(Level.INFO, "Delete: No errors");
             deleteTasksFromList();
         }
-        System.out.println(_display.getTaskIndices().get(0));
         return _display;
+    }
+
+    private boolean hasNoTaskNumber() {
+        if (_taskNumbers != null) {
+            if (_taskNumbers.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setInvalidDisplay() {
@@ -48,6 +55,8 @@ public class CommandDelete implements Command {
         _saveHistory = false;
         _display.setCommandType(GlobalConstants.GUI_ANIMATION_INVALID);
         _display.setMessage(_invalidNumbers);
+        _display.setTaskIndices(new ArrayList<Integer>());
+        _display.setConflictingTasksIndices(new ArrayList<Integer>());
     }
 
     private void setDisplay(String msg, String commandType, ArrayList<Integer> deletedTasks,
@@ -59,6 +68,9 @@ public class CommandDelete implements Command {
     }
 
     private boolean hasInvalidTaskNumbers() {
+        if(hasNoTaskNumber()){
+            return true;
+        }
         if (isDeleteAll()) {
             return false;
         } else {
@@ -117,8 +129,7 @@ public class CommandDelete implements Command {
             deletedTask = removeTask(_taskNumbers.get(i) - 1 - i);
             feedbackDeletedTasks(deletedTask, i);
         }
-        setDisplay(msgDelete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers,
-                new ArrayList<Integer>());
+        setDisplay(msgDelete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
     }
 
     private void deleteAllShownTasks() {
@@ -128,8 +139,8 @@ public class CommandDelete implements Command {
             removeTask(numTasks - i - 1);
             _taskNumbers.add(i + 1);
         }
-        setDisplay(GlobalConstants.MESSAGE_ALL_DELETED, GlobalConstants.GUI_ANIMATION_DELETE,
-                _taskNumbers, new ArrayList<Integer>());
+        setDisplay(GlobalConstants.MESSAGE_ALL_DELETED, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers,
+                new ArrayList<Integer>());
     }
 
     private boolean isDeleteAll() {

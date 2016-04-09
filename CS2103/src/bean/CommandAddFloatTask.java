@@ -4,11 +4,14 @@
 package bean;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandAddFloatTask implements Command {
     private TaskFloat _task;
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandAddFloatTask() {
         _task = null;
@@ -23,7 +26,9 @@ public class CommandAddFloatTask implements Command {
     }
 
     public Display execute(Display display) {
+        assert display != null: "AddFloat: null display";
         if (hasNoDescription()) {
+            logger.log(Level.INFO, "AddFloat: No desc");
             setInvalidDisplay(display);
             return display;
         }

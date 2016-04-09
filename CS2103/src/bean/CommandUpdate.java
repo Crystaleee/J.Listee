@@ -6,6 +6,8 @@ package bean;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class CommandUpdate extends TaskEvent implements Command {
@@ -18,6 +20,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private boolean _saveHistory = true;
     private String _msgEdit = "Edited : \"";
     private ArrayList<Integer> _removeReservedSlotIndex;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandUpdate() {
         super();
@@ -46,13 +49,16 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     public Display execute(Display oldDisplay) {
+        assert oldDisplay != null: "Update: null display";
         _display = oldDisplay;
         if (hasInvalidTaskNumber()) {
+            logger.log(Level.INFO, "Update: Invalid Indices");
             _msgEdit = GlobalConstants.MESSAGE_ERROR_TASK_NUMBER;
             setInvalidDisplay();
             return _display;
         }
         if (isInvalidDateRange()) {
+            logger.log(Level.INFO, "Update: Invalid dates");
             _msgEdit = GlobalConstants.MESSAGE_ERROR_DATE_RANGE;
             setInvalidDisplay();
             return oldDisplay;
@@ -89,17 +95,21 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void editTask() {
         if (_taskNumber <= _display.getVisibleDeadlineTasks().size()) {
+            logger.log(Level.INFO, "Update: Deadline");
             editDeadline();
         } else {
             _taskNumber -= _display.getVisibleDeadlineTasks().size();
             if (_taskNumber <= _display.getVisibleEvents().size()) {
+                logger.log(Level.INFO, "Update: Event");
                 editEvent();
             } else {
                 _taskNumber -= _display.getVisibleEvents().size();
                 if (_taskNumber <= _display.getVisibleFloatTasks().size()) {
+                    logger.log(Level.INFO, "Update: Float");
                     editFloat();
                 } else {
                     _taskNumber -= _display.getVisibleFloatTasks().size();
+                    logger.log(Level.INFO, "Update: Reserved");
                     editReserved();
                 }
             }

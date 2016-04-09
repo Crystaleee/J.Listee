@@ -5,12 +5,15 @@ package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandAddEvent implements Command {
     private TaskEvent _task;
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
     private ArrayList<Integer> _conflictingTasksIndices = new ArrayList<Integer>();
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandAddEvent() {
         _task = null;
@@ -26,11 +29,15 @@ public class CommandAddEvent implements Command {
     }
 
     public Display execute(Display display) {
+        assert display != null: "AddEvent: null display";
+        
         if (hasNoDescription()) {
+            logger.log(Level.INFO, "AddEvent: No desc");
             setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DESCRIPTION);
             return display;
         }
         if (isInvalidTimeRange()) {
+            logger.log(Level.INFO, "AddEvent: Invalid time");
             setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DATE_RANGE);
             return display;
         }

@@ -5,6 +5,8 @@ package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandPostpone implements Command {
     private int _taskNumber;
@@ -13,6 +15,7 @@ public class CommandPostpone implements Command {
     private String _msg;
     private boolean _updateFile = true;;
     private boolean _saveHistory = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandPostpone() {
         this._taskNumber = -1;
@@ -20,6 +23,7 @@ public class CommandPostpone implements Command {
 
     public CommandPostpone(Integer taskNumber, Calendar time, ArrayList<String> parameters) {
         assert parameters != null;
+        assert taskNumber != null;
         this._taskNumber = taskNumber - 1;
         this._time = time;
         this._parameters = parameters;
@@ -29,7 +33,9 @@ public class CommandPostpone implements Command {
      * Only deadline tasks and events can be postponed
      */
     public Display execute(Display display) {
+        assert display != null: "Postpone: null display";
         if (isInvalidCommand(display)) {
+            logger.log(Level.INFO, "Postpone: Invalid parameters");
             setInvalidDisplay(display);
             return display;
         }
@@ -40,9 +46,11 @@ public class CommandPostpone implements Command {
 
     public void postpone(Display display) {
         if (_taskNumber < display.getVisibleDeadlineTasks().size()) {
+            logger.log(Level.INFO, "Postpone: Postpone deadline");
             postponeDeadline(display);
         } else {
             _taskNumber -= display.getVisibleDeadlineTasks().size();
+            logger.log(Level.INFO, "Postpone: Postpone event");
             postponeEvent(display);
         }
     }
