@@ -750,7 +750,7 @@ public class JListeeParser {
 					inputLine = deleteKeyword(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[i], inputLine);
 					timeToPostpone = extractTaskNumber(inputLine);
 					inputLine = deleteKeyword(String.valueOf(timeToPostpone), inputLine);					
-					time.set(Calendar.HOUR, timeToPostpone);
+					time.set(Calendar.HOUR_OF_DAY, timeToPostpone);
 					break;
 					
 	
