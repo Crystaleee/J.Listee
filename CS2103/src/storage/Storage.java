@@ -89,7 +89,7 @@ public class Storage {
 		ArrayList<Task> completedTasks = readTasksCompleted(br);
 
 		br.close();
-		GlobalLogger.closeHandler();
+		//GlobalLogger.closeHandler();
 		//closeReaderClasses(handler, br);
 		setFilePath(filepath);
 
@@ -399,7 +399,7 @@ public class Storage {
 
 		bw.flush();
 		bw.close();
-		GlobalLogger.closeHandler();
+	//	GlobalLogger.closeHandler();
 		//closeWriterClasses(handler, bw);
 	}
 

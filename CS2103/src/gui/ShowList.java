@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import parser.InputSuggestion;
 import bean.Display;
+import bean.GlobalLogger;
 import bean.Task;
 import bean.TaskDeadline;
 import bean.TaskReserved;
@@ -336,6 +337,7 @@ public class ShowList extends AppPage {
 				changeStorageLocation();
 			} else if (cmd.toLowerCase().equals("exit")
 					|| cmd.toLowerCase().equals("quit")) {
+				GlobalLogger.closeHandler();
 				App.terminate();
 			} else {
 				GUIController.handelUserInput(cmd);

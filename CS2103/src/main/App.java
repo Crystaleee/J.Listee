@@ -24,6 +24,8 @@ import gui.GUIController;
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
 import com.tulskiy.keymaster.common.Provider;
+
+import bean.GlobalLogger;
 /**
  * @@author A0149527W
  */
@@ -55,6 +57,7 @@ public class App extends Application{
 	private static TrayIcon trayIcon;
 	
 	public static void main(String[] args) {
+		GlobalLogger.createLogHandler();
 		Application.launch(args);
 	}
 
