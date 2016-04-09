@@ -132,8 +132,6 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editEvent() {
-        System.out.println(getStartDate());
-        System.out.println(getEndDate());
         TaskEvent task = _display.getVisibleEvents().get(_taskNumber - 1);
         if (invalidEditEvent(task)) {
             setInvalidDisplay();
@@ -292,10 +290,6 @@ public class CommandUpdate extends TaskEvent implements Command {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_ADD_START_DATE_ONLY;
             return true;
         }
-        /*
-         * if (_reservedSlotIndex != null) { msgEdit =
-         * "Can't specify timeslot for non-reserved tasks!"; }
-         */
 
         return false;
     }

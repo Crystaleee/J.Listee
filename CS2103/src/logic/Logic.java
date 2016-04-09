@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import History.History;
 import bean.Command;
 import bean.CommandShow;
 import bean.Display;
 import bean.GlobalConstants;
+import bean.GlobalLogger;
 import parser.JListeeParser;
 import storage.Storage;
 import storage.StorageFilePath;
@@ -21,8 +24,10 @@ public class Logic {
     private static Storage storage = Storage.getInstance();
     private static Display display;
     private static String file;
+    private static Logger logger = GlobalLogger.getLogger();
 
     public static boolean createFile(String filePath) {
+        logger.log(Level.INFO, "Logic: Create filepath " + filePath);
         file = filePath;
         try {
             storage.createFile(filePath);
@@ -33,6 +38,7 @@ public class Logic {
     }
 
     public static Display changeFilePath(String filePath) {
+        logger.log(Level.INFO, "Logic: Change filepath" + filePath);
         try{
         	file = filePath;
             StorageFilePath.changeFilePath(filePath);
@@ -45,6 +51,7 @@ public class Logic {
     }
 
     public static Display initializeProgram(String filePath) {
+        logger.log(Level.INFO, "Logic: Initialise Program" + filePath);
         file = filePath;
         initializeDisplay();
         initialiseOverdueTasksReminder();
@@ -75,7 +82,9 @@ public class Logic {
     }
 
     public static Display executeUserCommand(String userInput) {
+        logger.log(Level.INFO, "Logic: Parsing user input " + userInput);
         Command userCommand = parseUserInput(userInput);
+        assert userCommand != null: "Null Command";
         synchronized (display) {
             display = executeCommand(userCommand);
         }
@@ -93,6 +102,7 @@ public class Logic {
     }
 
     public static Display executeCommand(Command userCommand) {
+        logger.log(Level.INFO, "Logic: Executing command ");
         display = userCommand.execute(display);
 
         if (requiresFileUpdate(userCommand)) {
@@ -121,6 +131,7 @@ public class Logic {
         Display thisDisplay = null;
         try {
             thisDisplay = storage.getDisplay(file);
+            assert thisDisplay != null: "Logic: Null display from storage";
         } catch (IOException e) {
             e.printStackTrace();
         }
