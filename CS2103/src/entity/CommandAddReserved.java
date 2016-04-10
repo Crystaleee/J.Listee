@@ -2,7 +2,9 @@
  * @@author A0139995E
  */
 package entity;
-
+/**
+ * This command is to add a reserved task.
+ */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -60,6 +62,9 @@ public class CommandAddReserved implements Command {
         return false;
     }
 
+    /*
+     * sets variables when the command has invalid parametersS
+     */
     private void setInvalidDisplay(Display display, String msg) {
         _updateFile = false;
         _saveHistory = false;
@@ -85,6 +90,9 @@ public class CommandAddReserved implements Command {
         display.setConflictingTasksIndices(_conflictingTasksIndices);
     }
 
+    /*
+     * This method searches for conflicting reserved tasks
+     */
     private void getConflictingReservedTasks(Display display) {
         ArrayList<TaskReserved> listReserved = display.getReservedTasks();
         for (TaskReserved myTask : listReserved) {
@@ -115,6 +123,9 @@ public class CommandAddReserved implements Command {
         return index >= 0;
     }
 
+    /*
+     * This method searches for conflicting events
+     */
     private void getConflictingEvents(Display display) {
         ArrayList<TaskEvent> listEvents = display.getEventTasks();
         for (TaskEvent myTask : listEvents) {

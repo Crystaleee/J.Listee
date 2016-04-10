@@ -3,6 +3,12 @@
  */
 package entity;
 
+/**
+ * This class keeps track of all tasks and also the view state
+ * of the program.
+ * 
+ */
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;

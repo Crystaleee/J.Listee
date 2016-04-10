@@ -3,11 +3,15 @@
  */
 package entity;
 
-import history.History;
-
+/**
+ * This command is to redo any previously
+ * undone commands
+ */
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import history.History;
 
 public class CommandRedo implements Command {
     private boolean _updateFile = true;

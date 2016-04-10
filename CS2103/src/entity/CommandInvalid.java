@@ -3,7 +3,9 @@
  */
 
 package entity;
-
+/**
+ * This class is for any invalid commands
+ */
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

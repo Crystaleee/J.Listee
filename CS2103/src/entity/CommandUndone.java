@@ -3,6 +3,10 @@
  */
 package entity;
 
+/**
+ * This command is to mark any completed tasks
+ * as incomplete again.
+ */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -46,6 +50,9 @@ public class CommandUndone implements Command {
         return _display;
     }
 
+    /*
+     * sets up variables if command has invalid parameters
+     */
     private void setInvalidDisplay() {
         _updateFile = false;
         _saveHistory = false;
@@ -60,6 +67,9 @@ public class CommandUndone implements Command {
         getTaskIndices();
     }
 
+    /*
+     * gets the new indices of the undone tasks for animation purposes
+     */
     private void getTaskIndices() {
         for (int i = 0; i < _tasks.size(); i++) {
             Task task = _tasks.get(i);
@@ -113,6 +123,9 @@ public class CommandUndone implements Command {
         return numOfTasks;
     }
 
+    /*
+     * set feedback msg for user
+     */
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
             _msgInvalidNum += taskNum;
@@ -164,7 +177,6 @@ public class CommandUndone implements Command {
     }
 
     private boolean isUndoneAll() {
-        System.out.println(_taskNumbers == null);
         return _taskNumbers == null;
     }
 

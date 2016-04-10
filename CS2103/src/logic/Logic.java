@@ -2,7 +2,10 @@
  * @@author A0139995E
  */
 package logic;
-
+/**
+ * This class serves as the interface between ui and 
+ * the sub components. 
+ */
 import history.History;
 
 import java.io.IOException;
@@ -27,6 +30,9 @@ public class Logic {
     private static String file;
     private static Logger logger = GlobalLogger.getLogger();
 
+    /*
+     * call storage to create text file specified by the filepath
+     */
     public static boolean createFile(String filePath) {
         logger.log(Level.INFO, "Logic: Create filepath " + filePath);
         file = filePath;
@@ -38,6 +44,9 @@ public class Logic {
         }
     }
 
+    /*
+     * call storage to change the file path of text file
+     */
     public static Display changeFilePath(String filePath) {
         logger.log(Level.INFO, "Logic: Change filepath" + filePath);
         try{
@@ -51,6 +60,9 @@ public class Logic {
         return display;
     }
 
+    /*
+     * sets up the program on first start up of the program
+     */
     public static Display initializeProgram(String filePath) {
         logger.log(Level.INFO, "Logic: Initialise Program" + filePath);
         file = filePath;
@@ -63,6 +75,10 @@ public class Logic {
         return display;
     }
 
+    /*
+     * initialise the timertask to constantly poll
+     * for overdue tasks
+     */
     private static void initialiseOverdueTasksReminder() {
         Timer timer = new Timer(GlobalConstants.IS_DAEMON_TASK);
         timer.schedule(new ReminderOverdue(), GlobalConstants.TIMER_DELAY, GlobalConstants.TIMER_PERIOD);
@@ -82,6 +98,10 @@ public class Logic {
         display.setMessage(GlobalConstants.MESSAGE_START_UP);
     }
 
+    /*
+     * called by ui whenever user enters a command and
+     * executes it
+     */
     public static Display executeUserCommand(String userInput) {
         logger.log(Level.INFO, "Logic: Parsing user input " + userInput);
         Command userCommand = parseUserInput(userInput);

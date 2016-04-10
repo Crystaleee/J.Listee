@@ -2,7 +2,9 @@
  * @@author A0139995E
  */
 package entity;
-
+/**
+ * This command is to delete tasks
+ */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -50,6 +52,9 @@ public class CommandDelete implements Command {
         return false;
     }
 
+    /*
+     * sets variables when the command has invalid parametersS
+     */
     private void setInvalidDisplay() {
         _updateFile = false;
         _saveHistory = false;
@@ -121,6 +126,9 @@ public class CommandDelete implements Command {
         }
     }
 
+    /*
+     * deletes one/multiple visible tasks
+     */
     private void deleteMultipleTasks() {
         Task deletedTask;
         System.out.println(_taskNumbers.get(0));
@@ -132,6 +140,9 @@ public class CommandDelete implements Command {
         setDisplay(msgDelete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
     }
 
+    /*
+     * deletes all visible tasks
+     */
     private void deleteAllShownTasks() {
         int numTasks = getNumOfTasks();
         _taskNumbers = new ArrayList<Integer>();

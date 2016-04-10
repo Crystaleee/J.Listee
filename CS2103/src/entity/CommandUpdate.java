@@ -3,7 +3,10 @@
  */
 package entity;
 
-import java.text.SimpleDateFormat;
+/**
+ * This command is to edit any parameters
+ * of a task
+ */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -79,6 +82,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * sets up variables if command has invalid parameters
+     */
     private void setInvalidDisplay() {
         _updateFile = false;
         _saveHistory = false;
@@ -94,6 +100,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         return ((_taskNumber > numOfTasks) || (_taskNumber < 1));
     }
 
+    /*
+     * Maps task number to task types
+     */
     private void editTask() {
         if (_taskNumber <= _display.getVisibleDeadlineTasks().size()) {
             logger.log(Level.INFO, "Update: Deadline");
@@ -120,6 +129,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editDeadline() {
         TaskDeadline task = _display.getVisibleDeadlineTasks().get(_taskNumber - 1);
         if (isInvalidEditDeadline(task)) {
+            logger.log(Level.INFO, "Update: Invalid deadline edit");
             setInvalidDisplay();
             return;
         }
@@ -135,6 +145,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editEvent() {
         TaskEvent task = _display.getVisibleEvents().get(_taskNumber - 1);
         if (isInvalidEditEvent(task)) {
+            logger.log(Level.INFO, "Update: Invalid event edit");
             setInvalidDisplay();
             return;
         }
@@ -156,6 +167,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editFloat() {
         TaskFloat task = _display.getVisibleFloatTasks().get(_taskNumber - 1);
         if (isInvalidEditFloat(task)) {
+            logger.log(Level.INFO, "Update: Invalid float edit");
             setInvalidDisplay();
             return;
         }
@@ -190,6 +202,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editReserved() {
         TaskReserved task = _display.getReservedTasks().get(_taskNumber - 1);
         if (isInvalidEditReserved(task)) {
+            logger.log(Level.INFO, "Update: Invalid reserved edit");
             setInvalidDisplay();
             return;
         }
@@ -202,6 +215,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         setTaskIndices(task);
     }
 
+    /*
+     * this method removes time slots from a reserved task
+     */
     private void removeTimeSlot(TaskReserved task) {
         if (_removeReservedSlotIndex != null) {
             Collections.sort(_removeReservedSlotIndex);
@@ -213,6 +229,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
+    /*
+     * this method checks if user wants to edit timeslot
+     * or add a timeslot
+     */
     private void editTimeSlot(TaskReserved task) {
         if (_reservedSlotIndex != null) {
             editTime(task);
@@ -221,16 +241,17 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    private void addTimeSlot(TaskReserved task) {/*
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh/mm");
-        String DateToStr = format.format(getStartDate().getTime());
-        System.out.println(DateToStr);
-        DateToStr = format.format(getEndDate().getTime());
-        System.out.println(DateToStr);*/
+    /*
+     * this method adds a time slot to a reserved task
+     */
+    private void addTimeSlot(TaskReserved task) {
         task.getStartDates().add(getStartDate());
         task.getEndDates().add(getEndDate());
     }
 
+    /*
+     * this method edits a time slot of a reserved task
+     */
     private void editTime(TaskReserved task) {
         if (getStartDate() != null) {
             if (isChangeTimeOnly(getStartDate())) {
@@ -252,6 +273,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit a reserved task
+     */
     private boolean isInvalidEditReserved(TaskReserved task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -290,6 +315,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit a floating task
+     */
     private boolean isInvalidEditFloat(TaskFloat task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -307,6 +336,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit an event task
+     */
     private boolean isInvalidEditEvent(TaskEvent task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -358,6 +391,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return (time.get(Calendar.YEAR) == 1);
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit a deadline task
+     */
     private boolean isInvalidEditDeadline(TaskDeadline task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -448,16 +485,22 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
         return false;
     }
-
+    
+    /*
+     * checks if there is a conversion of task type from deadline to event/float
+     * and converts accordingly
+     */
     private boolean changeDeadlineTaskType(TaskDeadline task) {
         // assertFalse endDate==0 AND startDate != 0&null
         boolean hasTaskChanged = false;
         if (isConvertDeadlineToFloat()) {
+            logger.log(Level.INFO, "Update: Convert deadline to float");
             _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
             _display.getDeadlineTasks().remove(task);
             hasTaskChanged = convertDeadlineToFloat(task);
         }
         if (isConvertDeadlineToEvent(hasTaskChanged)) {
+            logger.log(Level.INFO, "Update: Convert deadline to event");
             _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
             _display.getDeadlineTasks().remove(task);
             convertDeadlineToEvent(task);
@@ -469,6 +512,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return hasTaskChanged;
     }
 
+
+    /*
+     * sets the task indices array for UI to use in the animation
+     */
     private void setTaskIndices(Task task) {
         ArrayList<Integer> indices = new ArrayList<Integer>();
         indices.add(getIndex(task));
@@ -542,12 +589,16 @@ public class CommandUpdate extends TaskEvent implements Command {
                 new CommandAddEvent(task).execute(_display);
             }
         }
+        resetOverdueStatus(task);
+        return;
+    }
+
+    private void resetOverdueStatus(TaskEvent task) {
         if (task.getEndDate().before(Calendar.getInstance())) {
             task.setIsOverdue(true);
         } else {
             task.setIsOverdue(false);
         }
-        return;
     }
 
     private void editEndDate(TaskEvent task) {
@@ -563,11 +614,7 @@ public class CommandUpdate extends TaskEvent implements Command {
                 }
             }
         }
-        if (task.getEndDate().before(Calendar.getInstance())) {
-            task.setIsOverdue(true);
-        } else {
-            task.setIsOverdue(false);
-        }
+        resetOverdueStatus(task);
         return;
     }
 
@@ -585,12 +632,16 @@ public class CommandUpdate extends TaskEvent implements Command {
                 new CommandAddDeadlineTask(task).execute(_display);
             }
         }
+        resetOverdueStatus(task);
+        return;
+    }
+
+    private void resetOverdueStatus(TaskDeadline task) {
         if (task.getEndDate().before(Calendar.getInstance())) {
             task.setIsOverdue(true);
         } else {
             task.setIsOverdue(false);
         }
-        return;
     }
 
     private void editLocation(Task task) {
@@ -613,15 +664,21 @@ public class CommandUpdate extends TaskEvent implements Command {
         return;
     }
 
+    /*
+     * checks if there is a conversion of task type from event to deadline/float
+     * and converts accordingly
+     */
     private void changeEventTaskType(TaskEvent task) {
         boolean hasTaskChanged = false;
         if (isConvertEventToFloat()) {
+            logger.log(Level.INFO, "Update: Convert event to float");
             _display.getVisibleEvents().remove(task);
             _display.getEventTasks().remove(task);
             convertEventToFloat(task);
             hasTaskChanged = true;
         }
         if (isConvertEventToDeadline(hasTaskChanged)) {
+            logger.log(Level.INFO, "Update: Convert event to deadline");
             _display.getVisibleEvents().remove(task);
             _display.getEventTasks().remove(task);
             convertEventToDeadline(task);
@@ -663,13 +720,19 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * checks if there is a conversion of task type from float to event/deadline
+     * and converts accordingly
+     */
     private boolean hasChangeFloatTaskType(TaskFloat task) {
         boolean hasTaskChanged = false;
         if (isChangeFloatToEvent()) {
+            logger.log(Level.INFO, "Update: Convert float to event");
             convertFloatToEvent(task);
             hasTaskChanged = true;
         } else {
             if (isChangeFloatToDeadline()) {
+                logger.log(Level.INFO, "Update: Convert float to deadline");
                 convertFloatToDeadline(task);
                 hasTaskChanged = true;
             }

@@ -4,11 +4,15 @@
 
 package entity;
 
-import history.History;
-
+/**
+ * This command is to undo previously entered
+ * commands
+ */
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import history.History;
 
 public class CommandUndo implements Command {
     private boolean updateFile = true;

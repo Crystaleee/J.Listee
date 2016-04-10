@@ -3,6 +3,10 @@
  */
 package entity;
 
+/**
+ * This command is for filtering the visible tasks
+ * to match certain criteria
+ */
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,7 +84,7 @@ public class CommandShow implements Command {
         this._display = oldDisplay.deepClone();
 
         showTasks();
-        if (noTasksFound()) {
+        if (hasNoTasksFound()) {
             logger.log(Level.INFO, "Show: No tasks");
             oldDisplay.setMessage(GlobalConstants.MESSAGE_NO_TASKS);
             return oldDisplay;
@@ -92,7 +96,11 @@ public class CommandShow implements Command {
         return _display;
     }
 
-    private boolean noTasksFound() {
+    /*
+     * This method checks if there are no tasks
+     * matching the filter
+     */
+    private boolean hasNoTasksFound() {
         int numVisible = _display.getVisibleCompletedTasks().size()
                 + _display.getVisibleDeadlineTasks().size() + _display.getVisibleEvents().size()
                 + _display.getVisibleFloatTasks().size() + _display.getVisibleReservedTasks().size();
@@ -145,6 +153,9 @@ public class CommandShow implements Command {
         return false;
     }
 
+    /*
+     * This method sets the feedback to the user
+     */
     private String getFeedback() {
         if (!_taskTypes.isEmpty()) {
             for (int i = 0; i < _taskTypes.size(); i++) {
@@ -221,6 +232,9 @@ public class CommandShow implements Command {
         return false;
     }
 
+    /*
+     * Gets completed tasks matching the filter
+     */
     private void getCompletedTasks() {
         Task task;
         _display.setVisibleCompletedTasks(new ArrayList<Task>());
@@ -238,6 +252,9 @@ public class CommandShow implements Command {
         }
     }
 
+    /*
+     * Gets deadline tasks matching the filter
+     */
     private void getDeadLineTasks() {
         TaskDeadline task;
         _display.setVisibleDeadlineTasks(new ArrayList<TaskDeadline>());
@@ -255,6 +272,9 @@ public class CommandShow implements Command {
         }
     }
 
+    /*
+     * Gets event tasks matching the filter
+     */
     private void getEventTasks() {
         TaskEvent task;
         _display.setVisibleEvents(new ArrayList<TaskEvent>());
@@ -272,6 +292,9 @@ public class CommandShow implements Command {
         }
     }
 
+    /*
+     * Gets float tasks matching the filter
+     */
     private void getFloatTasks() {
         TaskFloat task;
         _display.setVisibleFloatTasks(new ArrayList<TaskFloat>());
@@ -288,6 +311,9 @@ public class CommandShow implements Command {
         }
     }
 
+    /*
+     * Gets reserved tasks matching the filter
+     */
     private void getReservedTasks() {
         TaskReserved task;
         _display.setVisibleReservedTasks(new ArrayList<TaskReserved>());

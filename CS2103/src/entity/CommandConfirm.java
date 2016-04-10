@@ -2,7 +2,10 @@
  * @@author A0139995E
  */
 package entity;
-
+/**
+ * This command is to confirm a timeslot of a reserved task
+ * and convert it to an event
+ */
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +51,9 @@ public class CommandConfirm implements Command {
         display.getReservedTasks().remove(task);
     }
 
+    /*
+     * sets variables when the command has invalid parametersS
+     */
     private void setInvalidDisplay(Display display) {
         _saveHistory = false;
         _updateFile = false;
@@ -56,6 +62,9 @@ public class CommandConfirm implements Command {
         display.setMessage(msg);
     }
 
+    /*
+     * checks for invalid parameters
+     */
     private boolean hasInvalidParameters(Display display) {
         if (display.getReservedTasks().size() == 0) {
             msg = GlobalConstants.MESSAGE_ERROR_NO_RESERVED_TASKS;
@@ -96,6 +105,10 @@ public class CommandConfirm implements Command {
         return false;
     }
 
+    /*
+     * This method will check if the task selected is 
+     * a reserved task or if the task number is invalid
+     */
     private boolean isInvalidTaskNumber(Display display) {
         int minIndex = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size()
                 + display.getVisibleFloatTasks().size() + 1;

@@ -2,7 +2,6 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -14,12 +13,10 @@ import org.junit.Test;
 
 import entity.Display;
 import logic.Logic;
-import storage.Storage;
 
 public class IntegrationTest {
 
 	private static Display display;
-	private Storage storage = Storage.getInstance();
 	private String filepath = "src\\tests\\systematicTest.txt";
 
 	@Before
@@ -54,13 +51,8 @@ public class IntegrationTest {
 		assertEquals(expected, actual);
 	}
 
-//	@Test
-//	public void testChangeFilePath() {
-//		GUIController.changeFilePath("C:\\Users\\Chloe\\Downloads\\J.Listee.txt");
-//	}
-	
 	/***********************
-	 * Adding Tasks Tests  * 
+	 * Adding Tasks Tests  *
 	 * @throws IOException *
 	 ***********************/
 
@@ -71,38 +63,41 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		System.out.println(display);
-		assertTrue(display.toString().contains("floatTasks=[Description: Floating Test"));
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testAddDeadline() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test due Thursday 3pm @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due 14th Apr 3pm @NUS #tag");
 		String expected = "added: \"Deadline Test\"";
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("deadlineTasks=[Description: Deadline Test"));
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 15:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testAddDeadlineWithoutTime() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test due Thursday @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due 14th Apr @NUS #tag");
 		String expected = "added: \"Deadline Test\"";
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("deadlineTasks=[Description: Deadline Test"));
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 23:59\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testAddEvent() throws IOException {
-		display = Logic.executeUserCommand("add Event Test from Thursday 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
 		String expected = "added: \"Event Test\"";
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("events=[Description: Event Test"));
+		assertTrue(display.toString().contains(
+				"events=[Description: Event Test\r\nStart Date: 14/04/16 15:00\r\nEnd Date: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -112,11 +107,13 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertEquals("Display [message=Please enter a description, events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]", display.toString());
+		assertEquals(
+				"Display [message=Please enter a description, events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]",
+				display.toString());
 	}
 
 	/************************
-	 * Updating Tasks Tests * 
+	 * Updating Tasks Tests *
 	 * @throws IOException  *
 	 ************************/
 
@@ -127,11 +124,9 @@ public class IntegrationTest {
 		String expected = "Edited : \"Floating Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("floatTasks=[Description: New Description"));
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: New Description\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -142,7 +137,8 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("Location: newPlace"));
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: newPlace\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -153,76 +149,72 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("Tags: #newTag"));
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #newTag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testUpdateDeadlineDescription() throws IOException {
-		display = Logic.executeUserCommand("add Deadline Test due tomorrow @NUS #tag");
+		display = Logic.executeUserCommand("add Deadline Test due April 11 @NUS #tag");
 		display = Logic.executeUserCommand("update 1 New Description");
 		String expected = "Edited : \"Deadline Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("deadlineTasks=[Description: New Description"));
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: New Description\r\nDeadline: 11/04/16 23:59\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testUpdateDeadlineTime() throws IOException {
 		display = Logic.executeUserCommand("add Deadline Test due tomorrow @NUS #tag");
-		display = Logic.executeUserCommand("update 1 /end Friday 4pm");
+		display = Logic.executeUserCommand("update 1 +end 15th Apr 4pm");
 		String expected = "Edited : \"Deadline Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("16:00"));
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 15/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testUpdateEventStartTime() throws IOException {
-		display = Logic.executeUserCommand("add Event Test from Thursday 3pm to 4pm @NUS #tag");
-		display = Logic.executeUserCommand("update 1 /start Thursday 12pm");
+		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("update 1 +start 14th Apr 12pm");
 		String expected = "Edited : \"Event Test\"";
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("12:00"));
+		assertTrue(display.toString().contains(
+				"events=[Description: Event Test\r\nStart Date: 14/04/16 12:00\r\nEnd Date: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testUpdateEventEndTime() throws IOException {
-		display = Logic.executeUserCommand("add Event Test from Thursday 3pm to 4pm @NUS #tag");
-		display = Logic.executeUserCommand("update 1 /end Thursday 7pm");
+		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("update 1 +end 14th Apr 7pm");
 		String expected = "Edited : \"Event Test\"";
 		String actual = display.getMessage();
-		
+
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("19:00"));
+		assertTrue(display.toString().contains(
+				"events=[Description: Event Test\r\nStart Date: 14/04/16 15:00\r\nEnd Date: 14/04/16 19:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testUpdateEventTimes() throws IOException {
-		display = Logic.executeUserCommand("add Event Test from Thursday 3pm to 4pm @NUS #tag");
-		display = Logic.executeUserCommand("update 1 /both Wednesday 9 pm to Thursday 10am");
+		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("update 1 +both 13th Apr 9 pm to 14th Apr 10am");
 		String expected = "Edited : \"Event Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("21:00"));
-		assertTrue(display.toString().contains("10:00"));
+		assertTrue(display.toString().contains(
+				"events=[Description: Event Test\r\nStart Date: 13/04/16 21:00\r\nEnd Date: 14/04/16 10:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	/************************
-	 * Deleting Tasks Tests * 
+	 * Deleting Tasks Tests *
 	 * @throws IOException  *
 	 ************************/
 
@@ -233,12 +225,8 @@ public class IntegrationTest {
 		String expected = "deleted: \"Floating Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		System.out.println(display);
-		assertFalse(display.toString().contains("floatTasks=[Floating Test"));
+		assertTrue(display.toString().contains("floatTasks=[]"));
 	}
 
 	@Test
@@ -249,7 +237,7 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertFalse(display.toString().contains("deadlineTasks=[Deadline Test"));
+		assertTrue(display.toString().contains("deadlineTasks=[]"));
 	}
 
 	@Test
@@ -260,8 +248,7 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		System.out.println("BLAH: " + display);
-		assertFalse(display.toString().contains("events=[Event Test"));
+		assertTrue(display.toString().contains("events=[]"));
 	}
 
 	@Test
@@ -274,7 +261,8 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertEquals(display.toString(), "Display [message=All tasks deleted, events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]");
+		assertTrue(display.toString()
+				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]"));
 	}
 
 	@Test
@@ -287,7 +275,8 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertEquals(display.toString(), "Display [message=deleted: \"Deadline Test\", \"Event Test\", \"Floating Test\", events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]");
+		assertTrue(display.toString()
+				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]"));
 	}
 
 	@Test
@@ -297,41 +286,41 @@ public class IntegrationTest {
 		String expected = "You have specified invalid numbers: 5";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("Floating Test"));
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	/*************************
-	 * Reserving Tasks Tests * 
+	 * Reserving Tasks Tests *
 	 * @throws IOException   *
 	 *************************/
 
 	@Test
 	public void testReserveSingle() throws IOException {
-		display = Logic.executeUserCommand("reserve Reservation Test from Thursday 3pm to 4pm @NUS #tag");
+		display = Logic.executeUserCommand("reserve Reservation Test from 14th Apr 3pm to 4pm @NUS #tag");
 		String expected = "Reserved: \"Reservation Test\"";
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("Reservation Test"));
+		assertTrue(display.toString().contains(
+				"reservedTasks=[Description: Reservation Test\r\nStart Dates: 14/04/16 15:00\r\nEnd Dates: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
 	public void testReserveDouble() throws IOException {
-		display = Logic
-				.executeUserCommand("reserve Reservation Test from Thursday 3pm to 4pm and Friday 4pm to 6pm @NUS #tag");
+		display = Logic.executeUserCommand(
+				"reserve Reservation Test from 14th Apr 3pm to 4pm and 15th Apr 4pm to 6pm @NUS #tag");
 		String expected = "Reserved: \"Reservation Test\"";
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("Reservation Test"));
+		assertTrue(display.toString().contains(
+				"reservedTasks=[Description: Reservation Test\r\nStart Dates: 14/04/16 15:00, 15/04/16 16:00\r\nEnd Dates: 14/04/16 16:00, 15/04/16 18:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	/***********************
-	 * Undo and Redo Tests * 
+	 * Undo and Redo Tests *
 	 * @throws IOException *
 	 ***********************/
 
@@ -343,7 +332,7 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertFalse(display.toString().contains("Floating Test"));
+		assertTrue(display.toString().contains("floatTasks=[]"));
 	}
 
 	@Test
@@ -354,9 +343,9 @@ public class IntegrationTest {
 		String expected = "Redid command(s)";
 		String actual = display.getMessage();
 
-
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains("Floating Test"));
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -380,11 +369,9 @@ public class IntegrationTest {
 		String expected = "Completed: \"Floating Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertEquals(display.toString(), storageDisplay.toString());
+		assertTrue(display.toString()
+				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]"));
 	}
 
 	@Test
@@ -394,11 +381,9 @@ public class IntegrationTest {
 		String expected = "You have specified invalid task numbers: 10";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertEquals(display.toString(), storageDisplay.toString());
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -410,11 +395,9 @@ public class IntegrationTest {
 		String expected = "Undone task: \"Floating Test\"";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertEquals(display.toString(), storageDisplay.toString());
+		assertTrue(display.toString()
+				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -426,11 +409,9 @@ public class IntegrationTest {
 		String expected = "You have specified invalid task numbers: 10";
 		String actual = display.getMessage();
 
-		Display storageDisplay = storage.getDisplay(filepath);
-		storageDisplay.setMessage(expected);
-
 		assertEquals(expected, actual);
-		assertEquals(display.toString(), storageDisplay.toString());
+		assertTrue(display.toString()
+				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]"));
 	}
 
 }
