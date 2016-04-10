@@ -2388,18 +2388,18 @@ public class LogicTest2 {
       //postpone task
         start = Calendar.getInstance();
         start.set(Calendar.HOUR_OF_DAY, 2);
+        start.set(Calendar.DATE, 2);
+        start.set(Calendar.MINUTE, 2);
+        start.set(Calendar.MONTH, 2);
         ArrayList<String> para = new ArrayList<String>();
         para.add("hour");
+        para.add("day");
+        para.add("minute");
+        para.add("month");
         assertEquals("Display [message=Postponed: DL4, "
                 + "events=[], "
                 
                 + "deadlineTasks=["
-                + "Description: DL4\r\n"
-                + "Deadline: 19/02/16 17:00\r\n"
-                + "Location: JEM\r\n"
-                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
-                + ", "
-
                 + "Description: Event3\r\n"
                 + "Deadline: 19/02/16 18:00\r\n"
                 + "Location: \r\n"
@@ -2408,7 +2408,13 @@ public class LogicTest2 {
                 + "Description: DL1\r\n"
                 + "Deadline: 19/02/16 19:00\r\n"
                 + "Location: \r\n"
-                + "Tags:\r\n\r\n], "
+                + "Tags:\r\n\r\n, "
+                
+                + "Description: DL4\r\n"
+                + "Deadline: 21/04/16 17:02\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + "], "
                 
                 + "floatTasks=[]"
                 
