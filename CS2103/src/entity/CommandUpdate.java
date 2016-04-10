@@ -3,7 +3,6 @@
  */
 package entity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -120,6 +119,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editDeadline() {
         TaskDeadline task = _display.getVisibleDeadlineTasks().get(_taskNumber - 1);
         if (isInvalidEditDeadline(task)) {
+            logger.log(Level.INFO, "Update: Invalid deadline edit");
             setInvalidDisplay();
             return;
         }
@@ -135,6 +135,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editEvent() {
         TaskEvent task = _display.getVisibleEvents().get(_taskNumber - 1);
         if (isInvalidEditEvent(task)) {
+            logger.log(Level.INFO, "Update: Invalid event edit");
             setInvalidDisplay();
             return;
         }
@@ -156,6 +157,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editFloat() {
         TaskFloat task = _display.getVisibleFloatTasks().get(_taskNumber - 1);
         if (isInvalidEditFloat(task)) {
+            logger.log(Level.INFO, "Update: Invalid float edit");
             setInvalidDisplay();
             return;
         }
@@ -190,6 +192,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     private void editReserved() {
         TaskReserved task = _display.getReservedTasks().get(_taskNumber - 1);
         if (isInvalidEditReserved(task)) {
+            logger.log(Level.INFO, "Update: Invalid reserved edit");
             setInvalidDisplay();
             return;
         }
@@ -448,16 +451,22 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
         return false;
     }
-
+    
+    /*
+     * checks if there is a conversion of task type from deadline to event/float
+     * and converts accordingly
+     */
     private boolean changeDeadlineTaskType(TaskDeadline task) {
         // assertFalse endDate==0 AND startDate != 0&null
         boolean hasTaskChanged = false;
         if (isConvertDeadlineToFloat()) {
+            logger.log(Level.INFO, "Update: Convert deadline to float");
             _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
             _display.getDeadlineTasks().remove(task);
             hasTaskChanged = convertDeadlineToFloat(task);
         }
         if (isConvertDeadlineToEvent(hasTaskChanged)) {
+            logger.log(Level.INFO, "Update: Convert deadline to event");
             _display.getVisibleDeadlineTasks().remove(_taskNumber - 1);
             _display.getDeadlineTasks().remove(task);
             convertDeadlineToEvent(task);
@@ -469,6 +478,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return hasTaskChanged;
     }
 
+
+    /*
+     * sets the task indices array for UI to use in the animation
+     */
     private void setTaskIndices(Task task) {
         ArrayList<Integer> indices = new ArrayList<Integer>();
         indices.add(getIndex(task));
@@ -613,15 +626,21 @@ public class CommandUpdate extends TaskEvent implements Command {
         return;
     }
 
+    /*
+     * checks if there is a conversion of task type from event to deadline/float
+     * and converts accordingly
+     */
     private void changeEventTaskType(TaskEvent task) {
         boolean hasTaskChanged = false;
         if (isConvertEventToFloat()) {
+            logger.log(Level.INFO, "Update: Convert event to float");
             _display.getVisibleEvents().remove(task);
             _display.getEventTasks().remove(task);
             convertEventToFloat(task);
             hasTaskChanged = true;
         }
         if (isConvertEventToDeadline(hasTaskChanged)) {
+            logger.log(Level.INFO, "Update: Convert event to deadline");
             _display.getVisibleEvents().remove(task);
             _display.getEventTasks().remove(task);
             convertEventToDeadline(task);
@@ -663,13 +682,19 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * checks if there is a conversion of task type from float to event/deadline
+     * and converts accordingly
+     */
     private boolean hasChangeFloatTaskType(TaskFloat task) {
         boolean hasTaskChanged = false;
         if (isChangeFloatToEvent()) {
+            logger.log(Level.INFO, "Update: Convert float to event");
             convertFloatToEvent(task);
             hasTaskChanged = true;
         } else {
             if (isChangeFloatToDeadline()) {
+                logger.log(Level.INFO, "Update: Convert float to deadline");
                 convertFloatToDeadline(task);
                 hasTaskChanged = true;
             }

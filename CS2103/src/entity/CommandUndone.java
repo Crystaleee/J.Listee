@@ -113,6 +113,9 @@ public class CommandUndone implements Command {
         return numOfTasks;
     }
 
+    /*
+     * set feedback msg for user
+     */
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
             _msgInvalidNum += taskNum;
