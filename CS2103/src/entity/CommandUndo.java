@@ -4,11 +4,11 @@
 
 package entity;
 
-import history.History;
-
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import history.History;
 
 public class CommandUndo implements Command {
     private boolean updateFile = true;

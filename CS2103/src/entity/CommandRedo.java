@@ -3,11 +3,11 @@
  */
 package entity;
 
-import history.History;
-
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import history.History;
 
 public class CommandRedo implements Command {
     private boolean _updateFile = true;
