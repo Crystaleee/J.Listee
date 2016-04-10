@@ -37,11 +37,41 @@ public class JListeeParser {
 	private static final String MATCH_LOCATION = "@\\w+\\S+";
 	private static final String MATCH_DELETE_HASHTAGS = "-#\\w+\\S+";
 	private static final String MATCH_HASHTAGS = "#\\w+\\S+";
+	private static final String WHITE_SPACE = "\\b";
+	private static final String DIGIT = "\\d";
+	private static final String EMPTY_SPACE = "";
+	private static final String INVALID_TASK_NUMBERS = "Invalid TaskNumbers";
+	private static final String MORE_THAN_ONE_SPACE = " +";
+	private static final String SPLIT_BY_SPACE = " ";
+	
 	private static final String SYMBOL_LOCATION = "@";
 	private static final String SYMBOL_HASHTAG = "#";
 	private static final String SYMBOL_REMOVE_HASHTAG = "-#";
+	private static final String SYMBOL_DELETE_LOCATION = "-@";
+	private static final String SYMBOL_SLASH = "/";
+	private static final String SYMBOL_PLUS = "+";
+	private static final String SYMBOL_DASH = "-";
+
 	private static final String CONTAINING_TO = "to";
 	private static final String CONTAINING_FROM = "from";
+	private static final String CONTAINING_UNTIMED = "untimed";
+	private static final String CONTAINING_EVENTS = "events";
+	private static final String CONTAINING_RESERVED = "reserved";
+	private static final String CONTAINING_DEADLINES = "deadlines";
+	private static final String CONTAINING_DONE = "done";
+	private static final String CONTAINING_OVERDUE = "overdue";
+	private static final String CONTAINING_TOMORROW = "tomorrow";
+	private static final String CONTAINING_TODAY = "today";
+	private static final String CONTAINING_DEL = "del";
+	private static final String CONTAINING_BOTH = "both";
+	private static final String CONTAINING_ALLTIME = "alltime";
+	private static final String CONTAINING_END = "end";
+	private static final String CONTAINING_ENDTIME = "etime";
+	private static final String CONTAINING_STARTTIME = "stime";
+	private static final String CONTAINING_START = "start";
+	private static final String CONTAINING_COMMA = ",";
+	private static final String CONTAINING_ALL = "all";
+
 	private static final String MINS = "mins";
 	private static final String MIN = "min";
 	private static final String MINUTES = "minutes";
@@ -60,26 +90,7 @@ public class JListeeParser {
 	private static final String YR = "yr";
 	private static final String YRS = "yrs";
 	private static final String YEAR = "year";
-	private static final String WHITE_SPACE = "\\b";
-	private static final String DIGIT = "\\d";
-	private static final String SYMBOL_DELETE_LOCATION = "-@";
-	private static final String CONTAINING_UNTIMED = "untimed";
-	private static final String CONTAINING_EVENTS = "events";
-	private static final String CONTAINING_RESERVED = "reserved";
-	private static final String CONTAINING_DEADLINES = "deadlines";
-	private static final String CONTAINING_DONE = "done";
-	private static final String CONTAINING_OVERDUE = "overdue";
-	private static final String CONTAINING_TOMORROW = "tomorrow";
-	private static final String CONTAINING_TODAY = "today";
-	private static final String SLASH = "/";
-	private static final String EMPTY_SPACE = "";
-	private static final String INVALID_TASK_NUMBERS = "Invalid TaskNumbers";
-	private static final String CONTAINS_DASH = "-";
-	private static final String MORE_THAN_ONE_SPACE = " +";
-	private static final int ONE = 1;
-	private static final int TWO = 2;
-	private static final int DONT_EXIST = -1;
-	private static final String SPLIT_BY_SPACE = " ";
+	
 	private static final String COMMAND_SEARCH = "search";
 	private static final String COMMAND_PP = "pp";
 	private static final String COMMAND_POSTPONE = "postpone";
@@ -88,20 +99,8 @@ public class JListeeParser {
 	private static final String COMMAND_RES = "res";
 	private static final String COMMAND_DEL = "del";
 	private static final String COMMAND_CONFIRM = "confirm";
-	private static final String CONTAINING_DEL = "del";
-	private static final String CONTAINING_BOTH = "both";
-	private static final String CONTAINING_ALLTIME = "alltime";
 	private static final String COMMAND_UNDONE = "undone";
 	private static final String COMMAND_DONE = CONTAINING_DONE;
-	private static final String CONTAINING_END = "end";
-	private static final String CONTAINING_ENDTIME = "etime";
-	private static final String CONTAINING_STARTTIME = "stime";
-
-	private static final int STARTING_INDEX = 0;
-
-	private static final String CONTAINING_START = "start";
-	private static final String CONTAINS_COMMA = ",";
-	private static final String CONTAINS_ALL = "all";
 	private static final String COMMAND_SHOW = "show";
 	private static final String COMMAND_REDO = "redo";
 	private static final String COMMAND_UNDO = "undo";
@@ -109,7 +108,11 @@ public class JListeeParser {
 	private static final String COMMAND_DELETE = "delete";
 	private static final String COMMAND_ADD = "add";
 	private static final String COMMAND_RESERVE = "reserve";
-
+	
+	private static final int STARTING_INDEX = 0;
+	private static final int ONE = 1;
+	private static final int TWO = 2;
+	private static final int DONT_EXIST = -1;
 	private static final int DEFAULT_START_HOUR = 0;
 	private static final int DEFAULT_START_MINUTE = 0;
 	private static final int DEFAULT_START_SECOND = 0;
@@ -131,6 +134,7 @@ public class JListeeParser {
 			new String[]{YEARS, YEAR, YR, YRS, MONTHS, MONTH, MTH, MTHS, DAY, DAYS, HOURS, HOUR, HR, HRS, MINUTE, MINUTES, MIN, MINS};
 
 	private static Logger logger = GlobalLogger.getLogger();
+	
 	private com.joestelmach.natty.Parser dateParser;
 
 	private Calendar startDate = null;
@@ -316,12 +320,12 @@ public class JListeeParser {
 	public ArrayList<Integer> extractTaskNumbers(String inputLine, ArrayList<Integer> taskNumbers) {
 		inputLine = inputLine.trim().replaceAll(MORE_THAN_ONE_SPACE, EMPTY_SPACE);
 
-		if (inputLine.contains(CONTAINS_ALL)) {
+		if (inputLine.contains(CONTAINING_ALL)) {
 			taskNumbers = null;
 		}
 
 		else {
-			String[] taskNumberLine = inputLine.split(CONTAINS_COMMA);
+			String[] taskNumberLine = inputLine.split(CONTAINING_COMMA);
 
 			for (int startIndex = STARTING_INDEX; startIndex < taskNumberLine.length; startIndex++) {
 				checkUsingDashOrCommaAndExtract(taskNumbers, taskNumberLine, startIndex);
@@ -338,8 +342,8 @@ public class JListeeParser {
 		 * index 1 refers to last task index to delete
 		 */
 
-		if (taskNumberLine[startIndex].contains(CONTAINS_DASH)) {
-			String[] splitRange = taskNumberLine[startIndex].split(CONTAINS_DASH);
+		if (taskNumberLine[startIndex].contains(SYMBOL_DASH)) {
+			String[] splitRange = taskNumberLine[startIndex].split(SYMBOL_DASH);
 
 			try{
 				int startDeleteIndex = Integer.valueOf(splitRange[STARTING_INDEX]);
@@ -419,8 +423,8 @@ public class JListeeParser {
 	}
 
 	public String checkTaskToDisplay(String inputLine, ArrayList<String> task, int keyword) {
-		if (inputLine.toLowerCase().contains(SLASH + SEARCH_TASKS[keyword])){
-			inputLine = deleteKeyword(SLASH + SEARCH_TASKS[keyword], inputLine);
+		if (inputLine.toLowerCase().contains(SYMBOL_SLASH + SEARCH_TASKS[keyword])){
+			inputLine = deleteKeyword(SYMBOL_SLASH + SEARCH_TASKS[keyword], inputLine);
 
 			switch (SEARCH_TASKS[keyword]){
 			case CONTAINING_TODAY :
@@ -531,7 +535,7 @@ public class JListeeParser {
 		}
 
 		for (String preposition : CONTAIN_TIME) {
-			if (inputLine.contains(SLASH + preposition) && (!preposition.equals(CONTAINING_BOTH))) {
+			if (inputLine.contains(SYMBOL_PLUS + preposition) && (!preposition.equals(CONTAINING_BOTH))) {
 				reservedTaskIndex = extractTaskNumber(inputLine);
 				inputLine = deleteKeyword(String.valueOf(reservedTaskIndex),inputLine);
 			}
@@ -541,14 +545,14 @@ public class JListeeParser {
 
 		for (int keyword = STARTING_INDEX; keyword < CONTAIN_TIME.length; keyword++) {
 
-			if (inputLine.toLowerCase().contains(CONTAINS_DASH + CONTAIN_TIME[keyword])){
-				inputLine = inputLine.replace(CONTAINS_DASH + CONTAIN_TIME[keyword], EMPTY_SPACE).trim();
+			if (inputLine.toLowerCase().contains(SYMBOL_DASH + CONTAIN_TIME[keyword])){
+				inputLine = inputLine.replace(SYMBOL_DASH + CONTAIN_TIME[keyword], EMPTY_SPACE).trim();
 				deleteTime(keyword);	
 			}
 
 
-			else if (inputLine.toLowerCase().contains(SLASH + CONTAIN_TIME[keyword])) { 
-				inputLine = inputLine.replace(SLASH + CONTAIN_TIME[keyword], EMPTY_SPACE).trim();
+			else if (inputLine.toLowerCase().contains(SYMBOL_PLUS + CONTAIN_TIME[keyword])) { 
+				inputLine = inputLine.replace(SYMBOL_PLUS + CONTAIN_TIME[keyword], EMPTY_SPACE).trim();
 
 				switch (CONTAIN_TIME[keyword]) {
 
@@ -586,7 +590,7 @@ public class JListeeParser {
 
 		}
 
-		if (inputLine.contains(CONTAINS_DASH)) {
+		if (inputLine.contains(SYMBOL_DASH)) {
 			removeTagLists = findHashTags(inputLine);
 			inputLine = trimInputLineWithoutRemoveHashTags(inputLine, removeTagLists);
 		}
@@ -622,8 +626,8 @@ public class JListeeParser {
 	public String removeAllDeletedNumberAndSymbols(String inputLine, ArrayList<Integer> taskNumbers) {
 		for (int i = STARTING_INDEX; i<taskNumbers.size(); i++){
 			if (inputLine.contains(String.valueOf(taskNumbers.get(i)))){
-				inputLine = deleteKeyword(CONTAINS_COMMA, inputLine);
-				inputLine = deleteKeyword(CONTAINS_DASH, inputLine);
+				inputLine = deleteKeyword(CONTAINING_COMMA, inputLine);
+				inputLine = deleteKeyword(SYMBOL_DASH, inputLine);
 				inputLine = deleteKeyword(String.valueOf(taskNumbers.get(i)), inputLine);
 			}
 		}
@@ -1004,7 +1008,7 @@ public class JListeeParser {
 		ArrayList<String> tags = new ArrayList<String>();
 		Matcher retrieveHashTags;
 
-		if (inputLine.contains(CONTAINS_DASH)) {
+		if (inputLine.contains(SYMBOL_DASH)) {
 			retrieveHashTags = Pattern.compile(MATCH_DELETE_HASHTAGS).matcher(inputLine);
 			addRemoveHashTags(tags, retrieveHashTags);
 
