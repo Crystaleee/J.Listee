@@ -1,10 +1,12 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandDone implements Command {
     private String _msgInvalidNumbers = "You have specified invalid task numbers: ";
@@ -13,6 +15,7 @@ public class CommandDone implements Command {
     private Display _display;
     private boolean _saveHistory = true;
     private boolean _updateFile = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandDone() {
         this._taskNumbers = null;
@@ -25,18 +28,14 @@ public class CommandDone implements Command {
     }
 
     public Display execute(Display oldDisplay) {
+        assert oldDisplay != null : "Done: null display";
         this._display = oldDisplay;
-        if (_taskNumbers != null) {
-            if (_taskNumbers.isEmpty()) {
-                setDisplay(GlobalConstants.MESSAGE_ERROR_NO_NUMBER, GlobalConstants.GUI_ANIMATION_INVALID,
-                        new ArrayList<Integer>(), new ArrayList<Integer>());
-                return _display;
-            }
-        }
         if (hasInvalidTaskNumbers()) {
+            logger.log(Level.INFO, "Done: Index Invalid");
             setInvalidDisplay();
             return _display;
         } else {
+            logger.log(Level.INFO, "Done: No errors");
             doneTasksFromList();
         }
         return _display;
@@ -53,20 +52,23 @@ public class CommandDone implements Command {
             ArrayList<Integer> conflictingTasks) {
         _display.setMessage(msg);
         _display.setCommandType(commandType);
-        incrementTaskNumbers();
         _display.setTaskIndices(completedTasks);
         _display.setConflictingTasksIndices(conflictingTasks);
     }
 
-    private void incrementTaskNumbers() {
+    private boolean hasNoTaskNumber() {
         if (_taskNumbers != null) {
-            for (int i = 0; i < _taskNumbers.size(); i++) {
-                _taskNumbers.set(i, _taskNumbers.get(i) + 1);
+            if (_taskNumbers.isEmpty()) {
+                return true;
             }
         }
+        return false;
     }
 
     private boolean hasInvalidTaskNumbers() {
+        if(hasNoTaskNumber()){
+            return true;
+        }
         if (isDoneAll()) {
             return false;
         } else {
@@ -128,10 +130,12 @@ public class CommandDone implements Command {
 
     private void doneAllVisibleTasks() {
         int numTasks = getNumOfTasks();
+        _taskNumbers = new ArrayList<Integer>();
         for (int i = 0; i < numTasks; i++) {
             markTaskAsDone(numTasks - i - 1);
+            _taskNumbers.add(i + 1);
         }
-        setDisplay(GlobalConstants.MESSAGE_ALL_COMPLETED, GlobalConstants.GUI_ANIMATION_DELETE, new ArrayList<Integer>(),
+        setDisplay(GlobalConstants.MESSAGE_ALL_COMPLETED, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers,
                 new ArrayList<Integer>());
     }
 

@@ -24,6 +24,8 @@ import gui.GUIController;
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
 import com.tulskiy.keymaster.common.Provider;
+
+import bean.GlobalLogger;
 /**
  * @@author A0149527W
  */
@@ -55,14 +57,36 @@ public class App extends Application{
 	private static TrayIcon trayIcon;
 	
 	public static void main(String[] args) {
+		GlobalLogger.createLogHandler();
 		Application.launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		Platform.setImplicitExit( false );
+
+		setHotKeyListener();
 		
-		//set listener for hotkey
+		//register global hotkey
+        shortcut.register(KeyStroke.getKeyStroke(SHORTCUT_LAUNCH), listener);
+        
+		stage = primaryStage;
+
+		enableTray();
+		
+		stage.getIcons().add(new Image(this.getClass().getResourceAsStream(ICON_DESKTOP)));
+		stage.initStyle(StageStyle.UNDECORATED);
+		stage.initStyle(StageStyle.TRANSPARENT);
+		stage.setTitle("J.Listee");
+		stage.setResizable(false);
+		GUIController.setStage(stage);
+		judgeAndShowStart();
+	}
+
+	/**
+	 * set hot key listener
+	 */
+	private void setHotKeyListener() {
 		listener=new HotKeyListener() {			
 			@Override
 			public void onHotKey(HotKey hotkey) {
@@ -83,20 +107,6 @@ public class App extends Application{
 				}
 			}
 		};
-		//register global hotkey
-        shortcut.register(KeyStroke.getKeyStroke(SHORTCUT_LAUNCH), listener);
-        
-		stage = primaryStage;
-
-		enableTray();
-		
-		stage.getIcons().add(new Image(this.getClass().getResourceAsStream(ICON_DESKTOP)));
-		stage.initStyle(StageStyle.UNDECORATED);
-		stage.initStyle(StageStyle.TRANSPARENT);
-		stage.setTitle("J.Listee");
-		stage.setResizable(false);
-		GUIController.setStage(stage);
-		judgeAndShowStart();
 	}
 
 	private void enableTray() {
@@ -105,10 +115,39 @@ public class App extends Application{
 		java.awt.MenuItem hideItem = new java.awt.MenuItem("Minimize");
 		java.awt.MenuItem quitItem = new java.awt.MenuItem("Exit");
 
+		ActionListener actionListener = setTrayActionListener();
+
+		// set listener for double click
+		MouseListener mouseListener = setMouseListener();
+
+		openItem.addActionListener(actionListener);
+		quitItem.addActionListener(actionListener);
+		hideItem.addActionListener(actionListener);
+ 
+		popupMenu.add(openItem);
+		popupMenu.add(hideItem);
+		popupMenu.add(quitItem);
+ 
+		try {
+			SystemTray tray = SystemTray.getSystemTray();
+			BufferedImage image = ImageIO.read(this.getClass()
+					.getResourceAsStream(ICON_TRAY));
+			trayIcon = new TrayIcon(image, "J.Listee", popupMenu);
+			trayIcon.setToolTip("J.Listee");
+			tray.add(trayIcon);
+			trayIcon.addMouseListener(mouseListener);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private ActionListener setTrayActionListener() {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				java.awt.MenuItem item = (java.awt.MenuItem) e.getSource();
-				//override default the application will shutdown when it's last window is hidden.
 
 				if (item.getLabel().equals("Exit")) {				
 					terminate();
@@ -134,8 +173,13 @@ public class App extends Application{
 				}
 			}
 		};
+		return actionListener;
+	}
 
-		// set listener for double click
+	/**
+	 * @return
+	 */
+	private MouseListener setMouseListener() {
 		MouseListener mouseListener = new MouseListener() {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
@@ -162,26 +206,7 @@ public class App extends Application{
 				}
 			}
 		};
-
-		openItem.addActionListener(actionListener);
-		quitItem.addActionListener(actionListener);
-		hideItem.addActionListener(actionListener);
- 
-		popupMenu.add(openItem);
-		popupMenu.add(hideItem);
-		popupMenu.add(quitItem);
- 
-		try {
-			SystemTray tray = SystemTray.getSystemTray();
-			BufferedImage image = ImageIO.read(this.getClass()
-					.getResourceAsStream(ICON_TRAY));
-			trayIcon = new TrayIcon(image, "J.Listee", popupMenu);
-			trayIcon.setToolTip("J.Listee");
-			tray.add(trayIcon);
-			trayIcon.addMouseListener(mouseListener);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		return mouseListener;
 	}
 
 	/**

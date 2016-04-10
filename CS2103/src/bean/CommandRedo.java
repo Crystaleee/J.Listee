@@ -1,9 +1,11 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import History.History;
 
@@ -11,6 +13,7 @@ public class CommandRedo implements Command {
     private boolean _updateFile = true;
     private boolean _saveHistory = false;
     private int _count;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandRedo() {
         _count = 1;
@@ -21,8 +24,10 @@ public class CommandRedo implements Command {
     }
 
     public Display execute(Display display) {
+        assert display != null: "Redo: null display";
         Display nextDisplay = History.getDisplay(_count);
         if (nextDisplay == null) {
+            logger.log(Level.INFO, "Redo: At last state");
             _updateFile = false;
             display.setMessage(GlobalConstants.MESSAGE_ERROR_REDO);
             return display;

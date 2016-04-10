@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * @@author  A0149527W
+ * @@author A0149527W
  */
 public class LogStorage {
 	  //this is the log file path, storing the location of the task file

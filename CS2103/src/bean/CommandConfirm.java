@@ -1,9 +1,11 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandConfirm implements Command {
     private Integer _timeSlotIndex;
@@ -13,6 +15,7 @@ public class CommandConfirm implements Command {
     private int index;
     private boolean _saveHistory = true;
     private boolean _updateFile = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandConfirm() {
         this._taskNumber = null;
@@ -24,7 +27,9 @@ public class CommandConfirm implements Command {
     }
 
     public Display execute(Display display) {
+        assert display != null: "Confirm: null display";
         if (hasInvalidParameters(display)) {
+            logger.log(Level.INFO, "Confirm: Invalid Parameters");
             setInvalidDisplay(display);
             return display;
         } else {

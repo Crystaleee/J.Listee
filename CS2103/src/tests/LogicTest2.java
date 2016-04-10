@@ -1,5 +1,5 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package tests;
 
@@ -18,6 +18,7 @@ import bean.CommandAddReserved;
 import bean.CommandDelete;
 import bean.CommandDone;
 import bean.CommandInvalid;
+import bean.CommandPostpone;
 import bean.CommandRedo;
 import bean.CommandShow;
 import bean.CommandUndo;
@@ -2383,6 +2384,40 @@ public class LogicTest2 {
                 + "completedTasks=["
                 + "]]", 
                 Logic.executeCommand(new CommandUndone(null)).toString());
+        
+      //postpone task
+        start = Calendar.getInstance();
+        start.set(Calendar.HOUR_OF_DAY, 2);
+        ArrayList<String> para = new ArrayList<String>();
+        para.add("hour");
+        assertEquals("Display [message=Postponed: DL4, "
+                + "events=[], "
+                
+                + "deadlineTasks=["
+                + "Description: DL4\r\n"
+                + "Deadline: 19/02/16 17:00\r\n"
+                + "Location: JEM\r\n"
+                + "Tags: #tag1 #tag2 #tag3\r\n\r\n"
+                + ", "
+
+                + "Description: Event3\r\n"
+                + "Deadline: 19/02/16 18:00\r\n"
+                + "Location: \r\n"
+                + "Tags: #tag1\r\n\r\n, "
+                
+                + "Description: DL1\r\n"
+                + "Deadline: 19/02/16 19:00\r\n"
+                + "Location: \r\n"
+                + "Tags:\r\n\r\n], "
+                
+                + "floatTasks=[]"
+                
+                + ", reservedTasks=[], "
+                
+                + "completedTasks=["
+                + "]]", 
+                Logic.executeCommand(new CommandPostpone(1, start, para)).toString());
+        
     }
 
 }

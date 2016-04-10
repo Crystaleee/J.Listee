@@ -1,10 +1,12 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandPostpone implements Command {
     private int _taskNumber;
@@ -13,6 +15,7 @@ public class CommandPostpone implements Command {
     private String _msg;
     private boolean _updateFile = true;;
     private boolean _saveHistory = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandPostpone() {
         this._taskNumber = -1;
@@ -20,6 +23,7 @@ public class CommandPostpone implements Command {
 
     public CommandPostpone(Integer taskNumber, Calendar time, ArrayList<String> parameters) {
         assert parameters != null;
+        assert taskNumber != null;
         this._taskNumber = taskNumber - 1;
         this._time = time;
         this._parameters = parameters;
@@ -29,7 +33,9 @@ public class CommandPostpone implements Command {
      * Only deadline tasks and events can be postponed
      */
     public Display execute(Display display) {
+        assert display != null: "Postpone: null display";
         if (isInvalidCommand(display)) {
+            logger.log(Level.INFO, "Postpone: Invalid parameters");
             setInvalidDisplay(display);
             return display;
         }
@@ -40,9 +46,11 @@ public class CommandPostpone implements Command {
 
     public void postpone(Display display) {
         if (_taskNumber < display.getVisibleDeadlineTasks().size()) {
+            logger.log(Level.INFO, "Postpone: Postpone deadline");
             postponeDeadline(display);
         } else {
             _taskNumber -= display.getVisibleDeadlineTasks().size();
+            logger.log(Level.INFO, "Postpone: Postpone event");
             postponeEvent(display);
         }
     }
@@ -53,30 +61,31 @@ public class CommandPostpone implements Command {
         for (int i = 0; i < _parameters.size(); i++) {
             String parameter = _parameters.get(i).trim().toLowerCase();
             switch (parameter) {
-            case "year":
+            case GlobalConstants.YEAR:
                 addYear(task.getStartDate());
                 addYear(task.getEndDate());
                 break;
-            case "month":
+            case GlobalConstants.MONTH:
                 addMonth(task.getStartDate());
                 addMonth(task.getEndDate());
                 break;
-            case "day":
+            case GlobalConstants.DAY:
                 addDay(task.getStartDate());
                 addDay(task.getEndDate());
                 break;
-            case "hour":
+            case GlobalConstants.HOUR:
                 addHour(task.getStartDate());
                 addHour(task.getEndDate());
                 break;
-            case "minute":
+            case GlobalConstants.MINUTE:
                 addMinute(task.getStartDate());
                 addMinute(task.getEndDate());
                 break;
             }
         }
         new CommandAddEvent(task).execute(display);
-        _msg = "Postponed: " + task.getDescription();
+        _msg = GlobalConstants.MESSAGE_POSTPONED + task.getDescription();
+        setOverdue(task);
     }
 
     public void postponeDeadline(Display display) {
@@ -85,25 +94,42 @@ public class CommandPostpone implements Command {
         for (int i = 0; i < _parameters.size(); i++) {
             String parameter = _parameters.get(i).trim().toLowerCase();
             switch (parameter) {
-            case "year":
+            case GlobalConstants.YEAR:
                 addYear(task.getEndDate());
                 break;
-            case "month":
+            case GlobalConstants.MONTH:
                 addMonth(task.getEndDate());
                 break;
-            case "day":
+            case GlobalConstants.DAY:
                 addDay(task.getEndDate());
                 break;
-            case "hour":
+            case GlobalConstants.HOUR:
                 addHour(task.getEndDate());
                 break;
-            case "minute":
+            case GlobalConstants.MINUTE:
                 addMinute(task.getEndDate());
                 break;
             }
         }
         new CommandAddDeadlineTask(task).execute(display);
-        _msg = "Postponed: " + task.getDescription();
+        _msg = GlobalConstants.MESSAGE_POSTPONED + task.getDescription();
+        setOverdue(task);
+    }
+
+    private void setOverdue(TaskEvent task) {
+        if(task.getEndDate().before(Calendar.getInstance())){
+            task.setIsOverdue(true);
+        }else{
+            task.setIsOverdue(false);
+        }
+    }
+
+    private void setOverdue(TaskDeadline task) {
+        if(task.getEndDate().before(Calendar.getInstance())){
+            task.setIsOverdue(true);
+        }else{
+            task.setIsOverdue(false);
+        }
     }
 
     private void addMinute(Calendar oldTime) {
@@ -151,13 +177,13 @@ public class CommandPostpone implements Command {
 
     private boolean hasInvalidTaskNumber(Display display) {
         if (_taskNumber < 0) {
-            _msg = "Please specify a task number";
+            _msg = GlobalConstants.MESSAGE_ERROR_INVALID_INDEX;
             return true;
         } else {
             int minIndex = 0;
             int maxIndex = display.getVisibleDeadlineTasks().size() + display.getVisibleEvents().size() - 1;
             if ((_taskNumber < minIndex) || (_taskNumber > maxIndex)) {
-                _msg = "You can only pospone deadline tasks and events!";
+                _msg = GlobalConstants.MESSAGE_ERROR_POSTPONE_INVALID_TASK_TYPES;
                 return true;
             }
         }

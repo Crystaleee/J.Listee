@@ -1,4 +1,4 @@
-// @@author Chloe Odquier Fortuna (A0149063E)
+// @@author A0149063E
 
 package tests;
 
@@ -59,13 +59,13 @@ public class StorageTest {
 
 	@Before
 	public void prepareTextFileForTests() throws IOException {
-		storage.createFile("src\\storage\\tests\\test.txt");
+		storage.createFile("src\\tests\\storageTests\\test.txt");
 	}
 
 	/* This is a case for the successful createFile() partition */
 	@Test
 	public void testfileExists() {
-		File file = new File("src\\storage\\tests\\test.txt");
+		File file = new File("src\\tests\\storageTests\\test.txt");
 		assertTrue(file.exists());
 	}
 
@@ -75,7 +75,7 @@ public class StorageTest {
 	 */
 	@Test
 	public void testfileLocation() {
-		File file = new File("src\\storage\\test.txt");
+		File file = new File("src\\storageTests\\test.txt");
 		assertFalse(file.exists());
 	}
 
@@ -83,7 +83,7 @@ public class StorageTest {
 	@Test
 	public void testSaveAndRead() throws IOException {
 		storage.saveFile(display);
-		assertEquals(display.toString(), storage.getDisplay(Storage.filePath).toString());
+		assertEquals(display.toString(), storage.getDisplay("src\\tests\\storageTests\\test.txt").toString());
 	}
 
 	/*
@@ -92,7 +92,7 @@ public class StorageTest {
 	 */
 	@Test
 	public void testReadEmptyDescription() throws IOException {
-		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDescriptionTest.txt");
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\tests\\storageTests\\emptyDescriptionTest.txt");
 
 		ArrayList<TaskFloat> emptyFloat = emptyDescriptionDisplay.getFloatTasks();
 		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
@@ -108,7 +108,7 @@ public class StorageTest {
 	 */
 	@Test
 	public void testReadEmptyLocation() throws IOException {
-		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyLocationTest.txt");
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\tests\\storageTests\\emptyLocationTest.txt");
 
 		ArrayList<TaskFloat> emptyFloat = emptyDescriptionDisplay.getFloatTasks();
 		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
@@ -122,7 +122,7 @@ public class StorageTest {
 	/* This is a case for the reading from a file with empty tags partition */
 	@Test
 	public void testReadEmptyTags() throws IOException {
-		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyTagsTest.txt");
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\tests\\storageTests\\emptyTagsTest.txt");
 
 		ArrayList<TaskFloat> emptyFloat = emptyDescriptionDisplay.getFloatTasks();
 		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
@@ -140,7 +140,7 @@ public class StorageTest {
 	 */
 	@Test
 	public void testReadEmptyDeadline() throws IOException {
-		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDeadlineTest.txt");
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\tests\\storageTests\\emptyDeadlineTest.txt");
 		ArrayList<TaskDeadline> emptyDeadline = emptyDescriptionDisplay.getDeadlineTasks();
 		assertTrue(emptyDeadline.isEmpty());
 	}
@@ -148,14 +148,14 @@ public class StorageTest {
 	/* This is a case for the reading from a file with empty dates partition */
 	@Test
 	public void testReadEmptyDates() throws IOException {
-		Display emptyDescriptionDisplay = storage.getDisplay("src\\storage\\tests\\emptyDatesTest.txt");
+		Display emptyDescriptionDisplay = storage.getDisplay("src\\tests\\storageTests\\emptyDatesTest.txt");
 		ArrayList<TaskEvent> emptyEvent = emptyDescriptionDisplay.getEventTasks();
 		assertTrue(emptyEvent.isEmpty());
 	}
 
 	@After
 	public void closeDownAfterTests() {
-		File file = new File("src\\storage\\tests\\test.txt");
+		File file = new File("src\\tests\\storageTests\\test.txt");
 		file.delete();
 	}
 

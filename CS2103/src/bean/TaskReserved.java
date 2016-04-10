@@ -1,5 +1,5 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 
 package bean;
@@ -46,7 +46,7 @@ public class TaskReserved extends Task {
 		return endDates;
 	}
 
-	// @@author Chloe Odquier Fortuna (A0149063E)
+	// @@author A0149063E
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

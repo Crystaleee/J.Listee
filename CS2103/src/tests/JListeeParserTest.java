@@ -1,4 +1,4 @@
-// @@author Her Kai Lin (A0126070U)
+// @@author A0126070U
 
 package tests;
 

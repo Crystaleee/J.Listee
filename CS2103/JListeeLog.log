@@ -1,0 +1,16 @@
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksFloating
+INFO: Successfully read floating task: ADD FLOAT
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksFloating
+INFO: Successfully read floating task: ADD BANANA
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksFloating
+INFO: Successfully read floating task: banana
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksDeadline
+INFO: Successfully read deadline task: lab
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksDeadline
+INFO: Successfully read deadline task: meeting for presentation
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksEvents
+INFO: Successfully read event task: party
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksEvents
+INFO: Successfully read event task: get1028 lecture
+Apr 09, 2016 11:28:13 AM storage.Storage readTasksReserved
+INFO: Successfully read reserved task: test reservation

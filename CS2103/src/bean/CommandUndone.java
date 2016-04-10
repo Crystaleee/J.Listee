@@ -1,10 +1,12 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandUndone implements Command {
     private ArrayList<Integer> _taskNumbers;
@@ -15,6 +17,7 @@ public class CommandUndone implements Command {
     private String _msgInvalidNum = "You have specified invalid task numbers: ";
     private boolean _saveHistory = true;
     private boolean _updateFile = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandUndone() {
         this._taskNumbers = null;
@@ -27,9 +30,11 @@ public class CommandUndone implements Command {
     }
 
     public Display execute(Display oldDisplay) {
+        assert oldDisplay != null: "Undone: null display";
         this._display = oldDisplay;
         if (_taskNumbers != null) {
             if (hasInvalidTaskNumbers()) {
+                logger.log(Level.INFO, "Undone: Invalid Indices");
                 setInvalidDisplay();
                 return oldDisplay;
             }

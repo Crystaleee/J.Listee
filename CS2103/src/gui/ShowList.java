@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import parser.InputSuggestion;
 import bean.Display;
+import bean.GlobalLogger;
 import bean.Task;
 import bean.TaskDeadline;
 import bean.TaskReserved;
@@ -27,15 +28,16 @@ import netscape.javascript.JSObject;
  * @@author A0149527W
  */
 public class ShowList extends AppPage {
-	private List<String> userCmd=new ArrayList<String>();//store user's commands
-	private int cmdIndex;//the presenting cmd's index
-	private Display display=new Display();
+	private List<String> userCmd = new ArrayList<String>();// store user's
+															// commands
+	private int cmdIndex;// the presenting cmd's index
+	private Display display = new Display();
 	private JSObject win;
-	private InputSuggestion suggestion=InputSuggestion.getInstance();
-	
+	private InputSuggestion suggestion = InputSuggestion.getInstance();
+
 	public ShowList(Display display) {
 		super("/view/html/list.html");
-		this.display=display;
+		this.display = display;
 		addLoadListener();
 	}
 
@@ -43,283 +45,353 @@ public class ShowList extends AppPage {
 	 * add load listener to webengine
 	 */
 	private void addLoadListener() {
-
 		webEngine
-		.getLoadWorker()
-		.stateProperty()
-		.addListener(
-				(ObservableValue<? extends State> ov,
-						State oldState, State newState) -> {
-							if(newState==Worker.State.FAILED) {
-								webEngine.load(WelcomeAndChooseStorage.class.getResource(
-										this.html).toExternalForm());
+				.getLoadWorker()
+				.stateProperty()
+				.addListener(
+						(ObservableValue<? extends State> ov, State oldState,
+								State newState) -> {
+							if (newState == Worker.State.FAILED) {
+								webEngine.load(WelcomeAndChooseStorage.class
+										.getResource(this.html)
+										.toExternalForm());
 							}
-					if (newState == Worker.State.SUCCEEDED) {
-						System.out.println("load listener");
-						
-						this.win = (JSObject) webEngine
-								.executeScript("window");
-						win.setMember("app", new ListBridge());
-																			
-						//reset task number				
-						webEngine.executeScript("reset()");
-						
-						//set message
-						if( this.display.getMessage()!=null)
-							win.call("showFeedBack", this.display.getMessage());
+							if (newState == Worker.State.SUCCEEDED) {
+								this.win = (JSObject) webEngine
+										.executeScript("window");
+								win.setMember("app", new ListBridge());
 
-						// construct JSON to pass to JS
-						//deadline tasks
-						if(this.display.getVisibleDeadlineTasks()!=null){
-							List<TaskDeadline> deadlines=this.display.getVisibleDeadlineTasks();
-							JSONArray jsonDeadline = new JSONArray();
-							for (TaskDeadline deadline: deadlines) {
-								JSONObject task = new JSONObject(deadline);
-								task.remove("startDate");
-								task.remove("endDate");
-								try {
-									task.put("endDate",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format(deadline.getEndDate()
-															.getTime()));
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-								jsonDeadline.put(task);
-							}
-							
-							win.call("addTasks", jsonDeadline,"deadline");
-							System.out.println(jsonDeadline);
-						}
-						
-						
-						//event tasks
-						if(this.display.getVisibleEvents()!=null){
-							List<TaskEvent> events=this.display.getVisibleEvents();
-							JSONArray jsonEvent = new JSONArray();
-							for (TaskEvent event: events) {
-								JSONObject task = new JSONObject(event);
-								task.remove("startDate");
-								task.remove("endDate");
-								try {
-									task.put("startDate",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format( event
-															.getStartDate()
-															.getTime()));
+								resetTaskNumber();
 
-									task.put("endDate",
-											new SimpleDateFormat(
-													"EEE MM/dd HH:mm",Locale.ENGLISH)
-													.format( event.getEndDate()
-															.getTime()));
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-								jsonEvent.put(task);
-							}
-							win.call("addTasks", jsonEvent,"event");
-							System.out.println(jsonEvent);
-						}				
-						
-						//floating tasks
-						if(this.display.getVisibleFloatTasks()!=null){
-							List<TaskFloat> floatings=this.display.getVisibleFloatTasks();
-							JSONArray jsonFloating = new JSONArray();
-							for (Task floating: floatings) {
-								JSONObject task = new JSONObject(floating);
-								task.remove("startDateTime");
-								task.remove("endDateTime");
-								jsonFloating.put(task);
-							}
-							win.call("addTasks", jsonFloating,"floating");
-							System.out.println(jsonFloating);
-						}
-						
-						//reserved tasks
-						if(this.display.getVisibleReservedTasks()!=null){
-							List<TaskReserved> reservations=this.display.getVisibleReservedTasks();
-							JSONArray jsonReserved = new JSONArray();
-							for (TaskReserved reserved: reservations) {
-								JSONObject  task= new JSONObject(reserved);
-								System.out.println(task);
-								task.remove("startDates");
-								task.remove("endDates");
-								for(int i=0;i<reserved.getStartDates().size();i++){
-									try {
-										task.append("startDates",
-												new SimpleDateFormat(
-														"EEE MM/dd HH:mm",Locale.ENGLISH)
-														.format( reserved
-																.getStartDates().get(i)
-																.getTime()));
+								// construct JSON to pass to JS and call add
+								// task
+								addTasks();
 
-										task.append("endDates",
-												new SimpleDateFormat(
-														"EEE MM/dd HH:mm",Locale.ENGLISH)
-														.format( reserved.getEndDates().get(i)
-																.getTime()));
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}						
-								jsonReserved.put(task);
+								setMessageAndAnimation();
 							}
-							System.out.println(jsonReserved);
-							win.call("addReservedTask", jsonReserved);							
-						}
-						
-						//completed tasks
-						if(this.display.getVisibleCompletedTasks()!=null 
-								&&this.display.getVisibleDeadlineTasks().size()==0
-								&& this.display.getVisibleEvents().size()==0
-								&& this.display.getVisibleFloatTasks().size()==0
-								&& this.display.getVisibleReservedTasks().size()==0){
-							List<Task> completeds=this.display.getVisibleCompletedTasks();
-							JSONArray jsonTask= new JSONArray();
-							
-							for (Task completed: completeds) {
-								JSONObject task = new JSONObject(completed);
-								task.remove("startDate");
-								task.remove("endDate");
-								if(completed instanceof TaskEvent){
-									try {
-										task.put("startDate",
-												new SimpleDateFormat(
-														"EEE MM/dd HH:mm",Locale.ENGLISH)
-														.format( ((TaskEvent) completed)
-																.getStartDate()
-																.getTime()));
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-								if(completed instanceof TaskDeadline || completed instanceof TaskEvent){
-									try {
-										task.put("endDate",
-												new SimpleDateFormat(
-														"EEE MM/dd HH:mm",Locale.ENGLISH)
-														.format( ((TaskDeadline)completed).getEndDate()
-																.getTime()));
-									} catch (Exception e) {
-										e.printStackTrace();
-									}								
-								}
-								jsonTask.put(task);
-							}
-							win.call("addTasks", jsonTask,"completed");
-							System.out.println(jsonTask);
-						}				
-						
-						//focus tasks if necessary
-					//	if(this.display.getCommandType()=="Add"||this.display.getCommandType()=="Update"||this.display.getCommandType()=="Undone"){
-							JSONArray jsonFocus= new JSONArray();
-							for(int i=0;i<this.display.getTaskIndices().size();i++){
-								jsonFocus.put(this.display.getTaskIndices().get(i));
-							}
-							
-							if(this.display.getCommandType()=="Add"){
-								win.call("addShowAnimation", jsonFocus);
-							}
-							
-							win.call("setFocus", jsonFocus);
-							System.out.println("focus: "+jsonFocus);							
-					//	}
-							
-							//add border to conflicting tasks
-							JSONArray jsonConflict= new JSONArray();
-							for(int i=0;i<this.display.getConflictingTasksIndices().size();i++){
-								jsonConflict.put(this.display.getConflictingTasksIndices().get(i));
-							}
-							win.call("showConflict", jsonConflict);
-							System.out.println(jsonConflict);
+						});
+	}
+
+	/**
+	 * set message and animation in display
+	 */
+	private void setMessageAndAnimation() {
+		setMessage();
+
+		JSONArray jsonFocus = constructFocusArray();
+
+		setAddAnimation(jsonFocus);
+		setFocusAnimation(jsonFocus);
+		setConflictAnimation();
+	}
+
+	/**
+	 * add all sorts of tasks
+	 */
+	private void addTasks() {
+		addDeadline();
+		addEvent();
+		addFloat();
+		addReserved();
+		addCompleted();
+	}
+
+	/**
+	 * reset task number
+	 */
+	private void resetTaskNumber() {
+		webEngine.executeScript("reset()");
+	}
+
+	/**
+	 * set focus animation
+	 * 
+	 * @param jsonFocus
+	 */
+	private void setFocusAnimation(JSONArray jsonFocus) {
+		win.call("setFocus", jsonFocus);
+	}
+
+	/**
+	 * set conflict animation
+	 */
+	private void setConflictAnimation() {
+		JSONArray jsonConflict = new JSONArray();
+		for (int i = 0; i < this.display.getConflictingTasksIndices().size(); i++) {
+			jsonConflict.put(this.display.getConflictingTasksIndices().get(i));
+		}
+		win.call("showConflict", jsonConflict);
+	}
+
+	/**
+	 * set add animation
+	 * 
+	 * @param jsonFocus
+	 */
+	private void setAddAnimation(JSONArray jsonFocus) {
+		if (this.display.getCommandType() == "Add") {
+			win.call("addShowAnimation", jsonFocus);
+		}
+	}
+
+	/**
+	 * construct JSONArray for completed tasks and call js
+	 */
+	private void addCompleted() {
+		if (this.display.getVisibleCompletedTasks() != null) {
+			List<Task> completeds = this.display.getVisibleCompletedTasks();
+			JSONArray jsonTask = new JSONArray();
+
+			for (Task completed : completeds) {
+				JSONObject task = constructJSON(completed);
+				jsonTask.put(task);
+			}
+			win.call("addTasks", jsonTask, "completed");
+		}
+	}
+
+	/**
+	 * construct JSONArray for reserved tasks and call js
+	 */
+	private void addReserved() {
+		if (this.display.getVisibleReservedTasks() != null) {
+			List<TaskReserved> reservations = this.display
+					.getVisibleReservedTasks();
+			JSONArray jsonReserved = new JSONArray();
+			for (TaskReserved reserved : reservations) {
+				JSONObject task = new JSONObject(reserved);
+				task.remove("startDates");
+				task.remove("endDates");
+				for (int i = 0; i < reserved.getStartDates().size(); i++) {
+					try {
+						task.append("startDates", new SimpleDateFormat(
+								"EEE MM/dd HH:mm", Locale.ENGLISH)
+								.format(reserved.getStartDates().get(i)
+										.getTime()));
+						task.append("endDates",
+								new SimpleDateFormat("EEE MM/dd HH:mm",
+										Locale.ENGLISH).format(reserved
+										.getEndDates().get(i).getTime()));
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				});
-	}
-	
-	public void setList(Display display){
-		if (this.display != null) {
-			this.display=display;		
-			
-			//add animation when deleting
-			if(this.display.getCommandType()=="Delete"){
-				//set message
-				if( this.display.getMessage()!=null)
-					win.call("showFeedBack", this.display.getMessage());
-				
-				JSONArray jsonFocus= new JSONArray();
-				for(int i=0;i<this.display.getTaskIndices().size();i++){
-					jsonFocus.put(this.display.getTaskIndices().get(i)-1);
 				}
-				System.out.println("focus: "+jsonFocus);	
-				
-				win.call("setFocus", jsonFocus);
-				win.call("addHideAnimation", jsonFocus);
-				win.call("clearCommandLine");	
-				win.call("hideSuggestion");
-			}else{
-				System.out.println("reloading");
-				webEngine.reload();			
-			}				
-		}		
+				jsonReserved.put(task);
+			}
+			win.call("addReservedTask", jsonReserved);
+		}
 	}
 
-	public Display getDisplay(){
+	/**
+	 * construct JSONArray for floating tasks and call js
+	 */
+	private void addFloat() {
+		if (this.display.getVisibleFloatTasks() != null) {
+			List<TaskFloat> floatings = this.display.getVisibleFloatTasks();
+			JSONArray jsonFloating = new JSONArray();
+			for (Task floating : floatings) {
+				JSONObject task = constructJSON(floating);
+				jsonFloating.put(task);
+			}
+			win.call("addTasks", jsonFloating, "floating");
+		}
+	}
+
+	/**
+	 * construct JSONArray for event tasks and call js
+	 */
+	private void addEvent() {
+		if (this.display.getVisibleEvents() != null) {
+			List<TaskEvent> events = this.display.getVisibleEvents();
+			JSONArray jsonEvent = new JSONArray();
+			for (TaskEvent event : events) {
+				JSONObject task = constructJSON(event);
+				jsonEvent.put(task);
+			}
+			win.call("addTasks", jsonEvent, "event");
+		}
+	}
+
+	/**
+	 * construct JSONArray for deadline tasks and call js
+	 */
+	private void addDeadline() {
+		// deadline tasks
+		if (this.display.getVisibleDeadlineTasks() != null) {
+			List<TaskDeadline> deadlines = this.display
+					.getVisibleDeadlineTasks();
+			JSONArray jsonDeadline = new JSONArray();
+			for (TaskDeadline deadline : deadlines) {
+				JSONObject task = constructJSON(deadline);
+				jsonDeadline.put(task);
+			}
+
+			win.call("addTasks", jsonDeadline, "deadline");
+		}
+	}
+
+	/**
+	 * construct single task json to pass to javascript
+	 * 
+	 * @param completed
+	 * @return
+	 */
+	private JSONObject constructJSON(Task completed) {
+		JSONObject task = new JSONObject(completed);
+		task.remove("startDate");
+		task.remove("endDate");
+		try {
+			if (completed instanceof TaskEvent) {
+
+				task.put("startDate", new SimpleDateFormat("EEE MM/dd HH:mm",
+						Locale.ENGLISH).format(((TaskEvent) completed)
+						.getStartDate().getTime()));
+			}
+			if (completed instanceof TaskDeadline
+					|| completed instanceof TaskEvent) {
+				task.put("endDate", new SimpleDateFormat("EEE MM/dd HH:mm",
+						Locale.ENGLISH).format(((TaskDeadline) completed)
+						.getEndDate().getTime()));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return task;
+	}
+
+	public void setList(Display display) {
+		if (this.display != null) {
+			this.display = display;
+
+			// add animation when deleting
+			if (this.display.getCommandType() == "Delete") {
+				setDeleteAnimation();
+			} else {
+				webEngine.reload();
+			}
+		}
+	}
+
+	public void setHtml(String html) {
+		this.html = html;
+		// load web page
+		webEngine.load(WelcomeAndChooseStorage.class.getResource(this.html)
+				.toExternalForm());
+	}
+
+	/**
+	 * set delete animation
+	 */
+	private void setDeleteAnimation() {
+		setMessage();
+
+		JSONArray jsonFocus = constructFocusArray();
+
+		setFocusAnimation(jsonFocus);
+		win.call("addHideAnimation", jsonFocus);
+		win.call("clearCommandLine");
+		win.call("hideSuggestion");
+	}
+
+	/**
+	 * set message in display
+	 */
+	private void setMessage() {
+		if (this.display.getMessage() != null)
+			win.call("showFeedBack", this.display.getMessage());
+	}
+
+	/**
+	 * construct JSONArray from list of integers
+	 * 
+	 * @return
+	 */
+	private JSONArray constructFocusArray() {
+		JSONArray jsonFocus = new JSONArray();
+		for (int i = 0; i < this.display.getTaskIndices().size(); i++) {
+			jsonFocus.put(this.display.getTaskIndices().get(i));
+		}
+		return jsonFocus;
+	}
+
+	public Display getDisplay() {
 		return this.display;
 	}
-	
+
 	// JavaScript interface object
 	public class ListBridge {
-		public void receiveCommand(String command){
-			String cmd=command.toLowerCase().trim();
-			System.out.println(cmd);
-			userCmd.add(cmd);
-			cmdIndex=userCmd.size()-1;
-			
-			if(cmd.equals("help")||cmd.equals("show help")){
+		/**
+		 * receive use cmd, add cmd history and decide what to do
+		 * 
+		 * @param command
+		 */
+		public void receiveCommand(String command) {
+			String cmd = command.trim();
+
+			setCmdHistory(cmd);
+
+			if (cmd.toLowerCase().equals("help")
+					|| cmd.toLowerCase().equals("show help")) {
 				GUIController.displayHelp();
-			}else if(cmd.equals("change filepath")){
-				
-				DirectoryChooser fileChooser = new DirectoryChooser();
-				File selectedFile = fileChooser.showDialog(App.stage);
-				fileChooser.setTitle("Please select a folder for storage location");
-				
-				if(selectedFile!=null){			
-					App.filePath=selectedFile.getAbsolutePath()+"\\J.Listee.txt";
-					System.out.println(App.filePath);
-					// create file under the file folder chosen by user
-					GUIController.changeFilePath(App.filePath);
-				}
-			}else if(cmd.equals("exit")||cmd.equals("quit")){
+			} else if (cmd.toLowerCase().equals("change filepath")) {
+				changeStorageLocation();
+			} else if (cmd.toLowerCase().equals("exit")
+					|| cmd.toLowerCase().equals("quit")) {
+				GlobalLogger.closeHandler();
 				App.terminate();
-			}else{
+			} else {
 				GUIController.handelUserInput(cmd);
-			}			
+			}
 		}
-		
-		public String getCommandsuggestion(String cmd){
-			String cmdSuggestion=suggestion.getSuggestedInput(cmd.trim());
-			if(cmdSuggestion.equals(new String("null"))==false){
+
+		/**
+		 * set cmd history
+		 * 
+		 * @param cmd
+		 */
+		private void setCmdHistory(String cmd) {
+			userCmd.add(cmd);
+			cmdIndex = userCmd.size() - 1;
+		}
+
+		/**
+		 * pop up a file chooser and send new filepath
+		 */
+		private void changeStorageLocation() {
+			DirectoryChooser fileChooser = new DirectoryChooser();
+			File selectedFile = fileChooser.showDialog(App.stage);
+			fileChooser.setTitle("Please select a folder for storage location");
+
+			if (selectedFile != null) {
+				App.filePath = selectedFile.getAbsolutePath()
+						+ "\\J.Listee.txt";
+				// create file under the file folder chosen by user
+				GUIController.changeFilePath(App.filePath);
+			}
+		}
+
+		public String getCommandsuggestion(String cmd) {
+			String cmdSuggestion = suggestion.getSuggestedInput(cmd.trim());
+			if (cmdSuggestion.equals(new String("null")) == false) {
 				return cmdSuggestion;
-			}else{
+			} else {
 				return "";
 			}
 		}
-		
-		public String getPreviousCmd(){
-			if(cmdIndex>0){
+
+		public String getPreviousCmd() {
+			if (cmdIndex > 0) {
 				return userCmd.get(cmdIndex--);
-			}else{
+			} else {
 				return userCmd.get(0);
-			}			
+			}
 		}
-		
-		public String getLaterCmd(){
-			if(cmdIndex<userCmd.size()-1){
+
+		public String getLaterCmd() {
+			if (cmdIndex < userCmd.size() - 1) {
 				return userCmd.get(++cmdIndex);
-			}else return "";
+			} else
+				return "";
 		}
 	}
 }

@@ -1,11 +1,13 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandShow implements Command {
     private String msgShow = "Displaying ";
@@ -14,6 +16,7 @@ public class CommandShow implements Command {
     private TaskEvent _searchedTask;
     private Display _display;
     private ArrayList<String> _taskTypes;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandShow() {
         _searchedTask = null;
@@ -61,13 +64,15 @@ public class CommandShow implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        // System.out.println(searchedTask.getDescription());
+        assert oldDisplay != null: "Show: null display";
         initialiseDisplay(oldDisplay);
         if (isShowAll()) {
+            logger.log(Level.INFO, "Show: Show all");
             setShowAll(oldDisplay);
             return oldDisplay;
         }
         if (isInvalidDateRange()) {
+            logger.log(Level.INFO, "Show: Invalid time range");
             setInvalidDisplay(oldDisplay);
             return oldDisplay;
 
@@ -76,9 +81,11 @@ public class CommandShow implements Command {
 
         showTasks();
         if (noTasksFound()) {
+            logger.log(Level.INFO, "Show: No tasks");
             oldDisplay.setMessage(GlobalConstants.MESSAGE_NO_TASKS);
             return oldDisplay;
         } else {
+            logger.log(Level.INFO, "Show: No errors");
             _display.setMessage(getFeedback());
         }
 
@@ -246,8 +253,6 @@ public class CommandShow implements Command {
                 }
             }
         }
-        // System.out.println("D" +
-        // oldDisplay.getVisibleDeadlineTasks().size());
     }
 
     private void getEventTasks() {
@@ -265,7 +270,6 @@ public class CommandShow implements Command {
                 }
             }
         }
-        // System.out.println("E" + oldDisplay.getVisibleEvents().size());
     }
 
     private void getFloatTasks() {
@@ -276,14 +280,12 @@ public class CommandShow implements Command {
             if (containsKeyword(task)) {
                 if (atLocation(task)) {
                     if (containsTag(task)) {
-                        if (withinTimeRange(task)) {
-                            _display.getVisibleFloatTasks().add(task);
-                        }
+                        _display.getVisibleFloatTasks().add(task);
+
                     }
                 }
             }
         }
-        // System.out.println("F" + oldDisplay.getVisibleFloatTasks().size());
     }
 
     private void getReservedTasks() {
@@ -301,8 +303,6 @@ public class CommandShow implements Command {
                 }
             }
         }
-        // System.out.println("R" +
-        // oldDisplay.getVisibleReservedTasks().size());
     }
 
     private boolean containsTag(Task task) {

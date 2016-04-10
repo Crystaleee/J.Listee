@@ -1,15 +1,18 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 package bean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandAddDeadlineTask implements Command {
     private TaskDeadline _task;
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
+    private Logger logger = GlobalLogger.getLogger();
 
     public CommandAddDeadlineTask() {
         _task = null;
@@ -25,7 +28,9 @@ public class CommandAddDeadlineTask implements Command {
     }
 
     public Display execute(Display display) {
+        assert display != null: "AddDeadline: null display";
         if (hasNoDescription()) {
+            logger.log(Level.INFO, "AddDeadline: No desc");
             setInvalidDisplay(display);
             return display;
         }
@@ -68,7 +73,7 @@ public class CommandAddDeadlineTask implements Command {
     }
 
     private void setIfOverdue() {
-        if(_task.getEndDate().before(Calendar.getInstance())){
+        if (_task.getEndDate().before(Calendar.getInstance())) {
             _task.setIsOverdue(true);
         }
     }

@@ -1,19 +1,24 @@
 /*
- * @@author Boh Tuang Hwee, Jehiel (A0139995E)
+ * @@author A0139995E
  */
 
 package bean;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandInvalid implements Command {
 	private boolean updateFile = false;
 	private boolean saveHistory = false;
+    private Logger logger = GlobalLogger.getLogger();
 
 	public CommandInvalid() {
 	}
 
 	public Display execute(Display display) {
+        assert display != null: "Invalid: null display";
+        logger.log(Level.INFO, "Invalid Command");
 	    setDisplay(display);
 		return display;
 	}
