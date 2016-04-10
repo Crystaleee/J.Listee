@@ -19,7 +19,7 @@ import storage.LogStorage;
 public class GUIController {
     // this is the width and height of the window
     private static final int WINDOW_WIDTH = 700;
-    private static final int WINDOW_HEIGHT = 750;
+    private static final int WINDOW_HEIGHT = 780;
 
     private static final String ERR_CREATEFILE = "Error: Cannot create file!";
     private static final String ERR_DISPLAY_NULL="Error: Display is null!";
