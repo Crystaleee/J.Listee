@@ -187,6 +187,12 @@ public class Display implements java.io.Serializable {
 
     public boolean setOverdueTasks() {
         boolean changed = false;
+        changed = setOverdueDeadlines(changed);
+        changed = setOverdueEvents(changed);
+        return changed;
+    }
+
+    private boolean setOverdueDeadlines(boolean changed) {
         if (this.getDeadlineTasks() != null) {
             for (int i = 0; i < this.getDeadlineTasks().size(); i++) {
                 TaskDeadline task = this.getDeadlineTasks().get(i);
@@ -199,6 +205,10 @@ public class Display implements java.io.Serializable {
 
             }
         }
+        return changed;
+    }
+
+    private boolean setOverdueEvents(boolean changed) {
         if (this.getEventTasks() != null) {
             for (int i = 0; i < this.getEventTasks().size(); i++) {
                 TaskEvent task = this.getEventTasks().get(i);

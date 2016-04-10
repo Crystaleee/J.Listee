@@ -3,6 +3,7 @@
  */
 package entity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -49,7 +50,7 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        assert oldDisplay != null: "Update: null display";
+        assert oldDisplay != null : "Update: null display";
         _display = oldDisplay;
         if (hasInvalidTaskNumber()) {
             logger.log(Level.INFO, "Update: Invalid Indices");
@@ -118,7 +119,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void editDeadline() {
         TaskDeadline task = _display.getVisibleDeadlineTasks().get(_taskNumber - 1);
-        if (invalidEditDeadline(task)) {
+        if (isInvalidEditDeadline(task)) {
             setInvalidDisplay();
             return;
         }
@@ -133,7 +134,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void editEvent() {
         TaskEvent task = _display.getVisibleEvents().get(_taskNumber - 1);
-        if (invalidEditEvent(task)) {
+        if (isInvalidEditEvent(task)) {
             setInvalidDisplay();
             return;
         }
@@ -143,7 +144,6 @@ public class CommandUpdate extends TaskEvent implements Command {
         editTags(task);
         editEndDate(task);
         editStartDate(task);
-        System.out.println("1 " + task.isOverdue());
         changeEventTaskType(task);
         if (_timeChanged) {
             _display.getEventTasks().remove(task);
@@ -155,7 +155,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void editFloat() {
         TaskFloat task = _display.getVisibleFloatTasks().get(_taskNumber - 1);
-        if (invalidEditFloat(task)) {
+        if (isInvalidEditFloat(task)) {
             setInvalidDisplay();
             return;
         }
@@ -189,7 +189,7 @@ public class CommandUpdate extends TaskEvent implements Command {
 
     private void editReserved() {
         TaskReserved task = _display.getReservedTasks().get(_taskNumber - 1);
-        if (invalidEditReserved(task)) {
+        if (isInvalidEditReserved(task)) {
             setInvalidDisplay();
             return;
         }
@@ -214,6 +214,24 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     private void editTimeSlot(TaskReserved task) {
+        if (_reservedSlotIndex != null) {
+            editTime(task);
+        }else{
+            addTimeSlot(task);
+        }
+    }
+
+    private void addTimeSlot(TaskReserved task) {/*
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh/mm");
+        String DateToStr = format.format(getStartDate().getTime());
+        System.out.println(DateToStr);
+        DateToStr = format.format(getEndDate().getTime());
+        System.out.println(DateToStr);*/
+        task.getStartDates().add(getStartDate());
+        task.getEndDates().add(getEndDate());
+    }
+
+    private void editTime(TaskReserved task) {
         if (getStartDate() != null) {
             if (isChangeTimeOnly(getStartDate())) {
                 Calendar start = task.getStartDates().get(_reservedSlotIndex - 1);
@@ -234,7 +252,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    private boolean invalidEditReserved(TaskReserved task) {
+    private boolean isInvalidEditReserved(TaskReserved task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
             return true;
@@ -242,12 +260,6 @@ public class CommandUpdate extends TaskEvent implements Command {
         if (hasNoTagsToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_TAGS;
             return true;
-        }
-        if ((getEndDate() != null) && (getStartDate() != null)) {
-            if (_reservedSlotIndex == null) {
-                _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_TIMESLOT;
-                return true;
-            }
         }
         if (hasRemoveEndDate()) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_REMOVE_END;
@@ -278,7 +290,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
-    private boolean invalidEditFloat(TaskFloat task) {
+    private boolean isInvalidEditFloat(TaskFloat task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
             return true;
@@ -295,7 +307,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
-    private boolean invalidEditEvent(TaskEvent task) {
+    private boolean isInvalidEditEvent(TaskEvent task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
             return true;
@@ -346,7 +358,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         return (time.get(Calendar.YEAR) == 1);
     }
 
-    private boolean invalidEditDeadline(TaskDeadline task) {
+    private boolean isInvalidEditDeadline(TaskDeadline task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
             return true;
