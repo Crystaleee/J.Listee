@@ -30,6 +30,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 /* @@author A0149527W*/
   body{
     background: rgba(0,0,0,0);
+    overflow:hidden;
   }
    .center {
      width: 700px;
@@ -254,7 +255,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 </style>
 </head>
 <body>
-	<script type="text/javascript">
+  <script  type="text/javascript">
     var i=0;
 
     function reset(){
@@ -754,6 +755,21 @@ $(document).keydown(
             var id=parseInt($(".task:focus")[0].id);
             shortCutCommand("postpone "+id);
           }
+        case 84://ctrl+t
+        	if(e.ctrlKey)
+        		shortCutCommand("show /today");
+        break;
+        case 68://ctrl+d
+        	if(e.ctrlKey)
+        		shortCutCommand("show /done");
+        break;
+        case 79://ctrl+o
+        	if(e.ctrlKey)
+        		shortCutCommand("show /overdue");
+        break;
+        case 83://ctrl+s
+        	if(e.ctrlKey)
+        		shortCutCommand("show")
         break;
         case 90://ctrl+z
         	if(e.ctrlKey)
@@ -762,6 +778,7 @@ $(document).keydown(
         case 89://ctrl+y
         	if(e.ctrlKey)
         		shortCutCommand("redo");
+        break;
       }
     }
 );
@@ -771,51 +788,57 @@ $(document).keydown(
     });
 </script>
 
-	<div id="wrapper">
-		<div class="center">
-			<div class="main">
-				<div class="alert alert-success" id="feedback" role="alert"></div>
+<div id="wrapper">
+ <div class="center">
+  <div class="main">
+    <div class="alert alert-success" id="feedback" role="alert"></div>
+    
+    <div class="list">
+      <div class="title" id="title"></div>
+      <div class="group deadline">
+        <div class="grouptitle" id="deadline_title"></div>
+        <div class="tasklist" id="tasklist_deadline">
 
-				<div class="list">
-					<div class="title" id="title"></div>
-					<div class="group deadline">
-						<div class="grouptitle" id="deadline_title"></div>
-						<div class="tasklist" id="tasklist_deadline"></div>
-					</div>
+        </div>
+      </div>
 
-					<div class="group event">
-						<div class="grouptitle" id="event_title"></div>
-						<div class="tasklist" id="tasklist_event"></div>
-					</div>
+      <div class="group event">
+        <div class="grouptitle" id="event_title"></div>
+        <div class="tasklist" id="tasklist_event">
 
-					<div class="group floating">
-						<div class="grouptitle" id="float_title"></div>
-						<div class="tasklist" id="tasklist_floating"></div>
-					</div>
-					<div class="group reserved">
-						<div class="grouptitle" id="reserved_title"></div>
-						<div class="tasklist" id="tasklist_reserved"></div>
-					</div>
-					<div class="group mixed">
-						<div class="grouptitle" id="mixed_title"></div>
-						<div class="tasklist" id="tasklist_mixed"></div>
-					</div>
-				</div>
-				<div class="commandline">
-					<form name="cmd">
-						<input type="text" name="command" id="command"
-							onkeydown="if(event.keyCode==13){sendCommand();}"
-							onkeyup="getCommandSuggestion();"
-							placeholder="Type your command here" autofocus />
-					</form>
-				</div>
-			</div>
-		</div>
-		<div id="suggestion-bar">
-			<div class="arrow-up"></div>
-			<div class="command_suggestion" id="suggstion"></div>
-		</div>
+        </div>
+      </div>
 
-	</div>
+      <div class="group floating">    
+       <div class="grouptitle" id="float_title"></div> 
+       <div class="tasklist" id="tasklist_floating">
+
+       </div>
+     </div>
+     <div class="group reserved">    
+       <div class="grouptitle" id="reserved_title"></div> 
+       <div class="tasklist" id="tasklist_reserved">
+          </div>
+     </div>
+    <div class="group mixed">
+        <div class="grouptitle" id="mixed_title"></div>
+        <div class="tasklist" id="tasklist_mixed">
+
+        </div>
+      </div>
+   </div>
+   <div class="commandline">
+    <form name="cmd">
+      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" onkeyup="getCommandSuggestion();" placeholder="Type your command here" autofocus/>
+    </form>
+  </div>
+</div>
+</div>
+<div id="suggestion-bar">
+  <div class="arrow-up"></div>
+  <div class="command_suggestion" id="suggstion"></div>
+</div>
+
+</div>
 </body>
 </html>

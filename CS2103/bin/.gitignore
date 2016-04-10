@@ -1,4 +1,4 @@
-/view/
-/entity/
-/history/
+/.gitignore
 /logic/
+/entity/
+/view/
