@@ -11,84 +11,85 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 @SuppressWarnings("serial")
-public class Display implements java.io.Serializable{
+public class Display implements java.io.Serializable {
 
-	private String message;
-	private String commandType;
-	private ArrayList<Integer> taskIndices = new ArrayList<Integer>();
+    private String message;
+    private String commandType;
+    private ArrayList<Integer> taskIndices = new ArrayList<Integer>();
     private ArrayList<Integer> conflictingTasksIndices = new ArrayList<Integer>();
-	
-	private ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
+
+    private ArrayList<TaskEvent> events = new ArrayList<TaskEvent>();
     private ArrayList<TaskDeadline> deadlineTasks = new ArrayList<TaskDeadline>();
     private ArrayList<TaskFloat> floatTasks = new ArrayList<TaskFloat>();
     private ArrayList<TaskReserved> reservedTasks = new ArrayList<TaskReserved>();
     private ArrayList<Task> completedTasks = new ArrayList<Task>();
-    
+
     private ArrayList<TaskEvent> visibleEvents = events;
     private ArrayList<TaskDeadline> visibleDeadlineTasks = deadlineTasks;
     private ArrayList<TaskFloat> visibleFloatTasks = floatTasks;
     private ArrayList<TaskReserved> visibleReservedTasks = reservedTasks;
     private ArrayList<Task> visibleCompletedTasks = new ArrayList<Task>();
 
-	public Display() {
-		message = "";
-	}
+    public Display() {
+        message = "";
+    }
 
-	public Display(String message) {
-		this.message = message;
-	}
+    public Display(String message) {
+        this.message = message;
+    }
 
-	public Display(String message, ArrayList<TaskEvent> events, ArrayList<TaskDeadline> deadlineTasks,
-			ArrayList<TaskFloat> floatTasks, ArrayList<TaskReserved> reservedTasks, ArrayList<Task> completedTasks) {
-		this.message = "";
-		this.events = events;
-		this.deadlineTasks = deadlineTasks;
-		this.floatTasks = floatTasks;
-		this.reservedTasks = reservedTasks;
-		this.completedTasks = completedTasks;
-		visibleEvents = events;
-		visibleDeadlineTasks = deadlineTasks;
-		visibleFloatTasks = floatTasks;
-		visibleReservedTasks = reservedTasks;
-	}
-    
-    public void setCommandType(String commandType){
+    public Display(String message, ArrayList<TaskEvent> events, ArrayList<TaskDeadline> deadlineTasks,
+            ArrayList<TaskFloat> floatTasks, ArrayList<TaskReserved> reservedTasks,
+            ArrayList<Task> completedTasks) {
+        this.message = "";
+        this.events = events;
+        this.deadlineTasks = deadlineTasks;
+        this.floatTasks = floatTasks;
+        this.reservedTasks = reservedTasks;
+        this.completedTasks = completedTasks;
+        visibleEvents = events;
+        visibleDeadlineTasks = deadlineTasks;
+        visibleFloatTasks = floatTasks;
+        visibleReservedTasks = reservedTasks;
+    }
+
+    public void setCommandType(String commandType) {
         this.commandType = commandType;
     }
 
     public String getCommandType() {
         return commandType;
     }
-    
-    public void setConflictingTasksIndices(ArrayList<Integer> conflictingTasksIndices){
+
+    public void setConflictingTasksIndices(ArrayList<Integer> conflictingTasksIndices) {
         this.conflictingTasksIndices = conflictingTasksIndices;
     }
 
     public ArrayList<Integer> getConflictingTasksIndices() {
         return conflictingTasksIndices;
     }
-    
-    public void setTaskIndices(ArrayList<Integer> taskIndices){
+
+    public void setTaskIndices(ArrayList<Integer> taskIndices) {
         this.taskIndices = taskIndices;
     }
 
     public ArrayList<Integer> getTaskIndices() {
         return taskIndices;
     }
-    
-    public void setVisibleReservedTasks(ArrayList<TaskReserved> reservedTasks){
+
+    public void setVisibleReservedTasks(ArrayList<TaskReserved> reservedTasks) {
         this.visibleReservedTasks = reservedTasks;
     }
-    
-    public void setVisibleDeadlineTasks(ArrayList<TaskDeadline> deadlineTasks){
+
+    public void setVisibleDeadlineTasks(ArrayList<TaskDeadline> deadlineTasks) {
         this.visibleDeadlineTasks = deadlineTasks;
     }
-    
-    public void setVisibleEvents(ArrayList<TaskEvent> events){
+
+    public void setVisibleEvents(ArrayList<TaskEvent> events) {
         this.visibleEvents = events;
     }
-    
-    public void setVisibleFloatTasks(ArrayList<TaskFloat> floatTasks){
+
+    public void setVisibleFloatTasks(ArrayList<TaskFloat> floatTasks) {
         this.visibleFloatTasks = floatTasks;
     }
 
@@ -108,74 +109,73 @@ public class Display implements java.io.Serializable{
         return visibleReservedTasks;
     }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public int getNumberOfTasks() {
-		return (events.size() + deadlineTasks.size() + floatTasks.size() + reservedTasks.size()
-				+ completedTasks.size());
-	}
+    public int getNumberOfTasks() {
+        return (events.size() + deadlineTasks.size() + floatTasks.size() + reservedTasks.size()
+                + completedTasks.size());
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setEvents(ArrayList<TaskEvent> events) {
-		this.events = events;
-	}
+    public void setEvents(ArrayList<TaskEvent> events) {
+        this.events = events;
+    }
 
-	public ArrayList<TaskEvent> getEventTasks() {
-		return events;
-	}
+    public ArrayList<TaskEvent> getEventTasks() {
+        return events;
+    }
 
-	public void setDeadlineTasks(ArrayList<TaskDeadline> deadlineTasks) {
-		this.deadlineTasks = deadlineTasks;
-	}
+    public void setDeadlineTasks(ArrayList<TaskDeadline> deadlineTasks) {
+        this.deadlineTasks = deadlineTasks;
+    }
 
-	public ArrayList<TaskDeadline> getDeadlineTasks() {
-		return deadlineTasks;
-	}
-	
-	 public Display deepClone() {
-	   try {
-	     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	     ObjectOutputStream oos = new ObjectOutputStream(baos);
-	     oos.writeObject(this);
-	     
-	     ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-	     ObjectInputStream ois = new ObjectInputStream(bais);
-	     return (Display)ois.readObject();
-	   }
-	   catch (Exception e) {
-	     e.printStackTrace();
-	     return null;
-	   }
-	 }
+    public ArrayList<TaskDeadline> getDeadlineTasks() {
+        return deadlineTasks;
+    }
 
-	public void setFloatTasks(ArrayList<TaskFloat> floatTasks) {
-		this.floatTasks = floatTasks;
-	}
+    public Display deepClone() {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(this);
 
-	public ArrayList<TaskFloat> getFloatTasks() {
-		return floatTasks;
-	}
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            return (Display) ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-	public void setReservedTasks(ArrayList<TaskReserved> reservedTasks) {
-		this.reservedTasks = reservedTasks;
-	}
+    public void setFloatTasks(ArrayList<TaskFloat> floatTasks) {
+        this.floatTasks = floatTasks;
+    }
 
-	public ArrayList<TaskReserved> getReservedTasks() {
-		return reservedTasks;
-	}
+    public ArrayList<TaskFloat> getFloatTasks() {
+        return floatTasks;
+    }
 
-	public ArrayList<Task> getCompletedTasks() {
-		return completedTasks;
-	}
+    public void setReservedTasks(ArrayList<TaskReserved> reservedTasks) {
+        this.reservedTasks = reservedTasks;
+    }
 
-	public void setCompletedTasks(ArrayList<Task> completedTasks) {
-		this.completedTasks = completedTasks;
-	}
+    public ArrayList<TaskReserved> getReservedTasks() {
+        return reservedTasks;
+    }
+
+    public ArrayList<Task> getCompletedTasks() {
+        return completedTasks;
+    }
+
+    public void setCompletedTasks(ArrayList<Task> completedTasks) {
+        this.completedTasks = completedTasks;
+    }
 
     public ArrayList<Task> getVisibleCompletedTasks() {
         return visibleCompletedTasks;
@@ -184,15 +184,17 @@ public class Display implements java.io.Serializable{
     public void setVisibleCompletedTasks(ArrayList<Task> completedTasks) {
         this.visibleCompletedTasks = completedTasks;
     }
-    
-    public int setOverdueTasks( ) {
-        int numOverdue = 0;
+
+    public boolean setOverdueTasks() {
+        boolean changed = false;
         if (this.getDeadlineTasks() != null) {
             for (int i = 0; i < this.getDeadlineTasks().size(); i++) {
                 TaskDeadline task = this.getDeadlineTasks().get(i);
                 if (task.getEndDate().before(Calendar.getInstance())) {
-                    task.setIsOverdue(true);
-                    numOverdue++;
+                    if (!task.isOverdue()) {
+                        task.setIsOverdue(true);
+                        changed = true;
+                    }
                 }
 
             }
@@ -201,21 +203,22 @@ public class Display implements java.io.Serializable{
             for (int i = 0; i < this.getEventTasks().size(); i++) {
                 TaskEvent task = this.getEventTasks().get(i);
                 if (task.getEndDate().before(Calendar.getInstance())) {
-                    task.setIsOverdue(true);
-                    numOverdue++;
+                    if (!task.isOverdue()) {
+                        task.setIsOverdue(true);
+                        changed = true;
+                    }
                 }
 
             }
         }
-        return numOverdue;
+        return changed;
     }
-	
 
-	// @@author A0149063E
-	@Override
-	public String toString() {
-		return "Display [message=" + message + ", events=" + visibleEvents + ", deadlineTasks=" + visibleDeadlineTasks
-				+ ", floatTasks=" + visibleFloatTasks + ", reservedTasks=" + visibleReservedTasks + ", completedTasks="
-				+ visibleCompletedTasks + "]";
-	}
+    // @@author A0149063E
+    @Override
+    public String toString() {
+        return "Display [message=" + message + ", events=" + visibleEvents + ", deadlineTasks="
+                + visibleDeadlineTasks + ", floatTasks=" + visibleFloatTasks + ", reservedTasks="
+                + visibleReservedTasks + ", completedTasks=" + visibleCompletedTasks + "]";
+    }
 }

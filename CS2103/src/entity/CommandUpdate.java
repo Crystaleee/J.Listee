@@ -143,6 +143,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         editTags(task);
         editEndDate(task);
         editStartDate(task);
+        System.out.println("1 " + task.isOverdue());
         changeEventTaskType(task);
         if (_timeChanged) {
             _display.getEventTasks().remove(task);
@@ -529,7 +530,7 @@ public class CommandUpdate extends TaskEvent implements Command {
                 new CommandAddEvent(task).execute(_display);
             }
         }
-        if (task.getStartDate().before(Calendar.getInstance())) {
+        if (task.getEndDate().before(Calendar.getInstance())) {
             task.setIsOverdue(true);
         } else {
             task.setIsOverdue(false);
