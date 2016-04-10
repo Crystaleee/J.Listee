@@ -98,8 +98,42 @@ public class JListeeParserTest {
 		
 		assertEquals(expected, actual);
 	}
+	
+	/* This is a test to find location with special characters */
+	@Test
+	public void testLocationWithSpecialCharacters() throws Exception {
+		String expected = "COM1-b2-03!!!";
+		
+		Method method = JListeeParser.class.getDeclaredMethod("findLocation", String.class);
 
-	/* This is a test to get TaskDescription */
+		method.setAccessible(true);
+		String actual = (String) method.invoke(parse, "add @COM1-b2-03!!! description");
+	
+		assertEquals(expected, actual);
+	}
+	
+	/* This is a test to get PrepositionIndex that exist */
+
+	@Test
+	public void getPrepositionIndex() throws Exception {
+		Method method = JListeeParser.class.getDeclaredMethod("getPrepositionIndex", String.class, int.class);
+		method.setAccessible(true);
+		int expected = 36;
+		int actual = (int) method.invoke(parse, "add what from today to tomorrow and due sunday", -1);
+		assertEquals(expected, actual);
+	}
+	
+	/* This is a test to get PrepositionIndex that don't exist */
+	@Test
+	public void getPrepositionIndex2() throws Exception {
+		Method method = JListeeParser.class.getDeclaredMethod("getPrepositionIndex", String.class, int.class);
+		method.setAccessible(true);
+		int expected = -1;
+		int actual = (int) method.invoke(parse, "add good friday", -1);
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test to get TaskDescription with location */
 	@Test
 	public void getTaskDescription() throws Exception {
 		String expected = "hello this is task";
@@ -110,5 +144,50 @@ public class JListeeParserTest {
 		
 		assertEquals(expected, actual);
 	}
+	
+	/* This is a test to get TaskDescription with special characters */
+	@Test
+	public void getTaskDescription2(){
+		String inputLine = "inputline with special !@#$%^&*() @location #hihihi";
+		ArrayList<String> tagLists = new ArrayList<String>();
+		tagLists.add("hihihi");
+		String location = "location";
+		String actual = "inputline with special !@#$%^&*()";
+		String expected = parse.trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+		assertEquals(expected,actual);
+	}
+	
+	
+	/* This is a test to get tasknumbers with extra spaces */
+	@Test
+	public void getTaskNumbersWithExtraSpace(){
+		String inputLine = "1,   2, 3";
+		int expected = 3;
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		parse.extractTaskNumbers(inputLine, taskNumbers);
+		assertEquals(expected, taskNumbers.size());
+	}
+	
+	/* This is a test to get tasknumbers with usage of dash */
+	@Test
+	public void getTaskNumberWithDash(){
+		String inputLine = "1-5,   2-9, 3-10";
+		int expected = 10;
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		parse.extractTaskNumbers(inputLine, taskNumbers);
+		assertEquals(expected, taskNumbers.size());
+	}
+	
+	/* This is a test to get tasknumbers with usage of commas and dash */
+	@Test
+	public void getTaskNumberWithCommasAndDash(){
+		String inputLine = "1-5,   6,7, 8-10";
+		int expected = 10;
+		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
+		parse.extractTaskNumbers(inputLine, taskNumbers);
+		assertEquals(expected, taskNumbers.size());
+	}
+	
+	
 
 }
