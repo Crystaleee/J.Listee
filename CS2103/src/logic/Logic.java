@@ -3,6 +3,8 @@
  */
 package logic;
 
+import history.History;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,12 +12,11 @@ import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import History.History;
-import bean.Command;
-import bean.CommandShow;
-import bean.Display;
-import bean.GlobalConstants;
-import bean.GlobalLogger;
+import entity.Command;
+import entity.CommandShow;
+import entity.Display;
+import entity.GlobalConstants;
+import entity.GlobalLogger;
 import parser.JListeeParser;
 import storage.Storage;
 import storage.StorageFilePath;

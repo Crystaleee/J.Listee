@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import bean.Display;
+import entity.Display;
 import logic.Logic;
 import storage.Storage;
 

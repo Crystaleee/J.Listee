@@ -10,50 +10,89 @@ import javafx.scene.web.WebView;
 
 import org.w3c.dom.Document;
 
+import parser.InputSuggestion;
+
 import com.sun.webkit.WebPage;
 
+// @@author A0149527W
+
 /**
- * @@author A0149527W
+ * abstract class for every page in the app
+ * 
+ * @extends StackPane
  */
 public abstract class AppPage extends StackPane {
-	WebView browser;
-	WebEngine webEngine;
-	String html;
+    // this is the javafx statement to set background to transparent
+    private static final String JAVAFX_BACKGROUND_TRANSPARENT = "-fx-background-color: rgba(0, 0, 0, 0); ";
+    
+    // common bridge name and script name
+    protected static final String NAME_BRIDGE = "app";
+    protected static final String SCRIPT_WINDOW="window";
+    
+    //this is Parser.InputSuggestion to get smd suggestion from
+    private InputSuggestion suggestion = InputSuggestion.getInstance();
+    
+    private WebView browser; // the web view to put in the scene
+    protected WebEngine webEngine; // the web engine to load web page
+    protected String html; // the web page
 
-	public AppPage(String html) {
-		this.browser = new WebView();
-		this.webEngine = browser.getEngine();
-		this.html = html;
-		browser.setContextMenuEnabled(false);
-		this.setStyle("-fx-background-color: rgba(0, 0, 0, 0); ");
+    public AppPage(String html) {
+        // initilize parameters
+        this.browser = new WebView();
+        this.webEngine = browser.getEngine();
+        this.html = html;
 
-		webEngine.documentProperty().addListener(new DocListener());
+        // disable context menu
+        this.browser.setContextMenuEnabled(false);
 
-		// load web page
-		webEngine.load(WelcomeAndChooseStorage.class.getResource(this.html)
-				.toExternalForm());
+        // set transparent background
+        setTransparentBackground();
 
-		// add the web view to the scene
-		this.getChildren().add(browser);
-	}
+        // load web page
+        webEngine.load(WelcomeAndChooseStorage.class.getResource(this.html).toExternalForm());
 
-	class DocListener implements ChangeListener<Document> {
-		@Override
-		public void changed(ObservableValue<? extends Document> observable,
-				Document oldValue, Document newValue) {
-			try {
+        // add the web view to the scene
+        this.getChildren().add(browser);
+    }
 
-				// Use reflection to retrieve the WebEngine's private 'page'
-				// field.
-				Field f = webEngine.getClass().getDeclaredField("page");
-				f.setAccessible(true);
-				com.sun.webkit.WebPage page = (WebPage) f.get(webEngine);
-				page.setBackgroundColor((new java.awt.Color(0, 0, 0, 0))
-						.getRGB());
+    /**
+     * set transparent background by seting StakePane's background and adding
+     * listener to the web page
+     */
+    private void setTransparentBackground() {
+        this.setStyle(JAVAFX_BACKGROUND_TRANSPARENT);
+        this.webEngine.documentProperty().addListener(new DocListener());
+    }
 
-			} catch (Exception e) {
-			}
 
-		}
-	}
+    /**
+     *  get sommand suggestion from parser and pass to Javascript
+     *  
+     * @param cmd
+     *              the user input command
+     * @return String 
+     * command suggestion
+     */
+    public String getCommandsuggestion(String cmd) {
+        String cmdSuggestion = suggestion.getSuggestedInput(cmd.trim());
+        return cmdSuggestion;
+
+    }
+    
+    private class DocListener implements ChangeListener<Document> {
+        @Override
+        public void changed(ObservableValue<? extends Document> observable, Document oldValue,
+                Document newValue) {
+            try {
+                // Use reflection to retrieve the WebEngine's private 'page'
+                // field.
+                Field f = webEngine.getClass().getDeclaredField("page");
+                f.setAccessible(true);
+                com.sun.webkit.WebPage page = (WebPage) f.get(webEngine);
+                page.setBackgroundColor((new java.awt.Color(0, 0, 0, 0)).getRGB());
+
+            } catch (Exception e) {
+            }
+        }
+    }
 }

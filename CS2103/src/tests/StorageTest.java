@@ -16,12 +16,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import bean.Display;
-import bean.Task;
-import bean.TaskDeadline;
-import bean.TaskEvent;
-import bean.TaskFloat;
-import bean.TaskReserved;
+import entity.Display;
+import entity.Task;
+import entity.TaskDeadline;
+import entity.TaskEvent;
+import entity.TaskFloat;
+import entity.TaskReserved;
 import storage.Storage;
 
 public class StorageTest {

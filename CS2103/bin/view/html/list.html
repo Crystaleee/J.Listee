@@ -30,6 +30,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 /* @@author A0149527W*/
   body{
     background: rgba(0,0,0,0);
+    overflow:hidden;
   }
    .center {
      width: 700px;
@@ -234,7 +235,6 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
     left: 30px;
   }
   .command_suggestion{
-    height: 35px;
     background-color: #333;
     width: 100%;
     border-radius: 10px;
@@ -668,24 +668,25 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 });
 
 
-function getCommandsuggestion()
+function getCommandSuggestion()
 {
-  if(cmd.elements['command'].value==''){
+  if($.trim(cmd.elements['command'].value)==''){
     $("#suggestion-bar").hide();
-  }
-
-  //send command when typing
-  if(app.getCommandsuggestion(cmd.elements['command'].value)!=''){
-    $("#suggestion-bar").show();
-    $("#suggstion").text(app.getCommandsuggestion(cmd.elements['command'].value));
   }else{
-    $("#suggestion-bar").hide();
+
+  	//send command when typing
+	if(app.getCommandSuggestion(cmd.elements['command'].value)!='null'){
+	  $("#suggestion-bar").show();
+	  $("#suggstion").text(app.getCommandSuggestion(cmd.elements['command'].value));
+	}else{
+	  hideSuggestion();
+	}
+
   }
-  
 };
 
 function hideSuggestion(){
-  $("#suggestion-bar").hide();
+	$("#suggestion-bar").hide();
 }
 
 $(document).keydown(
@@ -696,7 +697,7 @@ $(document).keydown(
           var d = e.srcElement || e.target;
            if (d.tagName.toUpperCase() != 'INPUT'){
             $(command).focus();
-            $(command).val("");
+            //$(command).val("");
           }
         break;
         case 40://key down
@@ -735,7 +736,6 @@ $(document).keydown(
         case 8://backspace
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
-            console.log("delete "+id);
             shortCutCommand("delete "+id);
           }
         break;
@@ -754,6 +754,21 @@ $(document).keydown(
             var id=parseInt($(".task:focus")[0].id);
             shortCutCommand("postpone "+id);
           }
+        case 84://ctrl+t
+        	if(e.ctrlKey)
+        		shortCutCommand("show /today");
+        break;
+        case 68://ctrl+d
+        	if(e.ctrlKey)
+        		shortCutCommand("show /done");
+        break;
+        case 79://ctrl+o
+        	if(e.ctrlKey)
+        		shortCutCommand("show /overdue");
+        break;
+        case 83://ctrl+s
+        	if(e.ctrlKey)
+        		shortCutCommand("show")
         break;
         case 90://ctrl+z
         	if(e.ctrlKey)
@@ -762,6 +777,7 @@ $(document).keydown(
         case 89://ctrl+y
         	if(e.ctrlKey)
         		shortCutCommand("redo");
+        break;
       }
     }
 );
@@ -812,7 +828,7 @@ $(document).keydown(
    </div>
    <div class="commandline">
     <form name="cmd">
-      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" onkeyup="getCommandsuggestion();" placeholder="Type your command here" autofocus/>
+      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" onkeyup="getCommandSuggestion();" placeholder="Type your command here" autofocus/>
     </form>
   </div>
 </div>

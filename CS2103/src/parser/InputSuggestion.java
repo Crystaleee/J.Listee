@@ -3,7 +3,7 @@ package parser;
 
 import java.util.ArrayList;
 
-import bean.Display;
+import entity.Display;
 import logic.Logic;
 
 public class InputSuggestion {

@@ -11,19 +11,19 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import bean.CommandAddDeadlineTask;
-import bean.CommandAddEvent;
-import bean.CommandAddFloatTask;
-import bean.CommandAddReserved;
-import bean.CommandDelete;
-import bean.CommandDone;
-import bean.CommandInvalid;
-import bean.CommandPostpone;
-import bean.CommandRedo;
-import bean.CommandShow;
-import bean.CommandUndo;
-import bean.CommandUndone;
-import bean.CommandUpdate;
+import entity.CommandAddDeadlineTask;
+import entity.CommandAddEvent;
+import entity.CommandAddFloatTask;
+import entity.CommandAddReserved;
+import entity.CommandDelete;
+import entity.CommandDone;
+import entity.CommandInvalid;
+import entity.CommandPostpone;
+import entity.CommandRedo;
+import entity.CommandShow;
+import entity.CommandUndo;
+import entity.CommandUndone;
+import entity.CommandUpdate;
 import logic.Logic;
 
 public class LogicTest2 {

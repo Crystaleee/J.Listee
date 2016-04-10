@@ -17,13 +17,13 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import bean.Display;
-import bean.GlobalLogger;
-import bean.Task;
-import bean.TaskDeadline;
-import bean.TaskEvent;
-import bean.TaskFloat;
-import bean.TaskReserved;
+import entity.Display;
+import entity.GlobalLogger;
+import entity.Task;
+import entity.TaskDeadline;
+import entity.TaskEvent;
+import entity.TaskFloat;
+import entity.TaskReserved;
 
 public class Storage {
 

@@ -1,5 +1,9 @@
-/tests/
-/logic/
-/storage/
+/entity/
 /gui/
+/history/
+/logic/
 /main/
+/parser/
+/storage/
+/tests/
+/view/
