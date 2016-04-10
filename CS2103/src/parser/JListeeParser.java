@@ -74,7 +74,7 @@ public class JListeeParser {
 	private static final int DEFAULT_END_MILLISECOND = 0;
 	
     private static final String[] DATE_WORDS =
-            new String[]{"by", "on", "at", "due", "during", "in", "for", "from", "at", "in", "this", "before", "after"};
+            new String[]{"by", "on", "at", "due", "during", "in", "for", "from", "at", "in", "this", "before", "after", "next"};
 	
     private static final String[] SEARCH_TASKS =
             new String[]{"today", "tomorrow", "overdue", "done", "reserved", "deadlines", "events", "untimed"};
@@ -94,7 +94,7 @@ public class JListeeParser {
 	public JListeeParser() {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
-/*
+
  public static void main(String[] separateInputLine){ // for testing
 		try {
 		//	fh = new FileHandler("logs\\log.txt");
@@ -111,10 +111,10 @@ public class JListeeParser {
 		testEvent.ParseCommand("add today to hi whhat friday from 5th april to 9th april #hi @location  # ");
 
 		JListeeParser testFloat = new JListeeParser();
-		testFloat.ParseCommand("add collect from april @zzz #arghhhhh #hi");
+		testFloat.ParseCommand("add  from april @zzz #arghhhhh #hi");
 
 		JListeeParser testDeadLine = new JListeeParser();
-		testDeadLine.ParseCommand("add good friday this friday");
+		testDeadLine.ParseCommand("add lunch at tomorrow @biz");
 
 		JListeeParser testDeadLine2 = new JListeeParser();
 		testDeadLine2.ParseCommand("add deadLine date and time on saturday 2359 #hashtag");
@@ -204,13 +204,13 @@ public class JListeeParser {
 		case COMMAND_DELETE:
 			return parseDelete(inputLine);
 
-		case COMMAND_UNDO:
-			
+		case COMMAND_UNDO:	
 			return parseUndo();
 
 		case COMMAND_REDO:
 			return parseRedo();
-
+			
+		case COMMAND_SEARCH:
 		case COMMAND_SHOW:
 			return parseShow(inputLine);
 		
@@ -222,7 +222,6 @@ public class JListeeParser {
 		case COMMAND_CONFIRM:
 			return parseConfirm(inputLine);
 		
-		case COMMAND_SEARCH:
 		case COMMAND_EDIT:
 		case COMMAND_UPDATE:
 			return parseUpdate(inputLine);
@@ -274,10 +273,11 @@ public class JListeeParser {
 		//if contain the list of words means there is date to extract
 		if (prepositionIndex != -1){
 			List<DateGroup> groups = dateParser.parse(inputLine.substring(prepositionIndex));
-
+			
+			System.out.println(inputLine.substring(prepositionIndex));
 			for (DateGroup group : groups) {
 				List<Date> dates = group.getDates();
-
+				
 				/* has start date and end date, event task */
 				if (dates.size() == 2) {
 					isEvent = true;
@@ -286,6 +286,7 @@ public class JListeeParser {
 
 				/* only 1 set of date, deadlineTask */
 				else if (dates.size() == 1) {
+					
 					isDeadline = true;
 					setAllDates(inputLine, groups);
 
@@ -302,7 +303,7 @@ public class JListeeParser {
 		location = findLocation(inputLine);
 
 		String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
-
+	
 		if (isEvent) {
 			return new CommandAddEvent(taskDescription, location, startDate, endDate, tagLists);
 		}
