@@ -3,6 +3,9 @@
  */
 package entity;
 
+/**
+ * This is the command to add deadline task.
+ */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -55,6 +58,9 @@ public class CommandAddDeadlineTask implements Command {
         return false;
     }
 
+    /*
+     * sets variables when the command has invalid parametersS
+     */
     private void setInvalidDisplay(Display display) {
         _updateFile = false;
         _saveHistory = false;

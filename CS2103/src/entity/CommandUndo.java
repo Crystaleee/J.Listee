@@ -4,6 +4,10 @@
 
 package entity;
 
+/**
+ * This command is to undo previously entered
+ * commands
+ */
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

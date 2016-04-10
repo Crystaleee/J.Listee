@@ -3,6 +3,10 @@
  */
 package entity;
 
+/**
+ * This command is to redo any previously
+ * undone commands
+ */
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

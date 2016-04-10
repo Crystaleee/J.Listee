@@ -3,6 +3,11 @@
  */
 package logic;
 
+/**
+ * This class employs multithreading to poll for
+ * overdue tasks and reminds user if there is a
+ * task that has just became overdue
+ */
 import java.util.Calendar;
 import java.util.TimerTask;
 import java.util.logging.Level;

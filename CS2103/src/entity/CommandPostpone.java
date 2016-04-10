@@ -3,6 +3,9 @@
  */
 package entity;
 
+/**
+ * This command is for postponing times of events and deadlines
+ */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -29,9 +32,6 @@ public class CommandPostpone implements Command {
         this._parameters = parameters;
     }
     
-    /*
-     * Only deadline tasks and events can be postponed
-     */
     public Display execute(Display display) {
         assert display != null: "Postpone: null display";
         if (isInvalidCommand(display)) {
@@ -55,6 +55,10 @@ public class CommandPostpone implements Command {
         }
     }
 
+    /*
+     * checks which parameters are being postponed
+     * and increment them accordingly
+     */
     public void postponeEvent(Display display) {
         TaskEvent task = display.getVisibleEvents().remove(_taskNumber);
         display.getEventTasks().remove(task);
@@ -88,6 +92,10 @@ public class CommandPostpone implements Command {
         setOverdue(task);
     }
 
+    /*
+     * checks which parameters are being postponed
+     * and increment them accordingly
+     */
     public void postponeDeadline(Display display) {
         TaskDeadline task = display.getVisibleDeadlineTasks().remove(_taskNumber);
         display.getDeadlineTasks().remove(task);
@@ -116,6 +124,10 @@ public class CommandPostpone implements Command {
         setOverdue(task);
     }
 
+    /*
+     * This method resets the overdue flag
+     * of the postponed task
+     */
     private void setOverdue(TaskEvent task) {
         if(task.getEndDate().before(Calendar.getInstance())){
             task.setIsOverdue(true);
@@ -175,6 +187,10 @@ public class CommandPostpone implements Command {
         return false;
     }
 
+    /*
+     * this method takes into accounts that only
+     * deadline tasks and events can be postponed
+     */
     private boolean hasInvalidTaskNumber(Display display) {
         if (_taskNumber < 0) {
             _msg = GlobalConstants.MESSAGE_ERROR_INVALID_INDEX;

@@ -3,6 +3,9 @@
  */
 package entity;
 
+/**
+ * This command is to add a floating task.
+ */
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,6 +55,9 @@ public class CommandAddFloatTask implements Command {
         return false;
     }
 
+    /*
+     * sets variables when the command has invalid parametersS
+     */
     private void setInvalidDisplay(Display display) {
         _updateFile = false;
         _saveHistory = false;

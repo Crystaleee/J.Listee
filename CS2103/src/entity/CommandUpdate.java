@@ -3,6 +3,10 @@
  */
 package entity;
 
+/**
+ * This command is to edit any parameters
+ * of a task
+ */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -78,6 +82,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * sets up variables if command has invalid parameters
+     */
     private void setInvalidDisplay() {
         _updateFile = false;
         _saveHistory = false;
@@ -93,6 +100,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         return ((_taskNumber > numOfTasks) || (_taskNumber < 1));
     }
 
+    /*
+     * Maps task number to task types
+     */
     private void editTask() {
         if (_taskNumber <= _display.getVisibleDeadlineTasks().size()) {
             logger.log(Level.INFO, "Update: Deadline");
@@ -205,6 +215,9 @@ public class CommandUpdate extends TaskEvent implements Command {
         setTaskIndices(task);
     }
 
+    /*
+     * this method removes time slots from a reserved task
+     */
     private void removeTimeSlot(TaskReserved task) {
         if (_removeReservedSlotIndex != null) {
             Collections.sort(_removeReservedSlotIndex);
@@ -216,6 +229,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
+    /*
+     * this method checks if user wants to edit timeslot
+     * or add a timeslot
+     */
     private void editTimeSlot(TaskReserved task) {
         if (_reservedSlotIndex != null) {
             editTime(task);
@@ -224,16 +241,17 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
-    private void addTimeSlot(TaskReserved task) {/*
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh/mm");
-        String DateToStr = format.format(getStartDate().getTime());
-        System.out.println(DateToStr);
-        DateToStr = format.format(getEndDate().getTime());
-        System.out.println(DateToStr);*/
+    /*
+     * this method adds a time slot to a reserved task
+     */
+    private void addTimeSlot(TaskReserved task) {
         task.getStartDates().add(getStartDate());
         task.getEndDates().add(getEndDate());
     }
 
+    /*
+     * this method edits a time slot of a reserved task
+     */
     private void editTime(TaskReserved task) {
         if (getStartDate() != null) {
             if (isChangeTimeOnly(getStartDate())) {
@@ -255,6 +273,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit a reserved task
+     */
     private boolean isInvalidEditReserved(TaskReserved task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -293,6 +315,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit a floating task
+     */
     private boolean isInvalidEditFloat(TaskFloat task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -310,6 +336,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return false;
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit an event task
+     */
     private boolean isInvalidEditEvent(TaskEvent task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -361,6 +391,10 @@ public class CommandUpdate extends TaskEvent implements Command {
         return (time.get(Calendar.YEAR) == 1);
     }
 
+    /*
+     * this method checks for any invalid parameters when
+     * user has specified to edit a deadline task
+     */
     private boolean isInvalidEditDeadline(TaskDeadline task) {
         if (hasNoLocationToRemove(task)) {
             _msgEdit = GlobalConstants.MESSAGE_ERROR_NO_LOCATION;
@@ -555,12 +589,16 @@ public class CommandUpdate extends TaskEvent implements Command {
                 new CommandAddEvent(task).execute(_display);
             }
         }
+        resetOverdueStatus(task);
+        return;
+    }
+
+    private void resetOverdueStatus(TaskEvent task) {
         if (task.getEndDate().before(Calendar.getInstance())) {
             task.setIsOverdue(true);
         } else {
             task.setIsOverdue(false);
         }
-        return;
     }
 
     private void editEndDate(TaskEvent task) {
@@ -576,11 +614,7 @@ public class CommandUpdate extends TaskEvent implements Command {
                 }
             }
         }
-        if (task.getEndDate().before(Calendar.getInstance())) {
-            task.setIsOverdue(true);
-        } else {
-            task.setIsOverdue(false);
-        }
+        resetOverdueStatus(task);
         return;
     }
 
@@ -598,12 +632,16 @@ public class CommandUpdate extends TaskEvent implements Command {
                 new CommandAddDeadlineTask(task).execute(_display);
             }
         }
+        resetOverdueStatus(task);
+        return;
+    }
+
+    private void resetOverdueStatus(TaskDeadline task) {
         if (task.getEndDate().before(Calendar.getInstance())) {
             task.setIsOverdue(true);
         } else {
             task.setIsOverdue(false);
         }
-        return;
     }
 
     private void editLocation(Task task) {

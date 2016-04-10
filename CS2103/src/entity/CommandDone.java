@@ -3,6 +3,9 @@
  */
 package entity;
 
+/**
+ * This command is to mark a task as completed.
+ */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -41,6 +44,9 @@ public class CommandDone implements Command {
         return _display;
     }
 
+    /*
+     * sets variables when the command has invalid parametersS
+     */
     private void setInvalidDisplay() {
         _updateFile = false;
         _saveHistory = false;
@@ -96,6 +102,9 @@ public class CommandDone implements Command {
         return numOfTasks;
     }
 
+    /*
+     * sets the feedback for invalid task indices
+     */
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
             _msgInvalidNumbers += taskNum;
@@ -118,6 +127,9 @@ public class CommandDone implements Command {
         }
     }
 
+    /*
+     * Mark one/multiple tasks as done
+     */
     private void doneMultipleTasks() {
         Task doneTask;
         Collections.sort(_taskNumbers);
@@ -128,6 +140,9 @@ public class CommandDone implements Command {
         setDisplay(_msgComplete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
     }
 
+    /*
+     * Mark all visible tasks as done
+     */
     private void doneAllVisibleTasks() {
         int numTasks = getNumOfTasks();
         _taskNumbers = new ArrayList<Integer>();
