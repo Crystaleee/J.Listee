@@ -96,276 +96,342 @@
     font-size: 18px;
     padding: 5px 15px;
   }
+  div:focus{
+  	outline:none;
+  }
 </style>
 </head>
 <body scroll="no">
 	<script>
+$(document).ready(function(){
+    $("div.tut").focus(); 
+});  
 
-		function shortCutCommand(cmd){
-			app.receiveCommand(cmd);
-		}
+	function shortCutCommand(cmd){
+		app.receiveCommand(cmd);
+	}
 
-		function sendCommand() {
-			var command = cmd.elements['command'].value;
-		  // Invoke the 'receive' Java callback
-		  app.receiveCommand(command);
-		}
+	function sendCommand() {
+		var command = cmd.elements['command'].value;
+	  // Invoke the 'receive' Java callback
+	  app.receiveCommand(command);
+	}
 
-		function clearCommandLine(){
-			$(command).val("");
-		}
+	function clearCommandLine(){
+		$(command).val("");
+	}
 
 //Prevent the backspace key from navigating back.
 $(document).unbind('keydown').bind('keydown', function (event) {
-	var doPrevent = false;
-	if (event.keyCode === 8) {
-		var d = event.srcElement || event.target;
-		if ((d.tagName.toUpperCase() === 'INPUT' && 
-			(
-				d.type.toUpperCase() === 'TEXT' ||
-				d.type.toUpperCase() === 'PASSWORD' || 
-				d.type.toUpperCase() === 'FILE' || 
-				d.type.toUpperCase() === 'SEARCH' || 
-				d.type.toUpperCase() === 'EMAIL' || 
-				d.type.toUpperCase() === 'NUMBER' || 
-				d.type.toUpperCase() === 'DATE' )
-			) || 
-			d.tagName.toUpperCase() === 'TEXTAREA') {
-			doPrevent = d.readOnly || d.disabled;
-	}
-	else {
-		doPrevent = true;
-	}
-}
-if (doPrevent) {
-	event.preventDefault();
-}
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+        var d = event.srcElement || event.target;
+        if ((d.tagName.toUpperCase() === 'INPUT' && 
+             (
+                 d.type.toUpperCase() === 'TEXT' ||
+                 d.type.toUpperCase() === 'PASSWORD' || 
+                 d.type.toUpperCase() === 'FILE' || 
+                 d.type.toUpperCase() === 'SEARCH' || 
+                 d.type.toUpperCase() === 'EMAIL' || 
+                 d.type.toUpperCase() === 'NUMBER' || 
+                 d.type.toUpperCase() === 'DATE' )
+             ) || 
+             d.tagName.toUpperCase() === 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else {
+            doPrevent = true;
+        }
+    }
+    if (doPrevent) {
+        event.preventDefault();
+    }
 });
 
 $(document).keydown(
 	function(e)
 	{   
 		switch(e.keyCode){
-        case 32://space bar
-        var d = e.srcElement || e.target;
-        if (d.tagName.toUpperCase() != 'INPUT'){
-        	$(command).focus();
-        	$(command).val("");
-        }
-        break;
-}
-		});
+	        case 32://space bar
+	        var d = e.srcElement || e.target;
+	        
+	        if (d.tagName.toUpperCase() != 'INPUT'){
+	        	$(command).focus();
+	        	//$(command).val("");
+	        }
+	        break;
+	        case 40://key down
+	          var d = e.srcElement || e.target;
+	          console.log(e);
+	           if (d.tagName.toUpperCase() == 'INPUT')
+	           {
+	            $("#command").val(app.getLaterCmd());
+	           }
+	        break;
+	        case 38://key up
+	           var d = e.srcElement || e.target;
+	           if (d.tagName.toUpperCase() == 'INPUT')
+	           {
+	              $("#command").val(app.getPreviousCmd());
+	           }
+	        break;
+		}
+});
 
-function getCommandsuggestion()
-{
-	if(cmd.elements['command'].value==''){
-		$("#suggestion-bar").hide();
-	}
+function getCommandSuggestion(){
+	if($.trim(cmd.elements['command'].value)==''){
+    	$("#suggestion-bar").hide();
+  	}else{
 
-  //send command when typing
-  if(app.getCommandsuggestion(cmd.elements['command'].value)!=''){
-  	$("#suggestion-bar").show();
-  	$("#suggstion").text(app.getCommandsuggestion(cmd.elements['command'].value));
-  }else{
-  	$("#suggestion-bar").hide();
+	  	//send command when typing
+		if(app.getCommandSuggestion(cmd.elements['command'].value)!='null'){
+		  $("#suggestion-bar").show();
+		  $("#suggstion").text(app.getCommandSuggestion(cmd.elements['command'].value));
+		}else{
+		  hideSuggestion();
+		}
   }
-  
 };
-</script>
-<div id="wrapper">
-	<div class="center">
-		<div class="main">
-			<div class="tut">
-				<div class="page-header">
-					<h1>J.Listee <small>Your Personal To-Do Manager</small></h1>
-				</div>
-				<div class="panel panel-default">
-					<!-- Default panel contents -->
-					<div class="panel-heading" style="background-color: #3273b1; color: #fff;font-size:20px;">Features and Commands</div>
-					<div class="panel-body">
-						<p>J.Listee is a GTD desktop application which can help you to manage your to-do list. </p>
-						<p><strong>Features include:</strong>
-							<br>&diams;&nbsp;   create a task with or without date and time
-							<br>&diams;&nbsp;   edit an existing task
-							<br>&diams;&nbsp;    delete existing tasks
-							<br>&diams;&nbsp; 	search tasks by keywords or by group
-							<br>&diams;&nbsp; 	postpone a task
-							<br>&diams;&nbsp; 	reserve time slots for a task
-							<br>&diams;&nbsp; 	confirm a time slot for a reserved task
-							<br>&diams;&nbsp; 	mark a task as done/undone
-							<br>&diams;&nbsp; 	undo/redo previous commands
-							<br>&diams;&nbsp; 	change storage location
-						</p>
-					</div>
 
-					<!-- Table -->
-					<table class="table">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Command format</th>
-								<th>Example</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th scope="row">1</th>
-								<td>&lt;add> [description] [&lt;preposition> time] [@location] [#tags<br>(for deadline)</td>
-								<td>add good friday this friday @home #yay #study</td>
-							</tr>
-							<tr>
-								<th scope="row">2</th>
-								<td>&lt;add> [description] [&lt;from> start time &lt;to> end time] [*@*location] [#tag]<br>(for event)</td>
-								<td>add meeting with prof @com1 #work from 1st april 2pm to 5th april 3pm</td>
-							</tr>
-							<tr>
-								<th scope="row">3</th>
-								<td>&lt;add> [description] [@location] [#tags]<br>(for untimed)</td>
-								<td> add @room clean</td>
-							</tr>
-							<tr>
-								<th scope="row">4</th>
-								<td>&lt;del> or &lt;delete> &lt;starting task number - ending task number><br>&lt;del> or &lt;delete> &lt;tasknumber, tasknumber, tasknumber></td>
-								<td>delete 1-3, 5 <br> delete 1,2,3,4,5 <br>delete 1-5</td>
-							</tr>
-							<tr>
-								<th scope="row">5</th>
-								<td>&lt;update> &lt;task number > [&lt;/timegroup> time] [task description] [@location] OR [-@] [#hashtags][-#deletehashtags]<br>(not for reserved)</td>
-								<td>update 2 more work /end tonight 2359<br>edit 2 /both today from 3pm to 6pm -@</td>
-							</tr>
-							<tr>
-								<th scope="row">6</th>
-								<td>&lt;update> &lt;task number > [&lt;reservation index> &lt;[-]/timegroup [time]> [task description] [@location] OR [-@] [#hashtags][-#deletehashtags]<br>(for reserved)</td>
-								<td>update 1 1 / start today 4pm<br>edit 2 meeting manager @ofﬁce<br>edit 3 -start</td>
-							</tr>
-							<tr>
-								<th scope="row">7</th>
-								<td>&lt;show> [task description] [/taskgroup][&lt;preposition> time] [@location] [#hashtags]</td>
-								<td>show assignment due friday</td>
-							</tr>
-							<tr>
-								<th scope="row">8</th>
-								<td>&lt;undone> or &lt;done> &lt;starting task number - ending task number><br>&lt;undone> or &lt;done> tasknumber, tasknumber, tasknumber></td>
-								<td>done 1-3, 5 <br>undone 1,2,3,4,5 <br>undone 1-5</td>
-							</tr>
-							<tr>
-								<th scope="row">9</th>
-								<td>&lt;postpone> &lt;task number> &lt;time></td>
-								<td> postpone 2 2hours 4mins<br>postpone 3 3years</td>
-							</tr>
-							<tr>
-								<th scope="row">10</th>
-								<td>reserve &lt;task description> [&lt;from> start time &lt;to> end time] [and/or] [&lt;from> start time &lt;to> end time] [@location] [#hashtags]</td>
-								<td>reserve meet friends from thursday 4pm to thursday 6pm or friday 4pm to 6pm #dinner</td>
-							</tr>
-							<tr>
-								<th scope="row">11</th>
-								<td>conﬁrm &lt;conﬁrm> &lt;tasknumber> &lt;reserve task index></td>
-								<td>confirm 2, 3</td>
-							</tr>
-							<tr>
-								<th scope="row">12</th>
-								<td>undo or redo</td>
-								<td>undo<br>redo</td>
-							</tr>
-							<tr>
-								<th scope="row">13</th>
-								<td>change filepath</td>
-								<td>change filepath</td>
-							</tr>
-							<tr>
-								<th scope="row">14</th>
-								<td>help</td>
-								<td>help</td>
-							</tr>
-							<tr>
-								<th scope="row">15</th>
-								<td>exit</td>
-								<td>exit</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="panel-body">
+function hideSuggestion(){
+	$("#suggestion-bar").hide();
+}
+
+</script>
+	<div id="wrapper">
+		<div class="center">
+			<div class="main">
+				<div class="tut" tabindex="0">
+					<div class="page-header">
+						<h1>
+							J.Listee <small>Your Personal To-Do Manager</small>
+						</h1>
 					</div>
-					<table class="table">
-						<thead>
-							<tr>
-								<th>Task group for show/search</th>
-								<th>Prepositions before time</th>
-								<th>Time group for update</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>/today</td>
-								<td> from…to… </td>
-								<td>/end</td>
-							</tr>
-							<tr>
-								<td>/tomorrow</td>
-								<td> by </td>
-								<td>/start</td>
-							</tr>
-							<tr>
-								<td>/overdue</td>
-								<td> on </td>
-								<td>/etime</td>
-							</tr>
-							<tr>
-								<td>/done</td>
-								<td> at </td>
-								<td>/stime</td>
-							</tr>
-							<tr>
-								<td>/reserved</td>
-								<td> due </td>
-								<td>-alltime</td>
-							</tr>
-							<tr>
-								<td>/events</td>
-								<td> during </td>
-								<td>-end</td>
-							</tr>
-							<tr>
-								<td>/deadlines</td>
-								<td> in </td>
-								<td>-start</td>
-							</tr>
-							<tr>
-								<td>/untimed</td>
-								<td> for </td>
-								<td>/both</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td> this </td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td> before </td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td> after </td>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
+					<div class="panel panel-default">
+						<!-- Default panel contents -->
+						<div class="panel-heading"
+							style="background-color: #3273b1; color: #fff; font-size: 20px;">Features
+							and Commands</div>
+						<div class="panel-body">
+							<p>J.Listee is a GTD desktop application which can help you
+								to manage your to-do list.</p>
+							<p>
+								<strong>Features include:</strong> <br>&diams;&nbsp; create
+								a task with or without date and time <br>&diams;&nbsp; edit
+								an existing task <br>&diams;&nbsp; delete existing tasks <br>&diams;&nbsp;
+								search tasks by keywords or by group <br>&diams;&nbsp;
+								postpone a task <br>&diams;&nbsp; reserve time slots for a
+								task <br>&diams;&nbsp; confirm a time slot for a reserved
+								task <br>&diams;&nbsp; mark a task as done/undone <br>&diams;&nbsp;
+								undo/redo previous commands <br>&diams;&nbsp; change
+								storage location
+							</p>
+						</div>
+
+						<!-- Table -->
+						<table class="table">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Command format</th>
+									<th>Example</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>&lt;add> [description] [&lt;preposition> time]
+										[@location] [#tags<br>(for deadline)
+									</td>
+									<td>add good friday this friday @home #yay #study</td>
+								</tr>
+								<tr>
+									<th scope="row">2</th>
+									<td>&lt;add> [description] [&lt;from> start time &lt;to>
+										end time] [*@*location] [#tag]<br>(for event)
+									</td>
+									<td>add meeting with prof @com1 #work from 1st april 2pm
+										to 5th april 3pm</td>
+								</tr>
+								<tr>
+									<th scope="row">3</th>
+									<td>&lt;add> [description] [@location] [#tags]<br>(for
+										untimed)
+									</td>
+									<td>add @room clean</td>
+								</tr>
+								<tr>
+									<th scope="row">4</th>
+									<td>&lt;del> or &lt;delete> &lt;starting task number -
+										ending task number><br>&lt;del> or &lt;delete>
+										&lt;tasknumber, tasknumber, tasknumber>
+									</td>
+									<td>delete 1-3, 5 <br> delete 1,2,3,4,5 <br>delete
+										1-5
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">5</th>
+									<td>&lt;update> &lt;task number > [&lt;/timegroup> time]
+										[task description] [@location] OR [-@]
+										[#hashtags][-#deletehashtags]<br>(not for reserved)
+									</td>
+									<td>update 2 more work /end tonight 2359<br>edit 2
+										/both today from 3pm to 6pm -@
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">6</th>
+									<td>&lt;update> &lt;task number > [&lt;reservation index>
+										&lt;[-]/timegroup [time]> [task description] [@location] OR
+										[-@] [#hashtags][-#deletehashtags]<br>(for reserved)
+									</td>
+									<td>update 1 1 / start today 4pm<br>edit 2 meeting
+										manager @ofﬁce<br>edit 3 -start
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">7</th>
+									<td>&lt;show> [task description]
+										[/taskgroup][&lt;preposition> time] [@location] [#hashtags]</td>
+									<td>show assignment due friday</td>
+								</tr>
+								<tr>
+									<th scope="row">8</th>
+									<td>&lt;undone> or &lt;done> &lt;starting task number -
+										ending task number><br>&lt;undone> or &lt;done>
+										tasknumber, tasknumber, tasknumber>
+									</td>
+									<td>done 1-3, 5 <br>undone 1,2,3,4,5 <br>undone
+										1-5
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">9</th>
+									<td>&lt;postpone> &lt;task number> &lt;time></td>
+									<td>postpone 2 2hours 4mins<br>postpone 3 3years
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">10</th>
+									<td>reserve &lt;task description> [&lt;from> start time
+										&lt;to> end time] [and/or] [&lt;from> start time &lt;to> end
+										time] [@location] [#hashtags]</td>
+									<td>reserve meet friends from thursday 4pm to thursday 6pm
+										or friday 4pm to 6pm #dinner</td>
+								</tr>
+								<tr>
+									<th scope="row">11</th>
+									<td>conﬁrm &lt;conﬁrm> &lt;tasknumber> &lt;reserve task
+										index></td>
+									<td>confirm 2, 3</td>
+								</tr>
+								<tr>
+									<th scope="row">12</th>
+									<td>undo or redo</td>
+									<td>undo<br>redo
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">13</th>
+									<td>change filepath</td>
+									<td>change filepath</td>
+								</tr>
+								<tr>
+									<th scope="row">14</th>
+									<td>help</td>
+									<td>help</td>
+								</tr>
+								<tr>
+									<th scope="row">15</th>
+									<td>exit</td>
+									<td>exit</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="panel-body"></div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Task group for show/search</th>
+									<th>Prepositions before time</th>
+									<th>Time group for update</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>/today</td>
+									<td>from…to…</td>
+									<td>/end</td>
+								</tr>
+								<tr>
+									<td>/tomorrow</td>
+									<td>by</td>
+									<td>/start</td>
+								</tr>
+								<tr>
+									<td>/overdue</td>
+									<td>on</td>
+									<td>/etime</td>
+								</tr>
+								<tr>
+									<td>/done</td>
+									<td>at</td>
+									<td>/stime</td>
+								</tr>
+								<tr>
+									<td>/reserved</td>
+									<td>due</td>
+									<td>-alltime</td>
+								</tr>
+								<tr>
+									<td>/events</td>
+									<td>during</td>
+									<td>-end</td>
+								</tr>
+								<tr>
+									<td>/deadlines</td>
+									<td>in</td>
+									<td>-start</td>
+								</tr>
+								<tr>
+									<td>/untimed</td>
+									<td>for</td>
+									<td>/both</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>this</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>before</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>after</td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>		
+			</div>
+			<div class="commandline">
+				<form name="cmd">
+					<input type="text" name="command" id="command"
+						onkeyup="getCommandSuggestion();"
+						onkeydown="if(event.keyCode==13){sendCommand();}"
+						placeholder="Type command here" />
+				</form>
+			</div>
 		</div>
-		<div class="commandline">
-			<form name="cmd">
-				<input type="text" name="command" id="command" onkeyup="getCommandsuggestion();" onkeydown="if(event.keyCode==13){sendCommand();}" placeholder="Type 'back' here" autofocus/>
-			</form>
+		<div id="suggestion-bar">
+			<div class="arrow-up"></div>
+			<div class="command_suggestion" id="suggstion"></div>
 		</div>
 	</div>
-	<div id="suggestion-bar">
-  <div class="arrow-up"></div>
-  <div class="command_suggestion" id="suggstion"></div>
-</div>
-</div>
 </body>
 </html>

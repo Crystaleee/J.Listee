@@ -15,22 +15,22 @@ import java.util.regex.Pattern;
 
 import com.joestelmach.natty.*;
 
-import bean.Command;
-import bean.CommandAddDeadlineTask;
-import bean.CommandAddEvent;
-import bean.CommandAddFloatTask;
-import bean.CommandAddReserved;
-import bean.CommandConfirm;
-import bean.CommandDelete;
-import bean.CommandDone;
-import bean.CommandInvalid;
-import bean.CommandRedo;
-import bean.CommandShow;
-import bean.CommandUndo;
-import bean.CommandUndone;
-import bean.CommandUpdate;
-import bean.GlobalLogger;
-import bean.CommandPostpone;
+import entity.Command;
+import entity.CommandAddDeadlineTask;
+import entity.CommandAddEvent;
+import entity.CommandAddFloatTask;
+import entity.CommandAddReserved;
+import entity.CommandConfirm;
+import entity.CommandDelete;
+import entity.CommandDone;
+import entity.CommandInvalid;
+import entity.CommandPostpone;
+import entity.CommandRedo;
+import entity.CommandShow;
+import entity.CommandUndo;
+import entity.CommandUndone;
+import entity.CommandUpdate;
+import entity.GlobalLogger;
 
 
 public class JListeeParser {

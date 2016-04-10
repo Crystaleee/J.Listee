@@ -2,9 +2,7 @@ package gui;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
-
-import bean.Display;
+import entity.Display;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -19,173 +17,173 @@ import storage.LogStorage;
  * @@author A0149527W
  */
 public class GUIController {
-	private static Stage stage;
-	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 750;
+    // this is the width and height of the window
+    private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_HEIGHT = 750;
 
-	private static AppPage welcome;
-	private static AppPage showList;
-	private static AppPage help;
+    private static final String ERR_CREATEFILE = "Error: Cannot create file!";
+    private static final String ERR_DISPLAY_NULL="Error: Display is null!";
 
-	public static void setStage(Stage stage2) {
-		stage = stage2;
-	}
+    // this is the stage to be display
+    private static Stage stage;
 
-	/**
-	 * create J.Listee file under the given file path
-	 * 
-	 * @throws IOException
-	 *             if file can not be created
-	 */
-	public static void createFile(String userChosenfile) throws IOException {
-		LogStorage.writeLogFile(userChosenfile);
-		if (!Logic.createFile(userChosenfile)) {
-			throw new IOException("Error: Cannot create file!");
-		}
-	}
+    // these are the app pages
+    private static AppPage welcome;
+    private static AppPage showList;
+    private static AppPage help;
 
-	/**
-	 * display welcome page in the frame
-	 */
-	public static void displayWelcome() {
-		Scene scene = stage.getScene();
-		welcome = new WelcomeAndChooseStorage();
-		if (scene == null) {
-			scene = new Scene(welcome, WINDOW_WIDTH, WINDOW_HEIGHT);
-			scene.setFill(null);
-			setMouseMovable(scene);
-			setShortcut(scene);
-			stage.setScene(scene);
-		} else {
-			stage.getScene().setRoot(welcome);
-		}
-		stage.sizeToScene();
-		stage.show();
-	}
+    public static void setStage(Stage stage_) {
+        stage = stage_;
+    }
 
-	/**
-	 * display list page in the frame
-	 * 
-	 * @param display
-	 * @return
-	 */
-	public static void displayList(Display display) {
-		Scene scene = stage.getScene();
+    /**
+     * create J.Listee file under the given file path
+     * 
+     * @throws IOException
+     *             if file can not be created
+     */
+    public static void createFile(String userChosenfile) throws IOException {
+        LogStorage.writeLogFile(userChosenfile);
+        if (!Logic.createFile(userChosenfile)) {
+            throw new IOException(ERR_CREATEFILE);
+        }
+    }
 
-		((ShowList) showList).setList(display);
+    /**
+     * display welcome page in the frame
+     */
+    public static void displayWelcome() {
+        welcome = new WelcomeAndChooseStorage();
+        setScene(stage.getScene(),welcome);     
+    }
 
-		if (scene != null && scene.getRoot() != showList) {
-			stage.getScene().setRoot(showList);
-			stage.show();
-			return;
-		}
+    /**
+     * display list page in the frame
+     * 
+     * @param display
+     * @return
+     */
+    public static void displayList(Display display) {
+        // set list and reload the list page
+        ((ShowList) showList).setList(display);
 
-		if (scene == null) {
-			scene = new Scene(showList, WINDOW_WIDTH, WINDOW_HEIGHT);
-			scene.setFill(null);
-			setMouseMovable(scene);
-			setShortcut(scene);
-			stage.setScene(scene);
-		}
-		stage.sizeToScene();
-		stage.show();
-	}
+        setScene(stage.getScene(),showList);
+    }
 
-	/**
-	 * display help page in the frame
-	 * 
-	 * @param display
-	 * @return
-	 */
-	public static void displayHelp() {
-		Scene scene = stage.getScene();
-		help= new Help();
-		
-		if (scene == null) {
-			scene = new Scene(help, WINDOW_WIDTH, WINDOW_HEIGHT);
-			scene.setFill(null);
-			setMouseMovable(scene);
-			setShortcut(scene);
-			stage.setScene(scene);
-		} else {
-			stage.getScene().setRoot(help);
-		}
-		stage.sizeToScene();
-		stage.show();
-	}
+    /**
+     * display help page in the frame
+     * 
+     * @param display
+     * @return
+     */
+    public static void displayHelp() {
+        help = new Help();
+        setScene(stage.getScene(),help);
+    }
 
-	/**
-	 * set esc on close
-	 * 
-	 * @param stage
-	 * @param scene
-	 */
-	private static void setShortcut(Scene scene) {
-		scene.addEventHandler(KeyEvent.KEY_PRESSED,
-				new EventHandler<KeyEvent>() {
-					@Override
-					public void handle(KeyEvent e) {
-						if (e.getCode() == KeyCode.ESCAPE) {
-							App.terminate();
-						}
-					}
-				});
-	}
+    /**
+     * @param scene
+     */
+    private static void setScene(Scene scene, AppPage page) {
+        if (scene == null) {
+            scene = new Scene(page, WINDOW_WIDTH, WINDOW_HEIGHT);
+            setStyleOnScene(scene);
+            stage.setScene(scene);
+        } else {
+            if (scene.getRoot() != page) {
+                stage.getScene().setRoot(page);
+            }
+        }
+        stage.sizeToScene();
+        stage.show();
+    }
 
-	/**
-	 * add mouse listener to scene
-	 */
-	private static void setMouseMovable(Scene scene) {
-		scene.addEventFilter(MouseEvent.MOUSE_PRESSED,
-				new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						App.xOffset = event.getSceneX();
-						App.yOffset = event.getSceneY();
-					}
-				});
-		scene.addEventFilter(MouseEvent.MOUSE_DRAGGED,
-				new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						stage.setX(event.getScreenX() - App.xOffset);
-						stage.setY(event.getScreenY() - App.yOffset);
-					}
-				});
-	}
+    /**
+     * set scene's fill to transparent, set it movable by mouse set esc on close
+     * 
+     * @param scene
+     */
+    private static void setStyleOnScene(Scene scene) {
+        scene.setFill(null);
+        setMouseMovable(scene);
+        setEscOnClose(scene);
+    }
 
-	/**
-	 * initialize the start page which display deadlines, events and floating
-	 * tasks
-	 */
-	public static void initializeList(String filePath) {
-		// call to logic to get all the tasks
-		Display display = Logic.initializeProgram(filePath);
-		// assert display!=null :"Display is null!";
-		if (display == null)
-			JOptionPane.showMessageDialog(null, "display is null!");
-		showList = new ShowList(display);
-		displayList(display);
-	}
+    /**
+     * set esc on close
+     * 
+     * @param stage
+     * @param scene
+     */
+    private static void setEscOnClose(Scene scene) {
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent e) {
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    App.terminate();
+                }
+            }
+        });
+    }
 
-	public static void handelUserInput(String command) {
-		Display display = Logic.executeUserCommand(command);
-		// assert display!=null :"Display is null!";
-		if (display == null)
-			JOptionPane.showMessageDialog(null, "display is null!");
-		displayList(display);
-	}
+    /**
+     * add mouse listener to scene
+     */
+    private static void setMouseMovable(Scene scene) {
+        //add mouse press lisnter
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                App.xOffset = event.getSceneX();
+                App.yOffset = event.getSceneY();
+            }
+        });
+        //add mouse drag listener
+        scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - App.xOffset);
+                stage.setY(event.getScreenY() - App.yOffset);
+            }
+        });
+    }
 
-	public static AppPage getShowList() {
-		return showList;
-	}
+    /**
+     * initialize the start page which display deadlines, events and floating
+     * tasks
+     */
+    public static void initializeList(String filePath) {
+        // call to logic to get all the tasks
+        Display display = Logic.initializeProgram(filePath);
+        
+        assert display!=null :ERR_DISPLAY_NULL;
+        
+        showList = new ShowList(display);
+        displayList(display);
+    }
 
-	public static void changeFilePath(String filePath) {
-		Display display = Logic.changeFilePath(filePath);
-		// assert display!=null :"Display is null!";
-		if (display == null)
-			JOptionPane.showMessageDialog(null, "display is null!");
-		displayList(display);
-	}
+    /**
+     * handle user input: pass to logic, and display new content
+     * @param command user input
+     */
+    public static void handelUserInput(String command) {
+        Display display = Logic.executeUserCommand(command);
+        
+        assert display!=null :ERR_DISPLAY_NULL;
+       
+        displayList(display);
+    }
+
+    public static AppPage getShowList() {
+        return showList;
+    }
+
+    public static void changeFilePath(String filePath) {
+        Display display = Logic.changeFilePath(filePath);
+        
+        assert display!=null :ERR_DISPLAY_NULL;
+        
+        displayList(display);
+    }
 
 }

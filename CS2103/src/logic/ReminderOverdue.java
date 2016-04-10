@@ -8,9 +8,9 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import bean.Display;
-import bean.GlobalConstants;
-import bean.GlobalLogger;
+import entity.Display;
+import entity.GlobalConstants;
+import entity.GlobalLogger;
 import gui.GUIController;
 import javafx.application.Platform;
 

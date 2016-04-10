@@ -1,5 +1,4 @@
-/tests/
+/view/
+/entity/
+/history/
 /logic/
-/storage/
-/gui/
-/main/

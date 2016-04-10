@@ -254,7 +254,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 </style>
 </head>
 <body>
-  <script  type="text/javascript">
+	<script type="text/javascript">
     var i=0;
 
     function reset(){
@@ -668,24 +668,25 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 });
 
 
-function getCommandsuggestion()
+function getCommandSuggestion()
 {
-  if(cmd.elements['command'].value==''){
+  if($.trim(cmd.elements['command'].value)==''){
     $("#suggestion-bar").hide();
-  }
-
-  //send command when typing
-  if(app.getCommandsuggestion(cmd.elements['command'].value)!=''){
-    $("#suggestion-bar").show();
-    $("#suggstion").text(app.getCommandsuggestion(cmd.elements['command'].value));
   }else{
-    $("#suggestion-bar").hide();
+
+  	//send command when typing
+	if(app.getCommandSuggestion(cmd.elements['command'].value)!='null'){
+	  $("#suggestion-bar").show();
+	  $("#suggstion").text(app.getCommandSuggestion(cmd.elements['command'].value));
+	}else{
+	  hideSuggestion();
+	}
+
   }
-  
 };
 
 function hideSuggestion(){
-  $("#suggestion-bar").hide();
+	$("#suggestion-bar").hide();
 }
 
 $(document).keydown(
@@ -696,7 +697,7 @@ $(document).keydown(
           var d = e.srcElement || e.target;
            if (d.tagName.toUpperCase() != 'INPUT'){
             $(command).focus();
-            $(command).val("");
+            //$(command).val("");
           }
         break;
         case 40://key down
@@ -735,7 +736,6 @@ $(document).keydown(
         case 8://backspace
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
-            console.log("delete "+id);
             shortCutCommand("delete "+id);
           }
         break;
@@ -771,57 +771,51 @@ $(document).keydown(
     });
 </script>
 
-<div id="wrapper">
- <div class="center">
-  <div class="main">
-    <div class="alert alert-success" id="feedback" role="alert"></div>
-    
-    <div class="list">
-      <div class="title" id="title"></div>
-      <div class="group deadline">
-        <div class="grouptitle" id="deadline_title"></div>
-        <div class="tasklist" id="tasklist_deadline">
+	<div id="wrapper">
+		<div class="center">
+			<div class="main">
+				<div class="alert alert-success" id="feedback" role="alert"></div>
 
-        </div>
-      </div>
+				<div class="list">
+					<div class="title" id="title"></div>
+					<div class="group deadline">
+						<div class="grouptitle" id="deadline_title"></div>
+						<div class="tasklist" id="tasklist_deadline"></div>
+					</div>
 
-      <div class="group event">
-        <div class="grouptitle" id="event_title"></div>
-        <div class="tasklist" id="tasklist_event">
+					<div class="group event">
+						<div class="grouptitle" id="event_title"></div>
+						<div class="tasklist" id="tasklist_event"></div>
+					</div>
 
-        </div>
-      </div>
+					<div class="group floating">
+						<div class="grouptitle" id="float_title"></div>
+						<div class="tasklist" id="tasklist_floating"></div>
+					</div>
+					<div class="group reserved">
+						<div class="grouptitle" id="reserved_title"></div>
+						<div class="tasklist" id="tasklist_reserved"></div>
+					</div>
+					<div class="group mixed">
+						<div class="grouptitle" id="mixed_title"></div>
+						<div class="tasklist" id="tasklist_mixed"></div>
+					</div>
+				</div>
+				<div class="commandline">
+					<form name="cmd">
+						<input type="text" name="command" id="command"
+							onkeydown="if(event.keyCode==13){sendCommand();}"
+							onkeyup="getCommandSuggestion();"
+							placeholder="Type your command here" autofocus />
+					</form>
+				</div>
+			</div>
+		</div>
+		<div id="suggestion-bar">
+			<div class="arrow-up"></div>
+			<div class="command_suggestion" id="suggstion"></div>
+		</div>
 
-      <div class="group floating">    
-       <div class="grouptitle" id="float_title"></div> 
-       <div class="tasklist" id="tasklist_floating">
-
-       </div>
-     </div>
-     <div class="group reserved">    
-       <div class="grouptitle" id="reserved_title"></div> 
-       <div class="tasklist" id="tasklist_reserved">
-          </div>
-     </div>
-    <div class="group mixed">
-        <div class="grouptitle" id="mixed_title"></div>
-        <div class="tasklist" id="tasklist_mixed">
-
-        </div>
-      </div>
-   </div>
-   <div class="commandline">
-    <form name="cmd">
-      <input type="text" name="command" id="command" onkeydown="if(event.keyCode==13){sendCommand();}" onkeyup="getCommandsuggestion();" placeholder="Type your command here" autofocus/>
-    </form>
-  </div>
-</div>
-</div>
-<div id="suggestion-bar">
-  <div class="arrow-up"></div>
-  <div class="command_suggestion" id="suggstion"></div>
-</div>
-
-</div>
+	</div>
 </body>
 </html>
