@@ -153,12 +153,6 @@ public class JListeeParser {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
 	
-	public static void main(String[] args){
-		JListeeParser parse = new JListeeParser();
-		Command what = parse.ParseCommand("update 5 -@ ");
-	}
-	
-		
 	/**
 	 * Return Command object of given inputLine
 	 * 
