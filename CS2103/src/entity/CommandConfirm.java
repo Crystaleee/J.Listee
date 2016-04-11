@@ -42,8 +42,8 @@ public class CommandConfirm implements Command {
     }
 
     private void confirmTask(Display display) {
-        Calendar start = task.getStartDates().get(index);
-        Calendar end = task.getEndDates().get(index);
+        Calendar start = task.getStartDates().get(_timeSlotIndex);
+        Calendar end = task.getEndDates().get(_timeSlotIndex);
         TaskEvent newTask = new TaskEvent(task.getDescription(), task.getLocation(), start, end, task.getTags());
         Command addEvent = new CommandAddEvent(newTask);
         addEvent.execute(display);
