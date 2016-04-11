@@ -177,10 +177,12 @@ public class GUIController {
         displayList(display);
     }
 
-    public static AppPage getShowList() {
-        return showList;
-    }
-
+    /**
+     * pass to logic change storage location
+     * 
+     * @param filePath
+     *            the new user chosen filepath
+     */
     public static void changeFilePath(String filePath) {
         Display display = Logic.changeFilePath(filePath);
 
