@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -235,17 +236,6 @@ public class JListeeParserTest {
 		int expected = 10;
 		assertEquals(expected, actual.size());
 	}
-	
-
-/*	public void testDate(){
-		com.joestelmach.natty.Parser dateParser = new com.joestelmach.natty.Parser();
-		List<DateGroup> dateGroups = dateParser.parse("event task from today 4pm to 6pm".substring(12));
-		Method method = JListeeParser.class.getDeclaredMethod("setAllDates", String.class, <List<DateGroup>>.getClass());
-
-	}
-	*/
-	
-	
-	
+		
 
 }
