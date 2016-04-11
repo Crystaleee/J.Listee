@@ -52,6 +52,7 @@ public class GlobalConstants {
     public static final String MESSAGE_ERROR_INVALID_COMMAND = "You have specified an invalid command";
     public static final String MESSAGE_ERROR_INVALID_INDEX = "Please specify a valid index";
     public static final String MESSAGE_ERROR_INVALID_TIMESLOT = "Please specify a valid time slot";
+    public static final String MESSAGE_ERROR_SPECIFY_BOTH_START_END = "Please specify both start and end dates";
     public static final String MESSAGE_ERROR_NO_LOCATION = "No location to remove!";
     public static final String MESSAGE_ERROR_NO_NUMBER = "please specify a task index";
     public static final String MESSAGE_ERROR_NO_RESERVED_TASKS = "There are no reserved tasks";

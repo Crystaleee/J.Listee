@@ -230,13 +230,12 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     /**
-     * this method checks if user wants to edit timeslot
-     * or add a timeslot
+     * this method checks if user wants to edit timeslot or add a timeslot
      */
     private void editTimeSlot(TaskReserved task) {
         if (_reservedSlotIndex != null) {
             editTime(task);
-        }else{
+        } else {
             addTimeSlot(task);
         }
     }
@@ -245,37 +244,65 @@ public class CommandUpdate extends TaskEvent implements Command {
      * this method adds a time slot to a reserved task
      */
     private void addTimeSlot(TaskReserved task) {
-        task.getStartDates().add(getStartDate());
-        task.getEndDates().add(getEndDate());
+        if ((getStartDate() != null) && (getEndDate() != null)) {
+            task.getStartDates().add(getStartDate());
+            task.getEndDates().add(getEndDate());
+        }else{
+            _msgEdit = GlobalConstants.MESSAGE_ERROR_SPECIFY_BOTH_START_END;
+        }
     }
 
     /**
      * this method edits a time slot of a reserved task
      */
     private void editTime(TaskReserved task) {
+        editStart(task);
+        editEnd(task);
+    }
+
+    private void editStart(TaskReserved task) {
+        Calendar newTime = Calendar.getInstance();
         if (getStartDate() != null) {
             if (isChangeTimeOnly(getStartDate())) {
-                Calendar start = task.getStartDates().get(_reservedSlotIndex - 1);
-                start.set(Calendar.HOUR_OF_DAY, getStartDate().get(Calendar.HOUR_OF_DAY));
-                start.set(Calendar.MINUTE, getStartDate().get(Calendar.MINUTE));
+                newTime.setTimeInMillis(task.getStartDates().get(_reservedSlotIndex - 1).getTimeInMillis());
+                newTime.set(Calendar.HOUR_OF_DAY, getStartDate().get(Calendar.HOUR_OF_DAY));
+                newTime.set(Calendar.MINUTE, getStartDate().get(Calendar.MINUTE));
             } else {
-                task.getStartDates().set(_reservedSlotIndex - 1, getStartDate());
+                newTime.setTimeInMillis(getStartDate().getTimeInMillis());
+            }
+
+            if (newTime.before(task.getEndDates().get(_reservedSlotIndex - 1))) {
+                Calendar start = task.getStartDates().get(_reservedSlotIndex - 1);
+                start.setTimeInMillis(newTime.getTimeInMillis());
+            } else {
+                _msgEdit = GlobalConstants.MESSAGE_ERROR_START_AFTER_END;
             }
         }
+
+    }
+
+    private void editEnd(TaskReserved task) {
+        Calendar newTime = Calendar.getInstance();
         if (getEndDate() != null) {
             if (isChangeTimeOnly(getEndDate())) {
-                Calendar end = task.getEndDates().get(_reservedSlotIndex - 1);
-                end.set(Calendar.HOUR_OF_DAY, getEndDate().get(Calendar.HOUR_OF_DAY));
-                end.set(Calendar.MINUTE, getEndDate().get(Calendar.MINUTE));
+                newTime.setTimeInMillis(task.getEndDates().get(_reservedSlotIndex - 1).getTimeInMillis());
+                newTime.set(Calendar.HOUR_OF_DAY, getEndDate().get(Calendar.HOUR_OF_DAY));
+                newTime.set(Calendar.MINUTE, getEndDate().get(Calendar.MINUTE));
             } else {
-                task.getEndDates().set(_reservedSlotIndex - 1, getEndDate());
+                newTime.setTimeInMillis(getEndDate().getTimeInMillis());
+            }
+            if (newTime.after(task.getStartDates().get(_reservedSlotIndex - 1))) {
+                Calendar end = task.getEndDates().get(_reservedSlotIndex - 1);
+                end.setTimeInMillis(newTime.getTimeInMillis());
+            } else {
+                _msgEdit = GlobalConstants.MESSAGE_ERROR_START_AFTER_END;
             }
         }
     }
 
     /**
-     * this method checks for any invalid parameters when
-     * user has specified to edit a reserved task
+     * this method checks for any invalid parameters when user has specified to
+     * edit a reserved task
      */
     private boolean isInvalidEditReserved(TaskReserved task) {
         if (hasNoLocationToRemove(task)) {
@@ -316,8 +343,8 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     /**
-     * this method checks for any invalid parameters when
-     * user has specified to edit a floating task
+     * this method checks for any invalid parameters when user has specified to
+     * edit a floating task
      */
     private boolean isInvalidEditFloat(TaskFloat task) {
         if (hasNoLocationToRemove(task)) {
@@ -337,8 +364,8 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     /**
-     * this method checks for any invalid parameters when
-     * user has specified to edit an event task
+     * this method checks for any invalid parameters when user has specified to
+     * edit an event task
      */
     private boolean isInvalidEditEvent(TaskEvent task) {
         if (hasNoLocationToRemove(task)) {
@@ -392,8 +419,8 @@ public class CommandUpdate extends TaskEvent implements Command {
     }
 
     /**
-     * this method checks for any invalid parameters when
-     * user has specified to edit a deadline task
+     * this method checks for any invalid parameters when user has specified to
+     * edit a deadline task
      */
     private boolean isInvalidEditDeadline(TaskDeadline task) {
         if (hasNoLocationToRemove(task)) {
@@ -485,7 +512,7 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
         return false;
     }
-    
+
     /**
      * checks if there is a conversion of task type from deadline to event/float
      * and converts accordingly
@@ -511,7 +538,6 @@ public class CommandUpdate extends TaskEvent implements Command {
         }
         return hasTaskChanged;
     }
-
 
     /**
      * sets the task indices array for UI to use in the animation
