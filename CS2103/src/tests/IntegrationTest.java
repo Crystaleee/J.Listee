@@ -61,8 +61,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -72,8 +74,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 15:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks=["
+		        + "Description: Deadline Test\r\n"
+				+ "Deadline: 14/04/16 15:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -83,8 +88,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 23:59\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks=["
+		        + "Description: Deadline Test\r\n"
+		        + "Deadline: 14/04/16 23:59\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -94,8 +102,12 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"events=[Description: Event Test\r\nStart Date: 14/04/16 15:00\r\nEnd Date: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("events=["
+		        + "Description: Event Test\r\n"
+		        + "Start Date: 14/04/16 15:00\r\n"
+		        + "End Date: 14/04/16 16:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -105,9 +117,8 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertEquals(
-				"Display [message=Please enter a description, events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]",
-				display.toString());
+		assertEquals("Display [message=Please enter a description, events=[], deadlineTasks=[], "
+				+ "floatTasks=[], reservedTasks=[], completedTasks=[]]", display.toString());
 	}
 
 	/************************
@@ -122,8 +133,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: New Description\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: New Description\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -134,8 +147,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: newPlace\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+		        + "Location: newPlace\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -146,8 +161,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #newTag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #newTag\r\n\r\n]"));
 	}
 
 	@Test
@@ -158,8 +175,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: New Description\r\nDeadline: 11/04/16 23:59\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks=["
+		        + "Description: New Description\r\n"
+		        + "Deadline: 11/04/16 23:59\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -170,8 +190,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 15/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks="
+		        + "[Description: Deadline Test\r\n"
+		        + "Deadline: 15/04/16 16:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -182,8 +205,12 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"events=[Description: Event Test\r\nStart Date: 14/04/16 12:00\r\nEnd Date: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("events=["
+		        + "Description: Event Test\r\n"
+		        + "Start Date: 14/04/16 12:00"
+		        + "\r\nEnd Date: 14/04/16 16:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -194,8 +221,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"events=[Description: Event Test\r\nStart Date: 14/04/16 15:00\r\nEnd Date: 14/04/16 19:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("events=["
+		        + "Description: Event Test\r\n"
+		        + "Start Date: 14/04/16 15:00\r\n"
+		        + "End Date: 14/04/16 19:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -206,8 +235,12 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"events=[Description: Event Test\r\nStart Date: 13/04/16 21:00\r\nEnd Date: 14/04/16 10:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("events=["
+		        + "Description: Event Test\r\n"
+		        + "Start Date: 13/04/16 21:00\r\n"
+		        + "End Date: 14/04/16 10:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	/************************
@@ -258,7 +291,8 @@ public class IntegrationTest {
 
 		assertEquals(expected, actual);
 		assertTrue(display.toString()
-				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]"));
+				.contains("events=[], deadlineTasks=[], floatTasks=[], "
+		        + "reservedTasks=[], completedTasks=[]]"));
 	}
 
 	@Test
@@ -272,7 +306,8 @@ public class IntegrationTest {
 
 		assertEquals(expected, actual);
 		assertTrue(display.toString()
-				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]]"));
+				.contains("events=[], deadlineTasks=[], floatTasks=[], "
+		        + "reservedTasks=[], completedTasks=[]]"));
 	}
 
 	@Test
@@ -283,8 +318,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	/*************************
@@ -298,8 +335,12 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"reservedTasks=[Description: Reservation Test\r\nStart Dates: 14/04/16 15:00\r\nEnd Dates: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("reservedTasks=["
+		        + "Description: Reservation Test\r\n"
+		        + "Start Dates: 14/04/16 15:00\r\n"
+		        + "End Dates: 14/04/16 16:00\r\n"
+				+ "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -310,8 +351,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"reservedTasks=[Description: Reservation Test\r\nStart Dates: 14/04/16 15:00, 15/04/16 16:00\r\nEnd Dates: 14/04/16 16:00, 15/04/16 18:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("reservedTasks=["
+		        + "Description: Reservation Test\r\n"
+	        	+ "Start Dates: 14/04/16 15:00, 15/04/16 16:00\r\n"
+				+ "End Dates: 14/04/16 16:00, 15/04/16 18:00\r\n"
+		        + "Location: NUS\r\nTags: #tag\r\n\r\n]"));
 	}
 
 	/***********************
@@ -338,8 +382,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+	         	+ "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -364,7 +410,8 @@ public class IntegrationTest {
 
 		assertEquals(expected, actual);
 		assertTrue(display.toString()
-				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]"));
+				.contains("events=[], deadlineTasks=[], floatTasks=[], "
+		        + "reservedTasks=[], completedTasks=[]"));
 	}
 
 	@Test
@@ -375,8 +422,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -389,8 +438,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString()
-				.contains("floatTasks=[Description: Floating Test\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("floatTasks=["
+		        + "Description: Floating Test\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -404,7 +455,8 @@ public class IntegrationTest {
 
 		assertEquals(expected, actual);
 		assertTrue(display.toString()
-				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]"));
+				.contains("events=[], deadlineTasks=[], floatTasks=[], "
+		        + "reservedTasks=[], completedTasks=[]"));
 	}
 
 	/*****************
@@ -420,8 +472,12 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"events=[Description: Reservation Test\r\nStart Date: 14/04/16 15:00\r\nEnd Date: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("events=["
+		        + "Description: Reservation Test\r\n"
+		        + "Start Date: 14/04/16 15:00\r\n"
+		        + "End Date: 14/04/16 16:00\r\n"
+				+ "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -447,8 +503,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 17:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks=["
+		        + "Description: Deadline Test\r\n"
+	        	+ "Deadline: 14/04/16 17:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -459,8 +518,11 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 16/04/16 15:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks=["
+		        + "Description: Deadline Test\r\n"
+		        + "Deadline: 16/04/16 15:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 
 	@Test
@@ -471,7 +533,10 @@ public class IntegrationTest {
 		String actual = display.getMessage();
 
 		assertEquals(expected, actual);
-		assertTrue(display.toString().contains(
-				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 15:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+		assertTrue(display.toString().contains("deadlineTasks=["
+		        + "Description: Deadline Test\r\n"
+		        + "Deadline: 14/04/16 15:00\r\n"
+		        + "Location: NUS\r\n"
+		        + "Tags: #tag\r\n\r\n]"));
 	}
 }
