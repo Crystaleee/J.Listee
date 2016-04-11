@@ -1,70 +1,56 @@
-四月 11, 2016 6:54:28 下午 logic.Logic initializeProgram
+四月 11, 2016 7:01:00 下午 logic.Logic createFile
+信息: Logic: Create filepath C:\Users\zhu\Documents\J.Listee.txt
+四月 11, 2016 7:01:00 下午 logic.Logic initializeProgram
 信息: Logic: Initialise ProgramC:\Users\zhu\Documents\J.Listee.txt
-四月 11, 2016 6:54:28 下午 storage.Storage addFloatingTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addFloatingTaskToList
 信息: Successfully read floating task: send intern email
-四月 11, 2016 6:54:28 下午 storage.Storage addFloatingTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addFloatingTaskToList
 信息: Successfully read floating task: confirm family tour schedule
-四月 11, 2016 6:54:28 下午 storage.Storage addFloatingTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addFloatingTaskToList
 信息: Successfully read floating task: photoshop photos
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: project
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: CS2103 group meeting
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: lab5
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: peer evaluation
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: UI project
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: UI presentation
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: SE FINAL
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: UI FINAL
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: CN FINAL
-四月 11, 2016 6:54:28 下午 storage.Storage addDeadlineTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
 信息: Successfully read deadline task: CG FINAL
-四月 11, 2016 6:54:28 下午 storage.Storage addEventTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addEventTaskToList
 信息: Successfully read event: Bali travel
-四月 11, 2016 6:54:28 下午 storage.Storage addEventTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addEventTaskToList
 信息: Successfully read event: family Singapore tour
-四月 11, 2016 6:54:28 下午 storage.Storage addReservedTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addReservedTaskToList
 信息: Successfully read reserved task: hello3
-四月 11, 2016 6:54:28 下午 storage.Storage addCompletedTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
 信息: Successfully read completed task: fetch clothes  balcony
-四月 11, 2016 6:54:28 下午 storage.Storage addCompletedTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
 信息: Successfully read completed task: borrow key and check mail box
-四月 11, 2016 6:54:28 下午 storage.Storage addCompletedTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
 信息: Successfully read completed task: longer feedback
-四月 11, 2016 6:54:28 下午 storage.Storage addCompletedTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
 信息: Successfully read completed task: check Taobao express delivery
-四月 11, 2016 6:54:28 下午 storage.Storage addCompletedTaskToList
+四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
 信息: Successfully read completed task: Lankawi travel
-四月 11, 2016 6:54:28 下午 entity.CommandShow execute
+四月 11, 2016 7:01:01 下午 entity.CommandShow execute
 信息: Show: No errors
-四月 11, 2016 6:54:29 下午 parser.JListeeParser ParseCommand
+四月 11, 2016 7:01:01 下午 parser.JListeeParser ParseCommand
 信息: commandType: add
-四月 11, 2016 6:54:29 下午 parser.JListeeParser parseAdd
+四月 11, 2016 7:01:01 下午 parser.JListeeParser parseAdd
 信息: Preposition Index for parseAdd: 5
-四月 11, 2016 6:54:33 下午 parser.JListeeParser parseAdd
+四月 11, 2016 7:01:05 下午 parser.JListeeParser parseAdd
 信息: is event?: false
-四月 11, 2016 6:54:33 下午 parser.JListeeParser parseAdd
+四月 11, 2016 7:01:05 下午 parser.JListeeParser parseAdd
 信息: is deadline?: false
-四月 11, 2016 6:54:46 下午 logic.Logic executeUserCommand
-信息: Logic: Parsing user input show
-四月 11, 2016 6:54:46 下午 parser.JListeeParser ParseCommand
-信息: commandType: show
-四月 11, 2016 6:54:46 下午 logic.Logic executeCommand
-信息: Logic: Executing command 
-四月 11, 2016 6:54:46 下午 entity.CommandShow execute
-信息: Show: Show all
-四月 11, 2016 6:55:06 下午 logic.Logic executeUserCommand
-信息: Logic: Parsing user input show /done
-四月 11, 2016 6:55:06 下午 parser.JListeeParser ParseCommand
-信息: commandType: show
-四月 11, 2016 6:55:06 下午 logic.Logic executeCommand
-信息: Logic: Executing command 
-四月 11, 2016 6:55:06 下午 entity.CommandShow execute
-信息: Show: No errors

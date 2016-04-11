@@ -1,9 +1,12 @@
 package gui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import parser.InputSuggestion;
 import javafx.stage.DirectoryChooser;
@@ -150,5 +153,26 @@ public class Bridge {
         } else
             // return "" when there's no later one
             return "";
+    }
+    
+    /**
+     * enable user to choose folder to put file in
+     */
+    public void chooseFolder() {
+        DirectoryChooser fileChooser = new DirectoryChooser();
+        File selectedFile = fileChooser.showDialog(App.stage);
+
+        String filePath = null;
+        if (selectedFile != null) {
+            filePath = selectedFile.getAbsolutePath() + FILENAME;
+            // create file under the file folder chosen by user
+            try {
+                GUIController.createFile(filePath);
+                // display starting page
+                GUIController.initializeList(filePath);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
     }
 }
