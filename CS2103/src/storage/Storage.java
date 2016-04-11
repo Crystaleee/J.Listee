@@ -434,9 +434,8 @@ public class Storage {
 	 * @throws IOException If I/O operations fail.
 	 */
 	private Task readCompletedFloatingTask(BufferedReader br, String line, String description) throws IOException {
-		Task task;
 		String tags = br.readLine();
-		task = processFloatingTask(description, line, tags);
+		Task task = processFloatingTask(description, line, tags);
 		return task;
 	}
 
@@ -450,10 +449,9 @@ public class Storage {
 	 * @throws IOException If I/O operations fail.
 	 */
 	private Task readCompletedDeadlineTask(BufferedReader br, String line, String description) throws IOException {
-		Task task;
 		String location = br.readLine();
 		String tags = br.readLine();
-		task = processDeadlineTask(description, line, location, tags);
+		Task task = processDeadlineTask(description, line, location, tags);
 		return task;
 	}
 
@@ -467,11 +465,10 @@ public class Storage {
 	 * @throws IOException If I/O operations fail.
 	 */
 	private Task readCompletedEventTask(BufferedReader br, String line, String description) throws IOException {
-		Task task;
 		String endDate = br.readLine();
 		String location = br.readLine();
 		String tags = br.readLine();
-		task = processEventTask(description, line, endDate, location, tags);
+		Task task = processEventTask(description, line, endDate, location, tags);
 		return task;
 	}
 
@@ -485,11 +482,10 @@ public class Storage {
 	 * @throws IOException If I/O operations fail.
 	 */
 	private Task readCompletedReservedTask(BufferedReader br, String line, String description) throws IOException {
-		Task task;
 		String endDates = br.readLine();
 		String location = br.readLine();
 		String tags = br.readLine();
-		task = processReservedTask(description, line, endDates, location, tags);
+		Task task = processReservedTask(description, line, endDates, location, tags);
 		return task;
 	}
 

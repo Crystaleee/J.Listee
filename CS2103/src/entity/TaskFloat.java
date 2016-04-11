@@ -28,8 +28,8 @@ public class TaskFloat extends Task {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format(STRING_DESCRIPTION, this.getDescription()));
+		
 		String location = this.getLocation();
-
 		if (location == null) {
 			location = "";
 		}

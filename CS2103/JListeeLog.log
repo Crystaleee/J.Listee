@@ -1,18 +1,34 @@
-Apr 11, 2016 9:47:31 PM logic.Logic initializeProgram
+Apr 11, 2016 9:53:43 PM logic.Logic initializeProgram
 INFO: Logic: Initialise ProgramC:\Users\Chloe\Desktop\J.Listee.txt
-Apr 11, 2016 9:47:31 PM storage.Storage addDeadlineTaskToList
+Apr 11, 2016 9:53:43 PM storage.Storage addDeadlineTaskToList
 INFO: Successfully read deadline task: CS2103 code and user manual
-Apr 11, 2016 9:47:31 PM storage.Storage addDeadlineTaskToList
+Apr 11, 2016 9:53:43 PM storage.Storage addDeadlineTaskToList
 INFO: Successfully read deadline task: CS2102 Presentation
-Apr 11, 2016 9:47:31 PM storage.Storage addDeadlineTaskToList
+Apr 11, 2016 9:53:43 PM storage.Storage addDeadlineTaskToList
 INFO: Successfully read deadline task: DL4
-Apr 11, 2016 9:47:31 PM entity.CommandShow execute
+Apr 11, 2016 9:53:43 PM entity.CommandShow execute
 INFO: Show: No errors
-Apr 11, 2016 9:47:31 PM parser.JListeeParser ParseCommand
+Apr 11, 2016 9:53:43 PM parser.JListeeParser ParseCommand
 INFO: commandType: add
-Apr 11, 2016 9:47:31 PM parser.JListeeParser parseAdd
+Apr 11, 2016 9:53:43 PM parser.JListeeParser parseAdd
 INFO: Preposition Index for parseAdd: 5
-Apr 11, 2016 9:47:32 PM parser.JListeeParser parseAdd
+Apr 11, 2016 9:53:44 PM parser.JListeeParser parseAdd
 INFO: is event?: false
-Apr 11, 2016 9:47:32 PM parser.JListeeParser parseAdd
+Apr 11, 2016 9:53:44 PM parser.JListeeParser parseAdd
 INFO: is deadline?: false
+Apr 11, 2016 9:53:46 PM logic.Logic executeUserCommand
+INFO: Logic: Parsing user input show
+Apr 11, 2016 9:53:46 PM parser.JListeeParser ParseCommand
+INFO: commandType: show
+Apr 11, 2016 9:53:46 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 9:53:46 PM entity.CommandShow execute
+INFO: Show: Show all
+Apr 11, 2016 9:53:49 PM logic.Logic executeUserCommand
+INFO: Logic: Parsing user input show /done
+Apr 11, 2016 9:53:49 PM parser.JListeeParser ParseCommand
+INFO: commandType: show
+Apr 11, 2016 9:53:49 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 9:53:49 PM entity.CommandShow execute
+INFO: Show: No tasks

@@ -69,8 +69,8 @@ public class Task implements java.io.Serializable {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format(STRING_DESCRIPTION, this.getDescription()));
+	
 		String location = this.getLocation();
-
 		if (location == null) {
 			location = "";
 		}
