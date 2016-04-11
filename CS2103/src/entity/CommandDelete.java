@@ -16,8 +16,8 @@ public class CommandDelete implements Command {
     private boolean _saveHistory = true;
     private boolean _updateFile = true;
     private String _invalidNumbers = "You have specified invalid numbers: ";
-    private String msgDelete = "deleted: ";
-    private Logger logger = GlobalLogger.getLogger();
+    private String _msgDelete = "deleted: ";
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandDelete() {
         this._taskNumbers = null;
@@ -34,10 +34,10 @@ public class CommandDelete implements Command {
         this._display = display;
         if (hasInvalidTaskNumbers()) {
             setInvalidDisplay();
-            logger.log(Level.INFO, "Delete: Index Invalid");
+            _logger.log(Level.INFO, "Delete: Index Invalid");
             return _display;
         } else {
-            logger.log(Level.INFO, "Delete: No errors");
+            _logger.log(Level.INFO, "Delete: No errors");
             deleteTasksFromList();
         }
         return _display;
@@ -52,7 +52,7 @@ public class CommandDelete implements Command {
         return false;
     }
 
-    /*
+    /**
      * sets variables when the command has invalid parametersS
      */
     private void setInvalidDisplay() {
@@ -108,7 +108,7 @@ public class CommandDelete implements Command {
         if (invalidTaskNumbers.size() == 0) {
             _invalidNumbers += taskNum;
         } else {
-            _invalidNumbers += ", " + taskNum;
+            _invalidNumbers += GlobalConstants.COMMA_SPACE + taskNum;
         }
     }
 
@@ -126,7 +126,7 @@ public class CommandDelete implements Command {
         }
     }
 
-    /*
+    /**
      * deletes one/multiple visible tasks
      */
     private void deleteMultipleTasks() {
@@ -137,10 +137,10 @@ public class CommandDelete implements Command {
             deletedTask = removeTask(_taskNumbers.get(i) - 1 - i);
             feedbackDeletedTasks(deletedTask, i);
         }
-        setDisplay(msgDelete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
+        setDisplay(_msgDelete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
     }
 
-    /*
+    /**
      * deletes all visible tasks
      */
     private void deleteAllShownTasks() {
@@ -160,10 +160,10 @@ public class CommandDelete implements Command {
 
     private void feedbackDeletedTasks(Task deletedTask, int i) {
         if (i == 0) {
-            msgDelete += GlobalConstants.INVERTED_COMMAS + deletedTask.getDescription()
+            _msgDelete += GlobalConstants.INVERTED_COMMAS + deletedTask.getDescription()
                     + GlobalConstants.INVERTED_COMMAS;
         } else {
-            msgDelete += ", \"" + deletedTask.getDescription() + GlobalConstants.INVERTED_COMMAS;
+            _msgDelete += ", \"" + deletedTask.getDescription() + GlobalConstants.INVERTED_COMMAS;
         }
     }
 

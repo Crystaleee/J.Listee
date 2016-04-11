@@ -14,7 +14,7 @@ public class CommandAddFloatTask implements Command {
     private TaskFloat _task;
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandAddFloatTask() {
         _task = null;
@@ -31,7 +31,7 @@ public class CommandAddFloatTask implements Command {
     public Display execute(Display display) {
         assert display != null: "AddFloat: null display";
         if (hasNoDescription()) {
-            logger.log(Level.INFO, "AddFloat: No desc");
+            _logger.log(Level.INFO, "AddFloat: No desc");
             setInvalidDisplay(display);
             return display;
         }
@@ -55,7 +55,7 @@ public class CommandAddFloatTask implements Command {
         return false;
     }
 
-    /*
+    /**
      * sets variables when the command has invalid parametersS
      */
     private void setInvalidDisplay(Display display) {

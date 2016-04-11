@@ -1,4 +1,4 @@
-/*
+/**
  * @@author A0139995E
  */
 package entity;
@@ -15,7 +15,7 @@ public class CommandAddEvent implements Command {
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
     private ArrayList<Integer> _conflictingTasksIndices = new ArrayList<Integer>();
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandAddEvent() {
         _task = null;
@@ -34,12 +34,12 @@ public class CommandAddEvent implements Command {
         assert display != null: "AddEvent: null display";
         
         if (hasNoDescription()) {
-            logger.log(Level.INFO, "AddEvent: No desc");
+            _logger.log(Level.INFO, "AddEvent: No desc");
             setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DESCRIPTION);
             return display;
         }
         if (isInvalidTimeRange()) {
-            logger.log(Level.INFO, "AddEvent: Invalid time");
+            _logger.log(Level.INFO, "AddEvent: Invalid time");
             setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DATE_RANGE);
             return display;
         }
@@ -67,7 +67,7 @@ public class CommandAddEvent implements Command {
         return false;
     }
 
-    /*
+    /**
      * sets variables when the command has invalid parametersS
      */
     private void setInvalidDisplay(Display display, String msg) {
@@ -101,7 +101,7 @@ public class CommandAddEvent implements Command {
     }
 
 
-    /*
+    /**
      * This method searches for conflicting reserved tasks
      */
     private void getConflictingReservedTasks(Display display) {
@@ -114,7 +114,6 @@ public class CommandAddEvent implements Command {
                     if (isValidIndex(index)) {
                         index = getConflictingTaskReservedIndex(display, index);
                         _conflictingTasksIndices.add(index);
-                        // System.out.println(index);
                     }
                     break;
                 }
@@ -131,7 +130,7 @@ public class CommandAddEvent implements Command {
         return index >= 0;
     }
     
-    /*
+    /**
      * This method searches for conflicting events
      */
     private void getConflictingEvents(Display display) {
@@ -174,7 +173,7 @@ public class CommandAddEvent implements Command {
         taskList.add(index, _task);
     }
 
-    /*
+    /**
      * This method searches for the index to slot the deadline task in since we
      * are sorting the list in order of earliest start time first
      */

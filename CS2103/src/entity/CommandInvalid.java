@@ -11,16 +11,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CommandInvalid implements Command {
-	private boolean updateFile = false;
-	private boolean saveHistory = false;
-    private Logger logger = GlobalLogger.getLogger();
+	private boolean _updateFile = false;
+	private boolean _saveHistory = false;
+    private Logger _logger = GlobalLogger.getLogger();
 
 	public CommandInvalid() {
 	}
 
 	public Display execute(Display display) {
         assert display != null: "Invalid: null display";
-        logger.log(Level.INFO, "Invalid Command");
+        _logger.log(Level.INFO, "Invalid Command");
 	    setDisplay(display);
 		return display;
 	}
@@ -33,10 +33,10 @@ public class CommandInvalid implements Command {
     }
 	
 	public boolean requiresSaveHistory() {
-		return saveHistory;
+		return _saveHistory;
 	}
 
 	public boolean requiresUpdateFile() {
-		return updateFile;
+		return _updateFile;
 	}
 }

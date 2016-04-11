@@ -21,7 +21,7 @@ public class CommandUndone implements Command {
     private String _msgInvalidNum = "You have specified invalid task numbers: ";
     private boolean _saveHistory = true;
     private boolean _updateFile = true;
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandUndone() {
         this._taskNumbers = null;
@@ -34,11 +34,11 @@ public class CommandUndone implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        assert oldDisplay != null: "Undone: null display";
+        assert oldDisplay != null : "Undone: null display";
         this._display = oldDisplay;
         if (_taskNumbers != null) {
             if (hasInvalidTaskNumbers()) {
-                logger.log(Level.INFO, "Undone: Invalid Indices");
+                _logger.log(Level.INFO, "Undone: Invalid Indices");
                 setInvalidDisplay();
                 return oldDisplay;
             }
@@ -50,7 +50,7 @@ public class CommandUndone implements Command {
         return _display;
     }
 
-    /*
+    /**
      * sets up variables if command has invalid parameters
      */
     private void setInvalidDisplay() {
@@ -67,7 +67,7 @@ public class CommandUndone implements Command {
         getTaskIndices();
     }
 
-    /*
+    /**
      * gets the new indices of the undone tasks for animation purposes
      */
     private void getTaskIndices() {
@@ -123,7 +123,7 @@ public class CommandUndone implements Command {
         return numOfTasks;
     }
 
-    /*
+    /**
      * set feedback msg for user
      */
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
@@ -170,7 +170,7 @@ public class CommandUndone implements Command {
         for (int i = numOfVisibleCompletedTasks - 1; i >= 0; i--) {
             Task completedTask = _display.getCompletedTasks().remove(i);
             markUndoneTask(completedTask);
-            
+
         }
         _display.setVisibleCompletedTasks(_display.getCompletedTasks());
         _display.setMessage(GlobalConstants.MESSAGE_ALL_UNDONE);
@@ -185,7 +185,8 @@ public class CommandUndone implements Command {
             _msgUndone += GlobalConstants.INVERTED_COMMAS + undoneTask.getDescription()
                     + GlobalConstants.INVERTED_COMMAS;
         } else {
-            _msgUndone += ", \"" + undoneTask.getDescription() + GlobalConstants.INVERTED_COMMAS;
+            _msgUndone += GlobalConstants.COMMA_SPACE_INVERTED_COMMAS + undoneTask.getDescription()
+                    + GlobalConstants.INVERTED_COMMAS;
         }
     }
 

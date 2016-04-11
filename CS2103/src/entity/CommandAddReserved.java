@@ -15,7 +15,7 @@ public class CommandAddReserved implements Command {
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
     private ArrayList<Integer> _conflictingTasksIndices = new ArrayList<Integer>();
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandAddReserved() {
         _task = null;
@@ -33,12 +33,12 @@ public class CommandAddReserved implements Command {
     public Display execute(Display display) {
         assert display != null: "AddReserved: null display";
         if (hasNoDescription()) {
-            logger.log(Level.INFO, "AddReserved: No desc");
+            _logger.log(Level.INFO, "AddReserved: No desc");
             setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_DESCRIPTION);
             return display;
         }
         if (containsInvalidTimeSlots()) {
-            logger.log(Level.INFO, "AddReserved: Invalid time");
+            _logger.log(Level.INFO, "AddReserved: Invalid time");
             setInvalidDisplay(display, GlobalConstants.MESSAGE_ERROR_TIME_RANGE);
             return display;
         }
@@ -62,7 +62,7 @@ public class CommandAddReserved implements Command {
         return false;
     }
 
-    /*
+    /**
      * sets variables when the command has invalid parametersS
      */
     private void setInvalidDisplay(Display display, String msg) {
@@ -90,7 +90,7 @@ public class CommandAddReserved implements Command {
         display.setConflictingTasksIndices(_conflictingTasksIndices);
     }
 
-    /*
+    /**
      * This method searches for conflicting reserved tasks
      */
     private void getConflictingReservedTasks(Display display) {
@@ -123,7 +123,7 @@ public class CommandAddReserved implements Command {
         return index >= 0;
     }
 
-    /*
+    /**
      * This method searches for conflicting events
      */
     private void getConflictingEvents(Display display) {

@@ -3,8 +3,19 @@ package entity;
 
 public class GlobalConstants {
 
-    public static final String INVERTED_COMMAS = "\"";
+    public static final String ALL_TASKS = "all tasks";
+    public static final String AT = " at ";
+    public static final String COMMA_SPACE = ", ";
+    public static final String COMMA_SPACE_INVERTED_COMMAS = ", \"";
+    public static final String CONTAINING = " containing ";
+    public static final String DATE_FORMAT = "dd/MM/yy HH:mm";
     public static final String EMPTY_STRING = "";
+    public static final String FROM = " from ";
+    public static final String INVERTED_COMMAS = "\"";
+    public static final String SPACE = " ";
+    public static final String TAGGED = " tagged";
+    public static final String TASKS = "tasks";
+    public static final String TO = " to ";
     public static final String MINUTE = "minute";
     public static final String HOUR = "hour";
     public static final String DAY = "day";

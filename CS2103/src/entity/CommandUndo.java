@@ -15,25 +15,25 @@ import java.util.logging.Logger;
 import history.History;
 
 public class CommandUndo implements Command {
-    private boolean updateFile = true;
-    private boolean saveHistory = false;
-    private int count;
-    private Logger logger = GlobalLogger.getLogger();
+    private boolean _updateFile = true;
+    private boolean _saveHistory = false;
+    private int _count;
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandUndo() {
-        count = -1;
+        _count = -1;
     }
 
     public CommandUndo(int count) {
-        this.count = -1 * count;
+        this._count = -1 * count;
     }
 
     public Display execute(Display display) {
         assert display != null: "Undo: null display";
-        Display prevDisplay = History.getDisplay(count);
+        Display prevDisplay = History.getDisplay(_count);
         if (prevDisplay == null) {
-            logger.log(Level.INFO, "Undo: At last state");
-            updateFile = false;
+            _logger.log(Level.INFO, "Undo: At last state");
+            _updateFile = false;
             display.setMessage(GlobalConstants.MESSAGE_ERROR_UNDO);
             return display;
         }
@@ -52,10 +52,10 @@ public class CommandUndo implements Command {
     }
 
     public boolean requiresSaveHistory() {
-        return saveHistory;
+        return _saveHistory;
     }
 
     public boolean requiresUpdateFile() {
-        return updateFile;
+        return _updateFile;
     }
 }

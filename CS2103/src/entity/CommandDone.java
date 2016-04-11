@@ -44,7 +44,7 @@ public class CommandDone implements Command {
         return _display;
     }
 
-    /*
+    /**
      * sets variables when the command has invalid parametersS
      */
     private void setInvalidDisplay() {
@@ -72,7 +72,7 @@ public class CommandDone implements Command {
     }
 
     private boolean hasInvalidTaskNumbers() {
-        if(hasNoTaskNumber()){
+        if (hasNoTaskNumber()) {
             return true;
         }
         if (isDoneAll()) {
@@ -102,14 +102,14 @@ public class CommandDone implements Command {
         return numOfTasks;
     }
 
-    /*
+    /**
      * sets the feedback for invalid task indices
      */
     private void feedbackInvalidNumbers(ArrayList<Integer> invalidTaskNumbers, int taskNum) {
         if (invalidTaskNumbers.size() == 0) {
             _msgInvalidNumbers += taskNum;
         } else {
-            _msgInvalidNumbers += ", " + taskNum;
+            _msgInvalidNumbers += GlobalConstants.COMMA_SPACE + taskNum;
         }
     }
 
@@ -127,7 +127,7 @@ public class CommandDone implements Command {
         }
     }
 
-    /*
+    /**
      * Mark one/multiple tasks as done
      */
     private void doneMultipleTasks() {
@@ -137,10 +137,11 @@ public class CommandDone implements Command {
             doneTask = markTaskAsDone(_taskNumbers.get(i) - 1 - i);
             feedbackCompletedTasks(doneTask, i);
         }
-        setDisplay(_msgComplete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers, new ArrayList<Integer>());
+        setDisplay(_msgComplete, GlobalConstants.GUI_ANIMATION_DELETE, _taskNumbers,
+                new ArrayList<Integer>());
     }
 
-    /*
+    /**
      * Mark all visible tasks as done
      */
     private void doneAllVisibleTasks() {
@@ -160,9 +161,11 @@ public class CommandDone implements Command {
 
     private void feedbackCompletedTasks(Task doneTask, int i) {
         if (i == 0) {
-            _msgComplete += "\"" + doneTask.getDescription() + "\"";
+            _msgComplete += GlobalConstants.INVERTED_COMMAS + doneTask.getDescription()
+                    + GlobalConstants.INVERTED_COMMAS;
         } else {
-            _msgComplete += ", \"" + doneTask.getDescription() + "\"";
+            _msgComplete += GlobalConstants.COMMA_SPACE_INVERTED_COMMAS + doneTask.getDescription()
+                    + GlobalConstants.INVERTED_COMMAS;
         }
     }
 

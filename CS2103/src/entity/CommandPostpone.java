@@ -18,7 +18,7 @@ public class CommandPostpone implements Command {
     private String _msg;
     private boolean _updateFile = true;;
     private boolean _saveHistory = true;
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandPostpone() {
         this._taskNumber = -1;
@@ -35,7 +35,7 @@ public class CommandPostpone implements Command {
     public Display execute(Display display) {
         assert display != null: "Postpone: null display";
         if (isInvalidCommand(display)) {
-            logger.log(Level.INFO, "Postpone: Invalid parameters");
+            _logger.log(Level.INFO, "Postpone: Invalid parameters");
             setInvalidDisplay(display);
             return display;
         }
@@ -46,16 +46,16 @@ public class CommandPostpone implements Command {
 
     public void postpone(Display display) {
         if (_taskNumber < display.getVisibleDeadlineTasks().size()) {
-            logger.log(Level.INFO, "Postpone: Postpone deadline");
+            _logger.log(Level.INFO, "Postpone: Postpone deadline");
             postponeDeadline(display);
         } else {
             _taskNumber -= display.getVisibleDeadlineTasks().size();
-            logger.log(Level.INFO, "Postpone: Postpone event");
+            _logger.log(Level.INFO, "Postpone: Postpone event");
             postponeEvent(display);
         }
     }
 
-    /*
+    /**
      * checks which parameters are being postponed
      * and increment them accordingly
      */
@@ -92,7 +92,7 @@ public class CommandPostpone implements Command {
         setOverdue(task);
     }
 
-    /*
+    /**
      * checks which parameters are being postponed
      * and increment them accordingly
      */
@@ -124,7 +124,7 @@ public class CommandPostpone implements Command {
         setOverdue(task);
     }
 
-    /*
+    /**
      * This method resets the overdue flag
      * of the postponed task
      */
@@ -187,7 +187,7 @@ public class CommandPostpone implements Command {
         return false;
     }
 
-    /*
+    /**
      * this method takes into accounts that only
      * deadline tasks and events can be postponed
      */

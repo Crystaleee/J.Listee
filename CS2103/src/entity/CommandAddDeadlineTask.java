@@ -15,7 +15,7 @@ public class CommandAddDeadlineTask implements Command {
     private TaskDeadline _task;
     private boolean _updateFile = true;
     private boolean _saveHistory = true;
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandAddDeadlineTask() {
         _task = null;
@@ -33,7 +33,7 @@ public class CommandAddDeadlineTask implements Command {
     public Display execute(Display display) {
         assert display != null: "AddDeadline: null display";
         if (hasNoDescription()) {
-            logger.log(Level.INFO, "AddDeadline: No desc");
+            _logger.log(Level.INFO, "AddDeadline: No desc");
             setInvalidDisplay(display);
             return display;
         }
@@ -58,7 +58,7 @@ public class CommandAddDeadlineTask implements Command {
         return false;
     }
 
-    /*
+    /**
      * sets variables when the command has invalid parametersS
      */
     private void setInvalidDisplay(Display display) {
@@ -89,7 +89,7 @@ public class CommandAddDeadlineTask implements Command {
         taskList.add(index, _task);
     }
 
-    /*
+    /**
      * This method searches for the index to slot the deadline task in since we
      * are sorting the list in order of earliest deadline first
      */

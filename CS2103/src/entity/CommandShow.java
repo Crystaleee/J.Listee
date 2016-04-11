@@ -14,13 +14,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CommandShow implements Command {
-    private String msgShow = "Displaying ";
+    private String _msgShow = "Displaying ";
     private boolean _updateFile = false;
     private boolean _saveHistory = true;
     private TaskEvent _searchedTask;
     private Display _display;
     private ArrayList<String> _taskTypes;
-    private Logger logger = GlobalLogger.getLogger();
+    private Logger _logger = GlobalLogger.getLogger();
 
     public CommandShow() {
         _searchedTask = null;
@@ -68,15 +68,15 @@ public class CommandShow implements Command {
     }
 
     public Display execute(Display oldDisplay) {
-        assert oldDisplay != null: "Show: null display";
+        assert oldDisplay != null : "Show: null display";
         initialiseDisplay(oldDisplay);
         if (isShowAll()) {
-            logger.log(Level.INFO, "Show: Show all");
+            _logger.log(Level.INFO, "Show: Show all");
             setShowAll(oldDisplay);
             return oldDisplay;
         }
         if (isInvalidDateRange()) {
-            logger.log(Level.INFO, "Show: Invalid time range");
+            _logger.log(Level.INFO, "Show: Invalid time range");
             setInvalidDisplay(oldDisplay);
             return oldDisplay;
 
@@ -85,20 +85,19 @@ public class CommandShow implements Command {
 
         showTasks();
         if (hasNoTasksFound()) {
-            logger.log(Level.INFO, "Show: No tasks");
+            _logger.log(Level.INFO, "Show: No tasks");
             oldDisplay.setMessage(GlobalConstants.MESSAGE_NO_TASKS);
             return oldDisplay;
         } else {
-            logger.log(Level.INFO, "Show: No errors");
+            _logger.log(Level.INFO, "Show: No errors");
             _display.setMessage(getFeedback());
         }
 
         return _display;
     }
 
-    /*
-     * This method checks if there are no tasks
-     * matching the filter
+    /**
+     * This method checks if there are no tasks matching the filter
      */
     private boolean hasNoTasksFound() {
         int numVisible = _display.getVisibleCompletedTasks().size()
@@ -153,42 +152,42 @@ public class CommandShow implements Command {
         return false;
     }
 
-    /*
+    /**
      * This method sets the feedback to the user
      */
     private String getFeedback() {
         if (!_taskTypes.isEmpty()) {
             for (int i = 0; i < _taskTypes.size(); i++) {
-                msgShow += _taskTypes.get(i) + " ";
+                _msgShow += _taskTypes.get(i) + GlobalConstants.SPACE;
             }
-            msgShow += "tasks";
+            _msgShow += GlobalConstants.TASKS;
         } else {
-            msgShow += "all tasks";
+            _msgShow += GlobalConstants.ALL_TASKS;
         }
         if (!_searchedTask.getDescription().isEmpty()) {
-            msgShow += " containing " + _searchedTask.getDescription();
+            _msgShow += GlobalConstants.CONTAINING + _searchedTask.getDescription();
         }
         if (!_searchedTask.getLocation().isEmpty()) {
-            msgShow += " at " + _searchedTask.getLocation();
+            _msgShow += GlobalConstants.AT + _searchedTask.getLocation();
         }
         if ((_searchedTask.getStartDate() != null) && (_searchedTask.getEndDate() != null)) {
-            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy HH:mm");
+            SimpleDateFormat format1 = new SimpleDateFormat(GlobalConstants.DATE_FORMAT);
             String startDate = format1.format(_searchedTask.getStartDate().getTime());
             String endDate = format1.format(_searchedTask.getEndDate().getTime());
 
-            msgShow += " from " + startDate + " to " + endDate;
+            _msgShow += GlobalConstants.FROM + startDate + GlobalConstants.TO + endDate;
         }
         if (!_searchedTask.getTags().isEmpty()) {
-            msgShow += " tagged";
+            _msgShow += GlobalConstants.TAGGED;
             for (int i = 0; i < _searchedTask.getTags().size(); i++) {
                 if (i == 0) {
-                    msgShow += " " + _searchedTask.getTags().get(i);
+                    _msgShow += GlobalConstants.SPACE + _searchedTask.getTags().get(i);
                 } else {
-                    msgShow += ", " + _searchedTask.getTags().get(i);
+                    _msgShow += GlobalConstants.COMMA_SPACE + _searchedTask.getTags().get(i);
                 }
             }
         }
-        return msgShow;
+        return _msgShow;
     }
 
     private void showTasks() {
@@ -232,7 +231,7 @@ public class CommandShow implements Command {
         return false;
     }
 
-    /*
+    /**
      * Gets completed tasks matching the filter
      */
     private void getCompletedTasks() {
@@ -252,7 +251,7 @@ public class CommandShow implements Command {
         }
     }
 
-    /*
+    /**
      * Gets deadline tasks matching the filter
      */
     private void getDeadLineTasks() {
@@ -272,7 +271,7 @@ public class CommandShow implements Command {
         }
     }
 
-    /*
+    /**
      * Gets event tasks matching the filter
      */
     private void getEventTasks() {
@@ -292,7 +291,7 @@ public class CommandShow implements Command {
         }
     }
 
-    /*
+    /**
      * Gets float tasks matching the filter
      */
     private void getFloatTasks() {
@@ -311,7 +310,7 @@ public class CommandShow implements Command {
         }
     }
 
-    /*
+    /**
      * Gets reserved tasks matching the filter
      */
     private void getReservedTasks() {
@@ -427,7 +426,7 @@ public class CommandShow implements Command {
     }
 
     private boolean containsKeyword(Task task) {
-        String[] keywords = _searchedTask.getDescription().split(" ");
+        String[] keywords = _searchedTask.getDescription().split(GlobalConstants.SPACE);
         for (int i = 0; i < keywords.length; i++) {
             if (!task.getDescription().toLowerCase().contains(keywords[i])) {
                 return false;
