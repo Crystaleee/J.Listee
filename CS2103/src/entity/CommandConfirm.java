@@ -94,6 +94,10 @@ public class CommandConfirm implements Command {
         return (_timeSlotIndex == null);
     }
 
+    /*
+     * checks if the timeslot index specified by user
+     * is valid
+     */
     private boolean isInvalidTimeSlot(Display display) {
         index = _taskNumber - display.getVisibleDeadlineTasks().size() - display.getVisibleEvents().size()
                 - display.getVisibleFloatTasks().size() - 1;
