@@ -17,12 +17,12 @@ public class LogStorage {
     // this is the log file path, storing the location of the task file
     public static String logFile = System.getProperty("user.home") + File.separator
             + "J.Listee.log";
-    //error messages
-    private static final String ERR_CREATE_LOG_FILE="Error: Cannot create log file";
-    private static final String ERR_LOG_NOT_FOUND="Error: Log file not found!";
-    private static final String ERR_WRITE_LOG="Error: Cannot write to log file!";
-    private static final String ERR_READ_LOG="Error: Cannot read from log file!";
-    
+    // error messages
+    private static final String ERR_CREATE_LOG_FILE = "Error: Cannot create log file";
+    private static final String ERR_LOG_NOT_FOUND = "Error: Log file not found!";
+    private static final String ERR_WRITE_LOG = "Error: Cannot write to log file!";
+    private static final String ERR_READ_LOG = "Error: Cannot read from log file!";
+
     /**
      * Read the log file, and find the file of task list. check if log file
      * exists, if not exists, it's the very first time that user use J.Listee
@@ -36,13 +36,13 @@ public class LogStorage {
         File file = new File(logFile);
         try {
             if (!file.exists()) {
-            
+
                 file.createNewFile();
-           
-            return null;
-        } else {
-            return readLogFile();
-        }
+
+                return null;
+            } else {
+                return readLogFile();
+            }
         } catch (IOException e) {
             throw new IOException(ERR_CREATE_LOG_FILE);
         }
@@ -81,16 +81,16 @@ public class LogStorage {
     private static String readLogFile() throws IOException {
         String filePath = null;
         BufferedReader br;
-        
+
         try {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile)));
             String lineStr;
-            
+
             lineStr = br.readLine();
             if (lineStr != null) {
                 filePath = lineStr;
             }
-            
+
             br.close();
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException(ERR_LOG_NOT_FOUND);

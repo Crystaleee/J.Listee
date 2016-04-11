@@ -22,7 +22,7 @@ public class GUIController {
     private static final int WINDOW_HEIGHT = 780;
 
     private static final String ERR_CREATEFILE = "Error: Cannot create file!";
-    private static final String ERR_DISPLAY_NULL="Error: Display is null!";
+    private static final String ERR_DISPLAY_NULL = "Error: Display is null!";
 
     // this is the stage to be display
     private static Stage stage;
@@ -54,7 +54,7 @@ public class GUIController {
      */
     public static void displayWelcome() {
         welcome = new WelcomePage();
-        setScene(stage.getScene(),welcome);     
+        setScene(stage.getScene(), welcome);
     }
 
     /**
@@ -67,7 +67,7 @@ public class GUIController {
         // set list and reload the list page
         ((ShowListPage) showList).setList(display);
 
-        setScene(stage.getScene(),showList);
+        setScene(stage.getScene(), showList);
     }
 
     /**
@@ -78,7 +78,7 @@ public class GUIController {
      */
     public static void displayHelp() {
         help = new HelpPage();
-        setScene(stage.getScene(),help);
+        setScene(stage.getScene(), help);
     }
 
     /**
@@ -130,7 +130,7 @@ public class GUIController {
      * add mouse listener to scene
      */
     private static void setMouseMovable(Scene scene) {
-        //add mouse press lisnter
+        // add mouse press lisnter
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -138,7 +138,7 @@ public class GUIController {
                 App.yOffset = event.getSceneY();
             }
         });
-        //add mouse drag listener
+        // add mouse drag listener
         scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -155,22 +155,24 @@ public class GUIController {
     public static void initializeList(String filePath) {
         // call to logic to get all the tasks
         Display display = Logic.initializeProgram(filePath);
-        
-        assert display!=null :ERR_DISPLAY_NULL;
-        
+
+        assert display != null : ERR_DISPLAY_NULL;
+
         showList = new ShowListPage(display);
         displayList(display);
     }
 
     /**
      * handle user input: pass to logic, and display new content
-     * @param command user input
+     * 
+     * @param command
+     *            user input
      */
     public static void handelUserInput(String command) {
         Display display = Logic.executeUserCommand(command);
-        
-        assert display!=null :ERR_DISPLAY_NULL;
-       
+
+        assert display != null : ERR_DISPLAY_NULL;
+
         displayList(display);
     }
 
@@ -180,9 +182,9 @@ public class GUIController {
 
     public static void changeFilePath(String filePath) {
         Display display = Logic.changeFilePath(filePath);
-        
-        assert display!=null :ERR_DISPLAY_NULL;
-        
+
+        assert display != null : ERR_DISPLAY_NULL;
+
         displayList(display);
     }
 

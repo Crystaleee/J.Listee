@@ -24,14 +24,14 @@ import com.sun.webkit.WebPage;
 public abstract class AppPage extends StackPane {
     // this is the javafx statement to set background to transparent
     private static final String JAVAFX_BACKGROUND_TRANSPARENT = "-fx-background-color: rgba(0, 0, 0, 0); ";
-    
+
     // common bridge name and script name
     protected static final String NAME_BRIDGE = "app";
-    protected static final String SCRIPT_WINDOW="window";
-    
-    //this is Parser.InputSuggestion to get smd suggestion from
+    protected static final String SCRIPT_WINDOW = "window";
+
+    // this is Parser.InputSuggestion to get smd suggestion from
     private InputSuggestion suggestion = InputSuggestion.getInstance();
-    
+
     private WebView browser; // the web view to put in the scene
     protected WebEngine webEngine; // the web engine to load web page
     protected String html; // the web page
@@ -64,21 +64,19 @@ public abstract class AppPage extends StackPane {
         this.webEngine.documentProperty().addListener(new DocListener());
     }
 
-
     /**
-     *  get sommand suggestion from parser and pass to Javascript
-     *  
+     * get sommand suggestion from parser and pass to Javascript
+     * 
      * @param cmd
-     *              the user input command
-     * @return String 
-     * command suggestion
+     *            the user input command
+     * @return String command suggestion
      */
     public String getCommandsuggestion(String cmd) {
         String cmdSuggestion = suggestion.getSuggestedInput(cmd.trim());
         return cmdSuggestion;
 
     }
-    
+
     private class DocListener implements ChangeListener<Document> {
         @Override
         public void changed(ObservableValue<? extends Document> observable, Document oldValue,

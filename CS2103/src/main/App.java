@@ -36,12 +36,12 @@ public class App extends Application {
     // the tray icon path
     private static final String ICON_TRAY = "/view/images/tray-icon.png";
     private static final String ICON_DESKTOP = "/view/images/desktop-icon.png";
-    
-    //the window title and menu items
-    private static final String TITLE_WINDOW="J.Listee";
-    private static final String MENU_SHOW="Show";
-    private static final String MENU_MINIMIZE="Minimize";
-    private static final String MENU_EXIT="Exit";
+
+    // the window title and menu items
+    private static final String TITLE_WINDOW = "J.Listee";
+    private static final String MENU_SHOW = "Show";
+    private static final String MENU_MINIMIZE = "Minimize";
+    private static final String MENU_EXIT = "Exit";
 
     // This the scene stage of application
     public static Stage stage;
@@ -74,14 +74,14 @@ public class App extends Application {
         shortcut.register(KeyStroke.getKeyStroke(SHORTCUT_LAUNCH), listener);
 
         stage = primaryStage;
-        
-        //set tray
+
+        // set tray
         enableTray();
-        
-        //set stage style
+
+        // set stage style
         initializeStage();
-        
-        //show start page
+
+        // show start page
         judgeAndShowStart();
     }
 
@@ -198,7 +198,6 @@ public class App extends Application {
         return mouseListener;
     }
 
-
     /**
      * new a thread to show the stage
      */
@@ -222,13 +221,13 @@ public class App extends Application {
             }
         });
     }
-    
+
     /**
      * judge if it's the first time user use this app and show start page
      */
     private void judgeAndShowStart() {
         // read log file
-        String filePath=null;
+        String filePath = null;
         try {
             filePath = LogStorage.readLog();
         } catch (IOException e) {

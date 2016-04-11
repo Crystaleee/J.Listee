@@ -23,50 +23,50 @@ import netscape.javascript.JSObject;
  */
 public class ShowListPage extends AppPage {
 
-    //These are the html path, file name, and bridge name for showList
-    private static final String PATH_HTML="/view/html/list.html";
-    
-    //This is the format of date and time displaying
-    private static final String FORMAT_DATE="EEE MM/dd HH:mm";
-    
-    //These are the JavaScript names of funcitons
-    private static final String SCRIPT_RESET="reset()";
-    private static final String SCRIPT_SETFOCUS="setFocus";
-    private static final String SCRIPT_ANIMATION_CONFLICT="showConflict";
-    private static final String SCRIPT_ANIMATION_ADD="addShowAnimation";
-    private static final String SCRIPT_ADD_TASKS="addTasks";
-    private static final String SCRIPT_ADD_RESERVED="addReservedTask";
-    private static final String SCRIPT_ANIMATION_HIDE="addHideAnimation";
-    private static final String SCRIPT_CLEAR_CMD="clearCommandLine";
-    private static final String SCRIPT_HIDE_SUGGESTION="hideSuggestion";
-    private static final String SCRIPT_SHOW_FEEDBACK="showFeedBack";
-    
-    //These are the name for different task types
-    private static final String TASKTYPE_EVENT="event";
-    private static final String TASKTYPE_FLOAT="floating";
-    private static final String TASKTYPE_DEADLINE="deadline";
-    private static final String TASKTYPE_COMPLETED="completed";
-    
-    //These are the JSON keys
-    private static final String JSONKEY_STARTDATE="startDate";
-    private static final String JSONKEY_ENDDATE="endDate";
-    private static final String JSONKEY_STARTDATES="startDates";
-    private static final String JSONKEY_ENDDATES="endDates";
-    
-    //These are command types used in animation
-    private static final String CMDTYPE_ADD="Add";
-    private static final String CMDTYPE_DELETE="Delete";
-    
-    //the display showing in page
+    // These are the html path, file name, and bridge name for showList
+    private static final String PATH_HTML = "/view/html/list.html";
+
+    // This is the format of date and time displaying
+    private static final String FORMAT_DATE = "EEE MM/dd HH:mm";
+
+    // These are the JavaScript names of funcitons
+    private static final String SCRIPT_RESET = "reset()";
+    private static final String SCRIPT_SETFOCUS = "setFocus";
+    private static final String SCRIPT_ANIMATION_CONFLICT = "showConflict";
+    private static final String SCRIPT_ANIMATION_ADD = "addShowAnimation";
+    private static final String SCRIPT_ADD_TASKS = "addTasks";
+    private static final String SCRIPT_ADD_RESERVED = "addReservedTask";
+    private static final String SCRIPT_ANIMATION_HIDE = "addHideAnimation";
+    private static final String SCRIPT_CLEAR_CMD = "clearCommandLine";
+    private static final String SCRIPT_HIDE_SUGGESTION = "hideSuggestion";
+    private static final String SCRIPT_SHOW_FEEDBACK = "showFeedBack";
+
+    // These are the name for different task types
+    private static final String TASKTYPE_EVENT = "event";
+    private static final String TASKTYPE_FLOAT = "floating";
+    private static final String TASKTYPE_DEADLINE = "deadline";
+    private static final String TASKTYPE_COMPLETED = "completed";
+
+    // These are the JSON keys
+    private static final String JSONKEY_STARTDATE = "startDate";
+    private static final String JSONKEY_ENDDATE = "endDate";
+    private static final String JSONKEY_STARTDATES = "startDates";
+    private static final String JSONKEY_ENDDATES = "endDates";
+
+    // These are command types used in animation
+    private static final String CMDTYPE_ADD = "Add";
+    private static final String CMDTYPE_DELETE = "Delete";
+
+    // the display showing in page
     private Display display;
-    
-    //JSObeject to call Javascript
+
+    // JSObeject to call Javascript
     private JSObject win;
-    
+
     public ShowListPage(Display display) {
-        //super class AppPage
+        // super class AppPage
         super(PATH_HTML);
-        
+
         this.display = display;
         addLoadListener();
     }
@@ -99,7 +99,7 @@ public class ShowListPage extends AppPage {
      * set web page's content
      */
     private void setContent() {
-        //conmunicate java and Javascript
+        // conmunicate java and Javascript
         this.win = (JSObject) webEngine.executeScript(SCRIPT_WINDOW);
         win.setMember(NAME_BRIDGE, Bridge.getInstance());
 
@@ -193,8 +193,8 @@ public class ShowListPage extends AppPage {
                 JSONObject task = constructJSON(completed);
                 jsonTask.put(task);
             }
-            
-            //call Javascript
+
+            // call Javascript
             win.call(SCRIPT_ADD_TASKS, jsonTask, TASKTYPE_COMPLETED);
         }
     }
@@ -220,7 +220,7 @@ public class ShowListPage extends AppPage {
 
                 // add dates in format to JSON
                 addDates(reserved, task);
-                
+
                 jsonReserved.put(task);
             }
 
@@ -231,19 +231,20 @@ public class ShowListPage extends AppPage {
 
     /**
      * add dates to JSONObject for a reserved task
+     * 
      * @param reserved
      * @param task
      */
     private void addDates(TaskReserved reserved, JSONObject task) {
         for (int i = 0; i < reserved.getStartDates().size(); i++) {
             try {
-                //append endDates
+                // append endDates
                 task.append(
                         JSONKEY_ENDDATES,
                         new SimpleDateFormat(FORMAT_DATE, Locale.ENGLISH).format(reserved
                                 .getEndDates().get(i).getTime()));
-                
-                //append startDates
+
+                // append startDates
                 task.append(
                         JSONKEY_STARTDATES,
                         new SimpleDateFormat(FORMAT_DATE, Locale.ENGLISH).format(reserved
@@ -323,20 +324,20 @@ public class ShowListPage extends AppPage {
      */
     private JSONObject constructJSON(Task completed) {
         JSONObject task = new JSONObject(completed);
-        
-        //remove original dates
+
+        // remove original dates
         task.remove(JSONKEY_STARTDATE);
         task.remove(JSONKEY_ENDDATE);
-        
-        //add dates in format
+
+        // add dates in format
         try {
-            //add startDate if it's an event
+            // add startDate if it's an event
             if (completed instanceof TaskEvent) {
                 task.put(JSONKEY_STARTDATE, new SimpleDateFormat(FORMAT_DATE, Locale.ENGLISH)
                         .format(((TaskEvent) completed).getStartDate().getTime()));
             }
-            
-            //add endDates if it's a dealine or event
+
+            // add endDates if it's a dealine or event
             if (completed instanceof TaskDeadline || completed instanceof TaskEvent) {
                 task.put(JSONKEY_ENDDATE, new SimpleDateFormat(FORMAT_DATE, Locale.ENGLISH)
                         .format(((TaskDeadline) completed).getEndDate().getTime()));
@@ -348,31 +349,31 @@ public class ShowListPage extends AppPage {
     }
 
     public void setList(Display display) {
-        assert (display!=null);
-        
-            this.display = display;
+        assert (display != null);
 
-            // delete command does not need reloading
-            if (this.display.getCommandType() == CMDTYPE_DELETE) {
-                setDeleteAnimation();
-            } else {
-                webEngine.reload();
-            }
-            
+        this.display = display;
+
+        // delete command does not need reloading
+        if (this.display.getCommandType() == CMDTYPE_DELETE) {
+            setDeleteAnimation();
+        } else {
+            webEngine.reload();
+        }
+
     }
 
     /**
      * set delete animation
      */
     private void setDeleteAnimation() {
-        //set message
+        // set message
         setMessage();
-        
-        //set focus animation
+
+        // set focus animation
         JSONArray jsonFocus = constructFocusArray();
         setFocusAnimation(jsonFocus);
-        
-        //call Javascript
+
+        // call Javascript
         win.call(SCRIPT_ANIMATION_HIDE, jsonFocus);
         win.call(SCRIPT_CLEAR_CMD);
         win.call(SCRIPT_HIDE_SUGGESTION);
