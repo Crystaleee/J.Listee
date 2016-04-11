@@ -13,7 +13,7 @@ import javafx.stage.DirectoryChooser;
 import main.App;
 
 /**
- * @@author Zhu Bingjing
+ * @@author A0149527W
  */
 
 // JavaScript interface object

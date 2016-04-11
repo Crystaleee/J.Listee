@@ -1,34 +1,18 @@
-Apr 11, 2016 7:40:26 PM logic.Logic initializeProgram
+Apr 11, 2016 9:47:31 PM logic.Logic initializeProgram
 INFO: Logic: Initialise ProgramC:\Users\Chloe\Desktop\J.Listee.txt
-Apr 11, 2016 7:40:26 PM storage.Storage addFloatingTaskToList
-INFO: Successfully read floating task: Float3
-Apr 11, 2016 7:40:26 PM storage.Storage addFloatingTaskToList
-INFO: Successfully read floating task: Float5
-Apr 11, 2016 7:40:26 PM storage.Storage addFloatingTaskToList
-INFO: Successfully read floating task: DeadlineTask
-Apr 11, 2016 7:40:26 PM storage.Storage addFloatingTaskToList
-INFO: Successfully read floating task: Float1
-Apr 11, 2016 7:40:26 PM storage.Storage addDeadlineTaskToList
-INFO: Successfully read deadline task: Event3
-Apr 11, 2016 7:40:26 PM storage.Storage addDeadlineTaskToList
-INFO: Successfully read deadline task: DL1
-Apr 11, 2016 7:40:26 PM storage.Storage addDeadlineTaskToList
+Apr 11, 2016 9:47:31 PM storage.Storage addDeadlineTaskToList
+INFO: Successfully read deadline task: CS2103 code and user manual
+Apr 11, 2016 9:47:31 PM storage.Storage addDeadlineTaskToList
+INFO: Successfully read deadline task: CS2102 Presentation
+Apr 11, 2016 9:47:31 PM storage.Storage addDeadlineTaskToList
 INFO: Successfully read deadline task: DL4
-Apr 11, 2016 7:40:26 PM storage.Storage addEventTaskToList
-INFO: Successfully read event: DL3
-Apr 11, 2016 7:40:26 PM storage.Storage addEventTaskToList
-INFO: Successfully read event: Event1
-Apr 11, 2016 7:40:26 PM storage.Storage addReservedTaskToList
-INFO: Successfully read reserved task: r1
-Apr 11, 2016 7:40:26 PM storage.Storage addReservedTaskToList
-INFO: Successfully read reserved task: r2
-Apr 11, 2016 7:40:26 PM entity.CommandShow execute
+Apr 11, 2016 9:47:31 PM entity.CommandShow execute
 INFO: Show: No errors
-Apr 11, 2016 7:40:26 PM parser.JListeeParser ParseCommand
+Apr 11, 2016 9:47:31 PM parser.JListeeParser ParseCommand
 INFO: commandType: add
-Apr 11, 2016 7:40:26 PM parser.JListeeParser parseAdd
+Apr 11, 2016 9:47:31 PM parser.JListeeParser parseAdd
 INFO: Preposition Index for parseAdd: 5
-Apr 11, 2016 7:40:26 PM parser.JListeeParser parseAdd
+Apr 11, 2016 9:47:32 PM parser.JListeeParser parseAdd
 INFO: is event?: false
-Apr 11, 2016 7:40:26 PM parser.JListeeParser parseAdd
+Apr 11, 2016 9:47:32 PM parser.JListeeParser parseAdd
 INFO: is deadline?: false

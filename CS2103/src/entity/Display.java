@@ -230,7 +230,7 @@ public class Display implements java.io.Serializable {
         return changed;
     }
 
-    // @@author A0149063E
+    // @@author A0149063E generated
     @Override
     public String toString() {
         return "Display [message=" + message + ", events=" + visibleEvents + ", deadlineTasks="
