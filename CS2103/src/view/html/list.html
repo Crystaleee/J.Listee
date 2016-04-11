@@ -786,28 +786,27 @@ $(document).keydown(
         	if(e.ctrlKey)
         		shortCutCommand("redo");
         break;
+        case 49:
         case 97://confirm 1
+        	var x=$(".task:focus");
         	if($(".task:focus").length>0){
 	            var id=parseInt($(".task:focus")[0].id);
-	            if($(title).text()=="Reserved"){
+	            	console.log("confirm "+id+" 1");
 	              shortCutCommand("confirm "+id+" 1");
-	            }
             }   
         break;   
+        case 50:
         case 98://confirm 2
         	if($(".task:focus").length>0){
 	            var id=parseInt($(".task:focus")[0].id);
-	            if($(title).text()=="Reserved"){
 	              shortCutCommand("confirm "+id+" 2");
-	            }
             }   
         break;  
+        case 51:
         case 99://confirm 3
         	if($(".task:focus").length>0){
 	            var id=parseInt($(".task:focus")[0].id);
-	            if($(title).text()=="Reserved"){
 	              shortCutCommand("confirm "+id+" 3");
-	            }
             }   
         break;        
         }
