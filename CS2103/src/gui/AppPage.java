@@ -49,7 +49,7 @@ public abstract class AppPage extends StackPane {
         setTransparentBackground();
 
         // load web page
-        webEngine.load(WelcomeAndChooseStorage.class.getResource(this.html).toExternalForm());
+        webEngine.load(WelcomePage.class.getResource(this.html).toExternalForm());
 
         // add the web view to the scene
         this.getChildren().add(browser);

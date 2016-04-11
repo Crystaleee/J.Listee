@@ -117,10 +117,10 @@ public class Bridge {
         File selectedFile = fileChooser.showDialog(App.stage);
 
         if (selectedFile != null) {
-            App.filePath = selectedFile.getAbsolutePath() + FILENAME;
+            String filePath = selectedFile.getAbsolutePath() + FILENAME;
             
             // create file under the file folder chosen by user
-            GUIController.changeFilePath(App.filePath);
+            GUIController.changeFilePath(filePath);
         }
     }
 

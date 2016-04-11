@@ -53,7 +53,7 @@ public class GUIController {
      * display welcome page in the frame
      */
     public static void displayWelcome() {
-        welcome = new WelcomeAndChooseStorage();
+        welcome = new WelcomePage();
         setScene(stage.getScene(),welcome);     
     }
 
@@ -65,7 +65,7 @@ public class GUIController {
      */
     public static void displayList(Display display) {
         // set list and reload the list page
-        ((ShowList) showList).setList(display);
+        ((ShowListPage) showList).setList(display);
 
         setScene(stage.getScene(),showList);
     }
@@ -77,7 +77,7 @@ public class GUIController {
      * @return
      */
     public static void displayHelp() {
-        help = new Help();
+        help = new HelpPage();
         setScene(stage.getScene(),help);
     }
 
@@ -158,7 +158,7 @@ public class GUIController {
         
         assert display!=null :ERR_DISPLAY_NULL;
         
-        showList = new ShowList(display);
+        showList = new ShowListPage(display);
         displayList(display);
     }
 

@@ -46,9 +46,6 @@ public class App extends Application {
     // This the scene stage of application
     public static Stage stage;
 
-    // this is the task file
-    public static String filePath;
-
     // this is the coordinates of the window
     public static double xOffset;
     public static double yOffset;
@@ -231,6 +228,7 @@ public class App extends Application {
      */
     private void judgeAndShowStart() {
         // read log file
+        String filePath=null;
         try {
             filePath = LogStorage.readLog();
         } catch (IOException e) {
