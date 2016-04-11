@@ -11,6 +11,16 @@ import java.util.Calendar;
 public class TaskEvent extends TaskDeadline {
 	private Calendar startDate;
 
+	// @@author A0149063E
+	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
+	private static final String STRING_START_DATE = "Start Date: %1$s\r\n";
+	private static final String STRING_END_DATE = "End Date: %1$s\r\n";
+	private static final String STRING_LOCATION = "Location: %1$s \r\n";
+	private static final String STRING_TAG = " #%1$s";
+	private static final String STRING_TAGS = "Tags: %1$s \r\n\r\n";
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+
+	// @@author A0139995E
 	public TaskEvent() {
 		this.setDescription(null);
 		this.setLocation(null);
@@ -40,29 +50,27 @@ public class TaskEvent extends TaskDeadline {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Description: " + this.getDescription() + "\r\n");
+		sb.append(String.format(STRING_DESCRIPTION, this.getDescription()));
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String startDate = sdf.format(this.startDate.getTime());
-		sb.append("Start Date: " + startDate + "\r\n");
+		sb.append(String.format(STRING_START_DATE, startDate));
 
 		String endDate = sdf.format(this.getEndDate().getTime());
-		sb.append("End Date: " + endDate + "\r\n");
+		sb.append(String.format(STRING_END_DATE, endDate));
 
 		String location = this.getLocation();
 		if (location == null) {
 			location = "";
 		}
-		sb.append("Location: " + location + "\r\n");
+		sb.append(String.format(STRING_LOCATION, location));
 
 		ArrayList<String> tagsList = this.getTags();
 		String tagsString = "";
 		for (String tag : tagsList) {
-			tagsString += " #" + tag;
+			tagsString += String.format(STRING_TAG, tag);
 		}
 
-		sb.append("Tags:" + tagsString + "\r\n");
-		sb.append("\r\n");
+		sb.append(String.format(STRING_TAGS, tagsString));
 		return sb.toString();
 	}
 

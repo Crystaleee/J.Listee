@@ -7,6 +7,13 @@ import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class TaskFloat extends Task {
+	// @@author A0149063E
+	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
+	private static final String STRING_LOCATION = "Location: %1$s \r\n";
+	private static final String STRING_TAG = " #%1$s";
+	private static final String STRING_TAGS = "Tags: %1$s \r\n\r\n";
+
+	// @@author A0139995E
 	public TaskFloat() {
 		super();
 	}
@@ -16,24 +23,24 @@ public class TaskFloat extends Task {
 	}
 
 	// @@author A0149063E
-	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Description: " + this.getDescription() + "\r\n");
+
+		sb.append(String.format(STRING_DESCRIPTION, this.getDescription()));
 		String location = this.getLocation();
+
 		if (location == null) {
 			location = "";
 		}
-		sb.append("Location: " + location + "\r\n");
+		sb.append(String.format(STRING_LOCATION, location));
 
 		ArrayList<String> tagsList = this.getTags();
 		String tagsString = "";
 		for (String tag : tagsList) {
-			tagsString += " #" + tag;
+			tagsString += String.format(STRING_TAG, tag);
 		}
 
-		sb.append("Tags:" + tagsString + "\r\n");
-		sb.append("\r\n");
+		sb.append(String.format(STRING_TAGS, tagsString));
 		return sb.toString();
 	}
 
