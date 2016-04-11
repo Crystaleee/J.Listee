@@ -81,7 +81,7 @@ public class InputSuggestion {
 	private static final String COMMAND_UNDO = "undo";
 	private static final String COMMAND_UNDONE = "undone ";
 
-	private static InputSuggestion inputSuggester;
+	private static InputSuggestion inputSuggester_;
 
 	/**
 	 * Get an instance of InputSuggestion for other classes to use.
@@ -89,10 +89,10 @@ public class InputSuggestion {
 	 * @return An InputSuggestion object.
 	 */
 	public static InputSuggestion getInstance() {
-		if (inputSuggester == null) {
+		if (inputSuggester_ == null) {
 			return new InputSuggestion();
 		}
-		return inputSuggester;
+		return inputSuggester_;
 	}
 
 	/**

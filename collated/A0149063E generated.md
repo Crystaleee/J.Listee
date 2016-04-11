@@ -3,9 +3,9 @@
 ``` java
     @Override
     public String toString() {
-        return "Display [message=" + message + ", events=" + visibleEvents + ", deadlineTasks="
-                + visibleDeadlineTasks + ", floatTasks=" + visibleFloatTasks + ", reservedTasks="
-                + visibleReservedTasks + ", completedTasks=" + visibleCompletedTasks + "]";
+        return "Display [message=" + _message + ", events=" + _visibleEvents + ", deadlineTasks="
+                + _visibleDeadlineTasks + ", floatTasks=" + _visibleFloatTasks + ", reservedTasks="
+                + _visibleReservedTasks + ", completedTasks=" + _visibleCompletedTasks + "]";
     }
 }
 ```

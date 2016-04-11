@@ -31,11 +31,11 @@ import entity.TaskReserved;
 
 public class Storage {
 
-	private static String filePath;
-	private static Storage storageInstance;
+	private static String filePath_;
+	private static Storage storageInstance_;
 
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
-	private Logger logger = GlobalLogger.getLogger();
+	private static SimpleDateFormat sdf_ = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static Logger logger_ = GlobalLogger.getLogger();
 	
 	/* Headers that divide the text file into the different task categories. */
 	private static final String HEADER_FLOATING = "     TASKS";
@@ -85,10 +85,10 @@ public class Storage {
 	 * @return A Storage object.
 	 */
 	public static Storage getInstance() {
-		if (storageInstance == null) {
+		if (storageInstance_ == null) {
 			return new Storage();
 		}
-		return storageInstance;
+		return storageInstance_;
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class Storage {
 		} else if (isCompletedReservedTask(line)) {
 			task = readCompletedReservedTask(br, line, description);
 		} else {
-			logger.log(Level.WARNING, String.format(LOGGER_READ_ERROR_COMPLETED, description));
+			logger_.log(Level.WARNING, String.format(LOGGER_READ_ERROR_COMPLETED, description));
 		}
 		
 		addCompletedTaskToList(completedTasks, task);
@@ -529,7 +529,7 @@ public class Storage {
 			deadlineTask = new TaskDeadline(description, location, deadline, tags);
 
 		} catch (ParseException e) {
-			logger.log(Level.WARNING, LOGGER_READ_ERROR_DEADLINE);
+			logger_.log(Level.WARNING, LOGGER_READ_ERROR_DEADLINE);
 		}
 		return deadlineTask;
 	}
@@ -558,7 +558,7 @@ public class Storage {
 			eventTask = new TaskEvent(description, location, startDate, endDate, tags);
 
 		} catch (ParseException e) {
-			logger.log(Level.WARNING, LOGGER_READ_ERROR_EVENT);
+			logger_.log(Level.WARNING, LOGGER_READ_ERROR_EVENT);
 		}
 		return eventTask;
 	}
@@ -587,7 +587,7 @@ public class Storage {
 			reservedTask = new TaskReserved(description, location, startDates, endDates, tags);
 
 		} catch (ParseException e) {
-			logger.log(Level.WARNING, LOGGER_READ_ERROR_RESERVED);
+			logger_.log(Level.WARNING, LOGGER_READ_ERROR_RESERVED);
 		}
 		return reservedTask;
 	}
@@ -650,7 +650,7 @@ public class Storage {
 		Calendar date = null;
 		if (dateString.startsWith(dateType)) {
 			date = Calendar.getInstance();
-			date.setTime(sdf.parse(dateString.replaceFirst(dateType, "").trim()));
+			date.setTime(sdf_.parse(dateString.replaceFirst(dateType, "").trim()));
 		}
 		return date;
 	}
@@ -672,7 +672,7 @@ public class Storage {
 
 			for (String dateString : datesList) {
 				Calendar date = Calendar.getInstance();
-				date.setTime(sdf.parse(dateString));
+				date.setTime(sdf_.parse(dateString));
 				dates.add(date);
 			}
 		}
@@ -688,7 +688,7 @@ public class Storage {
 	private void addFloatingTaskToList(ArrayList<TaskFloat> floatTasks, TaskFloat floatTask) {
 		if (floatTask != null) {
 			floatTasks.add(floatTask);
-			logger.log(Level.INFO, String.format(LOGGER_READ_FLOATING, floatTask.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_READ_FLOATING, floatTask.getDescription()));
 		}
 	}
 
@@ -701,7 +701,7 @@ public class Storage {
 	private void addDeadlineTaskToList(ArrayList<TaskDeadline> deadlineTasks, TaskDeadline deadlineTask) {
 		if (deadlineTask != null) {
 			deadlineTasks.add(deadlineTask);
-			logger.log(Level.INFO, String.format(LOGGER_READ_DEADLINE, deadlineTask.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_READ_DEADLINE, deadlineTask.getDescription()));
 		}
 	}
 
@@ -714,7 +714,7 @@ public class Storage {
 	private void addEventTaskToList(ArrayList<TaskEvent> events, TaskEvent eventTask) {
 		if (eventTask != null) {
 			events.add(eventTask);
-			logger.log(Level.INFO, String.format(LOGGER_READ_EVENT, eventTask.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_READ_EVENT, eventTask.getDescription()));
 		}
 	}
 
@@ -727,7 +727,7 @@ public class Storage {
 	private void addReservedTaskToList(ArrayList<TaskReserved> reservedTasks, TaskReserved reservedTask) {
 		if (reservedTask != null) {
 			reservedTasks.add(reservedTask);
-			logger.log(Level.INFO, String.format(LOGGER_READ_RESERVED, reservedTask.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_READ_RESERVED, reservedTask.getDescription()));
 		}
 	}
 
@@ -739,7 +739,7 @@ public class Storage {
 	private void addCompletedTaskToList(ArrayList<Task> completedTasks, Task task) {
 		if (task != null) {
 			completedTasks.add(task);
-			logger.log(Level.INFO, String.format(LOGGER_READ_COMPLETED, task.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_READ_COMPLETED, task.getDescription()));
 		}
 	}
 
@@ -778,7 +778,7 @@ public class Storage {
 	 * @param filepath The file path of storage's text file.
 	 */
 	private void setFilePath(String filepath) {
-		filePath = filepath;
+		filePath_ = filepath;
 	}
 
 	/**
@@ -788,7 +788,7 @@ public class Storage {
 	 * @throws IOException If I/O operations fail.
 	 */
 	public void saveFile(Display thisDisplay) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath_)));
 
 		ArrayList<TaskFloat> floatTasks = thisDisplay.getFloatTasks();
 		ArrayList<TaskDeadline> deadlineTasks = thisDisplay.getDeadlineTasks();
@@ -833,7 +833,7 @@ public class Storage {
 		writeHeaderToFile(bw, HEADER_FLOATING);
 		for (TaskFloat task : floatTasks) {
 			bw.write(task.toString());
-			logger.log(Level.INFO, String.format(LOGGER_WRITE_FLOATING, task.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_WRITE_FLOATING, task.getDescription()));
 		}
 	}
 
@@ -848,7 +848,7 @@ public class Storage {
 		writeHeaderToFile(bw, HEADER_DEADLINE);
 		for (TaskDeadline task : deadlineTasks) {
 			bw.write(task.toString());
-			logger.log(Level.INFO, String.format(LOGGER_WRITE_DEADLINE, task.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_WRITE_DEADLINE, task.getDescription()));
 		}
 	}
 
@@ -863,7 +863,7 @@ public class Storage {
 		writeHeaderToFile(bw, HEADER_EVENT);
 		for (TaskEvent event : events) {
 			bw.write(event.toString());
-			logger.log(Level.INFO, String.format(LOGGER_WRITE_EVENT, event.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_WRITE_EVENT, event.getDescription()));
 		}
 	}
 
@@ -878,7 +878,7 @@ public class Storage {
 		writeHeaderToFile(bw, HEADER_RESERVED);
 		for (TaskReserved task : reservedTasks) {
 			bw.write(task.toString());
-			logger.log(Level.INFO, String.format(LOGGER_WRITE_RESERVED, task.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_WRITE_RESERVED, task.getDescription()));
 		}
 	}
 
@@ -893,7 +893,7 @@ public class Storage {
 		writeHeaderToFile(bw, HEADER_COMPLETED);
 		for (Task task : completedTasks) {
 			bw.write(task.toString());
-			logger.log(Level.INFO, String.format(LOGGER_WRITE_COMPLETED, task.getDescription()));
+			logger_.log(Level.INFO, String.format(LOGGER_WRITE_COMPLETED, task.getDescription()));
 		}
 	}
 
