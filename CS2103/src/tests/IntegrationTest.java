@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,13 +50,12 @@ public class IntegrationTest {
 		assertEquals(expected, actual);
 	}
 
-	/***********************
-	 * Adding Tasks Tests  *
-	 * @throws IOException *
-	 ***********************/
+	/**********************
+	 * Adding Tasks Tests *
+	 **********************/
 
 	@Test
-	public void testAddFloating() throws IOException {
+	public void testAddFloating() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		String expected = "added: \"Floating Test\"";
 		String actual = display.getMessage();
@@ -68,7 +66,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testAddDeadline() throws IOException {
+	public void testAddDeadline() {
 		display = Logic.executeUserCommand("add Deadline Test due 14th Apr 3pm @NUS #tag");
 		String expected = "added: \"Deadline Test\"";
 		String actual = display.getMessage();
@@ -79,7 +77,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testAddDeadlineWithoutTime() throws IOException {
+	public void testAddDeadlineWithoutTime() {
 		display = Logic.executeUserCommand("add Deadline Test due 14th Apr @NUS #tag");
 		String expected = "added: \"Deadline Test\"";
 		String actual = display.getMessage();
@@ -90,7 +88,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testAddEvent() throws IOException {
+	public void testAddEvent() {
 		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
 		String expected = "added: \"Event Test\"";
 		String actual = display.getMessage();
@@ -101,7 +99,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testAddEmpty() throws IOException {
+	public void testAddEmpty() {
 		display = Logic.executeUserCommand("add");
 		String expected = "Please enter a description";
 		String actual = display.getMessage();
@@ -114,11 +112,10 @@ public class IntegrationTest {
 
 	/************************
 	 * Updating Tasks Tests *
-	 * @throws IOException  *
 	 ************************/
 
 	@Test
-	public void testUpdateFloatingDescription() throws IOException {
+	public void testUpdateFloatingDescription() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("update 1 New Description");
 		String expected = "Edited : \"Floating Test\"";
@@ -130,7 +127,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateFloatingLocation() throws IOException {
+	public void testUpdateFloatingLocation() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("update 1 @newPlace");
 		String expected = "Edited : \"Floating Test\"";
@@ -142,7 +139,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateFloatingTags() throws IOException {
+	public void testUpdateFloatingTags() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("update 1 -#tag #newTag");
 		String expected = "Edited : \"Floating Test\"";
@@ -154,7 +151,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateDeadlineDescription() throws IOException {
+	public void testUpdateDeadlineDescription() {
 		display = Logic.executeUserCommand("add Deadline Test due April 11 @NUS #tag");
 		display = Logic.executeUserCommand("update 1 New Description");
 		String expected = "Edited : \"Deadline Test\"";
@@ -166,7 +163,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateDeadlineTime() throws IOException {
+	public void testUpdateDeadlineTime() {
 		display = Logic.executeUserCommand("add Deadline Test due tomorrow @NUS #tag");
 		display = Logic.executeUserCommand("update 1 +end 15th Apr 4pm");
 		String expected = "Edited : \"Deadline Test\"";
@@ -178,7 +175,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateEventStartTime() throws IOException {
+	public void testUpdateEventStartTime() {
 		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("update 1 +start 14th Apr 12pm");
 		String expected = "Edited : \"Event Test\"";
@@ -190,7 +187,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateEventEndTime() throws IOException {
+	public void testUpdateEventEndTime() {
 		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("update 1 +end 14th Apr 7pm");
 		String expected = "Edited : \"Event Test\"";
@@ -202,7 +199,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testUpdateEventTimes() throws IOException {
+	public void testUpdateEventTimes() {
 		display = Logic.executeUserCommand("add Event Test from 14th Apr 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("update 1 +both 13th Apr 9 pm to 14th Apr 10am");
 		String expected = "Edited : \"Event Test\"";
@@ -215,11 +212,10 @@ public class IntegrationTest {
 
 	/************************
 	 * Deleting Tasks Tests *
-	 * @throws IOException  *
 	 ************************/
 
 	@Test
-	public void testDeleteFloating() throws IOException {
+	public void testDeleteFloating() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("delete 1");
 		String expected = "deleted: \"Floating Test\"";
@@ -230,7 +226,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testDeleteDeadline() throws IOException {
+	public void testDeleteDeadline() {
 		display = Logic.executeUserCommand("add Deadline Test due tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("delete 1");
 		String expected = "deleted: \"Deadline Test\"";
@@ -241,7 +237,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testDeleteEvent() throws IOException {
+	public void testDeleteEvent() {
 		display = Logic.executeUserCommand("add Event Test from tomorrow 3pm to 4pm @NUS #tag");
 		display = Logic.executeUserCommand("delete 1");
 		String expected = "deleted: \"Event Test\"";
@@ -252,7 +248,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testDeleteAll() throws IOException {
+	public void testDeleteAll() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("add Deadline Test due tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("add Event Test tomorrow 3pm to 4pm @NUS #tag");
@@ -266,7 +262,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testDeleteMultiple() throws IOException {
+	public void testDeleteMultiple() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("add Deadline Test due tomorrow 3pm @NUS #tag");
 		display = Logic.executeUserCommand("add Event Test from tomorrow 3pm to 4pm @NUS #tag");
@@ -280,7 +276,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testDeleteInvalidTaskNumber() throws IOException {
+	public void testDeleteInvalidTaskNumber() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("delete 5");
 		String expected = "You have specified invalid numbers: 5";
@@ -293,11 +289,10 @@ public class IntegrationTest {
 
 	/*************************
 	 * Reserving Tasks Tests *
-	 * @throws IOException   *
 	 *************************/
 
 	@Test
-	public void testReserveSingle() throws IOException {
+	public void testReserveSingle() {
 		display = Logic.executeUserCommand("reserve Reservation Test from 14th Apr 3pm to 4pm @NUS #tag");
 		String expected = "Reserved: \"Reservation Test\"";
 		String actual = display.getMessage();
@@ -308,7 +303,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testReserveDouble() throws IOException {
+	public void testReserveDouble() {
 		display = Logic.executeUserCommand(
 				"reserve Reservation Test from 14th Apr 3pm to 4pm and 15th Apr 4pm to 6pm @NUS #tag");
 		String expected = "Reserved: \"Reservation Test\"";
@@ -321,11 +316,10 @@ public class IntegrationTest {
 
 	/***********************
 	 * Undo and Redo Tests *
-	 * @throws IOException *
 	 ***********************/
 
 	@Test
-	public void testUndo() throws IOException {
+	public void testUndo() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("undo");
 		String expected = "Undid previous commands";
@@ -336,7 +330,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testRedo() throws IOException {
+	public void testRedo() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("undo");
 		display = Logic.executeUserCommand("redo");
@@ -349,7 +343,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testRedoError() throws IOException {
+	public void testRedoError() {
 		display = Logic.executeUserCommand("redo");
 		String expected = "You have reached the latest point possible";
 		String actual = display.getMessage();
@@ -359,11 +353,10 @@ public class IntegrationTest {
 
 	/******************************
 	 * Mark Done and Undone Tests *
-	 * @throws IOException        *
 	 ******************************/
 
 	@Test
-	public void testMarkDone() throws IOException {
+	public void testMarkDone() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("done 1");
 		String expected = "Completed: \"Floating Test\"";
@@ -375,7 +368,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testMarkDoneInvalidNumber() throws IOException {
+	public void testMarkDoneInvalidNumber() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("done 10");
 		String expected = "You have specified invalid task numbers: 10";
@@ -387,7 +380,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testMarkUnDone() throws IOException {
+	public void testMarkUnDone() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("done 1");
 		display = Logic.executeUserCommand("show /done");
@@ -401,7 +394,7 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testMarkUnDoneInvalidNumber() throws IOException {
+	public void testMarkUnDoneInvalidNumber() {
 		display = Logic.executeUserCommand("add Floating Test @NUS #tag");
 		display = Logic.executeUserCommand("done 1");
 		display = Logic.executeUserCommand("show Test");
@@ -414,4 +407,71 @@ public class IntegrationTest {
 				.contains("events=[], deadlineTasks=[], floatTasks=[], reservedTasks=[], completedTasks=[]"));
 	}
 
+	/*****************
+	 * Confirm Tests *
+	 *****************/
+
+	@Test
+	public void testConfirmReservation() {
+		display = Logic.executeUserCommand(
+				"reserve Reservation Test from 14th Apr 3pm to 4pm and 15th Apr 4pm to 6pm @NUS #tag");
+		display = Logic.executeUserCommand("confirm 1 1");
+		String expected = "added: \"Reservation Test\"";
+		String actual = display.getMessage();
+
+		assertEquals(expected, actual);
+		assertTrue(display.toString().contains(
+				"events=[Description: Reservation Test\r\nStart Date: 14/04/16 15:00\r\nEnd Date: 14/04/16 16:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+	}
+
+	@Test
+	public void testConfirmInvalidReservation() {
+		display = Logic.executeUserCommand(
+				"reserve Reservation Test from 14th Apr 3pm to 4pm and 15th Apr 4pm to 6pm @NUS #tag");
+		display = Logic.executeUserCommand("confirm 2 2");
+		String expected = "Please specify a valid index";
+		String actual = display.getMessage();
+
+		assertEquals(expected, actual);
+	}
+
+	/*****************
+	 * Postpone Tests *
+	 *****************/
+
+	@Test
+	public void testPostponeHours() {
+		display = Logic.executeUserCommand("add Deadline Test due 14th Apr 3pm @NUS #tag");
+		display = Logic.executeUserCommand("postpone 1 2hours");
+		String expected = "Postponed: Deadline Test";
+		String actual = display.getMessage();
+
+		assertEquals(expected, actual);
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 17:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+	}
+
+	@Test
+	public void testPostponeDays() {
+		display = Logic.executeUserCommand("add Deadline Test due 14th Apr 3pm @NUS #tag");
+		display = Logic.executeUserCommand("postpone 1 2days");
+		String expected = "Postponed: Deadline Test";
+		String actual = display.getMessage();
+
+		assertEquals(expected, actual);
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 16/04/16 15:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+	}
+
+	@Test
+	public void testPostponeInvalid() {
+		display = Logic.executeUserCommand("add Deadline Test due 14th Apr 3pm @NUS #tag");
+		display = Logic.executeUserCommand("postpone 3 2days");
+		String expected = "You can only pospone deadline tasks and events!";
+		String actual = display.getMessage();
+
+		assertEquals(expected, actual);
+		assertTrue(display.toString().contains(
+				"deadlineTasks=[Description: Deadline Test\r\nDeadline: 14/04/16 15:00\r\nLocation: NUS\r\nTags: #tag\r\n\r\n]"));
+	}
 }
