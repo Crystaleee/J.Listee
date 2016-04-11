@@ -152,6 +152,12 @@ public class JListeeParser {
 	public JListeeParser() {
 		dateParser = new com.joestelmach.natty.Parser();
 	}
+	
+	public static void main(String[] args){
+		JListeeParser parse = new JListeeParser();
+		Command what = parse.ParseCommand("update 5 -@ ");
+	}
+	
 		
 	/**
 	 * Return Command object of given inputLine
@@ -159,7 +165,6 @@ public class JListeeParser {
 	 * @param inputLine Inputline of user
 	 * @return Command object
 	 */
-	
 	public Command ParseCommand(String inputLine) {
 		String[] separateInputLine = inputLine.split(SPLIT_BY_SPACE);
 		String commandType = determineCommandType(separateInputLine);
@@ -414,9 +419,7 @@ public class JListeeParser {
 			Integer timeSlotIndex;
 	
 			taskNumber = extractNumber(inputLine);
-			if (taskNumber != null) {
-				inputLine = deleteKeyword(String.valueOf(taskNumber), inputLine);
-			}
+			inputLine = deleteReservedTaskIndexFromInputLine(inputLine, taskNumber);
 	
 			timeSlotIndex = extractNumber(inputLine);	
 	
@@ -443,36 +446,30 @@ public class JListeeParser {
 
 		taskNumber = extractNumber(inputLine);
 
-		if (taskNumber != null) {
-			inputLine = deleteKeyword(String.valueOf(taskNumber), inputLine);
-		}
+		inputLine = deleteReservedTaskIndexFromInputLine(inputLine, taskNumber);
 
 		Matcher retrieveLocation = Pattern.compile(SYMBOL_DELETE_LOCATION).matcher(inputLine);
 
-		if (retrieveLocation.find()) {
+		location = setLocationToEmptySpace(location, retrieveLocation);
+		
+		if (location!= null && location.equals(EMPTY_SPACE)){
 			inputLine = deleteKeyword(SYMBOL_DELETE_LOCATION, inputLine);
-			location = EMPTY_SPACE;
 		}
-
+		
 		else {
 			location = findLocation(inputLine);
 		}
-
+		
 		for (String preposition : CONTAIN_TIME) {
-			if (inputLine.contains(SYMBOL_PLUS + preposition) && (!preposition.equals(CONTAINING_BOTH))) {
-				reservedTaskIndex = extractNumber(inputLine);
-				logger.info("Editing reserve slot index time: " + reservedTaskIndex);
-				inputLine = deleteKeyword(String.valueOf(reservedTaskIndex),inputLine);
-			}
+			reservedTaskIndex = checkReservedTaskIndexExist(inputLine, reservedTaskIndex, preposition);
+			inputLine = deleteReservedTaskIndexFromInputLine(inputLine, reservedTaskIndex);
 		}
 
 		List<DateGroup> dateGroups = dateParser.parse(inputLine);
 
 		for (int keyword = STARTING_INDEX; keyword < CONTAIN_TIME.length; keyword++) {
 			if (inputLine.toLowerCase().contains(SYMBOL_DASH + CONTAIN_TIME[keyword])){
-				logger.info("Deleting time");
-				inputLine = inputLine.replace(SYMBOL_DASH + CONTAIN_TIME[keyword], EMPTY_SPACE).trim();
-				deleteTime(keyword);	
+				inputLine = deleteTimeAndTrimInputLine(inputLine, keyword);	
 			}
 
 			else if (inputLine.toLowerCase().contains(SYMBOL_PLUS + CONTAIN_TIME[keyword])) { 
@@ -528,7 +525,7 @@ public class JListeeParser {
 
 		return new CommandUpdate(taskNumber, reservedTaskIndex, taskDescription, location, startDate, endDate, tagLists, removeTagLists, taskNumbers);
 	}
-
+	
 	/**
 	 * Parses CommandDone 
 	 * 
@@ -538,9 +535,11 @@ public class JListeeParser {
 	private Command parseDone(String inputLine){
 		assert inputLine != null;
 		try {
+			
 			ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 			taskNumbers = extractTaskNumbers(inputLine, taskNumbers);
 			return new CommandDone(taskNumbers);
+			
 		} catch (NumberFormatException e) {
 			return new CommandInvalid();
 		}
@@ -555,10 +554,11 @@ public class JListeeParser {
 	private Command parseUndone(String inputLine) {
 		assert inputLine != null;
 		try {
-	
+			
 			ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
 			taskNumbers = extractTaskNumbers(inputLine, taskNumbers);	
-			return new CommandUndone(taskNumbers);		
+			return new CommandUndone(taskNumbers);	
+			
 		} catch (NumberFormatException e) {
 			return new CommandInvalid();
 		}
@@ -694,12 +694,24 @@ public class JListeeParser {
 	 */
 	private int checkFromAndTo(String inputLine, int prepositionIndex) {
 		if (prepositionIndex != DONT_EXIST){
-			if (inputLine.substring(prepositionIndex).contains(CONTAINING_FROM)){
-				if (!inputLine.substring(prepositionIndex).contains(CONTAINING_TO)){
-					prepositionIndex = DONT_EXIST;
-				}
-	
+			prepositionIndex = checkInputLineFromAndTo(inputLine, prepositionIndex);
+		}
+		
+		return prepositionIndex;
+	}
+
+	/**
+	 * check if inputLine exists "from... to.."
+	 * @param inputLine
+	 * @param prepositionIndex
+	 * @return
+	 */
+	private int checkInputLineFromAndTo(String inputLine, int prepositionIndex) {
+		if (inputLine.substring(prepositionIndex).contains(CONTAINING_FROM)){
+			if (!inputLine.substring(prepositionIndex).contains(CONTAINING_TO)){
+				prepositionIndex = DONT_EXIST;
 			}
+
 		}
 		return prepositionIndex;
 	}
@@ -710,10 +722,20 @@ public class JListeeParser {
 	 * @param keyword
 	 */
 	private void checkDuplicatesForAllElements(ArrayList<Integer> taskNumbers, int keyword) {
-		for (int i = keyword + ONE; i<taskNumbers.size(); i++) {
-			if (taskNumbers.get(keyword) == taskNumbers.get(i)) {
-				taskNumbers.remove(i);
-			}
+		for (int index = keyword + ONE; index<taskNumbers.size(); index++) {
+			checkIfDuplicateExist(taskNumbers, keyword, index);
+		}
+	}
+
+	/**
+	 * compares and check if duplicate exist
+	 * @param taskNumbers
+	 * @param keyword
+	 * @param index
+	 */
+	private void checkIfDuplicateExist(ArrayList<Integer> taskNumbers, int keyword, int index) {
+		if (taskNumbers.get(keyword) == taskNumbers.get(index)) {
+			taskNumbers.remove(index);
 		}
 	}
 
@@ -739,6 +761,21 @@ public class JListeeParser {
 			}
 		}
 		return prepositionIndex;
+	}
+
+	/**
+	 * if index of task reserve exist 
+	 * @param inputLine
+	 * @param reservedTaskIndex
+	 * @param preposition
+	 * @return task index for the reserved
+	 */
+	private Integer checkReservedTaskIndexExist(String inputLine, Integer reservedTaskIndex, String preposition) {
+		if (inputLine.contains(SYMBOL_PLUS + preposition) && (!preposition.equals(CONTAINING_BOTH))) {
+			reservedTaskIndex = extractNumber(inputLine);
+			logger.info("Editing reserve slot index time: " + reservedTaskIndex);		
+		}
+		return reservedTaskIndex;
 	}
 
 	private String changingStartTimeOnly(String inputLine, List<DateGroup> dateGroups) {
@@ -893,6 +930,33 @@ public class JListeeParser {
 			setEndTimeInMilliZero();
 			break;	
 		}
+	}
+
+	/**
+	 * deleting time and remove from input line
+	 * @param inputLine
+	 * @param keyword
+	 * @return inputLine after removing
+	 */
+	private String deleteTimeAndTrimInputLine(String inputLine, int keyword) {
+		logger.info("Deleting time");
+		inputLine = inputLine.replace(SYMBOL_DASH + CONTAIN_TIME[keyword], EMPTY_SPACE).trim();
+		deleteTime(keyword);
+		return inputLine;
+	}
+
+	/**
+	 * removee reserve task index from inputLine
+	 * @param inputLine
+	 * @param reservedTaskIndex
+	 * @return input line after revmogin
+	 */
+	private String deleteReservedTaskIndexFromInputLine(String inputLine, Integer reservedTaskIndex) {
+		if (reservedTaskIndex != null){
+			inputLine = deleteKeyword(String.valueOf(reservedTaskIndex),inputLine);
+		}
+		
+		return inputLine;
 	}
 
 	/**
@@ -1196,6 +1260,20 @@ public class JListeeParser {
 		if (group.isTimeInferred()) {
 			setEndDateTimeDefault();
 		}
+	}
+
+	/**
+	 * if user deletes location is found, set to empty space
+	 * 
+	 * @param location
+	 * @param retrieveLocation
+	 * @return location of empty space
+	 */
+	private String setLocationToEmptySpace(String location, Matcher retrieveLocation) {
+		if (retrieveLocation.find()) {
+			location = EMPTY_SPACE;
+		}
+		return location;
 	}
 
 	/**
