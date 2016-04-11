@@ -16,7 +16,7 @@ import logic.Logic;
 
 public class IntegrationTest {
 
-	private static Display display;
+	private Display display;
 	private String filepath = "src\\tests\\systematicTest.txt";
 
 	@Before
