@@ -46,6 +46,18 @@ public class InputSuggestion {
 	private static final String SUGGESTION_REDO_RESERVE = "redo // res/reserve <description> <from start date(s) to end date(s)>";
 	private static final String SUGGESTION_RES_RESERVE = "res/reserve <description> <from start date(s) to end date(s)>";
 
+	/* The prefixes that commands have when they share first couple characters. */
+	private static final String PREFIX_CONFIRM_FILEPATH = "c";
+	private static final String PREFIX_DELETE_DONE = "d";
+	private static final String PREFIX_DELETE_DEL = "del";
+	private static final String PREFIX_EDIT_EXIT = "e";
+	private static final String PREFIX_POSTPONE_PP = "p";
+	private static final String PREFIX_REDO_RESERVE = "re";
+	private static final String PREFIX_RES_RESERVE = "res";
+	private static final String PREFIX_SHOW_SEARCH = "s";
+	private static final String PREFIX_UNDO_UNDONE_UPDATE = "u";
+	private static final String PREFIX_UNDO_UNDONE = "undo";
+	
 	/* The commands that the user can type in. */
 	private static final String COMMAND_ADD = "add ";
 	private static final String COMMAND_BACK = "back";
@@ -91,7 +103,7 @@ public class InputSuggestion {
 	 */
 	public String getSuggestedInput(String currentInput) {
 		currentInput = currentInput.toLowerCase();
-		return getSuggestionForCommandsThatStartWithSameLetter(currentInput);
+		return getSuggestionForCommandsWithSamePrefix(currentInput);
 	}
 
 	/**
@@ -102,28 +114,28 @@ public class InputSuggestion {
 	 * @param currentInput  What the user has currently typed in.
 	 * @return              An input suggestion.
 	 */
-	private String getSuggestionForCommandsThatStartWithSameLetter(String currentInput) {
+	private String getSuggestionForCommandsWithSamePrefix(String currentInput) {
 		if (currentInput.isEmpty()) {
 			return null;
-		} else if ("c".startsWith(currentInput)) {
+		} else if (PREFIX_CONFIRM_FILEPATH.startsWith(currentInput)) {
 			return SUGGESTION_CONFIRM_FILEPATH;
-		} else if ("d".startsWith(currentInput)) {
+		} else if (PREFIX_DELETE_DONE.startsWith(currentInput)) {
 			return SUGGESTION_DELETE_DONE;
-		} else if ("del".startsWith(currentInput)) {
+		} else if (PREFIX_DELETE_DEL.startsWith(currentInput)) {
 			return SUGGESTION_DELETE_DEL;
-		} else if ("e".startsWith(currentInput)) {
+		} else if (PREFIX_EDIT_EXIT.startsWith(currentInput)) {
 			return SUGGESTION_EDIT_EXIT;
-		} else if ("p".startsWith(currentInput)) {
+		} else if (PREFIX_POSTPONE_PP.startsWith(currentInput)) {
 			return SUGGESTION_POSTPONE_PP;
-		} else if ("re".startsWith(currentInput)) {
+		} else if (PREFIX_REDO_RESERVE.startsWith(currentInput)) {
 			return SUGGESTION_REDO_RESERVE;
-		} else if ("res".startsWith(currentInput)) {
+		} else if (PREFIX_RES_RESERVE.startsWith(currentInput)) {
 			return SUGGESTION_RES_RESERVE;
-		} else if ("s".startsWith(currentInput)) {
+		} else if (PREFIX_SHOW_SEARCH.startsWith(currentInput)) {
 			return SUGGESTION_SHOW_SEARCH;
-		} else if ("u".startsWith(currentInput)) {
+		} else if (PREFIX_UNDO_UNDONE_UPDATE.startsWith(currentInput)) {
 			return SUGGESTION_UNDO_UNDONE_UPDATE;
-		} else if ("undo".startsWith(currentInput)) {
+		} else if (PREFIX_UNDO_UNDONE.startsWith(currentInput)) {
 			return SUGGESTION_UNDO_UNDONE;
 		} else {
 			return getSuggestionWhileTypingCommand(currentInput);

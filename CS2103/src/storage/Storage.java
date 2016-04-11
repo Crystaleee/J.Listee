@@ -177,6 +177,7 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
+				assert line != null : "There is no floating task to read.";
 				readFloatingTask(br, floatTasks, line);
 			}
 		}
@@ -201,6 +202,7 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
+				assert line != null : "There is no deadline task to read.";
 				readDeadlineTask(br, deadlineTasks, line);
 			}
 		}
@@ -225,6 +227,7 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
+				assert line != null : "There is no event to read.";
 				readEventTask(br, events, line);
 			}
 		}
@@ -249,6 +252,7 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
+				assert line != null : "There is no reserved task to read.";
 				readReservedTask(br, reservedTasks, line);
 			}
 		}
@@ -273,6 +277,7 @@ public class Storage {
 			if (isInvalidLine(line)) {
 				break;
 			} else {
+				assert line != null : "There is no completed task to read.";
 				readCompletedTask(br, completedTasks, line);
 			}
 		}

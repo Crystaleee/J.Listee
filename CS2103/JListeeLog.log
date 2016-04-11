@@ -1,52 +1,42 @@
-Apr 11, 2016 3:25:05 PM logic.Logic initializeProgram
+Apr 11, 2016 5:56:48 PM logic.Logic initializeProgram
 INFO: Logic: Initialise ProgramC:\Users\Chloe\Desktop\J.Listee.txt
-Apr 11, 2016 3:25:05 PM storage.Storage addFloatingTaskToList
-INFO: Successfully read floating task: floating test
-Apr 11, 2016 3:25:05 PM storage.Storage addFloatingTaskToList
-INFO: Successfully read floating task: floating
-Apr 11, 2016 3:25:05 PM storage.Storage addDeadlineTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addFloatingTaskToList
+INFO: Successfully read floating task: potato
+Apr 11, 2016 5:56:48 PM storage.Storage addFloatingTaskToList
+INFO: Successfully read floating task: untimed
+Apr 11, 2016 5:56:48 PM storage.Storage addDeadlineTaskToList
 INFO: Successfully read deadline task: deadline
-Apr 11, 2016 3:25:05 PM storage.Storage addDeadlineTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addDeadlineTaskToList
 INFO: Successfully read deadline task: deadline
-Apr 11, 2016 3:25:05 PM storage.Storage addEventTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addDeadlineTaskToList
+INFO: Successfully read deadline task: deadline
+Apr 11, 2016 5:56:48 PM storage.Storage addEventTaskToList
 INFO: Successfully read event: event
-Apr 11, 2016 3:25:05 PM storage.Storage addEventTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addEventTaskToList
 INFO: Successfully read event: event
-Apr 11, 2016 3:25:05 PM storage.Storage addReservedTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addEventTaskToList
+INFO: Successfully read event: event
+Apr 11, 2016 5:56:48 PM storage.Storage addReservedTaskToList
 INFO: Successfully read reserved task: something
-Apr 11, 2016 3:25:05 PM storage.Storage addReservedTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addReservedTaskToList
 INFO: Successfully read reserved task: blah
-Apr 11, 2016 3:25:05 PM storage.Storage addCompletedTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addReservedTaskToList
+INFO: Successfully read reserved task: something
+Apr 11, 2016 5:56:48 PM storage.Storage addCompletedTaskToList
 INFO: Successfully read completed task: event
-Apr 11, 2016 3:25:05 PM storage.Storage addCompletedTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addCompletedTaskToList
 INFO: Successfully read completed task: floating test
-Apr 11, 2016 3:25:05 PM storage.Storage addCompletedTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addCompletedTaskToList
 INFO: Successfully read completed task: testing
-Apr 11, 2016 3:25:05 PM storage.Storage addCompletedTaskToList
+Apr 11, 2016 5:56:48 PM storage.Storage addCompletedTaskToList
 INFO: Successfully read completed task: deadline again die today
-Apr 11, 2016 3:25:05 PM entity.CommandShow execute
+Apr 11, 2016 5:56:48 PM entity.CommandShow execute
 INFO: Show: No errors
-Apr 11, 2016 3:25:05 PM parser.JListeeParser ParseCommand
+Apr 11, 2016 5:56:48 PM parser.JListeeParser ParseCommand
 INFO: commandType: add
-Apr 11, 2016 3:25:05 PM parser.JListeeParser parseAdd
+Apr 11, 2016 5:56:48 PM parser.JListeeParser parseAdd
 INFO: Preposition Index for parseAdd: 5
-Apr 11, 2016 3:25:06 PM parser.JListeeParser parseAdd
+Apr 11, 2016 5:56:49 PM parser.JListeeParser parseAdd
 INFO: is event?: false
-Apr 11, 2016 3:25:06 PM parser.JListeeParser parseAdd
+Apr 11, 2016 5:56:49 PM parser.JListeeParser parseAdd
 INFO: is deadline?: false
-Apr 11, 2016 3:25:10 PM logic.Logic executeUserCommand
-INFO: Logic: Parsing user input show
-Apr 11, 2016 3:25:10 PM parser.JListeeParser ParseCommand
-INFO: commandType: show
-Apr 11, 2016 3:25:10 PM logic.Logic executeCommand
-INFO: Logic: Executing command 
-Apr 11, 2016 3:25:10 PM entity.CommandShow execute
-INFO: Show: Show all
-Apr 11, 2016 3:25:14 PM logic.Logic executeUserCommand
-INFO: Logic: Parsing user input show /done
-Apr 11, 2016 3:25:14 PM parser.JListeeParser ParseCommand
-INFO: commandType: show
-Apr 11, 2016 3:25:14 PM logic.Logic executeCommand
-INFO: Logic: Executing command 
-Apr 11, 2016 3:25:14 PM entity.CommandShow execute
-INFO: Show: No errors
