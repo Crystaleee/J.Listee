@@ -316,7 +316,7 @@ public class JListeeParser {
 	}
 
 	/**
-	 * 
+	 * Parses show either group or keywords 
 	 * @param inputLine
 	 * @return
 	 */
@@ -394,6 +394,7 @@ public class JListeeParser {
 			String taskDescription = trimInputLineToDescriptionOnly(inputLine, location, tagLists);
 
 			return new CommandAddReserved(taskDescription, location, startDates, endDates, tagLists);
+		
 		} catch (NumberFormatException e) {
 			return new CommandInvalid();
 		}
@@ -576,11 +577,11 @@ public class JListeeParser {
 				inputLine = deleteKeyword(String.valueOf(taskNumber), inputLine);
 			}
 
-			for (int keyword = STARTING_INDEX; keyword< CONTAIN_YEAR_MONTH_DAY_HOUR_MIN.length; keyword++){
+			for (int keyword = STARTING_INDEX; keyword < CONTAIN_YEAR_MONTH_DAY_HOUR_MIN.length; keyword++){
 
 				Matcher matcher = Pattern.compile(DIGIT+ CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[keyword]+WHITE_SPACE).matcher(inputLine);
 
-				while(matcher.find()){
+				while(matcher.find()) {
 					switch(CONTAIN_YEAR_MONTH_DAY_HOUR_MIN[keyword]){
 					case YEAR :
 					case YRS :
@@ -716,7 +717,7 @@ public class JListeeParser {
 	 * @param keyword
 	 */
 	private void checkDuplicatesForAllElements(ArrayList<Integer> taskNumbers, int keyword) {
-		for (int index = keyword + ONE; index<taskNumbers.size(); index++) {
+		for (int index = keyword + ONE; index < taskNumbers.size(); index++) {
 			checkIfDuplicateExist(taskNumbers, keyword, index);
 		}
 	}
@@ -741,7 +742,7 @@ public class JListeeParser {
 	 * @return prepositionIndex
 	 */
 	private int checkPrepositionIndexAndInitialise(String inputLine, int prepositionIndex) {
-		for (int keyword = STARTING_INDEX; keyword< DATE_WORDS.length; keyword++){
+		for (int keyword = STARTING_INDEX; keyword < DATE_WORDS.length; keyword++){
 			int temp = DONT_EXIST;
 	
 			Matcher matcher = Pattern.compile(WHITE_SPACE+ DATE_WORDS[keyword]+WHITE_SPACE).matcher(inputLine);
@@ -1065,7 +1066,7 @@ public class JListeeParser {
 	 * @param endDeleteIndex
 	 */
 	private void extractTaskNumbersContainingDash(ArrayList<Integer> taskNumbers, int startDeleteIndex, int endDeleteIndex) {
-		while (startDeleteIndex <= endDeleteIndex){
+		while (startDeleteIndex <= endDeleteIndex) {
 			taskNumbers.add(startDeleteIndex);
 			startDeleteIndex++;
 		}
@@ -1141,7 +1142,7 @@ public class JListeeParser {
 	 */
 	
 	private void iterateAndDetectDuplicates(ArrayList<Integer> taskNumbers) {
-		for (int keyword=STARTING_INDEX; keyword<taskNumbers.size();keyword++){
+		for (int keyword = STARTING_INDEX; keyword < taskNumbers.size(); keyword++){
 			checkDuplicatesForAllElements(taskNumbers, keyword);
 		}
 	}
@@ -1154,7 +1155,7 @@ public class JListeeParser {
 	 * @return inputLine
 	 */
 	private String removeAllDeletedNumberAndSymbols(String inputLine, ArrayList<Integer> taskNumbers) {
-		for (int startIndex = STARTING_INDEX; startIndex<taskNumbers.size(); startIndex++) {
+		for (int startIndex = STARTING_INDEX; startIndex < taskNumbers.size(); startIndex++) {
 			if (inputLine.contains(String.valueOf(taskNumbers.get(startIndex)))) {
 				inputLine = deleteKeyword(CONTAINING_COMMA, inputLine);
 				inputLine = deleteKeyword(SYMBOL_DASH, inputLine);
