@@ -9,10 +9,10 @@ import java.util.ArrayList;
 public class TaskFloat extends Task {
 	// @@author A0149063E
 	// String formats for the toString() method
-	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
-	private static final String STRING_LOCATION = "Location: %1$s \r\n";
+	private static final String STRING_DESCRIPTION = "Description: %1$s\r\n";
+	private static final String STRING_LOCATION = "Location: %1$s\r\n";
 	private static final String STRING_TAG = " #%1$s";
-	private static final String STRING_TAGS = "Tags: %1$s \r\n\r\n";
+	private static final String STRING_TAGS = "Tags:%1$s\r\n\r\n";
 
 	// @@author A0139995E
 	public TaskFloat() {

@@ -1,56 +1,848 @@
-四月 11, 2016 7:01:00 下午 logic.Logic createFile
-信息: Logic: Create filepath C:\Users\zhu\Documents\J.Listee.txt
-四月 11, 2016 7:01:00 下午 logic.Logic initializeProgram
-信息: Logic: Initialise ProgramC:\Users\zhu\Documents\J.Listee.txt
-四月 11, 2016 7:01:00 下午 storage.Storage addFloatingTaskToList
-信息: Successfully read floating task: send intern email
-四月 11, 2016 7:01:00 下午 storage.Storage addFloatingTaskToList
-信息: Successfully read floating task: confirm family tour schedule
-四月 11, 2016 7:01:00 下午 storage.Storage addFloatingTaskToList
-信息: Successfully read floating task: photoshop photos
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: project
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: CS2103 group meeting
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: lab5
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: peer evaluation
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: UI project
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: UI presentation
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: SE FINAL
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: UI FINAL
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: CN FINAL
-四月 11, 2016 7:01:00 下午 storage.Storage addDeadlineTaskToList
-信息: Successfully read deadline task: CG FINAL
-四月 11, 2016 7:01:00 下午 storage.Storage addEventTaskToList
-信息: Successfully read event: Bali travel
-四月 11, 2016 7:01:00 下午 storage.Storage addEventTaskToList
-信息: Successfully read event: family Singapore tour
-四月 11, 2016 7:01:00 下午 storage.Storage addReservedTaskToList
-信息: Successfully read reserved task: hello3
-四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
-信息: Successfully read completed task: fetch clothes  balcony
-四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
-信息: Successfully read completed task: borrow key and check mail box
-四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
-信息: Successfully read completed task: longer feedback
-四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
-信息: Successfully read completed task: check Taobao express delivery
-四月 11, 2016 7:01:00 下午 storage.Storage addCompletedTaskToList
-信息: Successfully read completed task: Lankawi travel
-四月 11, 2016 7:01:01 下午 entity.CommandShow execute
-信息: Show: No errors
-四月 11, 2016 7:01:01 下午 parser.JListeeParser ParseCommand
-信息: commandType: add
-四月 11, 2016 7:01:01 下午 parser.JListeeParser parseAdd
-信息: Preposition Index for parseAdd: 5
-四月 11, 2016 7:01:05 下午 parser.JListeeParser parseAdd
-信息: is event?: false
-四月 11, 2016 7:01:05 下午 parser.JListeeParser parseAdd
-信息: is deadline?: false
+Apr 11, 2016 7:25:43 PM logic.Logic createFile
+INFO: Logic: Create filepath C:\Users\Chloe\Desktop\J.Listee.txt
+Apr 11, 2016 7:25:43 PM logic.Logic initializeProgram
+INFO: Logic: Initialise ProgramC:\Users\Chloe\Desktop\J.Listee.txt
+Apr 11, 2016 7:25:43 PM storage.Storage addFloatingTaskToList
+INFO: Successfully read floating task: Float3
+Apr 11, 2016 7:25:43 PM storage.Storage addFloatingTaskToList
+INFO: Successfully read floating task: Float5
+Apr 11, 2016 7:25:43 PM storage.Storage addFloatingTaskToList
+INFO: Successfully read floating task: DeadlineTask
+Apr 11, 2016 7:25:43 PM storage.Storage addFloatingTaskToList
+INFO: Successfully read floating task: Float1
+Apr 11, 2016 7:25:43 PM storage.Storage addDeadlineTaskToList
+INFO: Successfully read deadline task: Event3
+Apr 11, 2016 7:25:43 PM storage.Storage addDeadlineTaskToList
+INFO: Successfully read deadline task: DL1
+Apr 11, 2016 7:25:43 PM storage.Storage addDeadlineTaskToList
+INFO: Successfully read deadline task: DL4
+Apr 11, 2016 7:25:43 PM storage.Storage addEventTaskToList
+INFO: Successfully read event: DL3
+Apr 11, 2016 7:25:43 PM storage.Storage addEventTaskToList
+INFO: Successfully read event: Event1
+Apr 11, 2016 7:25:43 PM storage.Storage addReservedTaskToList
+INFO: Successfully read reserved task: r1
+Apr 11, 2016 7:25:43 PM storage.Storage addReservedTaskToList
+INFO: Successfully read reserved task: r2
+Apr 11, 2016 7:25:43 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:43 PM parser.JListeeParser ParseCommand
+INFO: commandType: add
+Apr 11, 2016 7:25:43 PM parser.JListeeParser parseAdd
+INFO: Preposition Index for parseAdd: 5
+Apr 11, 2016 7:25:44 PM parser.JListeeParser parseAdd
+INFO: is event?: false
+Apr 11, 2016 7:25:44 PM parser.JListeeParser parseAdd
+INFO: is deadline?: false
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: Show all
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDelete execute
+INFO: Delete: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No tasks
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDelete execute
+INFO: Delete: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: Show all
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandRedo execute
+INFO: Redo: At last state
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandAddFloatTask execute
+INFO: AddFloat: No desc
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event2
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float2
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event2
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDelete execute
+INFO: Delete: No errors
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL2
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event2
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDelete execute
+INFO: Delete: No errors
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDelete execute
+INFO: Delete: Index Invalid
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDelete execute
+INFO: Delete: Index Invalid
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandInvalid execute
+INFO: Invalid Command
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float4
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: Show all
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Float
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Floatter
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Float
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate hasChangeFloatTaskType
+INFO: Update: Convert float to deadline
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Floatter
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Float
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate hasChangeFloatTaskType
+INFO: Update: Convert float to event
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Floatter
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Deadline
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Deadline
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Deadline
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate changeDeadlineTaskType
+INFO: Update: Convert deadline to float
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Deadline
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate changeDeadlineTaskType
+INFO: Update: Convert deadline to event
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Event
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Event
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate changeEventTaskType
+INFO: Update: Convert event to deadline
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate editTask
+INFO: Update: Event
+Apr 11, 2016 7:25:48 PM entity.CommandUpdate changeEventTaskType
+INFO: Update: Convert event to float
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDone execute
+INFO: Done: No errors
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: DL4
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDone execute
+INFO: Done: No errors
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: DL1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: DL1
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandDone execute
+INFO: Done: No errors
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeCompletedTasks
+INFO: Successfully wrote completed task: DL4
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandShow execute
+INFO: Show: No errors
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2
+Apr 11, 2016 7:25:48 PM logic.Logic executeCommand
+INFO: Logic: Executing command 
+Apr 11, 2016 7:25:48 PM entity.CommandPostpone postpone
+INFO: Postpone: Postpone deadline
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float3
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float5
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: DeadlineTask
+Apr 11, 2016 7:25:48 PM storage.Storage writeFloatingTasks
+INFO: Successfully wrote floating task: Float1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: Event3
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL1
+Apr 11, 2016 7:25:48 PM storage.Storage writeDeadlineTasks
+INFO: Successfully wrote deadline task: DL4
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: DL3
+Apr 11, 2016 7:25:48 PM storage.Storage writeEventTasks
+INFO: Successfully wrote event: Event1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r1
+Apr 11, 2016 7:25:48 PM storage.Storage writeReservedTasks
+INFO: Successfully wrote reserved task: r2

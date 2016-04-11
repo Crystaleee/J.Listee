@@ -15,12 +15,12 @@ public class TaskReserved extends Task {
 
 	// @@author A0149063E
 	// String formats for the toString() method
-	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
+	private static final String STRING_DESCRIPTION = "Description: %1$s\r\n";
 	private static final String STRING_START_DATES = "Start Dates: %1$s\r\n";
 	private static final String STRING_END_DATES = "End Dates: %1$s\r\n";
-	private static final String STRING_LOCATION = "Location: %1$s \r\n";
+	private static final String STRING_LOCATION = "Location: %1$s\r\n";
 	private static final String STRING_TAG = " #%1$s";
-	private static final String STRING_TAGS = "Tags: %1$s \r\n\r\n";
+	private static final String STRING_TAGS = "Tags:%1$s\r\n\r\n";
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 
 	// @@author A0139995E

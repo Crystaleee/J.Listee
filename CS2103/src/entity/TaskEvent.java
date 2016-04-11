@@ -13,12 +13,12 @@ public class TaskEvent extends TaskDeadline {
 
 	// @@author A0149063E
 	// String formats for the toString() method
-	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
+	private static final String STRING_DESCRIPTION = "Description: %1$s\r\n";
 	private static final String STRING_START_DATE = "Start Date: %1$s\r\n";
 	private static final String STRING_END_DATE = "End Date: %1$s\r\n";
-	private static final String STRING_LOCATION = "Location: %1$s \r\n";
+	private static final String STRING_LOCATION = "Location: %1$s\r\n";
 	private static final String STRING_TAG = " #%1$s";
-	private static final String STRING_TAGS = "Tags: %1$s \r\n\r\n";
+	private static final String STRING_TAGS = "Tags:%1$s\r\n\r\n";
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 
 	// @@author A0139995E
