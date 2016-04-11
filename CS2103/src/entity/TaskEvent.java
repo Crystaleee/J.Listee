@@ -12,6 +12,7 @@ public class TaskEvent extends TaskDeadline {
 	private Calendar startDate;
 
 	// @@author A0149063E
+	// String formats for the toString() method
 	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
 	private static final String STRING_START_DATE = "Start Date: %1$s\r\n";
 	private static final String STRING_END_DATE = "End Date: %1$s\r\n";

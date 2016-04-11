@@ -9,6 +9,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,6 +91,12 @@ public class Storage {
 		return storageInstance;
 	}
 
+	/**
+	 * Creates the text file that will be used to store the tasks of J.Listee.
+	 * 
+	 * @param filepath      Location of where the file will be created.
+	 * @throws IOException  If I/O operations fail.
+	 */
 	public void createFile(String filepath) throws IOException {
 		File file = new File(filepath);
 		if (!file.exists()) {
@@ -95,6 +105,36 @@ public class Storage {
 		setFilePath(filepath);
 	}
 
+	/**
+	 * Changes the location of the text file to a new filepath. If a valid
+	 * storage file exists in the new filepath, read storage from there.
+	 * 
+	 * @param newFilePathString  The new location of the storage text file.
+	 * @throws IOException       If I/O operations fail.
+	 */
+	public void changeFilePath(String newFilePathString) throws IOException {
+		String oldFilePathString = readOldFilePath();
+
+		File newFile = new File(newFilePathString);
+		if (!newFile.exists()) {
+			Path oldFilePath = Paths.get(oldFilePathString);
+			Path newFilePath = Paths.get(newFilePathString);
+			Files.move(oldFilePath, newFilePath, StandardCopyOption.ATOMIC_MOVE);
+		}
+		LogStorage.writeLogFile(newFilePathString);
+		setFilePath(newFilePathString);
+	}
+
+	/**
+	 * Reads the location of the old storage text file.
+	 * 
+	 * @return              The location of the text file.
+	 * @throws IOException  If I/O operations fail.
+	 */
+	private String readOldFilePath() throws IOException {
+		return LogStorage.readLog();
+	}
+	
 	/**
 	 * Reads storage's text file to create and return a Display object.
 	 * 

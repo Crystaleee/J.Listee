@@ -13,6 +13,7 @@ public class Task implements java.io.Serializable {
 	private boolean isOverdue;
 
 	// @@author A0149063E
+	// String formats for the toString() method
 	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
 	private static final String STRING_LOCATION = "Location: %1$s \r\n";
 	private static final String STRING_TAG = " #%1$s";

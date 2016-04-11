@@ -14,6 +14,7 @@ public class TaskReserved extends Task {
 	private ArrayList<Calendar> endDates;
 
 	// @@author A0149063E
+	// String formats for the toString() method
 	private static final String STRING_DESCRIPTION = "Description: %1$s \r\n";
 	private static final String STRING_START_DATES = "Start Dates: %1$s\r\n";
 	private static final String STRING_END_DATES = "End Dates: %1$s\r\n";

@@ -22,7 +22,6 @@ import entity.GlobalConstants;
 import entity.GlobalLogger;
 import parser.JListeeParser;
 import storage.Storage;
-import storage.StorageFilePath;
 
 public class Logic {
     private static Storage storage = Storage.getInstance();
@@ -51,7 +50,7 @@ public class Logic {
         logger.log(Level.INFO, "Logic: Change filepath" + filePath);
         try{
         	file = filePath;
-            StorageFilePath.changeFilePath(filePath);
+            storage.changeFilePath(filePath);
             initializeDisplay();
             display.setMessage(GlobalConstants.MESSAGE_FILE_PATH_CHANGE + filePath);
         }catch(IOException e){
