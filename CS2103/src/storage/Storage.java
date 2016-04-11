@@ -30,6 +30,10 @@ public class Storage {
 	private static String filePath;
 	private static Storage storageInstance;
 
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private Logger logger = GlobalLogger.getLogger();
+	
+	/* Headers that divide the text file into the different task categories. */
 	private static final String HEADER_FLOATING = "     TASKS";
 	private static final String HEADER_DEADLINE = "   DEADLINES";
 	private static final String HEADER_EVENT = "    EVENTS";
@@ -37,6 +41,7 @@ public class Storage {
 	private static final String HEADER_COMPLETED = "   COMPLETED";
 	private static final String HEADER_DIVIDER = "===============";
 
+	/* The attributes of each task. */
 	private static final String ATTRIBUTE_DESCRIPTION = "Description:";
 	private static final String ATTRIBUTE_LOCATION = "Location:";
 	private static final String ATTRIBUTE_TAGS = "Tags:";
@@ -46,28 +51,29 @@ public class Storage {
 	private static final String ATTRIBUTE_START_DATES = "Start Dates:";
 	private static final String ATTRIBUTE_END_DATES = "End Dates:";
 
+	/* Inputs into the display for an empty attribute. */
 	private static final String EMPTY_MESSAGE = "";
 	private static final String EMPTY_DESCRIPTION = "undefined";
 
+	/* Messages to be logged for successfully reading a task. */
 	private static final String LOGGER_READ_FLOATING = "Successfully read floating task: %1$s";
 	private static final String LOGGER_READ_DEADLINE = "Successfully read deadline task: %1$s";
 	private static final String LOGGER_READ_EVENT = "Successfully read event: %1$s";
 	private static final String LOGGER_READ_RESERVED = "Successfully read reserved task: %1$s";
 	private static final String LOGGER_READ_COMPLETED = "Successfully read completed task: %1$s";
 
+	/* Messages to be logged if there is an error in reading a task. */
 	private static final String LOGGER_READ_ERROR_DEADLINE = "Deadline task has invalid deadline and can't be read.";
 	private static final String LOGGER_READ_ERROR_EVENT = "Event task has invalid dates and can't be read.";
 	private static final String LOGGER_READ_ERROR_RESERVED = "Reserved task has invalid dates and can't be read.";
 	private static final String LOGGER_READ_ERROR_COMPLETED = "Could not read completed task: %1$s";
 
+	/* Messages to be logged for successfully writing a task. */
 	private static final String LOGGER_WRITE_FLOATING = "Successfully wrote floating task: %1$s";
 	private static final String LOGGER_WRITE_DEADLINE = "Successfully wrote deadline task: %1$s";
 	private static final String LOGGER_WRITE_EVENT = "Successfully wrote event: %1$s";
 	private static final String LOGGER_WRITE_RESERVED = "Successfully wrote reserved task: %1$s";
 	private static final String LOGGER_WRITE_COMPLETED = "Successfully wrote completed task: %1$s";
-
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
-	private Logger logger = GlobalLogger.getLogger();
 
 	/**
 	 * Gets an instance of Storage for other classes to use.
