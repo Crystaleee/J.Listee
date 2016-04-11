@@ -10,8 +10,8 @@ import java.util.Calendar;
 
 @SuppressWarnings("serial")
 public class TaskReserved extends Task {
-	private ArrayList<Calendar> startDates;
-	private ArrayList<Calendar> endDates;
+	private ArrayList<Calendar> _startDates;
+	private ArrayList<Calendar> _endDates;
 
 	// @@author A0149063E
 	// String formats for the toString() method
@@ -28,8 +28,8 @@ public class TaskReserved extends Task {
 		this.setDescription(null);
 		this.setLocation(null);
 		this.setTags(null);
-		startDates = null;
-		endDates = null;
+		_startDates = null;
+		_endDates = null;
 	}
 
 	public TaskReserved(String description, String location, ArrayList<Calendar> startDates,
@@ -37,24 +37,24 @@ public class TaskReserved extends Task {
 		this.setDescription(description);
 		this.setLocation(location);
 		this.setTags(tags);
-		this.startDates = startDates;
-		this.endDates = endDates;
+		this._startDates = startDates;
+		this._endDates = endDates;
 	}
 
 	public void setStartDates(ArrayList<Calendar> startDates) {
-		this.startDates = startDates;
+		this._startDates = startDates;
 	}
 
 	public ArrayList<Calendar> getStartDates() {
-		return startDates;
+		return _startDates;
 	}
 
 	public void setEndDates(ArrayList<Calendar> endDates) {
-		this.endDates = endDates;
+		this._endDates = endDates;
 	}
 
 	public ArrayList<Calendar> getEndDates() {
-		return endDates;
+		return _endDates;
 	}
 
 	// @@author A0149063E
@@ -64,21 +64,21 @@ public class TaskReserved extends Task {
 		sb.append(String.format(STRING_DESCRIPTION, this.getDescription()));
 
 		String startDates = "";
-		for (int i = 0; i < this.startDates.size(); i++) {
-			if (i == this.startDates.size() - 1) {
-				startDates += sdf.format(this.startDates.get(i).getTime());
+		for (int i = 0; i < this._startDates.size(); i++) {
+			if (i == this._startDates.size() - 1) {
+				startDates += sdf.format(this._startDates.get(i).getTime());
 			} else {
-				startDates += sdf.format(this.startDates.get(i).getTime()) + ", ";
+				startDates += sdf.format(this._startDates.get(i).getTime()) + ", ";
 			}
 		}
 		sb.append(String.format(STRING_START_DATES, startDates));
 
 		String endDates = "";
-		for (int i = 0; i < this.endDates.size(); i++) {
-			if (i == this.endDates.size() - 1) {
-				endDates += sdf.format(this.endDates.get(i).getTime());
+		for (int i = 0; i < this._endDates.size(); i++) {
+			if (i == this._endDates.size() - 1) {
+				endDates += sdf.format(this._endDates.get(i).getTime());
 			} else {
-				endDates += sdf.format(this.endDates.get(i).getTime()) + ", ";
+				endDates += sdf.format(this._endDates.get(i).getTime()) + ", ";
 			}
 		}
 		sb.append(String.format(STRING_END_DATES, endDates));

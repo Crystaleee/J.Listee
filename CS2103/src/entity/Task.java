@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class Task implements java.io.Serializable {
-	private String description;
-	private String location;
-	private ArrayList<String> tags;
-	private boolean isOverdue;
+	private String _description;
+	private String _location;
+	private ArrayList<String> _tags;
+	private boolean _isOverdue;
 
 	// @@author A0149063E
 	// String formats for the toString() method
@@ -21,47 +21,47 @@ public class Task implements java.io.Serializable {
 
 	// @@author A0139995E
 	public Task() {
-		description = null;
-		location = null;
-		tags = null;
+		_description = null;
+		_location = null;
+		_tags = null;
 	}
 
 	public Task(String description, String location, ArrayList<String> tags) {
-		this.description = description;
-		this.location = location;
-		this.tags = tags;
+		this._description = description;
+		this._location = location;
+		this._tags = tags;
 	}
 
 	public void setIsOverdue(boolean isOverdue) {
-		this.isOverdue = isOverdue;
+		this._isOverdue = isOverdue;
 	}
 
 	public boolean isOverdue() {
-		return isOverdue;
+		return _isOverdue;
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this._description = description;
 	}
 
 	public String getDescription() {
-		return description;
+		return _description;
 	}
 
 	public void setTags(ArrayList<String> tags) {
-		this.tags = tags;
+		this._tags = tags;
 	}
 
 	public ArrayList<String> getTags() {
-		return tags;
+		return _tags;
 	}
 
 	public String getLocation() {
-		return location;
+		return _location;
 	}
 
 	public void setLocation(String location) {
-		this.location = location;
+		this._location = location;
 	}
 
 	// @@author A0149063E

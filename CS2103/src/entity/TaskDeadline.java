@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 @SuppressWarnings("serial")
 public class TaskDeadline extends Task {
-	private Calendar endDate;
+	private Calendar _endDate;
 
 	// @@author A0149063E
 	// String formats for the toString() method
@@ -25,22 +25,22 @@ public class TaskDeadline extends Task {
 		this.setDescription(null);
 		this.setLocation(null);
 		this.setTags(null);
-		this.endDate = null;
+		this._endDate = null;
 	}
 
 	public TaskDeadline(String description, String location, Calendar endDate, ArrayList<String> tags) {
 		this.setDescription(description);
 		this.setLocation(location);
 		this.setTags(tags);
-		this.endDate = endDate;
+		this._endDate = endDate;
 	}
 
 	public void setEndDate(Calendar endDate) {
-		this.endDate = endDate;
+		this._endDate = endDate;
 	}
 
 	public Calendar getEndDate() {
-		return endDate;
+		return _endDate;
 	}
 
 	// @@author A0149063E
@@ -49,7 +49,7 @@ public class TaskDeadline extends Task {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format(STRING_DESCRIPTION, this.getDescription()));
 
-		String dateString = sdf.format(this.endDate.getTime());
+		String dateString = sdf.format(this._endDate.getTime());
 		sb.append(String.format(STRING_DEADLINE, dateString));
 
 		String location = this.getLocation();

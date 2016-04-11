@@ -24,19 +24,19 @@ import parser.JListeeParser;
 import storage.Storage;
 
 public class Logic {
-    private static Storage storage = Storage.getInstance();
-    private static Display display;
-    private static String file;
-    private static Logger logger = GlobalLogger.getLogger();
+    private static Storage _storage = Storage.getInstance();
+    private static Display _display;
+    private static String _file;
+    private static Logger _logger = GlobalLogger.getLogger();
 
     /*
      * call storage to create text file specified by the filepath
      */
     public static boolean createFile(String filePath) {
-        logger.log(Level.INFO, "Logic: Create filepath " + filePath);
-        file = filePath;
+        _logger.log(Level.INFO, "Logic: Create filepath " + filePath);
+        _file = filePath;
         try {
-            storage.createFile(filePath);
+            _storage.createFile(filePath);
             return true;
         } catch (IOException error) {
             return false;
@@ -47,31 +47,31 @@ public class Logic {
      * call storage to change the file path of text file
      */
     public static Display changeFilePath(String filePath) {
-        logger.log(Level.INFO, "Logic: Change filepath" + filePath);
+        _logger.log(Level.INFO, "Logic: Change filepath" + filePath);
         try{
-        	file = filePath;
-            storage.changeFilePath(filePath);
+        	_file = filePath;
+            _storage.changeFilePath(filePath);
             initializeDisplay();
-            display.setMessage(GlobalConstants.MESSAGE_FILE_PATH_CHANGE + filePath);
+            _display.setMessage(GlobalConstants.MESSAGE_FILE_PATH_CHANGE + filePath);
         }catch(IOException e){
-            display.setMessage(GlobalConstants.MESSAGE_ERROR_CHANGE_FILE_PATH);
+            _display.setMessage(GlobalConstants.MESSAGE_ERROR_CHANGE_FILE_PATH);
         }
-        return display;
+        return _display;
     }
 
     /*
      * sets up the program on first start up of the program
      */
     public static Display initializeProgram(String filePath) {
-        logger.log(Level.INFO, "Logic: Initialise Program" + filePath);
-        file = filePath;
+        _logger.log(Level.INFO, "Logic: Initialise Program" + filePath);
+        _file = filePath;
         initializeDisplay();
         initialiseOverdueTasksReminder();
-        synchronized (display) {
-            History.saveDisplay(display.deepClone());
+        synchronized (_display) {
+            History.saveDisplay(_display.deepClone());
         }
         initialiseNatty();
-        return display;
+        return _display;
     }
 
     /*
@@ -87,14 +87,14 @@ public class Logic {
      * display is set to show only overdue and today's task on startup
      */
     private static void initializeDisplay() {
-        display = getDisplayFromStorage();
+        _display = getDisplayFromStorage();
         Calendar start = Calendar.getInstance();
         start.setTimeInMillis(0);
         Calendar end = Calendar.getInstance();
         end.set(Calendar.HOUR_OF_DAY, 23);
         end.set(Calendar.MINUTE, 59);
-        display = new CommandShow(null, null, start, end, new ArrayList<String>()).execute(display);
-        display.setMessage(GlobalConstants.MESSAGE_START_UP);
+        _display = new CommandShow(null, null, start, end, new ArrayList<String>()).execute(_display);
+        _display.setMessage(GlobalConstants.MESSAGE_START_UP);
     }
 
     /*
@@ -102,39 +102,39 @@ public class Logic {
      * executes it
      */
     public static Display executeUserCommand(String userInput) {
-        logger.log(Level.INFO, "Logic: Parsing user input " + userInput);
+        _logger.log(Level.INFO, "Logic: Parsing user input " + userInput);
         Command userCommand = parseUserInput(userInput);
         assert userCommand != null: "Null Command";
-        synchronized (display) {
-            display = executeCommand(userCommand);
+        synchronized (_display) {
+            _display = executeCommand(userCommand);
         }
-        return display;
+        return _display;
     }
 
     private static void saveDisplayToHistory(Command userCommand) {
         if (userCommand.requiresSaveHistory()) {
-            History.saveDisplay(display.deepClone());
+            History.saveDisplay(_display.deepClone());
         }
     }
 
     public static Display getDisplay() {
-        return display;
+        return _display;
     }
 
     public static Display executeCommand(Command userCommand) {
-        logger.log(Level.INFO, "Logic: Executing command ");
-        display = userCommand.execute(display);
+        _logger.log(Level.INFO, "Logic: Executing command ");
+        _display = userCommand.execute(_display);
 
         if (requiresFileUpdate(userCommand)) {
             if (successfullyUpdatesFile()) {
                 saveDisplayToHistory(userCommand);
             } else {
-                display.setMessage(GlobalConstants.MESSAGE_ERROR_UPDATE_FILE);
+                _display.setMessage(GlobalConstants.MESSAGE_ERROR_UPDATE_FILE);
             }
         } else {
             saveDisplayToHistory(userCommand);
         }
-        return display;
+        return _display;
     }
 
     private static boolean requiresFileUpdate(Command userCommand) {
@@ -150,7 +150,7 @@ public class Logic {
     private static Display getDisplayFromStorage() {
         Display thisDisplay = null;
         try {
-            thisDisplay = storage.getDisplay(file);
+            thisDisplay = _storage.getDisplay(_file);
             assert thisDisplay != null: "Logic: Null display from storage";
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,7 +160,7 @@ public class Logic {
 
     private static boolean successfullyUpdatesFile() {
         try {
-            storage.saveFile(display);
+            _storage.saveFile(_display);
             return true;
         } catch (IOException error) {
             return false;

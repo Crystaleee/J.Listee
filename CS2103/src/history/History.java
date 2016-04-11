@@ -13,29 +13,29 @@ import entity.Display;
 
 public class History {
 
-    private static ArrayList<Display> oldDisplays = new ArrayList<Display>();
-    private static int oldDisplaysIndex = -1;
+    private static ArrayList<Display> _oldDisplays = new ArrayList<Display>();
+    private static int _oldDisplaysIndex = -1;
 
     /*
      * removes any unwanted states before 
      * saving a new display state.
      */
     public static void saveDisplay(Display display) {
-        if (oldDisplaysIndex < (oldDisplays.size() - 1)) {
-            for (int i = (oldDisplays.size() - 1); i > oldDisplaysIndex; i--) {
-                oldDisplays.remove(i);
+        if (_oldDisplaysIndex < (_oldDisplays.size() - 1)) {
+            for (int i = (_oldDisplays.size() - 1); i > _oldDisplaysIndex; i--) {
+                _oldDisplays.remove(i);
             }
         }
-        oldDisplays.add(display);
-        oldDisplaysIndex++;
+        _oldDisplays.add(display);
+        _oldDisplaysIndex++;
     }
 
     public static boolean atLastState() {
-        return (oldDisplaysIndex == (oldDisplays.size() - 1));
+        return (_oldDisplaysIndex == (_oldDisplays.size() - 1));
     }
 
     public static boolean atFirstState() {
-        return (oldDisplaysIndex == 0);
+        return (_oldDisplaysIndex == 0);
     }
 
     /*
@@ -46,24 +46,24 @@ public class History {
             if (atLastState()) {
                 return null;
             }
-            oldDisplaysIndex += offset;
+            _oldDisplaysIndex += offset;
             if (indexOutOfRange()) {
-                oldDisplaysIndex = oldDisplays.size() - 1;
+                _oldDisplaysIndex = _oldDisplays.size() - 1;
             }
         } else if (offset < 0) {
             if (atFirstState()) {
                 return null;
             }
-            oldDisplaysIndex += offset;
-            if (oldDisplaysIndex < 0) {
-                oldDisplaysIndex = 0;
+            _oldDisplaysIndex += offset;
+            if (_oldDisplaysIndex < 0) {
+                _oldDisplaysIndex = 0;
             }
         }
-        return oldDisplays.get(oldDisplaysIndex);
+        return _oldDisplays.get(_oldDisplaysIndex);
     }
 
     private static boolean indexOutOfRange() {
-        return oldDisplaysIndex > (oldDisplays.size() - 1);
+        return _oldDisplaysIndex > (_oldDisplays.size() - 1);
     }
 
 }
