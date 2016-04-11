@@ -212,11 +212,11 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
     margin-left: 1px;
   }
   .reserved .task_middle{
-    width:35%;
+    width:33%;
   }
   .reserved .task_right{
     padding: 0;
-    width: 57%;
+    width: 59%;
   }
   #timeslot1{
     border-radius: 0 8px 8px 0;
@@ -292,10 +292,10 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 
         //restric displaying discription length
         var description="";
-        if(taskList[index].description.length<24){
+        if(taskList[index].description.length<23){
           description=taskList[index].description;
         }else{
-          description=taskList[index].description.substring(0,23)+"...";
+          description=taskList[index].description.substring(0,22)+"...";
         }
 
         taskdiv.innerHTML= "<section class='task_number'>"
@@ -388,7 +388,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
         for( index3 =len-1; index3>=0 && len-index3<4; index3--){
            var timeslot = document.createElement("div");
            timeslot.setAttribute("class", "timeslot");
-           timeslot.setAttribute("id", "timeslot"+(index3));
+           timeslot.setAttribute("id", "timeslot"+(len-index3));
            timeslot.innerHTML="<div class='index'>"+(index3+1)+"</div>"+"<div style='margin: 8px 0 0;'>"+taskList[index].startDates[index3]+"</div><div>"+taskList[index].endDates[index3]+"<div>";
            timeslot_list.appendChild(timeslot);
         }
@@ -752,7 +752,7 @@ $(document).keydown(
         case 80://p
           if($(".task:focus").length>0){
             var id=parseInt($(".task:focus")[0].id);
-            shortCutCommand("postpone "+id);
+            shortCutCommand("postpone "+id+" 1day");
           }
         case 84://ctrl+t
         	if(e.ctrlKey)
@@ -761,6 +761,14 @@ $(document).keydown(
         case 68://ctrl+d
         	if(e.ctrlKey)
         		shortCutCommand("show /done");
+        break;
+        case 70://ctrl+f
+        	if(e.ctrlKey)
+        		shortCutCommand("change filepath");
+        break;
+        case 72://ctrl+h
+        	if(e.ctrlKey)
+        		shortCutCommand("help");
         break;
         case 79://ctrl+o
         	if(e.ctrlKey)
@@ -778,7 +786,31 @@ $(document).keydown(
         	if(e.ctrlKey)
         		shortCutCommand("redo");
         break;
-      }
+        case 97://confirm 1
+        	if($(".task:focus").length>0){
+	            var id=parseInt($(".task:focus")[0].id);
+	            if($(title).text()=="Reserved"){
+	              shortCutCommand("confirm "+id+" 1");
+	            }
+            }   
+        break;   
+        case 98://confirm 2
+        	if($(".task:focus").length>0){
+	            var id=parseInt($(".task:focus")[0].id);
+	            if($(title).text()=="Reserved"){
+	              shortCutCommand("confirm "+id+" 2");
+	            }
+            }   
+        break;  
+        case 99://confirm 3
+        	if($(".task:focus").length>0){
+	            var id=parseInt($(".task:focus")[0].id);
+	            if($(title).text()=="Reserved"){
+	              shortCutCommand("confirm "+id+" 3");
+	            }
+            }   
+        break;        
+        }
     }
 );
 

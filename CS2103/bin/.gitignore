@@ -1,8 +1,6 @@
 /entity/
-/logic/
 /history/
-/main/
+/logic/
 /parser/
-/view/
 /tests/
-/storage/
+/view/
