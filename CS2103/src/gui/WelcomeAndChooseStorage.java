@@ -23,7 +23,7 @@ public class WelcomeAndChooseStorage extends AppPage {
         
         //communicate Java and JavaScript
         JSObject win = (JSObject) webEngine.executeScript(SCRIPT_WINDOW);
-        win.setMember(NAME_BRIDGE, Bridge.getInstance());
+        win.setMember(NAME_BRIDGE, new WelcomeBridge());
     }
 
     // JavaScript interface object

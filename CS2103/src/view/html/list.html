@@ -754,9 +754,13 @@ $(document).keydown(
             var id=parseInt($(".task:focus")[0].id);
             shortCutCommand("postpone "+id+" 1day");
           }
-        case 84://ctrl+t
+        case 112://ctrl+f1
         	if(e.ctrlKey)
         		shortCutCommand("show /today");
+        break;
+        case 113://ctrl+f2
+        	if(e.ctrlKey)
+        		shortCutCommand("show /tomorrow");
         break;
         case 68://ctrl+d
         	if(e.ctrlKey)
