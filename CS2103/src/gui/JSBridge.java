@@ -17,7 +17,7 @@ import main.App;
  */
 
 // JavaScript interface object
-public class Bridge {
+public class JSBridge {
     // the name of file storing tasks
     private static final String FILENAME = "\\J.Listee.txt";
 
@@ -30,7 +30,7 @@ public class Bridge {
             "change filepath", "change directory", "change location"));
 
     // the only instance of Bridge
-    private static Bridge bridge;
+    private static JSBridge bridge;
 
     // this is the list of string storing user's commands
     private static List<String> userCmd = new ArrayList<String>();
@@ -41,12 +41,12 @@ public class Bridge {
     // the presenting cmd's index
     private static int cmdIndex;
 
-    private Bridge() {
+    private JSBridge() {
     }
 
-    public static Bridge getInstance() {
+    public static JSBridge getInstance() {
         if (bridge == null) {
-            return new Bridge();
+            return new JSBridge();
         }
         return bridge;
     }

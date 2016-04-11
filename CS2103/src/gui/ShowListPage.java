@@ -101,7 +101,7 @@ public class ShowListPage extends AppPage {
     private void setContent() {
         // conmunicate java and Javascript
         this.win = (JSObject) webEngine.executeScript(SCRIPT_WINDOW);
-        win.setMember(NAME_BRIDGE, Bridge.getInstance());
+        win.setMember(NAME_BRIDGE, JSBridge.getInstance());
 
         resetTaskNumber();
 
