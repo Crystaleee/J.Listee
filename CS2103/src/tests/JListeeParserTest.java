@@ -8,11 +8,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.joestelmach.natty.*;
+
 import parser.JListeeParser;
+
 
 public class JListeeParserTest {
 	public static JListeeParser parse;
@@ -22,33 +26,50 @@ public class JListeeParserTest {
 		parse = new JListeeParser();
 	}
 
-//	/* This is a test for the add command partition */
-//	@Test
-//	public void testAddCommandType() {
-//		String[] separateInputLine = "add cs2103 lecture (03/17/2016 2pm to 03/27/2016 5pm) @LT27 #hihi #me".split(" ");
-//		String expected = separateInputLine[0];
-//		String actual = parse.determineCommandType(separateInputLine);
-//		
-//		assertEquals(expected, actual);
-//	}
-//
-//	/* This is a test for the delete command partition */
-//	@Test
-//	public void testDeleteCommandType() {
-//		String[] separateInputLine = ("delete 1,2,3,4".split(" "));
-//		String expected = separateInputLine[0];
-//		String actual = parse.determineCommandType(separateInputLine);
-//		assertEquals(expected, actual);
-//	}
-//
-//	/* This is a test for the show command partition */
-//	@Test
-//	public void testShowCommandType() {
-//		String[] separateInputLine = ("show keyword".split(" "));
-//		String expected = separateInputLine[0];
-//		String actual = parse.determineCommandType(separateInputLine);
-//		assertEquals(expected, actual);
-//	}
+	/* This is a test for the add command partition */
+	@Test
+	public void testAddCommandType() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method method = JListeeParser.class.getDeclaredMethod("determineCommandType", String[].class);
+		method.setAccessible(true);
+		
+		String[] inputLine = "add #one hihi @location".split(" ");
+		
+		String actual = (String) method.invoke(parse, new Object[]{inputLine});
+	
+		String expected = "add";
+	
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test for the delete command partition */
+	@Test
+	public void testDeleteCommandType() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method method = JListeeParser.class.getDeclaredMethod("determineCommandType", String[].class);
+		method.setAccessible(true);
+		
+		String[] inputLine = "add #one hihi @location".split(" ");
+		
+		String actual = (String) method.invoke(parse, new Object[]{inputLine});
+	
+		String expected = "add";
+	
+		assertEquals(expected, actual);
+	}
+
+	/* This is a test for the show command partition */
+	@Test
+	public void testShowCommandType() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method method = JListeeParser.class.getDeclaredMethod("determineCommandType", String[].class);
+		method.setAccessible(true);
+		
+		String[] inputLine = "show /today 4pm".split(" ");
+		
+		String actual = (String) method.invoke(parse, new Object[]{inputLine});
+	
+		String expected = "show";
+	
+		assertEquals(expected, actual);
+	}
 
 	/* This is a test to find hash tags when hash tag exists */
 	@Test
@@ -71,7 +92,6 @@ public class JListeeParserTest {
 		Method method = JListeeParser.class.getDeclaredMethod("findHashTags", String.class);
 		method.setAccessible(true);
 		ArrayList<String> actual = (ArrayList<String>) method.invoke(parse, "add @location description");
-		
 		assertTrue(actual.isEmpty());
 	}
 
@@ -99,6 +119,19 @@ public class JListeeParserTest {
 		assertEquals(expected, actual);
 	}
 	
+	/* This is a test to find location with @ as task description */
+	@Test
+	public void testLocationDontExistWithAt() throws Exception {
+		String expected = "location";
+		
+		Method method = JListeeParser.class.getDeclaredMethod("findLocation", String.class);
+		method.setAccessible(true);
+		String actual = (String) method.invoke(parse, "add @ @location @@ description");
+		
+		assertEquals(expected, actual);
+	}
+	
+	
 	/* This is a test to find location with special characters */
 	@Test
 	public void testLocationWithSpecialCharacters() throws Exception {
@@ -113,7 +146,6 @@ public class JListeeParserTest {
 	}
 	
 	/* This is a test to get PrepositionIndex that exist */
-
 	@Test
 	public void getPrepositionIndex() throws Exception {
 		Method method = JListeeParser.class.getDeclaredMethod("getPrepositionIndex", String.class, int.class);
@@ -133,6 +165,16 @@ public class JListeeParserTest {
 		assertEquals(expected, actual);
 	}
 
+	/* This is a test to get Preposition index if user only input from without to */
+	@Test
+	public void checkFromAndToPrepositionIndex() throws Exception {
+		Method method = JListeeParser.class.getDeclaredMethod("checkFromAndTo", String.class, int.class);
+		method.setAccessible(true);
+		int expected = -1;
+		int actual = (int) method.invoke(parse, "add task description from", -1);
+		assertEquals(expected, actual);
+	}
+	
 	/* This is a test to get TaskDescription with location */
 	@Test
 	public void getTaskDescription() throws Exception {
@@ -147,46 +189,62 @@ public class JListeeParserTest {
 	
 	/* This is a test to get TaskDescription with special characters */
 	@Test
-	public void getTaskDescription2(){
-		String inputLine = "inputline with special !@#$%^&*() @location #hihihi";
+	public void getTaskDescriptionWithSpecialCharacters() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		
+		Method method = JListeeParser.class.getDeclaredMethod("trimInputLineToDescriptionOnly", String.class, String.class, ArrayList.class);
+		method.setAccessible(true);
 		ArrayList<String> tagLists = new ArrayList<String>();
 		tagLists.add("hihihi");
-		String location = "location";
-		String actual = "inputline with special !@#$%^&*()";
-		String expected = parse.trimInputLineToDescriptionOnly(inputLine, location, tagLists);
+		String actual = (String) method.invoke(parse, "inputline with special !@#$%^&*() @location #hihihi", "location", tagLists);
+		
+		String expected = "inputline with special !@#$%^&*()";
 		assertEquals(expected,actual);
 	}
 	
 	
 	/* This is a test to get tasknumbers with extra spaces */
 	@Test
-	public void getTaskNumbersWithExtraSpace(){
-		String inputLine = "1,   2, 3";
-		int expected = 3;
-		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
-		parse.extractTaskNumbers(inputLine, taskNumbers);
-		assertEquals(expected, taskNumbers.size());
+	public void getTaskNumbersWithExtraSpace() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{	
+		Method method = JListeeParser.class.getDeclaredMethod("extractTaskNumbers", String.class, ArrayList.class);
+		method.setAccessible(true);
+		ArrayList<Integer>  actual = new ArrayList<Integer>();
+		actual = (ArrayList<Integer>) method.invoke(parse, "1  , 2, 3, 4",  actual);
+		int expected = 4;
+		assertEquals(expected, actual.size());
 	}
 	
 	/* This is a test to get tasknumbers with usage of dash */
 	@Test
-	public void getTaskNumberWithDash(){
-		String inputLine = "1-5,   2-9, 3-10";
+	public void getTaskNumberWithDash() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		
+		Method method = JListeeParser.class.getDeclaredMethod("extractTaskNumbers", String.class, ArrayList.class);
+		method.setAccessible(true);
+		ArrayList<Integer>  actual = new ArrayList<Integer>();
+		actual = (ArrayList<Integer>) method.invoke(parse, "1-5,   2-9, 3-10",  actual);
 		int expected = 10;
-		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
-		parse.extractTaskNumbers(inputLine, taskNumbers);
-		assertEquals(expected, taskNumbers.size());
+		assertEquals(expected, actual.size());
 	}
 	
 	/* This is a test to get tasknumbers with usage of commas and dash */
 	@Test
-	public void getTaskNumberWithCommasAndDash(){
-		String inputLine = "1-5,   6,7, 8-10";
+	public void getTaskNumberWithCommasAndDash() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Method method = JListeeParser.class.getDeclaredMethod("extractTaskNumbers", String.class, ArrayList.class);
+		method.setAccessible(true);
+		ArrayList<Integer>  actual = new ArrayList<Integer>();
+		actual = (ArrayList<Integer>) method.invoke(parse, "1-5,   6,7, 8-10",  actual);
 		int expected = 10;
-		ArrayList<Integer> taskNumbers = new ArrayList<Integer>();
-		parse.extractTaskNumbers(inputLine, taskNumbers);
-		assertEquals(expected, taskNumbers.size());
+		assertEquals(expected, actual.size());
 	}
+	
+
+/*	public void testDate(){
+		com.joestelmach.natty.Parser dateParser = new com.joestelmach.natty.Parser();
+		List<DateGroup> dateGroups = dateParser.parse("event task from today 4pm to 6pm".substring(12));
+		Method method = JListeeParser.class.getDeclaredMethod("setAllDates", String.class, <List<DateGroup>>.getClass());
+
+	}
+	*/
+	
 	
 	
 
