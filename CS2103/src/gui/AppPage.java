@@ -10,8 +10,6 @@ import javafx.scene.web.WebView;
 
 import org.w3c.dom.Document;
 
-import parser.InputSuggestion;
-
 import com.sun.webkit.WebPage;
 
 // @@author A0149527W
@@ -28,9 +26,6 @@ public abstract class AppPage extends StackPane {
     // common bridge name and script name
     protected static final String NAME_BRIDGE = "app";
     protected static final String SCRIPT_WINDOW = "window";
-
-    // this is Parser.InputSuggestion to get smd suggestion from
-    private InputSuggestion suggestion = InputSuggestion.getInstance();
 
     private WebView browser; // the web view to put in the scene
     protected WebEngine webEngine; // the web engine to load web page
@@ -63,20 +58,7 @@ public abstract class AppPage extends StackPane {
         this.setStyle(JAVAFX_BACKGROUND_TRANSPARENT);
         this.webEngine.documentProperty().addListener(new DocListener());
     }
-
-    /**
-     * get sommand suggestion from parser and pass to Javascript
-     * 
-     * @param cmd
-     *            the user input command
-     * @return String command suggestion
-     */
-    public String getCommandsuggestion(String cmd) {
-        String cmdSuggestion = suggestion.getSuggestedInput(cmd.trim());
-        return cmdSuggestion;
-
-    }
-
+    
     private class DocListener implements ChangeListener<Document> {
         @Override
         public void changed(ObservableValue<? extends Document> observable, Document oldValue,
