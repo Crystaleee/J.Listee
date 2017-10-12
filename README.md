@@ -32,6 +32,6 @@ Type “help” on the command box if you should require any assistance!
 ```
 help
 ```
-Detailed guidance can be found in the User Guide in [T15-2j][V0.5].pdf.
-## Screenshot of J.Listee
-![Screenshot of J.Listee](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+Detailed guidance can be found in the User Guide in [[T15-2j][V0.5].pdf](https://github.com/cs2103jan2016-t15-2j/main/blob/master/Deliverables/[T15-2j][V0.5].pdf).
+## Example GIF of J.Listee
+![Screenshot of J.Listee](./J.Listee.gif)
