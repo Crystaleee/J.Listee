@@ -1,7 +1,5 @@
 # J.Listee
 
-CS2103 project of team t15-2
-
 Get Things Done (GTD) software is a kind of utility applications that rests on the idea of moving planned tasks and projects out of the mind by recording them externally and then breaking them into actionable work items. This allows one to focus attention on taking action on tasks, instead of recalling them.
 
 J.Listee is java-based desktop GTD software that can help users deal with tasks and make schedules, especially for folks who can type fast, spend most of the time near a computer, and prefer typing over mouse/voice commands.
